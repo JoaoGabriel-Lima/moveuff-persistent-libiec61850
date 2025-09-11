@@ -14,6 +14,7 @@
 #include <math.h>
 
 #include "static_model.h"
+#include "data_logger.h"
 
 static int running = 0;
 static IedServer iedServer = NULL;
@@ -31,9 +32,10 @@ controlHandlerForBinaryOutput(ControlAction action, void* parameter, MmsValue* v
         return CONTROL_RESULT_FAILED;
 
     if (MmsValue_getType(value) == MMS_BOOLEAN) {
+        bool state = MmsValue_getBoolean(value);
         printf("received binary control command: ");
 
-        if (MmsValue_getBoolean(value))
+        if (state)
             printf("on\n");
         else
             printf("off\n");
@@ -46,21 +48,25 @@ controlHandlerForBinaryOutput(ControlAction action, void* parameter, MmsValue* v
     if (parameter == IEDMODEL_GenericIO_GGIO1_SPCSO1) {
         IedServer_updateUTCTimeAttributeValue(iedServer, IEDMODEL_GenericIO_GGIO1_SPCSO1_t, timeStamp);
         IedServer_updateAttributeValue(iedServer, IEDMODEL_GenericIO_GGIO1_SPCSO1_stVal, value);
+        DataLogger_logDigitalValue("SPCSO1", MmsValue_getBoolean(value), timeStamp);
     }
 
     if (parameter == IEDMODEL_GenericIO_GGIO1_SPCSO2) {
         IedServer_updateUTCTimeAttributeValue(iedServer, IEDMODEL_GenericIO_GGIO1_SPCSO2_t, timeStamp);
         IedServer_updateAttributeValue(iedServer, IEDMODEL_GenericIO_GGIO1_SPCSO2_stVal, value);
+        DataLogger_logDigitalValue("SPCSO2", MmsValue_getBoolean(value), timeStamp);
     }
 
     if (parameter == IEDMODEL_GenericIO_GGIO1_SPCSO3) {
         IedServer_updateUTCTimeAttributeValue(iedServer, IEDMODEL_GenericIO_GGIO1_SPCSO3_t, timeStamp);
         IedServer_updateAttributeValue(iedServer, IEDMODEL_GenericIO_GGIO1_SPCSO3_stVal, value);
+        DataLogger_logDigitalValue("SPCSO3", MmsValue_getBoolean(value), timeStamp);
     }
 
     if (parameter == IEDMODEL_GenericIO_GGIO1_SPCSO4) {
         IedServer_updateUTCTimeAttributeValue(iedServer, IEDMODEL_GenericIO_GGIO1_SPCSO4_t, timeStamp);
         IedServer_updateAttributeValue(iedServer, IEDMODEL_GenericIO_GGIO1_SPCSO4_stVal, value);
+        DataLogger_logDigitalValue("SPCSO4", MmsValue_getBoolean(value), timeStamp);
     }
 
     return CONTROL_RESULT_OK;
@@ -108,6 +114,12 @@ main(int argc, char** argv)
     }
 
     printf("Using libIEC61850 version %s\n", LibIEC61850_getVersionString());
+
+    /* Initialize data logger */
+    if (DataLogger_init("./bike_data.db") != 0) {
+        printf("Failed to initialize data logger! Exit.\n");
+        exit(-1);
+    }
 
     /* Create new server configuration object */
     IedServerConfig config = IedServerConfig_create();
@@ -184,6 +196,7 @@ main(int argc, char** argv)
     signal(SIGINT, sigint_handler);
 
     float t = 0.f;
+    int log_counter = 0;  /* Counter for periodic logging */
 
     while (running)
     {
@@ -222,6 +235,16 @@ main(int argc, char** argv)
         IedServer_updateFloatAttributeValue(iedServer, IEDMODEL_GenericIO_GGIO1_AnIn4_mag_f, an4);
 
         IedServer_unlockDataModel(iedServer);
+
+        /* Log analog values to database every 10 cycles (1 second) to reduce I/O */
+        log_counter++;
+        if (log_counter >= 10) {
+            DataLogger_logAnalogValue("AnIn1", an1, timestamp);
+            DataLogger_logAnalogValue("AnIn2", an2, timestamp);
+            DataLogger_logAnalogValue("AnIn3", an3, timestamp);
+            DataLogger_logAnalogValue("AnIn4", an4, timestamp);
+            log_counter = 0;
+        }
 #endif
 
         Thread_sleep(100);
@@ -232,6 +255,9 @@ main(int argc, char** argv)
 
     /* Cleanup - free all resources */
     IedServer_destroy(iedServer);
+
+    /* Cleanup data logger */
+    DataLogger_cleanup();
 
     return 0;
 } /* main() */

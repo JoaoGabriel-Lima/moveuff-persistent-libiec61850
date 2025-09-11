@@ -1,0 +1,161 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <time.h>
+#include "data_logger.h"
+
+void print_usage(const char* program_name) {
+    printf("Usage: %s <command> [options]\n", program_name);
+    printf("Commands:\n");
+    printf("  stats <channel> <hours>    - Show statistics for last N hours\n");
+    printf("  query <channel> <hours>    - Query data for last N hours\n");
+    printf("  cleanup <days>             - Remove data older than N days\n");
+    printf("  compact                    - Compact database\n");
+    printf("\nExamples:\n");
+    printf("  %s stats AnIn1 24          - Show AnIn1 stats for last 24 hours\n", program_name);
+    printf("  %s query SPCSO1 1          - Query SPCSO1 data for last hour\n", program_name);
+    printf("  %s cleanup 30              - Remove data older than 30 days\n", program_name);
+}
+
+void format_timestamp(uint64_t timestamp_ms, char* buffer, size_t buffer_size) {
+    time_t timestamp_s = timestamp_ms / 1000;
+    struct tm* tm_info = localtime(&timestamp_s);
+    strftime(buffer, buffer_size, "%Y-%m-%d %H:%M:%S", tm_info);
+}
+
+void query_analog_data(const char* channel, uint64_t hours_back) {
+    uint64_t now = (uint64_t)time(NULL) * 1000;
+    uint64_t start_time = now - (hours_back * 3600 * 1000);
+    
+    AnalogRecord* records;
+    int count;
+    
+    printf("Querying analog data for %s (last %llu hours)...\n", channel, hours_back);
+    
+    if (DataLogger_queryAnalogData(channel, start_time, now, &records, &count) == 0) {
+        if (count > 0) {
+            printf("Found %d records:\n", count);
+            printf("Timestamp                Value\n");
+            printf("--------------------------------\n");
+            
+            for (int i = 0; i < count; i++) {
+                char time_str[32];
+                format_timestamp(records[i].timestamp, time_str, sizeof(time_str));
+                printf("%s   %.3f\n", time_str, records[i].value);
+            }
+        } else {
+            printf("No data found.\n");
+        }
+        
+        DataLogger_freeAnalogRecords(records);
+    } else {
+        printf("Error querying data.\n");
+    }
+}
+
+void query_digital_data(const char* channel, uint64_t hours_back) {
+    uint64_t now = (uint64_t)time(NULL) * 1000;
+    uint64_t start_time = now - (hours_back * 3600 * 1000);
+    
+    DigitalRecord* records;
+    int count;
+    
+    printf("Querying digital data for %s (last %llu hours)...\n", channel, hours_back);
+    
+    if (DataLogger_queryDigitalData(channel, start_time, now, &records, &count) == 0) {
+        if (count > 0) {
+            printf("Found %d records:\n", count);
+            printf("Timestamp                State\n");
+            printf("--------------------------------\n");
+            
+            for (int i = 0; i < count; i++) {
+                char time_str[32];
+                format_timestamp(records[i].timestamp, time_str, sizeof(time_str));
+                printf("%s   %s\n", time_str, records[i].state ? "ON" : "OFF");
+            }
+        } else {
+            printf("No data found.\n");
+        }
+        
+        DataLogger_freeDigitalRecords(records);
+    } else {
+        printf("Error querying data.\n");
+    }
+}
+
+int main(int argc, char** argv) {
+    if (argc < 2) {
+        print_usage(argv[0]);
+        return 1;
+    }
+    
+    /* Initialize data logger */
+    if (DataLogger_init("./bike_data.db") != 0) {
+        printf("A inicialização do DataLogger Falhou!\n");
+        return 1;
+    }
+    
+    const char* command = argv[1];
+    
+    if (strcmp(command, "stats") == 0) {
+        if (argc != 4) {
+            printf("Usage: %s stats <channel> <hours>\n", argv[0]);
+            DataLogger_cleanup();
+            return 1;
+        }
+        
+        const char* channel = argv[2];
+        uint64_t hours = atoi(argv[3]);
+        
+        /* Try as analog first, then digital */
+        printf("Verificando dados analógicos...\n");
+        DataLogger_printAnalogStats(channel, hours);
+        
+        printf("\nVerificando dados digitais...\n");
+        DataLogger_printDigitalStats(channel, hours);
+        
+    } else if (strcmp(command, "query") == 0) {
+        if (argc != 4) {
+            printf("Usage: %s query <channel> <hours>\n", argv[0]);
+            DataLogger_cleanup();
+            return 1;
+        }
+        
+        const char* channel = argv[2];
+        uint64_t hours = atoi(argv[3]);
+        
+        /* Check if it's an analog channel */
+        if (strncmp(channel, "AnIn", 4) == 0) {
+            query_analog_data(channel, hours);
+        } else if (strncmp(channel, "SPCSO", 5) == 0) {
+            query_digital_data(channel, hours);
+        } else {
+            printf("Trying both analog and digital queries...\n");
+            query_analog_data(channel, hours);
+            printf("\n");
+            query_digital_data(channel, hours);
+        }
+        
+    } else if (strcmp(command, "cleanup") == 0) {
+        if (argc != 3) {
+            printf("Usage: %s cleanup <days>\n", argv[0]);
+            DataLogger_cleanup();
+            return 1;
+        }
+        
+        uint64_t days = atoi(argv[2]);
+        DataLogger_cleanupOldData(days);
+        
+    } else if (strcmp(command, "compact") == 0) {
+        DataLogger_compactDatabase();
+        
+    } else {
+        printf("Unknown command: %s\n", command);
+        print_usage(argv[0]);
+        DataLogger_cleanup();
+        return 1;
+    }
+    
+    DataLogger_cleanup();
+    return 0;
+}
