@@ -1,0 +1,21 @@
+LIBIEC_HOME=../..
+
+PROJECT_BINARY_NAME = client_persistent_reporting
+PROJECT_SOURCES = client_persistent_reporting.c
+PROJECT_SOURCES += data_logger.c
+
+include $(LIBIEC_HOME)/make/target_system.mk
+include $(LIBIEC_HOME)/make/stack_includes.mk
+
+all:	$(PROJECT_BINARY_NAME)
+
+include $(LIBIEC_HOME)/make/common_targets.mk
+
+LDLIBS += -lsqlite3
+
+$(PROJECT_BINARY_NAME):	$(PROJECT_SOURCES) $(LIB_NAME)
+	$(CC) $(CFLAGS) $(LDFLAGS) -o $(PROJECT_BINARY_NAME) $(PROJECT_SOURCES) $(INCLUDES) $(LIB_NAME) $(LDLIBS)
+
+clean:
+	rm -f $(PROJECT_BINARY_NAME)
+	rm -f client_data.db*
