@@ -2,6 +2,7 @@
  * client_example_reporting.c
  *
  * This example is intended to be used with server_example_basic_io or server_example_goose.
+ * Modified to include HTTP API server on port 8080
  */
 
 #include "iec61850_client.h"
@@ -12,14 +13,173 @@
 #include <time.h>
 #include <string.h>
 #include <stdbool.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <unistd.h>
+#include <pthread.h>
 
 #include "hal_thread.h"
 
 static int running = 0;
 
+/* Shared data structure for API */
+typedef struct {
+    char name[64];
+    char ip[64];
+    float actual_lat;
+    float actual_long;
+    float actual_altitude;
+    float actual_soc;
+    bool data_valid;
+    pthread_mutex_t mutex;
+} BikeData;
+
+static BikeData bikeData = {
+    .name = "bike-1",
+    .ip = "100.82.62.58",
+    .actual_lat = 0.0,
+    .actual_long = 0.0,
+    .actual_altitude = 0.0,
+    .actual_soc = 0.0,
+    .data_valid = false
+};
+
 void sigint_handler(int signalId)
 {
     running = 0;
+}
+
+/* HTTP API Server Thread */
+void* http_server_thread(void* arg)
+{
+    int server_fd, client_fd;
+    struct sockaddr_in address;
+    int addrlen = sizeof(address);
+    int opt = 1;
+    
+    // Create socket
+    if ((server_fd = socket(AF_INET, SOCK_STREAM, 0)) == 0) {
+        perror("Socket creation failed");
+        return NULL;
+    }
+    
+    // Set socket options
+    if (setsockopt(server_fd, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt))) {
+        perror("setsockopt failed");
+        close(server_fd);
+        return NULL;
+    }
+    
+    address.sin_family = AF_INET;
+    address.sin_addr.s_addr = INADDR_ANY;
+    address.sin_port = htons(8080);
+    
+    // Bind socket
+    if (bind(server_fd, (struct sockaddr *)&address, sizeof(address)) < 0) {
+        perror("Bind failed");
+        close(server_fd);
+        return NULL;
+    }
+    
+    // Listen
+    if (listen(server_fd, 3) < 0) {
+        perror("Listen failed");
+        close(server_fd);
+        return NULL;
+    }
+    
+    printf("HTTP API Server started on port 8080\n");
+    printf("Access: http://localhost:8080/api/bikes\n");
+    
+    while (running) {
+        fd_set readfds;
+        struct timeval timeout;
+        
+        FD_ZERO(&readfds);
+        FD_SET(server_fd, &readfds);
+        
+        timeout.tv_sec = 1;
+        timeout.tv_usec = 0;
+        
+        int activity = select(server_fd + 1, &readfds, NULL, NULL, &timeout);
+        
+        if (activity < 0) {
+            continue;
+        }
+        
+        if (activity == 0) {
+            continue; // Timeout
+        }
+        
+        if ((client_fd = accept(server_fd, (struct sockaddr *)&address, (socklen_t*)&addrlen)) < 0) {
+            continue;
+        }
+        
+        // Read HTTP request
+        char buffer[1024] = {0};
+        read(client_fd, buffer, 1024);
+        
+        // Check if it's a GET request to /api/bikes
+        if (strstr(buffer, "GET /api/bikes") != NULL) {
+            char response[2048];
+            char json[1024];
+            
+            pthread_mutex_lock(&bikeData.mutex);
+            
+            // Build JSON response (array with one bike object)
+            snprintf(json, sizeof(json),
+                "[{\n"
+                "  \"name\": \"%s\",\n"
+                "  \"ip\": \"%s\",\n"
+                "  \"actual_lat\": %.6f,\n"
+                "  \"actual_long\": %.6f,\n"
+                "  \"actual_altitude\": %.3f,\n"
+                "  \"actual_soc\": %.2f,\n"
+                "  \"data_valid\": %s\n"
+                "}]",
+                bikeData.name,
+                bikeData.ip,
+                bikeData.actual_lat,
+                bikeData.actual_long,
+                bikeData.actual_altitude,
+                bikeData.actual_soc,
+                bikeData.data_valid ? "true" : "false"
+            );
+            
+            pthread_mutex_unlock(&bikeData.mutex);
+            
+            // Build HTTP response
+            snprintf(response, sizeof(response),
+                "HTTP/1.1 200 OK\r\n"
+                "Content-Type: application/json\r\n"
+                "Access-Control-Allow-Origin: *\r\n"
+                "Content-Length: %ld\r\n"
+                "Connection: close\r\n"
+                "\r\n"
+                "%s",
+                strlen(json),
+                json
+            );
+            
+            send(client_fd, response, strlen(response), 0);
+        }
+        else {
+            // 404 for other routes
+            const char* not_found = 
+                "HTTP/1.1 404 Not Found\r\n"
+                "Content-Type: text/plain\r\n"
+                "Connection: close\r\n"
+                "\r\n"
+                "404 Not Found\nTry: GET /api/bikes\n";
+            send(client_fd, not_found, strlen(not_found), 0);
+        }
+        
+        close(client_fd);
+    }
+    
+    close(server_fd);
+    printf("HTTP API Server stopped\n");
+    return NULL;
 }
 
 
@@ -83,7 +243,7 @@ main(int argc, char** argv)
     if (argc > 1)
         hostname = argv[1];
     else
-        hostname = "192.168.2.130";
+        hostname = "100.82.62.58";
 
     if (argc > 2)
         tcpPort = atoi(argv[2]);
@@ -91,6 +251,16 @@ main(int argc, char** argv)
     running = 1;
 
     signal(SIGINT, sigint_handler);
+    
+    // Initialize mutex
+    pthread_mutex_init(&bikeData.mutex, NULL);
+    
+    // Start HTTP server thread
+    pthread_t http_thread;
+    if (pthread_create(&http_thread, NULL, http_server_thread, NULL) != 0) {
+        fprintf(stderr, "Failed to create HTTP server thread\n");
+        return 1;
+    }
 
     IedClientError error;
 
@@ -269,6 +439,8 @@ main(int argc, char** argv)
             if (rcb == NULL) {
                 printf("\n=== Periodic Data Read ===\n");
                 
+                pthread_mutex_lock(&bikeData.mutex);
+                
                 /* Read individual values directly */
                 MmsValue* modVal = IedConnection_readObject(con, &error, "MOVEUFFBIKE/LLN0.Mod.stVal", IEC61850_FC_ST);
                 if (modVal != NULL && error == IED_ERROR_OK) {
@@ -281,28 +453,35 @@ main(int argc, char** argv)
                 /* Read geolocation values */
                 MmsValue* latitude = IedConnection_readObject(con, &error, "MOVEUFFBIKE/DEEV1.EVNam.latitude", IEC61850_FC_DC);
                 if (latitude != NULL && error == IED_ERROR_OK) {
-                    printf("  MOVEUFFBIKE/DEEV1.EVNam.latitude: %.6f\n", MmsValue_toFloat(latitude));
+                    bikeData.actual_lat = MmsValue_toFloat(latitude);
+                    printf("  MOVEUFFBIKE/DEEV1.EVNam.latitude: %.6f\n", bikeData.actual_lat);
                     MmsValue_delete(latitude);
                 }
                 
                 MmsValue* longitude = IedConnection_readObject(con, &error, "MOVEUFFBIKE/DEEV1.EVNam.longitude", IEC61850_FC_DC);
                 if (longitude != NULL && error == IED_ERROR_OK) {
-                    printf("  MOVEUFFBIKE/DEEV1.EVNam.longitude: %.6f\n", MmsValue_toFloat(longitude));
+                    bikeData.actual_long = MmsValue_toFloat(longitude);
+                    printf("  MOVEUFFBIKE/DEEV1.EVNam.longitude: %.6f\n", bikeData.actual_long);
                     MmsValue_delete(longitude);
                 }
                 
                 MmsValue* altitude = IedConnection_readObject(con, &error, "MOVEUFFBIKE/DEEV1.EVNam.altitude", IEC61850_FC_DC);
                 if (altitude != NULL && error == IED_ERROR_OK) {
-                    printf("  MOVEUFFBIKE/DEEV1.EVNam.altitude: %.3f m\n", MmsValue_toFloat(altitude));
+                    bikeData.actual_altitude = MmsValue_toFloat(altitude);
+                    printf("  MOVEUFFBIKE/DEEV1.EVNam.altitude: %.3f m\n", bikeData.actual_altitude);
                     MmsValue_delete(altitude);
                 }
                 
                 /* Read SoC */
                 MmsValue* soc = IedConnection_readObject(con, &error, "MOVEUFFBIKE/DEEV1.Soc.mag", IEC61850_FC_MX);
                 if (soc != NULL && error == IED_ERROR_OK) {
-                    printf("  MOVEUFFBIKE/DEEV1.Soc.mag: %.2f%%\n", MmsValue_toFloat(soc));
+                    bikeData.actual_soc = MmsValue_toFloat(soc);
+                    printf("  MOVEUFFBIKE/DEEV1.Soc.mag: %.2f%%\n", bikeData.actual_soc);
                     MmsValue_delete(soc);
                 }
+                
+                bikeData.data_valid = true;
+                pthread_mutex_unlock(&bikeData.mutex);
             }
             else if (clientDataSet != NULL) {
                 ClientDataSet newDataSet = IedConnection_readDataSetValues(con, &error, "MOVEUFFBIKE/LLN0.DynDataSet", NULL);
