@@ -1,7 +1,7 @@
 /*
  * static_model.c
  * Dispositivo: STG
- * Nós Ativos: LLN0, MMXU1, XSWI1, TTMP1, DBAT1
+ * Nós Ativos: LLN0, XSWI1, TTMP1, DBAT1
  * (ZBAT1 está comentado)
  */
 
@@ -39,7 +39,7 @@ LogicalNode iedModel_STG_LLN0 = {
     LogicalNodeModelType,
     "LLN0",
     (ModelNode*) &iedModel_STG,
-    (ModelNode*) &iedModel_STG_MMXU1,
+    (ModelNode*) &iedModel_STG_XSWI1,
     (ModelNode*) &iedModel_STG_LLN0_Beh
 };
 
@@ -178,89 +178,6 @@ DataAttribute iedModel_STG_LLN0_NamPlt_d = {
     -1,
     IEC61850_FC_DC,
     IEC61850_VISIBLE_STRING_255,
-    0
-};
-
-/* ==================================================================
- * MODELAGEM NÓ LÓGICO MMXU1
- * ==================================================================
- */
-
-LogicalNode iedModel_STG_MMXU1 = {
-    LogicalNodeModelType,
-    "MMXU1",
-    (ModelNode*) &iedModel_STG,
-    (ModelNode*) &iedModel_STG_XSWI1,
-    (ModelNode*) &iedModel_STG_MMXU1_TotW
-};
-
-/* --- Data Object: TotW (CDC: MV) --- */
-DataObject iedModel_STG_MMXU1_TotW = {
-    DataObjectModelType, "TotW",
-    (ModelNode*) &iedModel_STG_MMXU1,
-    NULL,
-    (ModelNode*) &iedModel_STG_MMXU1_TotW_mag,
-    0,
-    -1
-};
-
-DataAttribute iedModel_STG_MMXU1_TotW_mag = {
-    DataAttributeModelType, "mag",
-    (ModelNode*) &iedModel_STG_MMXU1_TotW,
-    (ModelNode*) &iedModel_STG_MMXU1_TotW_q,
-    (ModelNode*) &iedModel_STG_MMXU1_TotW_mag_f,
-    0,
-    -1,
-    IEC61850_FC_MX,
-    IEC61850_CONSTRUCTED,
-    TRG_OPT_DATA_CHANGED
-};
-
-DataAttribute iedModel_STG_MMXU1_TotW_mag_f = {
-    DataAttributeModelType, "f",
-    (ModelNode*) &iedModel_STG_MMXU1_TotW_mag,
-    NULL,
-    NULL,
-    0,
-    -1,
-    IEC61850_FC_MX,
-    IEC61850_FLOAT32,
-    0
-};
-
-DataAttribute iedModel_STG_MMXU1_TotW_q = {
-    DataAttributeModelType, "q",
-    (ModelNode*) &iedModel_STG_MMXU1_TotW,
-    (ModelNode*) &iedModel_STG_MMXU1_TotW_t,
-    NULL,
-    0,
-    -1,
-    IEC61850_FC_MX,
-    IEC61850_QUALITY,
-    TRG_OPT_QUALITY_CHANGED
-};
-
-DataAttribute iedModel_STG_MMXU1_TotW_t = {
-    DataAttributeModelType, "t",
-    (ModelNode*) &iedModel_STG_MMXU1_TotW,
-    (ModelNode*) &iedModel_STG_MMXU1_TotW_db,
-    NULL,
-    0,
-    -1,
-    IEC61850_FC_MX,
-    IEC61850_TIMESTAMP,
-    0
-};
-
-DataAttribute iedModel_STG_MMXU1_TotW_db = {
-    DataAttributeModelType, "db",
-    (ModelNode*) &iedModel_STG_MMXU1_TotW,
-    NULL,
-    NULL,
-    0,
-    -1,
-    IEC61850_FC_CF,
-    IEC61850_INT32U,
     0
 };
 
@@ -565,14 +482,122 @@ DataAttribute iedModel_STG_XSWI1_Pos_ctlModel = {
     0
 };
 
-/* --- Data Object: BlkOpn (CDC: SPC - Status) --- */
+/* --- Data Object: BlkOpn (CDC: SPC - Status & Control) --- */
 DataObject iedModel_STG_XSWI1_BlkOpn = {
     DataObjectModelType, "BlkOpn",
     (ModelNode*) &iedModel_STG_XSWI1,
     (ModelNode*) &iedModel_STG_XSWI1_BlkCls,
-    (ModelNode*) &iedModel_STG_XSWI1_BlkOpn_stVal,
+    (ModelNode*) &iedModel_STG_XSWI1_BlkOpn_Oper, /* Child aponta para Oper */
     0,
     -1
+};
+
+DataAttribute iedModel_STG_XSWI1_BlkOpn_Oper = {
+    DataAttributeModelType, "Oper",
+    (ModelNode*) &iedModel_STG_XSWI1_BlkOpn,
+    (ModelNode*) &iedModel_STG_XSWI1_BlkOpn_stVal, /* Sibling é stVal */
+    (ModelNode*) &iedModel_STG_XSWI1_BlkOpn_Oper_ctlVal, /* Child */
+    0,
+    -1,
+    IEC61850_FC_CO,
+    IEC61850_CONSTRUCTED,
+    0
+};
+
+DataAttribute iedModel_STG_XSWI1_BlkOpn_Oper_ctlVal = {
+    DataAttributeModelType, "ctlVal",
+    (ModelNode*) &iedModel_STG_XSWI1_BlkOpn_Oper,
+    (ModelNode*) &iedModel_STG_XSWI1_BlkOpn_Oper_origin, /* Sibling */
+    NULL,
+    0,
+    -1,
+    IEC61850_FC_CO,
+    IEC61850_BOOLEAN,
+    0
+};
+
+DataAttribute iedModel_STG_XSWI1_BlkOpn_Oper_origin = {
+    DataAttributeModelType, "origin",
+    (ModelNode*) &iedModel_STG_XSWI1_BlkOpn_Oper,
+    (ModelNode*) &iedModel_STG_XSWI1_BlkOpn_Oper_ctlNum, /* Sibling */
+    (ModelNode*) &iedModel_STG_XSWI1_BlkOpn_Oper_origin_orCat, /* Child */
+    0,
+    -1,
+    IEC61850_FC_CO,
+    IEC61850_CONSTRUCTED,
+    0
+};
+
+DataAttribute iedModel_STG_XSWI1_BlkOpn_Oper_origin_orCat = {
+    DataAttributeModelType, "orCat",
+    (ModelNode*) &iedModel_STG_XSWI1_BlkOpn_Oper_origin,
+    (ModelNode*) &iedModel_STG_XSWI1_BlkOpn_Oper_origin_orIdent, /* Sibling */
+    NULL,
+    0,
+    -1,
+    IEC61850_FC_CO,
+    IEC61850_INT8, /* Enum OrCat */
+    0
+};
+
+DataAttribute iedModel_STG_XSWI1_BlkOpn_Oper_origin_orIdent = {
+    DataAttributeModelType, "orIdent",
+    (ModelNode*) &iedModel_STG_XSWI1_BlkOpn_Oper_origin,
+    NULL,
+    NULL,
+    0,
+    -1,
+    IEC61850_FC_CO,
+    IEC61850_OCTET_STRING_64,
+    0
+};
+
+DataAttribute iedModel_STG_XSWI1_BlkOpn_Oper_ctlNum = {
+    DataAttributeModelType, "ctlNum",
+    (ModelNode*) &iedModel_STG_XSWI1_BlkOpn_Oper,
+    (ModelNode*) &iedModel_STG_XSWI1_BlkOpn_Oper_T, /* Sibling */
+    NULL,
+    0,
+    -1,
+    IEC61850_FC_CO,
+    IEC61850_INT8U,
+    0
+};
+
+DataAttribute iedModel_STG_XSWI1_BlkOpn_Oper_T = {
+    DataAttributeModelType, "T",
+    (ModelNode*) &iedModel_STG_XSWI1_BlkOpn_Oper,
+    (ModelNode*) &iedModel_STG_XSWI1_BlkOpn_Oper_Test, /* Sibling */
+    NULL,
+    0,
+    -1,
+    IEC61850_FC_CO,
+    IEC61850_TIMESTAMP,
+    0
+};
+
+DataAttribute iedModel_STG_XSWI1_BlkOpn_Oper_Test = {
+    DataAttributeModelType, "Test",
+    (ModelNode*) &iedModel_STG_XSWI1_BlkOpn_Oper,
+    (ModelNode*) &iedModel_STG_XSWI1_BlkOpn_Oper_Check, /* Sibling */
+    NULL,
+    0,
+    -1,
+    IEC61850_FC_CO,
+    IEC61850_BOOLEAN,
+    0
+};
+
+DataAttribute iedModel_STG_XSWI1_BlkOpn_Oper_Check = {
+    DataAttributeModelType, "Check",
+    (ModelNode*) &iedModel_STG_XSWI1_BlkOpn_Oper,
+    NULL,
+    NULL,
+    0,
+    -1,
+    IEC61850_FC_CO,
+    IEC61850_CHECK,
+    0
 };
 
 DataAttribute iedModel_STG_XSWI1_BlkOpn_stVal = {
@@ -623,14 +648,122 @@ DataAttribute iedModel_STG_XSWI1_BlkOpn_ctlModel = {
     0
 };
 
-/* --- Data Object: BlkCls (CDC: SPC - Status) --- */
+/* --- Data Object: BlkCls (CDC: SPC - Status & Control) --- */
 DataObject iedModel_STG_XSWI1_BlkCls = {
     DataObjectModelType, "BlkCls",
     (ModelNode*) &iedModel_STG_XSWI1,
-    NULL,
-    (ModelNode*) &iedModel_STG_XSWI1_BlkCls_stVal,
+    NULL, /* Fim da cadeia */
+    (ModelNode*) &iedModel_STG_XSWI1_BlkCls_Oper, /* Child aponta para Oper */
     0,
     -1
+};
+
+DataAttribute iedModel_STG_XSWI1_BlkCls_Oper = {
+    DataAttributeModelType, "Oper",
+    (ModelNode*) &iedModel_STG_XSWI1_BlkCls,
+    (ModelNode*) &iedModel_STG_XSWI1_BlkCls_stVal, /* Sibling é stVal */
+    (ModelNode*) &iedModel_STG_XSWI1_BlkCls_Oper_ctlVal, /* Child */
+    0,
+    -1,
+    IEC61850_FC_CO,
+    IEC61850_CONSTRUCTED,
+    0
+};
+
+DataAttribute iedModel_STG_XSWI1_BlkCls_Oper_ctlVal = {
+    DataAttributeModelType, "ctlVal",
+    (ModelNode*) &iedModel_STG_XSWI1_BlkCls_Oper,
+    (ModelNode*) &iedModel_STG_XSWI1_BlkCls_Oper_origin, /* Sibling */
+    NULL,
+    0,
+    -1,
+    IEC61850_FC_CO,
+    IEC61850_BOOLEAN,
+    0
+};
+
+DataAttribute iedModel_STG_XSWI1_BlkCls_Oper_origin = {
+    DataAttributeModelType, "origin",
+    (ModelNode*) &iedModel_STG_XSWI1_BlkCls_Oper,
+    (ModelNode*) &iedModel_STG_XSWI1_BlkCls_Oper_ctlNum, /* Sibling */
+    (ModelNode*) &iedModel_STG_XSWI1_BlkCls_Oper_origin_orCat, /* Child */
+    0,
+    -1,
+    IEC61850_FC_CO,
+    IEC61850_CONSTRUCTED,
+    0
+};
+
+DataAttribute iedModel_STG_XSWI1_BlkCls_Oper_origin_orCat = {
+    DataAttributeModelType, "orCat",
+    (ModelNode*) &iedModel_STG_XSWI1_BlkCls_Oper_origin,
+    (ModelNode*) &iedModel_STG_XSWI1_BlkCls_Oper_origin_orIdent, /* Sibling */
+    NULL,
+    0,
+    -1,
+    IEC61850_FC_CO,
+    IEC61850_INT8,
+    0
+};
+
+DataAttribute iedModel_STG_XSWI1_BlkCls_Oper_origin_orIdent = {
+    DataAttributeModelType, "orIdent",
+    (ModelNode*) &iedModel_STG_XSWI1_BlkCls_Oper_origin,
+    NULL,
+    NULL,
+    0,
+    -1,
+    IEC61850_FC_CO,
+    IEC61850_OCTET_STRING_64,
+    0
+};
+
+DataAttribute iedModel_STG_XSWI1_BlkCls_Oper_ctlNum = {
+    DataAttributeModelType, "ctlNum",
+    (ModelNode*) &iedModel_STG_XSWI1_BlkCls_Oper,
+    (ModelNode*) &iedModel_STG_XSWI1_BlkCls_Oper_T, /* Sibling */
+    NULL,
+    0,
+    -1,
+    IEC61850_FC_CO,
+    IEC61850_INT8U,
+    0
+};
+
+DataAttribute iedModel_STG_XSWI1_BlkCls_Oper_T = {
+    DataAttributeModelType, "T",
+    (ModelNode*) &iedModel_STG_XSWI1_BlkCls_Oper,
+    (ModelNode*) &iedModel_STG_XSWI1_BlkCls_Oper_Test, /* Sibling */
+    NULL,
+    0,
+    -1,
+    IEC61850_FC_CO,
+    IEC61850_TIMESTAMP,
+    0
+};
+
+DataAttribute iedModel_STG_XSWI1_BlkCls_Oper_Test = {
+    DataAttributeModelType, "Test",
+    (ModelNode*) &iedModel_STG_XSWI1_BlkCls_Oper,
+    (ModelNode*) &iedModel_STG_XSWI1_BlkCls_Oper_Check, /* Sibling */
+    NULL,
+    0,
+    -1,
+    IEC61850_FC_CO,
+    IEC61850_BOOLEAN,
+    0
+};
+
+DataAttribute iedModel_STG_XSWI1_BlkCls_Oper_Check = {
+    DataAttributeModelType, "Check",
+    (ModelNode*) &iedModel_STG_XSWI1_BlkCls_Oper,
+    NULL,
+    NULL,
+    0,
+    -1,
+    IEC61850_FC_CO,
+    IEC61850_CHECK,
+    0
 };
 
 DataAttribute iedModel_STG_XSWI1_BlkCls_stVal = {
@@ -1016,49 +1149,12 @@ DataAttribute iedModel_STG_DBAT1_EEName_vendor = {
 DataAttribute iedModel_STG_DBAT1_EEName_model = {
     DataAttributeModelType, "model",
     (ModelNode*) &iedModel_STG_DBAT1_EEName,
-    (ModelNode*) &iedModel_STG_DBAT1_EEName_stVal, /* Sibling: stVal */
+    NULL,
     NULL,
     0,
     -1,
     IEC61850_FC_DC,
     IEC61850_VISIBLE_STRING_255,
-    0
-};
-
-/* O seu atributo stVal original */
-DataAttribute iedModel_STG_DBAT1_EEName_stVal = {
-    DataAttributeModelType, "stVal",
-    (ModelNode*) &iedModel_STG_DBAT1_EEName,
-    (ModelNode*) &iedModel_STG_DBAT1_EEName_q, /* Sibling: q */
-    NULL,
-    0,
-    -1,
-    IEC61850_FC_ST,
-    IEC61850_VISIBLE_STRING_255,
-    TRG_OPT_DATA_CHANGED
-};
-
-DataAttribute iedModel_STG_DBAT1_EEName_q = {
-    DataAttributeModelType, "q",
-    (ModelNode*) &iedModel_STG_DBAT1_EEName,
-    (ModelNode*) &iedModel_STG_DBAT1_EEName_t,
-    NULL,
-    0,
-    -1,
-    IEC61850_FC_ST,
-    IEC61850_QUALITY,
-    TRG_OPT_QUALITY_CHANGED
-};
-
-DataAttribute iedModel_STG_DBAT1_EEName_t = {
-    DataAttributeModelType, "t",
-    (ModelNode*) &iedModel_STG_DBAT1_EEName,
-    NULL,
-    NULL,
-    0,
-    -1,
-    IEC61850_FC_ST,
-    IEC61850_TIMESTAMP,
     0
 };
 
@@ -1670,7 +1766,7 @@ DataAttribute iedModel_STG_DBAT1_AhrRtg_sVC_offset = {
 DataObject iedModel_STG_DBAT1_ChaVolMaxRtg = {
     DataObjectModelType, "ChaVolMaxRtg",
     (ModelNode*) &iedModel_STG_DBAT1,
-    NULL,
+    (ModelNode*) &iedModel_STG_DBAT1_SocPro,
     (ModelNode*) &iedModel_STG_DBAT1_ChaVolMaxRtg_setMag,
     0,
     -1
@@ -1733,6 +1829,52 @@ DataAttribute iedModel_STG_DBAT1_ChaVolMaxRtg_sVC_offset = {
     -1,
     IEC61850_FC_CF,
     IEC61850_FLOAT32,
+    0
+};
+
+/* --- Data Object: SocPro (CDC: SPS - Status) --- */
+DataObject iedModel_STG_DBAT1_SocPro = {
+    DataObjectModelType, "SocPro",
+    (ModelNode*) &iedModel_STG_DBAT1,
+    NULL,
+    (ModelNode*) &iedModel_STG_DBAT1_SocPro_stVal,
+    0,
+    -1
+};
+
+DataAttribute iedModel_STG_DBAT1_SocPro_stVal = {
+    DataAttributeModelType, "stVal",
+    (ModelNode*) &iedModel_STG_DBAT1_SocPro,
+    (ModelNode*) &iedModel_STG_DBAT1_SocPro_q,
+    NULL,
+    0,
+    -1,
+    IEC61850_FC_ST,
+    IEC61850_BOOLEAN,
+    TRG_OPT_DATA_CHANGED
+};
+
+DataAttribute iedModel_STG_DBAT1_SocPro_q = {
+    DataAttributeModelType, "q",
+    (ModelNode*) &iedModel_STG_DBAT1_SocPro,
+    (ModelNode*) &iedModel_STG_DBAT1_SocPro_t,
+    NULL,
+    0,
+    -1,
+    IEC61850_FC_ST,
+    IEC61850_QUALITY,
+    TRG_OPT_QUALITY_CHANGED
+};
+
+DataAttribute iedModel_STG_DBAT1_SocPro_t = {
+    DataAttributeModelType, "t",
+    (ModelNode*) &iedModel_STG_DBAT1_SocPro,
+    NULL,
+    NULL,
+    0,
+    -1,
+    IEC61850_FC_ST,
+    IEC61850_TIMESTAMP,
     0
 };
 

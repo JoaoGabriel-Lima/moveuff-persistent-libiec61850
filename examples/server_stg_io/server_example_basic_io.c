@@ -2,7 +2,7 @@
  * server_example_basic_io.c
  *
  * (Versão adaptada para o dispositivo STG)
- * LNs: LLN0, MMXU1, XSWI1, DBAT1
+ * LNs: LLN0, XSWI1, DBAT1
  */
 
 #include "iec61850_server.h"
@@ -207,9 +207,6 @@ main(int argc, char** argv)
     /* --- LLN0 --- */
     IedServer_updateInt32AttributeValue(iedServer, IEDMODEL_STG_LLN0_Beh_stVal, 1); // On
     IedServer_updateInt32AttributeValue(iedServer, IEDMODEL_STG_LLN0_Health_stVal, 1); // Ok
-
-    /* --- MMXU1 (Medição) --- */
-    IedServer_updateFloatAttributeValue(iedServer, IEDMODEL_STG_MMXU1_TotW_mag_f, 4500.5); // Ex: 4.5kW
     
     /* --- XSWI1 (Switch) --- */
     IedServer_updateInt32AttributeValue(iedServer, IEDMODEL_STG_XSWI1_SwTyp_stVal, 1); // Load Break
@@ -221,7 +218,8 @@ main(int argc, char** argv)
 
     /* --- DBAT1 (Bateria) --- */
     /* Status */
-    IedServer_updateVisibleStringAttributeValue(iedServer, IEDMODEL_STG_DBAT1_EEName_stVal, "BATERIA_STG_A");
+    IedServer_updateVisibleStringAttributeValue(iedServer, IEDMODEL_STG_DBAT1_EEName_vendor, "BikeFacil");
+    IedServer_updateVisibleStringAttributeValue(iedServer, IEDMODEL_STG_DBAT1_EEName_model, "BATERIA_STG_A");
     IedServer_updateBooleanAttributeValue(iedServer, IEDMODEL_STG_DBAT1_ChaSt_stVal, true); // A carregar
     IedServer_updateBooleanAttributeValue(iedServer, IEDMODEL_STG_DBAT1_DschSt_stVal, false);
     IedServer_updateInt32AttributeValue(iedServer, IEDMODEL_STG_DBAT1_EEHealth_stVal, 1); // Ok

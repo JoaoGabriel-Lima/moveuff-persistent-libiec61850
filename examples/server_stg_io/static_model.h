@@ -1,7 +1,7 @@
 /*
  * static_model.h
  * Dispositivo: STG
- * Nós: LLN0, MMXU1, XSWI1, TTMP1, DBAT1
+ * Nós: LLN0, XSWI1, TTMP1, DBAT1
  * Status: 100% COMPLETO (Inclui TTMP1)
  */
 
@@ -15,7 +15,6 @@ extern LogicalDevice iedModel_STG;
 
 /* Logical Nodes */
 extern LogicalNode iedModel_STG_LLN0;
-extern LogicalNode iedModel_STG_MMXU1;
 extern LogicalNode iedModel_STG_XSWI1;
 extern LogicalNode iedModel_STG_TTMP1; 
 extern LogicalNode iedModel_STG_DBAT1;
@@ -37,17 +36,6 @@ extern DataObject iedModel_STG_LLN0_NamPlt;
 extern DataAttribute iedModel_STG_LLN0_NamPlt_vendor;
 extern DataAttribute iedModel_STG_LLN0_NamPlt_swRev;
 extern DataAttribute iedModel_STG_LLN0_NamPlt_d;
-
-/* ==================================================================
- * MMXU1
- * ==================================================================
- */
-extern DataObject iedModel_STG_MMXU1_TotW;
-extern DataAttribute iedModel_STG_MMXU1_TotW_mag;
-extern DataAttribute iedModel_STG_MMXU1_TotW_mag_f;
-extern DataAttribute iedModel_STG_MMXU1_TotW_q;
-extern DataAttribute iedModel_STG_MMXU1_TotW_t;
-extern DataAttribute iedModel_STG_MMXU1_TotW_db;
 
 /* ==================================================================
  * XSWI1
@@ -79,11 +67,29 @@ extern DataAttribute iedModel_STG_XSWI1_Pos_q;
 extern DataAttribute iedModel_STG_XSWI1_Pos_t;
 extern DataAttribute iedModel_STG_XSWI1_Pos_ctlModel;
 extern DataObject iedModel_STG_XSWI1_BlkOpn;
+extern DataAttribute iedModel_STG_XSWI1_BlkOpn_Oper;
+extern DataAttribute iedModel_STG_XSWI1_BlkOpn_Oper_ctlVal;
+extern DataAttribute iedModel_STG_XSWI1_BlkOpn_Oper_origin;
+extern DataAttribute iedModel_STG_XSWI1_BlkOpn_Oper_origin_orCat;
+extern DataAttribute iedModel_STG_XSWI1_BlkOpn_Oper_origin_orIdent;
+extern DataAttribute iedModel_STG_XSWI1_BlkOpn_Oper_ctlNum;
+extern DataAttribute iedModel_STG_XSWI1_BlkOpn_Oper_T;
+extern DataAttribute iedModel_STG_XSWI1_BlkOpn_Oper_Test;
+extern DataAttribute iedModel_STG_XSWI1_BlkOpn_Oper_Check;
 extern DataAttribute iedModel_STG_XSWI1_BlkOpn_stVal;
 extern DataAttribute iedModel_STG_XSWI1_BlkOpn_q;
 extern DataAttribute iedModel_STG_XSWI1_BlkOpn_t;
 extern DataAttribute iedModel_STG_XSWI1_BlkOpn_ctlModel;
 extern DataObject iedModel_STG_XSWI1_BlkCls;
+extern DataAttribute iedModel_STG_XSWI1_BlkCls_Oper;
+extern DataAttribute iedModel_STG_XSWI1_BlkCls_Oper_ctlVal;
+extern DataAttribute iedModel_STG_XSWI1_BlkCls_Oper_origin;
+extern DataAttribute iedModel_STG_XSWI1_BlkCls_Oper_origin_orCat;
+extern DataAttribute iedModel_STG_XSWI1_BlkCls_Oper_origin_orIdent;
+extern DataAttribute iedModel_STG_XSWI1_BlkCls_Oper_ctlNum;
+extern DataAttribute iedModel_STG_XSWI1_BlkCls_Oper_T;
+extern DataAttribute iedModel_STG_XSWI1_BlkCls_Oper_Test;
+extern DataAttribute iedModel_STG_XSWI1_BlkCls_Oper_Check;
 extern DataAttribute iedModel_STG_XSWI1_BlkCls_stVal;
 extern DataAttribute iedModel_STG_XSWI1_BlkCls_q;
 extern DataAttribute iedModel_STG_XSWI1_BlkCls_t;
@@ -125,9 +131,6 @@ extern DataAttribute iedModel_STG_TTMP1_TmpTgt_sVC_offset;
 extern DataObject iedModel_STG_DBAT1_EEName;
 extern DataAttribute iedModel_STG_DBAT1_EEName_vendor; /* Novo */
 extern DataAttribute iedModel_STG_DBAT1_EEName_model;  /* Novo */
-extern DataAttribute iedModel_STG_DBAT1_EEName_stVal;
-extern DataAttribute iedModel_STG_DBAT1_EEName_q;
-extern DataAttribute iedModel_STG_DBAT1_EEName_t;
 extern DataObject iedModel_STG_DBAT1_ChaSt;
 extern DataAttribute iedModel_STG_DBAT1_ChaSt_stVal;
 extern DataAttribute iedModel_STG_DBAT1_ChaSt_q;
@@ -186,6 +189,10 @@ extern DataAttribute iedModel_STG_DBAT1_ChaVolMaxRtg_setMag_f;
 extern DataAttribute iedModel_STG_DBAT1_ChaVolMaxRtg_sVC;
 extern DataAttribute iedModel_STG_DBAT1_ChaVolMaxRtg_sVC_scaleFactor;
 extern DataAttribute iedModel_STG_DBAT1_ChaVolMaxRtg_sVC_offset;
+extern DataObject iedModel_STG_DBAT1_SocPro;
+extern DataAttribute iedModel_STG_DBAT1_SocPro_stVal;
+extern DataAttribute iedModel_STG_DBAT1_SocPro_q;
+extern DataAttribute iedModel_STG_DBAT1_SocPro_t;
 
 /* ==================================================================
  * ZBAT1
@@ -227,10 +234,6 @@ extern DataAttribute iedModel_STG_ZBAT1_VolChgRte_t;
 #define IEDMODEL_STG_LLN0_Health_stVal (&iedModel_STG_LLN0_Health_stVal)
 #define IEDMODEL_STG_LLN0_NamPlt_vendor (&iedModel_STG_LLN0_NamPlt_vendor)
 
-/* --- MMXU1 --- */
-#define IEDMODEL_STG_MMXU1 (&iedModel_STG_MMXU1)
-#define IEDMODEL_STG_MMXU1_TotW_mag_f (&iedModel_STG_MMXU1_TotW_mag_f)
-
 /* --- Defines XSWI1 --- */
 #define IEDMODEL_STG_XSWI1 (&iedModel_STG_XSWI1)
 #define IEDMODEL_STG_XSWI1_SwTyp (&iedModel_STG_XSWI1_SwTyp)
@@ -259,11 +262,15 @@ extern DataAttribute iedModel_STG_ZBAT1_VolChgRte_t;
 #define IEDMODEL_STG_XSWI1_Pos_t (&iedModel_STG_XSWI1_Pos_t)
 #define IEDMODEL_STG_XSWI1_Pos_ctlModel (&iedModel_STG_XSWI1_Pos_ctlModel)
 #define IEDMODEL_STG_XSWI1_BlkOpn (&iedModel_STG_XSWI1_BlkOpn)
+#define IEDMODEL_STG_XSWI1_BlkOpn_Oper (&iedModel_STG_XSWI1_BlkOpn_Oper)
+#define IEDMODEL_STG_XSWI1_BlkOpn_Oper_ctlVal (&iedModel_STG_XSWI1_BlkOpn_Oper_ctlVal)
 #define IEDMODEL_STG_XSWI1_BlkOpn_stVal (&iedModel_STG_XSWI1_BlkOpn_stVal)
 #define IEDMODEL_STG_XSWI1_BlkOpn_q (&iedModel_STG_XSWI1_BlkOpn_q)
 #define IEDMODEL_STG_XSWI1_BlkOpn_t (&iedModel_STG_XSWI1_BlkOpn_t)
 #define IEDMODEL_STG_XSWI1_BlkOpn_ctlModel (&iedModel_STG_XSWI1_BlkOpn_ctlModel)
 #define IEDMODEL_STG_XSWI1_BlkCls (&iedModel_STG_XSWI1_BlkCls)
+#define IEDMODEL_STG_XSWI1_BlkCls_Oper (&iedModel_STG_XSWI1_BlkCls_Oper)
+#define IEDMODEL_STG_XSWI1_BlkCls_Oper_ctlVal (&iedModel_STG_XSWI1_BlkCls_Oper_ctlVal)
 #define IEDMODEL_STG_XSWI1_BlkCls_stVal (&iedModel_STG_XSWI1_BlkCls_stVal)
 #define IEDMODEL_STG_XSWI1_BlkCls_q (&iedModel_STG_XSWI1_BlkCls_q)
 #define IEDMODEL_STG_XSWI1_BlkCls_t (&iedModel_STG_XSWI1_BlkCls_t)
@@ -283,7 +290,6 @@ extern DataAttribute iedModel_STG_ZBAT1_VolChgRte_t;
 #define IEDMODEL_STG_DBAT1_EEName (&iedModel_STG_DBAT1_EEName)
 #define IEDMODEL_STG_DBAT1_EEName_vendor (&iedModel_STG_DBAT1_EEName_vendor)
 #define IEDMODEL_STG_DBAT1_EEName_model (&iedModel_STG_DBAT1_EEName_model)
-#define IEDMODEL_STG_DBAT1_EEName_stVal (&iedModel_STG_DBAT1_EEName_stVal)
 #define IEDMODEL_STG_DBAT1_ChaSt_stVal (&iedModel_STG_DBAT1_ChaSt_stVal)
 #define IEDMODEL_STG_DBAT1_DschSt_stVal (&iedModel_STG_DBAT1_DschSt_stVal)
 #define IEDMODEL_STG_DBAT1_EEHealth_stVal (&iedModel_STG_DBAT1_EEHealth_stVal)
@@ -295,6 +301,10 @@ extern DataAttribute iedModel_STG_ZBAT1_VolChgRte_t;
 #define IEDMODEL_STG_DBAT1_ChaAmpMax_setMag_f (&iedModel_STG_DBAT1_ChaAmpMax_setMag_f)
 #define IEDMODEL_STG_DBAT1_AhrRtg_setMag_f (&iedModel_STG_DBAT1_AhrRtg_setMag_f)
 #define IEDMODEL_STG_DBAT1_ChaVolMaxRtg_setMag_f (&iedModel_STG_DBAT1_ChaVolMaxRtg_setMag_f)
+#define IEDMODEL_STG_DBAT1_SocPro (&iedModel_STG_DBAT1_SocPro)
+#define IEDMODEL_STG_DBAT1_SocPro_stVal (&iedModel_STG_DBAT1_SocPro_stVal)
+#define IEDMODEL_STG_DBAT1_SocPro_q (&iedModel_STG_DBAT1_SocPro_q)
+#define IEDMODEL_STG_DBAT1_SocPro_t (&iedModel_STG_DBAT1_SocPro_t)
 
 /* --- Defines ZBAT1 --- */
 #define IEDMODEL_STG_ZBAT1 (&iedModel_STG_ZBAT1)
