@@ -25,31 +25,37 @@
  extern LogicalNode iedModel_CTRL_LGOS1;
  extern LogicalNode iedModel_CTRL_LTIM1;
  extern LogicalNode iedModel_CTRL_LTMS1;
+ extern LogicalNode iedModel_CTRL_LTRK1;
 
  /* LPHD1 Data Objects and Attributes */
  extern DataObject iedModel_CTRL_LPHD1_NamPlt;
  extern DataAttribute iedModel_CTRL_LPHD1_NamPlt_vendor;
  extern DataAttribute iedModel_CTRL_LPHD1_NamPlt_swRev;
- extern DataAttribute iedModel_CTRL_LPHD1_NamPlt_ldNs;
+ extern DataAttribute iedModel_CTRL_LPHD1_NamPlt_lnNs;
  extern DataObject iedModel_CTRL_LPHD1_PhyNam;
  extern DataAttribute iedModel_CTRL_LPHD1_PhyNam_vendor;
+ extern DataAttribute iedModel_CTRL_LPHD1_PhyNam_model;
  extern DataObject iedModel_CTRL_LPHD1_PhyHealth;
  extern DataAttribute iedModel_CTRL_LPHD1_PhyHealth_stVal;
  extern DataAttribute iedModel_CTRL_LPHD1_PhyHealth_q;
  extern DataAttribute iedModel_CTRL_LPHD1_PhyHealth_t;
  extern DataObject iedModel_CTRL_LPHD1_OutOv;
  extern DataAttribute iedModel_CTRL_LPHD1_OutOv_stVal;
+ extern DataAttribute iedModel_CTRL_LPHD1_OutOv_q;
+ extern DataAttribute iedModel_CTRL_LPHD1_OutOv_t;
  extern DataObject iedModel_CTRL_LPHD1_Proxy;
  extern DataAttribute iedModel_CTRL_LPHD1_Proxy_stVal;
+ extern DataAttribute iedModel_CTRL_LPHD1_Proxy_q;
+ extern DataAttribute iedModel_CTRL_LPHD1_Proxy_t;
  extern DataObject iedModel_CTRL_LPHD1_OpTmh;
  extern DataAttribute iedModel_CTRL_LPHD1_OpTmh_stVal;
-//  extern DataObject iedModel_CTRL_LPHD1_Sim;
-//  extern DataAttribute iedModel_CTRL_LPHD1_Sim_ctlVal; /* Atributo de Controle */
-//  extern DataAttribute iedModel_CTRL_LPHD1_Sim_stVal;
-//  extern DataAttribute iedModel_CTRL_LPHD1_Sim_q;
-//  extern DataAttribute iedModel_CTRL_LPHD1_Sim_t;
-//  extern DataAttribute iedModel_CTRL_LPHD1_Sim_ctlModel;
-
+ extern DataAttribute iedModel_CTRL_LPHD1_OpTmh_q;
+ extern DataAttribute iedModel_CTRL_LPHD1_OpTmh_t;
+ extern DataObject iedModel_CTRL_LPHD1_Sim; // Faltava este
+ extern DataAttribute iedModel_CTRL_LPHD1_Sim_stVal;
+ extern DataAttribute iedModel_CTRL_LPHD1_Sim_q;
+ extern DataAttribute iedModel_CTRL_LPHD1_Sim_t;
+ extern DataAttribute iedModel_CTRL_LPHD1_Sim_ctlModel;
  /* LLN0 Data Objects and Attributes */
   extern DataObject iedModel_CTRL_LLN0_Mod;
   extern DataAttribute iedModel_CTRL_LLN0_Mod_ctlVal; /* Atributo de Controle */
@@ -68,9 +74,60 @@
   extern DataObject iedModel_CTRL_LLN0_NamPlt;
   extern DataAttribute iedModel_CTRL_LLN0_NamPlt_vendor;
   extern DataAttribute iedModel_CTRL_LLN0_NamPlt_swRev;
-  extern DataAttribute iedModel_CTRL_LLN0_NamPlt_ldNs;
+  extern DataAttribute iedModel_CTRL_LLN0_NamPlt_lnNs;
   extern DataAttribute iedModel_CTRL_LLN0_NamPlt_configRev;
   extern DataAttribute iedModel_CTRL_LLN0_NamPlt_d;
+  extern DataObject iedModel_CTRL_LLN0_LEDRs;
+  extern DataAttribute iedModel_CTRL_LLN0_LEDRs_Oper;
+  extern DataAttribute iedModel_CTRL_LLN0_LEDRs_Oper_ctlVal;
+  extern DataAttribute iedModel_CTRL_LLN0_LEDRs_Oper_origin;
+  extern DataAttribute iedModel_CTRL_LLN0_LEDRs_Oper_origin_orCat;
+  extern DataAttribute iedModel_CTRL_LLN0_LEDRs_Oper_origin_orIdent;
+  extern DataAttribute iedModel_CTRL_LLN0_LEDRs_Oper_ctlNum;
+  extern DataAttribute iedModel_CTRL_LLN0_LEDRs_Oper_T;
+  extern DataAttribute iedModel_CTRL_LLN0_LEDRs_Oper_Test;
+  extern DataAttribute iedModel_CTRL_LLN0_LEDRs_Oper_Check;
+  extern DataAttribute iedModel_CTRL_LLN0_LEDRs_stVal;
+  extern DataAttribute iedModel_CTRL_LLN0_LEDRs_q;
+  extern DataAttribute iedModel_CTRL_LLN0_LEDRs_t;
+  extern DataAttribute iedModel_CTRL_LLN0_LEDRs_ctlModel;
+ /* LTRK1 Data Objects and Attributes */
+  extern DataObject iedModel_CTRL_LTRK1_NamPlt;
+  extern DataAttribute iedModel_CTRL_LTRK1_NamPlt_vendor;
+  extern DataAttribute iedModel_CTRL_LTRK1_NamPlt_swRev;
+  extern DataAttribute iedModel_CTRL_LTRK1_NamPlt_d;
+
+  /* Beh */
+  extern DataObject iedModel_CTRL_LTRK1_Beh;
+  extern DataAttribute iedModel_CTRL_LTRK1_Beh_stVal;
+  extern DataAttribute iedModel_CTRL_LTRK1_Beh_q;
+  extern DataAttribute iedModel_CTRL_LTRK1_Beh_t;
+
+  /* Health */
+  extern DataObject iedModel_CTRL_LTRK1_Health;
+  extern DataAttribute iedModel_CTRL_LTRK1_Health_stVal;
+  extern DataAttribute iedModel_CTRL_LTRK1_Health_q;
+  extern DataAttribute iedModel_CTRL_LTRK1_Health_t;
+
+  /* GenTrk (Generic Tracking) */
+  extern DataObject iedModel_CTRL_LTRK1_GenTrk;
+  extern DataAttribute iedModel_CTRL_LTRK1_GenTrk_objRef;
+  extern DataAttribute iedModel_CTRL_LTRK1_GenTrk_serviceType;
+  extern DataAttribute iedModel_CTRL_LTRK1_GenTrk_errorCode;
+  extern DataAttribute iedModel_CTRL_LTRK1_GenTrk_t;
+
+  /* GocbTrk (GOOSE Tracking) */
+  extern DataObject iedModel_CTRL_LTRK1_GocbTrk;
+  extern DataAttribute iedModel_CTRL_LTRK1_GocbTrk_objRef;
+  extern DataAttribute iedModel_CTRL_LTRK1_GocbTrk_serviceType;
+  extern DataAttribute iedModel_CTRL_LTRK1_GocbTrk_errorCode;
+  extern DataAttribute iedModel_CTRL_LTRK1_GocbTrk_t;
+  extern DataAttribute iedModel_CTRL_LTRK1_GocbTrk_goEna;
+  extern DataAttribute iedModel_CTRL_LTRK1_GocbTrk_goID;
+  extern DataAttribute iedModel_CTRL_LTRK1_GocbTrk_datSet;
+  extern DataAttribute iedModel_CTRL_LTRK1_GocbTrk_confRev;
+  extern DataAttribute iedModel_CTRL_LTRK1_GocbTrk_ndsCom;
+  extern DataAttribute iedModel_CTRL_LTRK1_GocbTrk_dstAddress;
 
  /* DEEV1 Data Objects and Attributes */
  /*
@@ -364,6 +421,9 @@
   extern DataAttribute iedModel_CTRL_LGOS1_NamPlt_vendor;
   extern DataObject iedModel_CTRL_LGOS1_GoCBRef;
   extern DataAttribute iedModel_CTRL_LGOS1_GoCBRef_stVal;
+  extern DataAttribute iedModel_CTRL_LGOS1_GoCBRef_q;
+  extern DataAttribute iedModel_CTRL_LGOS1_GoCBRef_t;
+  extern DataAttribute iedModel_CTRL_LGOS1_St_t;
   extern DataObject iedModel_CTRL_LGOS1_St;
   extern DataAttribute iedModel_CTRL_LGOS1_St_stVal;
   extern DataAttribute iedModel_CTRL_LGOS1_St_q;
@@ -402,10 +462,10 @@
   extern DataAttribute iedModel_CTRL_LTIM1_Health_stVal;
   extern DataAttribute iedModel_CTRL_LTIM1_Health_q;
   extern DataAttribute iedModel_CTRL_LTIM1_Health_t;
-  extern DataObject iedModel_CTRL_LTIM1_Tm;
-  extern DataAttribute iedModel_CTRL_LTIM1_Tm_stVal;
-  extern DataAttribute iedModel_CTRL_LTIM1_Tm_q;
-  extern DataAttribute iedModel_CTRL_LTIM1_Tm_t;
+  extern DataObject iedModel_CTRL_LTIM1_TmDT;
+  extern DataAttribute iedModel_CTRL_LTIM1_TmDT_stVal;
+  extern DataAttribute iedModel_CTRL_LTIM1_TmDT_q;
+  extern DataAttribute iedModel_CTRL_LTIM1_TmDT_t;
   
 //  extern DataObject iedModel_CTRL_LTIM1_NamPlt;
 //  extern DataAttribute iedModel_CTRL_LTIM1_NamPlt_vendor;
@@ -452,6 +512,7 @@
   #define IEDMODEL_CTRL_LPHD1 (&iedModel_CTRL_LPHD1)
   #define IEDMODEL_CTRL_LPHD1_PhyNam (&iedModel_CTRL_LPHD1_PhyNam)
   #define IEDMODEL_CTRL_LPHD1_PhyNam_vendor (&iedModel_CTRL_LPHD1_PhyNam_vendor)
+  #define IEDMODEL_CTRL_LPHD1_PhyNam_model (&iedModel_CTRL_LPHD1_PhyNam_model)
   #define IEDMODEL_CTRL_LPHD1_PhyHealth (&iedModel_CTRL_LPHD1_PhyHealth)
   #define IEDMODEL_CTRL_LPHD1_PhyHealth_stVal (&iedModel_CTRL_LPHD1_PhyHealth_stVal)
   #define IEDMODEL_CTRL_LPHD1_PhyHealth_q (&iedModel_CTRL_LPHD1_PhyHealth_q)
@@ -468,16 +529,15 @@
   #define IEDMODEL_CTRL_LPHD1_OpTmh_stVal (&iedModel_CTRL_LPHD1_OpTmh_stVal)
   #define IEDMODEL_CTRL_LPHD1_OpTmh_q (&iedModel_CTRL_LPHD1_OpTmh_q)
   #define IEDMODEL_CTRL_LPHD1_OpTmh_t (&iedModel_CTRL_LPHD1_OpTmh_t)
-//   #define IEDMODEL_CTRL_LPHD1_Sim (&iedModel_CTRL_LPHD1_Sim)
-//   //#define IEDMODEL_CTRL_LPHD1_Sim_ctlVal (&iedModel_CTRL_LPHD1_Sim_ctlVal) /* ADICIONADO */
-//   #define IEDMODEL_CTRL_LPHD1_Sim_stVal (&iedModel_CTRL_LPHD1_Sim_stVal)
-//   #define IEDMODEL_CTRL_LPHD1_Sim_q (&iedModel_CTRL_LPHD1_Sim_q)
-//   #define IEDMODEL_CTRL_LPHD1_Sim_t (&iedModel_CTRL_LPHD1_Sim_t)
-//   #define IEDMODEL_CTRL_LPHD1_Sim_ctlModel (&iedModel_CTRL_LPHD1_Sim_ctlModel)
+  #define IEDMODEL_CTRL_LPHD1_Sim (&iedModel_CTRL_LPHD1_Sim)
+  #define IEDMODEL_CTRL_LPHD1_Sim_stVal (&iedModel_CTRL_LPHD1_Sim_stVal)
+  #define IEDMODEL_CTRL_LPHD1_Sim_q (&iedModel_CTRL_LPHD1_Sim_q)
+  #define IEDMODEL_CTRL_LPHD1_Sim_t (&iedModel_CTRL_LPHD1_Sim_t)
+  #define IEDMODEL_CTRL_LPHD1_Sim_ctlModel (&iedModel_CTRL_LPHD1_Sim_ctlModel)
   #define IEDMODEL_CTRL_LPHD1_NamPlt (&iedModel_CTRL_LPHD1_NamPlt)
   #define IEDMODEL_CTRL_LPHD1_NamPlt_vendor (&iedModel_CTRL_LPHD1_NamPlt_vendor)
   #define IEDMODEL_CTRL_LPHD1_NamPlt_swRev (&iedModel_CTRL_LPHD1_NamPlt_swRev)
-  #define IEDMODEL_CTRL_LPHD1_NamPlt_ldNs (&iedModel_CTRL_LPHD1_NamPlt_ldNs)
+  #define IEDMODEL_CTRL_LPHD1_NamPlt_lnNs (&iedModel_CTRL_LPHD1_NamPlt_lnNs)
 
   #define IEDMODEL_CTRL (&iedModel_CTRL)
   #define IEDMODEL_CTRL_LLN0 (&iedModel_CTRL_LLN0)
@@ -500,7 +560,14 @@
   #define IEDMODEL_CTRL_LLN0_NamPlt_swRev (&iedModel_CTRL_LLN0_NamPlt_swRev)
   #define IEDMODEL__CTRL_LLN0_NamPlt_d (&iedModel_CTRL_LLN0_NamPlt_d)
   #define IEDMODEL__CTRL_LLN0_NamPlt_configRev (&iedModel_CTRL_LLN0_NamPlt_configRev) 
-  #define IEDMODEL_CTRL_LLN0_NamPlt_ldNs (&iedModel_CTRL_LLN0_NamPlt_ldNs)
+  #define IEDMODEL_CTRL_LLN0_NamPlt_lnNs (&iedModel_CTRL_LLN0_NamPlt_lnNs)
+  #define IEDMODEL_CTRL_LLN0_LEDRs (&iedModel_CTRL_LLN0_LEDRs)
+  #define IEDMODEL_CTRL_LLN0_LEDRs_Oper (&iedModel_CTRL_LLN0_LEDRs_Oper)
+  #define IEDMODEL_CTRL_LLN0_LEDRs_Oper_ctlVal (&iedModel_CTRL_LLN0_LEDRs_Oper_ctlVal)
+  #define IEDMODEL_CTRL_LLN0_LEDRs_stVal (&iedModel_CTRL_LLN0_LEDRs_stVal)
+  #define IEDMODEL_CTRL_LLN0_LEDRs_q (&iedModel_CTRL_LLN0_LEDRs_q)
+  #define IEDMODEL_CTRL_LLN0_LEDRs_t (&iedModel_CTRL_LLN0_LEDRs_t)
+  #define IEDMODEL_CTRL_LLN0_LEDRs_ctlModel (&iedModel_CTRL_LLN0_LEDRs_ctlModel)
 
 //  #define IEDMODEL_CTRL_DEEV1 (&iedModel_CTRL_DEEV1)
 //  #define IEDMODEL_CTRL_DEEV1_Mod (&iedModel_CTRL_DEEV1_Mod)
@@ -774,12 +841,6 @@
 //  #define IEDMODEL_CTRL_DESE1_ConnDCRef_stVal (&iedModel_CTRL_DESE1_ConnDCRef_stVal)
 
   #define IEDMODEL_CTRL_LGOS1 (&iedModel_CTRL_LGOS1)
-  #define IEDMODEL_CTRL_LGOS1_Mod (&iedModel_CTRL_LGOS1_Mod)
-  #define IEDMODEL_CTRL_LGOS1_Mod_ctlVal (&iedModel_CTRL_LGOS1_Mod_ctlVal) /* ADICIONADO */
-  #define IEDMODEL_CTRL_LGOS1_Mod_stVal (&iedModel_CTRL_LGOS1_Mod_stVal)
-  #define IEDMODEL_CTRL_LGOS1_Mod_q (&iedModel_CTRL_LGOS1_Mod_q)
-  #define IEDMODEL_CTRL_LGOS1_Mod_t (&iedModel_CTRL_LGOS1_Mod_t)
-  #define IEDMODEL_CTRL_LGOS1_Mod_ctlModel (&iedModel_CTRL_LGOS1_Mod_ctlModel)
   #define IEDMODEL_CTRL_LGOS1_Beh (&iedModel_CTRL_LGOS1_Beh)
   #define IEDMODEL_CTRL_LGOS1_Beh_stVal (&iedModel_CTRL_LGOS1_Beh_stVal)
   #define IEDMODEL_CTRL_LGOS1_Beh_q (&iedModel_CTRL_LGOS1_Beh_q)
@@ -792,6 +853,8 @@
   #define IEDMODEL_CTRL_LGOS1_NamPlt_vendor (&iedModel_CTRL_LGOS1_NamPlt_vendor)
   #define IEDMODEL_CTRL_LGOS1_GoCBRef (&iedModel_CTRL_LGOS1_GoCBRef)
   #define IEDMODEL_CTRL_LGOS1_GoCBRef_stVal (&iedModel_CTRL_LGOS1_GoCBRef_stVal)
+  #define IEDMODEL_CTRL_LGOS1_GoCBRef_q (&iedModel_CTRL_LGOS1_GoCBRef_q)
+  #define IEDMODEL_CTRL_LGOS1_GoCBRef_t (&iedModel_CTRL_LGOS1_GoCBRef_t)
   #define IEDMODEL_CTRL_LGOS1_St (&iedModel_CTRL_LGOS1_St)
   #define IEDMODEL_CTRL_LGOS1_St_stVal (&iedModel_CTRL_LGOS1_St_stVal)
   #define IEDMODEL_CTRL_LGOS1_St_q (&iedModel_CTRL_LGOS1_St_q)
@@ -834,10 +897,10 @@
   #define IEDMODEL_CTRL_LTIM1_Health_t (&iedModel_CTRL_LTIM1_Health_t)
 //  #define IEDMODEL_CTRL_LTIM1_NamPlt (&iedModel_CTRL_LTIM1_NamPlt)
 //  #define IEDMODEL_CTRL_LTIM1_NamPlt_vendor (&iedModel_CTRL_LTIM1_NamPlt_vendor)
-  #define IEDMODEL_CTRL_LTIM1_Tm (&iedModel_CTRL_LTIM1_Tm)
-  #define IEDMODEL_CTRL_LTIM1_Tm_stVal (&iedModel_CTRL_LTIM1_Tm_stVal)
-  #define IEDMODEL_CTRL_LTIM1_Tm_q (&iedModel_CTRL_LTIM1_Tm_q)
-  #define IEDMODEL_CTRL_LTIM1_Tm_t (&iedModel_CTRL_LTIM1_Tm_t)
+  #define IEDMODEL_CTRL_LTIM1_TmDT (&iedModel_CTRL_LTIM1_TmDT)
+  #define IEDMODEL_CTRL_LTIM1_TmDT_stVal (&iedModel_CTRL_LTIM1_TmDT_stVal)
+  #define IEDMODEL_CTRL_LTIM1_TmDT_q (&iedModel_CTRL_LTIM1_TmDT_q)
+  #define IEDMODEL_CTRL_LTIM1_TmDT_t (&iedModel_CTRL_LTIM1_TmDT_t)
 
   #define IEDMODEL_CTRL_LTMS1 (&iedModel_CTRL_LTMS1)
 //  #define IEDMODEL_CTRL_LTMS1_Mod (&iedModel_CTRL_LTMS1_Mod)
@@ -864,5 +927,38 @@
   #define IEDMODEL_CTRL_LTMS1_TmSrcTyp_stVal (&iedModel_CTRL_LTMS1_TmSrcTyp_stVal)
   #define IEDMODEL_CTRL_LTMS1_TmSrcTyp_q (&iedModel_CTRL_LTMS1_TmSrcTyp_q)
   #define IEDMODEL_CTRL_LTMS1_TmSrcTyp_t (&iedModel_CTRL_LTMS1_TmSrcTyp_t)
+  #define IEDMODEL_CTRL_LTRK1 (&iedModel_CTRL_LTRK1)
+  /* NamPlt */
+  #define IEDMODEL_CTRL_LTRK1_NamPlt (&iedModel_CTRL_LTRK1_NamPlt)
+  #define IEDMODEL_CTRL_LTRK1_NamPlt_vendor (&iedModel_CTRL_LTRK1_NamPlt_vendor)
+  #define IEDMODEL_CTRL_LTRK1_NamPlt_swRev (&iedModel_CTRL_LTRK1_NamPlt_swRev)
+  /* Beh */
+  #define IEDMODEL_CTRL_LTRK1_Beh (&iedModel_CTRL_LTRK1_Beh)
+  #define IEDMODEL_CTRL_LTRK1_Beh_stVal (&iedModel_CTRL_LTRK1_Beh_stVal)
+  #define IEDMODEL_CTRL_LTRK1_Beh_q (&iedModel_CTRL_LTRK1_Beh_q)
+  #define IEDMODEL_CTRL_LTRK1_Beh_t (&iedModel_CTRL_LTRK1_Beh_t)
+  /* Health */
+  #define IEDMODEL_CTRL_LTRK1_Health (&iedModel_CTRL_LTRK1_Health)
+  #define IEDMODEL_CTRL_LTRK1_Health_stVal (&iedModel_CTRL_LTRK1_Health_stVal)
+  #define IEDMODEL_CTRL_LTRK1_Health_q (&iedModel_CTRL_LTRK1_Health_q)
+  #define IEDMODEL_CTRL_LTRK1_Health_t (&iedModel_CTRL_LTRK1_Health_t)
+  /* GenTrk */
+  #define IEDMODEL_CTRL_LTRK1_GenTrk (&iedModel_CTRL_LTRK1_GenTrk)
+  #define IEDMODEL_CTRL_LTRK1_GenTrk_objRef (&iedModel_CTRL_LTRK1_GenTrk_objRef)
+  #define IEDMODEL_CTRL_LTRK1_GenTrk_serviceType (&iedModel_CTRL_LTRK1_GenTrk_serviceType)
+  #define IEDMODEL_CTRL_LTRK1_GenTrk_errorCode (&iedModel_CTRL_LTRK1_GenTrk_errorCode)
+  #define IEDMODEL_CTRL_LTRK1_GenTrk_t (&iedModel_CTRL_LTRK1_GenTrk_t)
+  /* GocbTrk */
+  #define IEDMODEL_CTRL_LTRK1_GocbTrk (&iedModel_CTRL_LTRK1_GocbTrk)
+  #define IEDMODEL_CTRL_LTRK1_GocbTrk_objRef (&iedModel_CTRL_LTRK1_GocbTrk_objRef)
+  #define IEDMODEL_CTRL_LTRK1_GocbTrk_serviceType (&iedModel_CTRL_LTRK1_GocbTrk_serviceType)
+  #define IEDMODEL_CTRL_LTRK1_GocbTrk_errorCode (&iedModel_CTRL_LTRK1_GocbTrk_errorCode)
+  #define IEDMODEL_CTRL_LTRK1_GocbTrk_t (&iedModel_CTRL_LTRK1_GocbTrk_t)
+  #define IEDMODEL_CTRL_LTRK1_GocbTrk_goEna (&iedModel_CTRL_LTRK1_GocbTrk_goEna)
+  #define IEDMODEL_CTRL_LTRK1_GocbTrk_goID (&iedModel_CTRL_LTRK1_GocbTrk_goID)
+  #define IEDMODEL_CTRL_LTRK1_GocbTrk_datSet (&iedModel_CTRL_LTRK1_GocbTrk_datSet)
+  #define IEDMODEL_CTRL_LTRK1_GocbTrk_confRev (&iedModel_CTRL_LTRK1_GocbTrk_confRev)
+  #define IEDMODEL_CTRL_LTRK1_GocbTrk_ndsCom (&iedModel_CTRL_LTRK1_GocbTrk_ndsCom)
+  #define IEDMODEL_CTRL_LTRK1_GocbTrk_dstAddress (&iedModel_CTRL_LTRK1_GocbTrk_dstAddress)
 
  #endif /* STATIC_MODEL_H_ */
