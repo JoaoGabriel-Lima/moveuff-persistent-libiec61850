@@ -43,9 +43,9 @@ controlHandlerForBinaryOutput(ControlAction action, void* parameter, MmsValue* v
 
     uint64_t timeStamp = Hal_getTimeInMs();
 
-    //if (parameter == IEDMODEL_CTRL_LPHD1_Sim_stVal) {
-     //   IedServer_updateUTCTimeAttributeValue(iedServer, IEDMODEL_CTRL_LPHD1_Sim_t, timeStamp);
-    //    IedServer_updateAttributeValue(iedServer, IEDMODEL_CTRL_LPHD1_Sim_stVal, value);
+    //if (parameter == IEDMODEL_B1CTR_LPHD1_Sim_stVal) {
+     //   IedServer_updateUTCTimeAttributeValue(iedServer, IEDMODEL_B1CTR_LPHD1_Sim_t, timeStamp);
+    //    IedServer_updateAttributeValue(iedServer, IEDMODEL_B1CTR_LPHD1_Sim_stVal, value);
    // }
 
     return CONTROL_RESULT_OK;
@@ -128,9 +128,9 @@ main(int argc, char** argv)
     IedServer_setServerIdentity(iedServer, "MZ", "basic io", "1.6.0");
 
     /* Install handler for operate command */
-   // IedServer_setControlHandler(iedServer, IEDMODEL_CTRL_LPHD1_Sim,
+   // IedServer_setControlHandler(iedServer, IEDMODEL_B1CTR_LPHD1_Sim,
       //      (ControlHandler) controlHandlerForBinaryOutput,
-      //      IEDMODEL_CTRL_LPHD1_Sim_stVal);
+      //      IEDMODEL_B1CTR_LPHD1_Sim_stVal);
 
     IedServer_setConnectionIndicationHandler(iedServer, (IedConnectionIndicationHandler) connectionHandler, NULL);
 
@@ -182,17 +182,17 @@ main(int argc, char** argv)
 // #if 1
 //         IedServer_lockDataModel(iedServer);
 
-//         IedServer_updateTimestampAttributeValue(iedServer, IEDMODEL_CTRL_LPHD1_Sim_AnIn1_t, &iecTimestamp);
-//         IedServer_updateFloatAttributeValue(iedServer, IEDMODEL_CTRL_LPHD1_Sim_AnIn1_mag_f, an1);
+//         IedServer_updateTimestampAttributeValue(iedServer, IEDMODEL_B1CTR_LPHD1_Sim_AnIn1_t, &iecTimestamp);
+//         IedServer_updateFloatAttributeValue(iedServer, IEDMODEL_B1CTR_LPHD1_Sim_AnIn1_mag_f, an1);
 
-//         IedServer_updateTimestampAttributeValue(iedServer, IEDMODEL_CTRL_LPHD1_Sim_AnIn2_t, &iecTimestamp);
-//         IedServer_updateFloatAttributeValue(iedServer, IEDMODEL_CTRL_LPHD1_Sim_AnIn2_mag_f, an2);
+//         IedServer_updateTimestampAttributeValue(iedServer, IEDMODEL_B1CTR_LPHD1_Sim_AnIn2_t, &iecTimestamp);
+//         IedServer_updateFloatAttributeValue(iedServer, IEDMODEL_B1CTR_LPHD1_Sim_AnIn2_mag_f, an2);
 
-//         IedServer_updateTimestampAttributeValue(iedServer, IEDMODEL_CTRL_LPHD1_Sim_AnIn3_t, &iecTimestamp);
-//         IedServer_updateFloatAttributeValue(iedServer, IEDMODEL_CTRL_LPHD1_Sim_AnIn3_mag_f, an3);
+//         IedServer_updateTimestampAttributeValue(iedServer, IEDMODEL_B1CTR_LPHD1_Sim_AnIn3_t, &iecTimestamp);
+//         IedServer_updateFloatAttributeValue(iedServer, IEDMODEL_B1CTR_LPHD1_Sim_AnIn3_mag_f, an3);
 
-//         IedServer_updateTimestampAttributeValue(iedServer, IEDMODEL_CTRL_LPHD1_Sim_AnIn4_t, &iecTimestamp);
-//         IedServer_updateFloatAttributeValue(iedServer, IEDMODEL_CTRL_LPHD1_Sim_AnIn4_mag_f, an4);
+//         IedServer_updateTimestampAttributeValue(iedServer, IEDMODEL_B1CTR_LPHD1_Sim_AnIn4_t, &iecTimestamp);
+//         IedServer_updateFloatAttributeValue(iedServer, IEDMODEL_B1CTR_LPHD1_Sim_AnIn4_mag_f, an4);
 
 //         IedServer_unlockDataModel(iedServer);
 // #endif
