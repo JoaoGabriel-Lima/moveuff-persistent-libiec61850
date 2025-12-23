@@ -3401,7 +3401,7 @@ LogicalNode iedModel_B1EBK_MMXU1 = {
     LogicalNodeModelType,
     "MMXU1",
     (ModelNode*) &iedModel_B1EBK,
-    (ModelNode*) &iedModel_B1EBK_DLOC1, 
+    (ModelNode*) &iedModel_B1EBK_TLOC1, 
     (ModelNode*) &iedModel_B1EBK_MMXU1_NamPlt
 };
 
@@ -3623,49 +3623,47 @@ DataAttribute iedModel_B1EBK_MMXU1_TotW_db = {
 };
 
 /* ==================================================================
- * MODELAGEM NÓ LÓGICO DLOC1
+ * IMPLEMENTAÇÃO TLOC1 
  * ==================================================================
  */
 
-/* ==================================================================
- * MODELAGEM NÓ LÓGICO DLOC1
- * ==================================================================
- */
-
-LogicalNode iedModel_B1EBK_DLOC1 = {
+/* --- Nó Lógico: TLOC1 --- */
+LogicalNode iedModel_B1EBK_TLOC1 = {
     LogicalNodeModelType,
-    "DLOC1",
+    "TLOC1",
     (ModelNode*) &iedModel_B1EBK,
-    NULL, /* Sibling (Será o próximo LN) */
-    (ModelNode*) &iedModel_B1EBK_DLOC1_DistTot
+    NULL,
+    (ModelNode*) &iedModel_B1EBK_TLOC1_DistTot
 };
 
-/* --- Data Object: DistTot (CDC: MV - Measured Value) --- */
-DataObject iedModel_B1EBK_DLOC1_DistTot = {
+/* --- 1. DistTot (Distance Total - MV) --- */
+DataObject iedModel_B1EBK_TLOC1_DistTot = {
     DataObjectModelType,
     "DistTot",
-    (ModelNode*) &iedModel_B1EBK_DLOC1,
-    (ModelNode*) &iedModel_B1EBK_DLOC1_DistSess,
-    (ModelNode*) &iedModel_B1EBK_DLOC1_DistTot_mag,
+    (ModelNode*) &iedModel_B1EBK_TLOC1,
+    (ModelNode*) &iedModel_B1EBK_TLOC1_DistSess, /* Sibling */
+    (ModelNode*) &iedModel_B1EBK_TLOC1_DistTot_mag,
     0,
     -1
 };
 
-DataAttribute iedModel_B1EBK_DLOC1_DistTot_mag = {
-    DataAttributeModelType, "mag",
-    (ModelNode*) &iedModel_B1EBK_DLOC1_DistTot,
-    (ModelNode*) &iedModel_B1EBK_DLOC1_DistTot_q,
-    (ModelNode*) &iedModel_B1EBK_DLOC1_DistTot_mag_f,
+DataAttribute iedModel_B1EBK_TLOC1_DistTot_mag = {
+    DataAttributeModelType,
+    "mag",
+    (ModelNode*) &iedModel_B1EBK_TLOC1_DistTot,
+    (ModelNode*) &iedModel_B1EBK_TLOC1_DistTot_q,
+    (ModelNode*) &iedModel_B1EBK_TLOC1_DistTot_mag_f,
     0,
     -1,
     IEC61850_FC_MX,
     IEC61850_CONSTRUCTED,
-    TRG_OPT_DATA_CHANGED | TRG_OPT_DATA_UPDATE
+    0
 };
 
-DataAttribute iedModel_B1EBK_DLOC1_DistTot_mag_f = {
-    DataAttributeModelType, "f",
-    (ModelNode*) &iedModel_B1EBK_DLOC1_DistTot_mag,
+DataAttribute iedModel_B1EBK_TLOC1_DistTot_mag_f = {
+    DataAttributeModelType,
+    "f",
+    (ModelNode*) &iedModel_B1EBK_TLOC1_DistTot_mag,
     NULL,
     NULL,
     0,
@@ -3675,68 +3673,60 @@ DataAttribute iedModel_B1EBK_DLOC1_DistTot_mag_f = {
     0
 };
 
-DataAttribute iedModel_B1EBK_DLOC1_DistTot_q = {
-    DataAttributeModelType, "q",
-    (ModelNode*) &iedModel_B1EBK_DLOC1_DistTot,
-    (ModelNode*) &iedModel_B1EBK_DLOC1_DistTot_t,
+DataAttribute iedModel_B1EBK_TLOC1_DistTot_q = {
+    DataAttributeModelType,
+    "q",
+    (ModelNode*) &iedModel_B1EBK_TLOC1_DistTot,
+    (ModelNode*) &iedModel_B1EBK_TLOC1_DistTot_t,
     NULL,
     0,
     -1,
-    IEC61850_FC_MX, /* <-- CORRIGIDO (Era ST) */
+    IEC61850_FC_MX,
     IEC61850_QUALITY,
     TRG_OPT_QUALITY_CHANGED
 };
 
-DataAttribute iedModel_B1EBK_DLOC1_DistTot_t = {
-    DataAttributeModelType, "t",
-    (ModelNode*) &iedModel_B1EBK_DLOC1_DistTot,
-    (ModelNode*) &iedModel_B1EBK_DLOC1_DistTot_db,
+DataAttribute iedModel_B1EBK_TLOC1_DistTot_t = {
+    DataAttributeModelType,
+    "t",
+    (ModelNode*) &iedModel_B1EBK_TLOC1_DistTot,
+    NULL,
     NULL,
     0,
     -1,
-    IEC61850_FC_MX, /* <-- CORRIGIDO (Era ST) */
+    IEC61850_FC_MX,
     IEC61850_TIMESTAMP,
     0
 };
 
-DataAttribute iedModel_B1EBK_DLOC1_DistTot_db = {
-    DataAttributeModelType, "db",
-    (ModelNode*) &iedModel_B1EBK_DLOC1_DistTot,
-    NULL,
-    NULL,
-    0,
-    -1,
-    IEC61850_FC_CF,
-    IEC61850_INT32U,
-    TRG_OPT_DATA_CHANGED
-};
-
-/* --- Data Object: DistSess (CDC: MV - Measured Value) --- */
-DataObject iedModel_B1EBK_DLOC1_DistSess = {
+/* --- 2. DistSess (Distance Session - MV) --- */
+DataObject iedModel_B1EBK_TLOC1_DistSess = {
     DataObjectModelType,
     "DistSess",
-    (ModelNode*) &iedModel_B1EBK_DLOC1,
-    (ModelNode*) &iedModel_B1EBK_DLOC1_NavFai,
-    (ModelNode*) &iedModel_B1EBK_DLOC1_DistSess_mag,
+    (ModelNode*) &iedModel_B1EBK_TLOC1,
+    (ModelNode*) &iedModel_B1EBK_TLOC1_NavFal, /* Sibling */
+    (ModelNode*) &iedModel_B1EBK_TLOC1_DistSess_mag,
     0,
     -1
 };
 
-DataAttribute iedModel_B1EBK_DLOC1_DistSess_mag = {
-    DataAttributeModelType, "mag",
-    (ModelNode*) &iedModel_B1EBK_DLOC1_DistSess,
-    (ModelNode*) &iedModel_B1EBK_DLOC1_DistSess_q,
-    (ModelNode*) &iedModel_B1EBK_DLOC1_DistSess_mag_f,
+DataAttribute iedModel_B1EBK_TLOC1_DistSess_mag = {
+    DataAttributeModelType,
+    "mag",
+    (ModelNode*) &iedModel_B1EBK_TLOC1_DistSess,
+    (ModelNode*) &iedModel_B1EBK_TLOC1_DistSess_q,
+    (ModelNode*) &iedModel_B1EBK_TLOC1_DistSess_mag_f,
     0,
     -1,
     IEC61850_FC_MX,
     IEC61850_CONSTRUCTED,
-    TRG_OPT_DATA_CHANGED | TRG_OPT_DATA_UPDATE
+    0
 };
 
-DataAttribute iedModel_B1EBK_DLOC1_DistSess_mag_f = {
-    DataAttributeModelType, "f",
-    (ModelNode*) &iedModel_B1EBK_DLOC1_DistSess_mag,
+DataAttribute iedModel_B1EBK_TLOC1_DistSess_mag_f = {
+    DataAttributeModelType,
+    "f",
+    (ModelNode*) &iedModel_B1EBK_TLOC1_DistSess_mag,
     NULL,
     NULL,
     0,
@@ -3746,57 +3736,48 @@ DataAttribute iedModel_B1EBK_DLOC1_DistSess_mag_f = {
     0
 };
 
-DataAttribute iedModel_B1EBK_DLOC1_DistSess_q = {
-    DataAttributeModelType, "q",
-    (ModelNode*) &iedModel_B1EBK_DLOC1_DistSess,
-    (ModelNode*) &iedModel_B1EBK_DLOC1_DistSess_t,
+DataAttribute iedModel_B1EBK_TLOC1_DistSess_q = {
+    DataAttributeModelType,
+    "q",
+    (ModelNode*) &iedModel_B1EBK_TLOC1_DistSess,
+    (ModelNode*) &iedModel_B1EBK_TLOC1_DistSess_t,
     NULL,
     0,
     -1,
-    IEC61850_FC_MX, /* <-- CORRIGIDO (Era ST) */
+    IEC61850_FC_MX,
     IEC61850_QUALITY,
     TRG_OPT_QUALITY_CHANGED
 };
 
-DataAttribute iedModel_B1EBK_DLOC1_DistSess_t = {
-    DataAttributeModelType, "t",
-    (ModelNode*) &iedModel_B1EBK_DLOC1_DistSess,
-    (ModelNode*) &iedModel_B1EBK_DLOC1_DistSess_db,
+DataAttribute iedModel_B1EBK_TLOC1_DistSess_t = {
+    DataAttributeModelType,
+    "t",
+    (ModelNode*) &iedModel_B1EBK_TLOC1_DistSess,
+    NULL,
     NULL,
     0,
     -1,
-    IEC61850_FC_MX, /* <-- CORRIGIDO (Era ST) */
+    IEC61850_FC_MX,
     IEC61850_TIMESTAMP,
     0
 };
 
-DataAttribute iedModel_B1EBK_DLOC1_DistSess_db = {
-    DataAttributeModelType, "db",
-    (ModelNode*) &iedModel_B1EBK_DLOC1_DistSess,
-    NULL,
-    NULL,
-    0,
-    -1,
-    IEC61850_FC_CF,
-    IEC61850_INT32U,
-    TRG_OPT_DATA_CHANGED
-};
-
-/* --- Data Object: NavFai (CDC: SPS - Simple Point Status) --- */
-DataObject iedModel_B1EBK_DLOC1_NavFai = {
+/* --- 3. NavFal (Navigation Failure - SPS) --- */
+DataObject iedModel_B1EBK_TLOC1_NavFal = {
     DataObjectModelType,
-    "NavFai",
-    (ModelNode*) &iedModel_B1EBK_DLOC1,
-    (ModelNode*) &iedModel_B1EBK_DLOC1_SatAvl,
-    (ModelNode*) &iedModel_B1EBK_DLOC1_NavFai_stVal,
+    "NavFal",
+    (ModelNode*) &iedModel_B1EBK_TLOC1,
+    (ModelNode*) &iedModel_B1EBK_TLOC1_SatAvl, /* Sibling */
+    (ModelNode*) &iedModel_B1EBK_TLOC1_NavFal_stVal,
     0,
     -1
 };
 
-DataAttribute iedModel_B1EBK_DLOC1_NavFai_stVal = {
-    DataAttributeModelType, "stVal",
-    (ModelNode*) &iedModel_B1EBK_DLOC1_NavFai,
-    (ModelNode*) &iedModel_B1EBK_DLOC1_NavFai_q,
+DataAttribute iedModel_B1EBK_TLOC1_NavFal_stVal = {
+    DataAttributeModelType,
+    "stVal",
+    (ModelNode*) &iedModel_B1EBK_TLOC1_NavFal,
+    (ModelNode*) &iedModel_B1EBK_TLOC1_NavFal_q,
     NULL,
     0,
     -1,
@@ -3805,10 +3786,11 @@ DataAttribute iedModel_B1EBK_DLOC1_NavFai_stVal = {
     TRG_OPT_DATA_CHANGED
 };
 
-DataAttribute iedModel_B1EBK_DLOC1_NavFai_q = {
-    DataAttributeModelType, "q",
-    (ModelNode*) &iedModel_B1EBK_DLOC1_NavFai,
-    (ModelNode*) &iedModel_B1EBK_DLOC1_NavFai_t,
+DataAttribute iedModel_B1EBK_TLOC1_NavFal_q = {
+    DataAttributeModelType,
+    "q",
+    (ModelNode*) &iedModel_B1EBK_TLOC1_NavFal,
+    (ModelNode*) &iedModel_B1EBK_TLOC1_NavFal_t,
     NULL,
     0,
     -1,
@@ -3817,9 +3799,10 @@ DataAttribute iedModel_B1EBK_DLOC1_NavFai_q = {
     TRG_OPT_QUALITY_CHANGED
 };
 
-DataAttribute iedModel_B1EBK_DLOC1_NavFai_t = {
-    DataAttributeModelType, "t",
-    (ModelNode*) &iedModel_B1EBK_DLOC1_NavFai,
+DataAttribute iedModel_B1EBK_TLOC1_NavFal_t = {
+    DataAttributeModelType,
+    "t",
+    (ModelNode*) &iedModel_B1EBK_TLOC1_NavFal,
     NULL,
     NULL,
     0,
@@ -3829,21 +3812,22 @@ DataAttribute iedModel_B1EBK_DLOC1_NavFai_t = {
     0
 };
 
-/* --- Data Object: SatAvl (CDC: SPS - Simple Point Status) --- */
-DataObject iedModel_B1EBK_DLOC1_SatAvl = {
+/* --- 4. SatAvl (Satellite Available - SPS) --- */
+DataObject iedModel_B1EBK_TLOC1_SatAvl = {
     DataObjectModelType,
     "SatAvl",
-    (ModelNode*) &iedModel_B1EBK_DLOC1,
-    (ModelNode*) &iedModel_B1EBK_DLOC1_LocPrec,
-    (ModelNode*) &iedModel_B1EBK_DLOC1_SatAvl_stVal,
+    (ModelNode*) &iedModel_B1EBK_TLOC1,
+    (ModelNode*) &iedModel_B1EBK_TLOC1_LocPrec, /* Sibling */
+    (ModelNode*) &iedModel_B1EBK_TLOC1_SatAvl_stVal,
     0,
     -1
 };
 
-DataAttribute iedModel_B1EBK_DLOC1_SatAvl_stVal = {
-    DataAttributeModelType, "stVal",
-    (ModelNode*) &iedModel_B1EBK_DLOC1_SatAvl,
-    (ModelNode*) &iedModel_B1EBK_DLOC1_SatAvl_q,
+DataAttribute iedModel_B1EBK_TLOC1_SatAvl_stVal = {
+    DataAttributeModelType,
+    "stVal",
+    (ModelNode*) &iedModel_B1EBK_TLOC1_SatAvl,
+    (ModelNode*) &iedModel_B1EBK_TLOC1_SatAvl_q,
     NULL,
     0,
     -1,
@@ -3852,10 +3836,11 @@ DataAttribute iedModel_B1EBK_DLOC1_SatAvl_stVal = {
     TRG_OPT_DATA_CHANGED
 };
 
-DataAttribute iedModel_B1EBK_DLOC1_SatAvl_q = {
-    DataAttributeModelType, "q",
-    (ModelNode*) &iedModel_B1EBK_DLOC1_SatAvl,
-    (ModelNode*) &iedModel_B1EBK_DLOC1_SatAvl_t,
+DataAttribute iedModel_B1EBK_TLOC1_SatAvl_q = {
+    DataAttributeModelType,
+    "q",
+    (ModelNode*) &iedModel_B1EBK_TLOC1_SatAvl,
+    (ModelNode*) &iedModel_B1EBK_TLOC1_SatAvl_t,
     NULL,
     0,
     -1,
@@ -3864,9 +3849,10 @@ DataAttribute iedModel_B1EBK_DLOC1_SatAvl_q = {
     TRG_OPT_QUALITY_CHANGED
 };
 
-DataAttribute iedModel_B1EBK_DLOC1_SatAvl_t = {
-    DataAttributeModelType, "t",
-    (ModelNode*) &iedModel_B1EBK_DLOC1_SatAvl,
+DataAttribute iedModel_B1EBK_TLOC1_SatAvl_t = {
+    DataAttributeModelType,
+    "t",
+    (ModelNode*) &iedModel_B1EBK_TLOC1_SatAvl,
     NULL,
     NULL,
     0,
@@ -3876,23 +3862,22 @@ DataAttribute iedModel_B1EBK_DLOC1_SatAvl_t = {
     0
 };
 
-/* --- Data Object: LocPrec (CDC: INS - Integer Status) --- */
-DataObject iedModel_B1EBK_DLOC1_LocPrec = {
+/* --- 5. LocPrec (Location Precision - INS) --- */
+DataObject iedModel_B1EBK_TLOC1_LocPrec = {
     DataObjectModelType,
     "LocPrec",
-    (ModelNode*) &iedModel_B1EBK_DLOC1,
-    (ModelNode*) &iedModel_B1EBK_DLOC1_LocDist,
-    (ModelNode*) &iedModel_B1EBK_DLOC1_LocPrec_stVal,
+    (ModelNode*) &iedModel_B1EBK_TLOC1,
+    (ModelNode*) &iedModel_B1EBK_TLOC1_LocDist, /* Sibling */
+    (ModelNode*) &iedModel_B1EBK_TLOC1_LocPrec_stVal,
     0,
     -1
 };
 
-
-
-DataAttribute iedModel_B1EBK_DLOC1_LocPrec_stVal = {
-    DataAttributeModelType, "stVal",
-    (ModelNode*) &iedModel_B1EBK_DLOC1_LocPrec,
-    (ModelNode*) &iedModel_B1EBK_DLOC1_LocPrec_q,
+DataAttribute iedModel_B1EBK_TLOC1_LocPrec_stVal = {
+    DataAttributeModelType,
+    "stVal",
+    (ModelNode*) &iedModel_B1EBK_TLOC1_LocPrec,
+    (ModelNode*) &iedModel_B1EBK_TLOC1_LocPrec_q,
     NULL,
     0,
     -1,
@@ -3901,10 +3886,11 @@ DataAttribute iedModel_B1EBK_DLOC1_LocPrec_stVal = {
     TRG_OPT_DATA_CHANGED | TRG_OPT_DATA_UPDATE
 };
 
-DataAttribute iedModel_B1EBK_DLOC1_LocPrec_q = {
-    DataAttributeModelType, "q",
-    (ModelNode*) &iedModel_B1EBK_DLOC1_LocPrec,
-    (ModelNode*) &iedModel_B1EBK_DLOC1_LocPrec_t,
+DataAttribute iedModel_B1EBK_TLOC1_LocPrec_q = {
+    DataAttributeModelType,
+    "q",
+    (ModelNode*) &iedModel_B1EBK_TLOC1_LocPrec,
+    (ModelNode*) &iedModel_B1EBK_TLOC1_LocPrec_t,
     NULL,
     0,
     -1,
@@ -3913,9 +3899,10 @@ DataAttribute iedModel_B1EBK_DLOC1_LocPrec_q = {
     TRG_OPT_QUALITY_CHANGED
 };
 
-DataAttribute iedModel_B1EBK_DLOC1_LocPrec_t = {
-    DataAttributeModelType, "t",
-    (ModelNode*) &iedModel_B1EBK_DLOC1_LocPrec,
+DataAttribute iedModel_B1EBK_TLOC1_LocPrec_t = {
+    DataAttributeModelType,
+    "t",
+    (ModelNode*) &iedModel_B1EBK_TLOC1_LocPrec,
     NULL,
     NULL,
     0,
@@ -3925,32 +3912,34 @@ DataAttribute iedModel_B1EBK_DLOC1_LocPrec_t = {
     0
 };
 
-/* --- Data Object: LocDist (CDC: MV - Measured Value) --- */
-DataObject iedModel_B1EBK_DLOC1_LocDist = {
+/* --- 6. LocDist (Location Distance - MV/SAV) --- */
+DataObject iedModel_B1EBK_TLOC1_LocDist = {
     DataObjectModelType,
     "LocDist",
-    (ModelNode*) &iedModel_B1EBK_DLOC1,
-    (ModelNode*) &iedModel_B1EBK_DLOC1_LocTime,
-    (ModelNode*) &iedModel_B1EBK_DLOC1_LocDist_mag,
+    (ModelNode*) &iedModel_B1EBK_TLOC1,
+    (ModelNode*) &iedModel_B1EBK_TLOC1_AutDis, /* Sibling */
+    (ModelNode*) &iedModel_B1EBK_TLOC1_LocDist_instMag,
     0,
     -1
 };
 
-DataAttribute iedModel_B1EBK_DLOC1_LocDist_mag = {
-    DataAttributeModelType, "mag",
-    (ModelNode*) &iedModel_B1EBK_DLOC1_LocDist,
-    (ModelNode*) &iedModel_B1EBK_DLOC1_LocDist_q,
-    (ModelNode*) &iedModel_B1EBK_DLOC1_LocDist_mag_f,
+DataAttribute iedModel_B1EBK_TLOC1_LocDist_instMag = {
+    DataAttributeModelType,
+    "instMag",
+    (ModelNode*) &iedModel_B1EBK_TLOC1_LocDist,
+    (ModelNode*) &iedModel_B1EBK_TLOC1_LocDist_q,
+    (ModelNode*) &iedModel_B1EBK_TLOC1_LocDist_instMag_f,
     0,
     -1,
     IEC61850_FC_MX,
     IEC61850_CONSTRUCTED,
-    TRG_OPT_DATA_CHANGED | TRG_OPT_DATA_UPDATE
+    TRG_OPT_DATA_CHANGED
 };
 
-DataAttribute iedModel_B1EBK_DLOC1_LocDist_mag_f = {
-    DataAttributeModelType, "f",
-    (ModelNode*) &iedModel_B1EBK_DLOC1_LocDist_mag,
+DataAttribute iedModel_B1EBK_TLOC1_LocDist_instMag_f = {
+    DataAttributeModelType,
+    "f",
+    (ModelNode*) &iedModel_B1EBK_TLOC1_LocDist_instMag,
     NULL,
     NULL,
     0,
@@ -3960,10 +3949,11 @@ DataAttribute iedModel_B1EBK_DLOC1_LocDist_mag_f = {
     0
 };
 
-DataAttribute iedModel_B1EBK_DLOC1_LocDist_q = {
-    DataAttributeModelType, "q",
-    (ModelNode*) &iedModel_B1EBK_DLOC1_LocDist,
-    (ModelNode*) &iedModel_B1EBK_DLOC1_LocDist_t,
+DataAttribute iedModel_B1EBK_TLOC1_LocDist_q = {
+    DataAttributeModelType,
+    "q",
+    (ModelNode*) &iedModel_B1EBK_TLOC1_LocDist,
+    (ModelNode*) &iedModel_B1EBK_TLOC1_LocDist_t,
     NULL,
     0,
     -1,
@@ -3972,10 +3962,11 @@ DataAttribute iedModel_B1EBK_DLOC1_LocDist_q = {
     TRG_OPT_QUALITY_CHANGED
 };
 
-DataAttribute iedModel_B1EBK_DLOC1_LocDist_t = {
-    DataAttributeModelType, "t",
-    (ModelNode*) &iedModel_B1EBK_DLOC1_LocDist,
-    (ModelNode*) &iedModel_B1EBK_DLOC1_LocDist_db,
+DataAttribute iedModel_B1EBK_TLOC1_LocDist_t = {
+    DataAttributeModelType,
+    "t",
+    (ModelNode*) &iedModel_B1EBK_TLOC1_LocDist,
+    NULL,
     NULL,
     0,
     -1,
@@ -3984,90 +3975,55 @@ DataAttribute iedModel_B1EBK_DLOC1_LocDist_t = {
     0
 };
 
-DataAttribute iedModel_B1EBK_DLOC1_LocDist_db = {
-    DataAttributeModelType, "db",
-    (ModelNode*) &iedModel_B1EBK_DLOC1_LocDist,
-    NULL,
-    NULL,
-    0,
-    -1,
-    IEC61850_FC_CF,
-    IEC61850_INT32U,
-    TRG_OPT_DATA_CHANGED
-};
-
-/* --- Data Object: LocTime (CDC: MV - Measured Value) --- */
-DataObject iedModel_B1EBK_DLOC1_LocTime = {
+/* --- 7. AutDis (Auto Disable - INS) --- */
+DataObject iedModel_B1EBK_TLOC1_AutDis = {
     DataObjectModelType,
-    "LocTime",
-    (ModelNode*) &iedModel_B1EBK_DLOC1,
-    NULL, /* Fim da cadeia de DOs */
-    (ModelNode*) &iedModel_B1EBK_DLOC1_LocTime_mag,
+    "AutDis",
+    (ModelNode*) &iedModel_B1EBK_TLOC1,
+    NULL, /* Fim da lista */
+    (ModelNode*) &iedModel_B1EBK_TLOC1_AutDis_stVal,
     0,
     -1
 };
 
-DataAttribute iedModel_B1EBK_DLOC1_LocTime_mag = {
-    DataAttributeModelType, "mag",
-    (ModelNode*) &iedModel_B1EBK_DLOC1_LocTime,
-    (ModelNode*) &iedModel_B1EBK_DLOC1_LocTime_q,
-    (ModelNode*) &iedModel_B1EBK_DLOC1_LocTime_mag_f,
+DataAttribute iedModel_B1EBK_TLOC1_AutDis_stVal = {
+    DataAttributeModelType,
+    "stVal",
+    (ModelNode*) &iedModel_B1EBK_TLOC1_AutDis,
+    (ModelNode*) &iedModel_B1EBK_TLOC1_AutDis_q,
+    NULL,
     0,
     -1,
-    IEC61850_FC_MX,
-    IEC61850_CONSTRUCTED,
-    TRG_OPT_DATA_CHANGED | TRG_OPT_DATA_UPDATE
+    IEC61850_FC_ST,
+    IEC61850_INT32,
+    TRG_OPT_DATA_CHANGED
 };
 
-DataAttribute iedModel_B1EBK_DLOC1_LocTime_mag_f = {
-    DataAttributeModelType, "f",
-    (ModelNode*) &iedModel_B1EBK_DLOC1_LocTime_mag,
-    NULL,
-    NULL,
-    0,
-    -1,
-    IEC61850_FC_MX,
-    IEC61850_FLOAT32,
-    0
-};
-
-DataAttribute iedModel_B1EBK_DLOC1_LocTime_q = {
-    DataAttributeModelType, "q",
-    (ModelNode*) &iedModel_B1EBK_DLOC1_LocTime,
-    (ModelNode*) &iedModel_B1EBK_DLOC1_LocTime_t,
+DataAttribute iedModel_B1EBK_TLOC1_AutDis_q = {
+    DataAttributeModelType,
+    "q",
+    (ModelNode*) &iedModel_B1EBK_TLOC1_AutDis,
+    (ModelNode*) &iedModel_B1EBK_TLOC1_AutDis_t,
     NULL,
     0,
     -1,
-    IEC61850_FC_MX,
+    IEC61850_FC_ST,
     IEC61850_QUALITY,
     TRG_OPT_QUALITY_CHANGED
 };
 
-DataAttribute iedModel_B1EBK_DLOC1_LocTime_t = {
-    DataAttributeModelType, "t",
-    (ModelNode*) &iedModel_B1EBK_DLOC1_LocTime,
-    (ModelNode*) &iedModel_B1EBK_DLOC1_LocTime_db,
+DataAttribute iedModel_B1EBK_TLOC1_AutDis_t = {
+    DataAttributeModelType,
+    "t",
+    (ModelNode*) &iedModel_B1EBK_TLOC1_AutDis,
+    NULL,
     NULL,
     0,
     -1,
-    IEC61850_FC_MX,
+    IEC61850_FC_ST,
     IEC61850_TIMESTAMP,
     0
 };
-
-DataAttribute iedModel_B1EBK_DLOC1_LocTime_db = {
-    DataAttributeModelType, "db",
-    (ModelNode*) &iedModel_B1EBK_DLOC1_LocTime,
-    NULL,
-    NULL,
-    0,
-    -1,
-    IEC61850_FC_CF,
-    IEC61850_INT32U,
-    TRG_OPT_DATA_CHANGED
-};
-
-
 
 static void
 initializeValues()

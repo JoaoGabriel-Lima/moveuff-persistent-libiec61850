@@ -1,7 +1,7 @@
 /*
  * server_example_basic_io.c
  *
- * (Versão adaptada para o dispositivo STG)
+ * (Versão adaptada para o dispositivo B1STG)
  * LNs: LLN0, XSWI1, DBAT1
  */
 
@@ -12,7 +12,7 @@
 #include <stdio.h>
 #include <math.h>
 
-#include "static_model.h" /* Carrega o modelo STG */
+#include "static_model.h" /* Carrega o modelo B1STG */
 
 static int running = 0;
 static IedServer iedServer = NULL;
@@ -24,7 +24,7 @@ sigint_handler(int signalId)
 }
 
 /*
- * Handler para controlos booleanos (SPS) do STG
+ * Handler para controlos booleanos (SPS) do B1STG
  * (BlkOpn e BlkCls do XSWI1)
  */
 static ControlHandlerResult
@@ -43,7 +43,7 @@ controlHandlerForBinaryOutput(ControlAction action, void* parameter, MmsValue* v
     char attrRef[130];
     ModelNode_getObjectReference((ModelNode*) dataAttribute, attrRef);
 
-    printf("Control (STG): Recebido comando para %s, valor: %s\n",
+    printf("Control (B1STG): Recebido comando para %s, valor: %s\n",
            attrRef,
            MmsValue_getBoolean(value) ? "on (true)" : "off (false)");
 
@@ -52,19 +52,19 @@ controlHandlerForBinaryOutput(ControlAction action, void* parameter, MmsValue* v
     /* Atualiza o valor no modelo */
     IedServer_updateAttributeValue(iedServer, dataAttribute, value);
     
-    /* Atualiza os timestamps correspondentes no STG */
-    if (parameter == IEDMODEL_STG_XSWI1_BlkOpn_stVal) {
-        IedServer_updateUTCTimeAttributeValue(iedServer, IEDMODEL_STG_XSWI1_BlkOpn_t, timeStamp);
+    /* Atualiza os timestamps correspondentes no B1STG */
+    if (parameter == IEDMODEL_B1STG_XSWI1_BlkOpn_stVal) {
+        IedServer_updateUTCTimeAttributeValue(iedServer, IEDMODEL_B1STG_XSWI1_BlkOpn_t, timeStamp);
     }
-    else if (parameter == IEDMODEL_STG_XSWI1_BlkCls_stVal) {
-        IedServer_updateUTCTimeAttributeValue(iedServer, IEDMODEL_STG_XSWI1_BlkCls_t, timeStamp);
+    else if (parameter == IEDMODEL_B1STG_XSWI1_BlkCls_stVal) {
+        IedServer_updateUTCTimeAttributeValue(iedServer, IEDMODEL_B1STG_XSWI1_BlkCls_t, timeStamp);
     }
     
     return CONTROL_RESULT_OK;
 }
 
 /*
- * Handler para controlos DPC (Posição Dupla) do STG
+ * Handler para controlos DPC (Posição Dupla) do B1STG
  * (Pos do XSWI1)
  */
 static ControlHandlerResult
@@ -84,7 +84,7 @@ controlHandlerForDbpos(ControlAction action, void* parameter, MmsValue* value, b
     char attrRef[130];
     ModelNode_getObjectReference((ModelNode*) dataAttribute, attrRef);
 
-    printf("Control (STG): Recebido comando para %s, valor: %i\n", attrRef, controlValue);
+    printf("Control (B1STG): Recebido comando para %s, valor: %i\n", attrRef, controlValue);
 
     if (controlValue != 1 && controlValue != 2) {
         printf("Control: Valor inválido para DPC (apenas 1 ou 2 são permitidos)\n");
@@ -93,10 +93,10 @@ controlHandlerForDbpos(ControlAction action, void* parameter, MmsValue* value, b
 
     uint64_t timeStamp = Hal_getTimeInMs();
 
-    /* Atualizar o timestamp e o valor no modelo STG */
-    if (parameter == IEDMODEL_STG_XSWI1_Pos_stVal) {
-        IedServer_updateUTCTimeAttributeValue(iedServer, IEDMODEL_STG_XSWI1_Pos_t, timeStamp);
-        IedServer_updateAttributeValue(iedServer, IEDMODEL_STG_XSWI1_Pos_stVal, value);
+    /* Atualizar o timestamp e o valor no modelo B1STG */
+    if (parameter == IEDMODEL_B1STG_XSWI1_Pos_stVal) {
+        IedServer_updateUTCTimeAttributeValue(iedServer, IEDMODEL_B1STG_XSWI1_Pos_t, timeStamp);
+        IedServer_updateAttributeValue(iedServer, IEDMODEL_B1STG_XSWI1_Pos_stVal, value);
     }
 
     return CONTROL_RESULT_OK;
@@ -153,26 +153,26 @@ main(int argc, char** argv)
     iedServer = IedServer_createWithConfig(&iedModel, NULL, config);
     IedServerConfig_destroy(config);
 
-    /* Identidade do Servidor STG */
-    IedServer_setServerIdentity(iedServer, "MoveUFF", "STG Server", "1.0.0");
+    /* Identidade do Servidor B1STG */
+    IedServer_setServerIdentity(iedServer, "MoveUFF", "B1STG Server", "1.0.0");
 
     /****************************************************************
-     * ATIVAÇÃO DOS CONTROLOS (STG - XSWI1)
+     * ATIVAÇÃO DOS CONTROLOS (B1STG - XSWI1)
      ***************************************************************/
 
     /* Controles Booleanos */
-    IedServer_setControlHandler(iedServer, IEDMODEL_STG_XSWI1_BlkOpn,
+    IedServer_setControlHandler(iedServer, IEDMODEL_B1STG_XSWI1_BlkOpn,
             (ControlHandler) controlHandlerForBinaryOutput,
-            IEDMODEL_STG_XSWI1_BlkOpn_stVal);
+            IEDMODEL_B1STG_XSWI1_BlkOpn_stVal);
 
-    IedServer_setControlHandler(iedServer, IEDMODEL_STG_XSWI1_BlkCls,
+    IedServer_setControlHandler(iedServer, IEDMODEL_B1STG_XSWI1_BlkCls,
             (ControlHandler) controlHandlerForBinaryOutput,
-            IEDMODEL_STG_XSWI1_BlkCls_stVal);
+            IEDMODEL_B1STG_XSWI1_BlkCls_stVal);
     
     /* Controle de Posição (Dbpos) */
-    IedServer_setControlHandler(iedServer, IEDMODEL_STG_XSWI1_Pos,
+    IedServer_setControlHandler(iedServer, IEDMODEL_B1STG_XSWI1_Pos,
             (ControlHandler) controlHandlerForDbpos,
-            IEDMODEL_STG_XSWI1_Pos_stVal);
+            IEDMODEL_B1STG_XSWI1_Pos_stVal);
 
     /****************************************************************
      * FIM DA ATIVAÇÃO DE CONTROLOS
@@ -197,48 +197,48 @@ main(int argc, char** argv)
     }
 
     /****************************************************************
-     * INICIALIZAÇÃO DE VALORES (STG)
+     * INICIALIZAÇÃO DE VALORES (B1STG)
      ***************************************************************/
     
-    printf("Servidor STG arrancou na porta %i. A inicializar valores...\n", tcpPort);
+    printf("Servidor B1STG arrancou na porta %i. A inicializar valores...\n", tcpPort);
 
     IedServer_lockDataModel(iedServer); 
 
     /* --- LLN0 --- */
-    IedServer_updateInt32AttributeValue(iedServer, IEDMODEL_STG_LLN0_Beh_stVal, 1); // On
-    IedServer_updateInt32AttributeValue(iedServer, IEDMODEL_STG_LLN0_Health_stVal, 1); // Ok
+    IedServer_updateInt32AttributeValue(iedServer, IEDMODEL_B1STG_LLN0_Beh_stVal, 1); // On
+    IedServer_updateInt32AttributeValue(iedServer, IEDMODEL_B1STG_LLN0_Health_stVal, 1); // Ok
     
     /* --- XSWI1 (Switch) --- */
-    IedServer_updateInt32AttributeValue(iedServer, IEDMODEL_STG_XSWI1_SwTyp_stVal, 1); // Load Break
-    IedServer_updateBooleanAttributeValue(iedServer, IEDMODEL_STG_XSWI1_Loc_stVal, false); // Remote
-    IedServer_updateInt32AttributeValue(iedServer, IEDMODEL_STG_XSWI1_OpCnt_stVal, 15); // Já operou 15 vezes
-    IedServer_updateInt32AttributeValue(iedServer, IEDMODEL_STG_XSWI1_Pos_stVal, 2); // ON (Fechado)
-    IedServer_updateBooleanAttributeValue(iedServer, IEDMODEL_STG_XSWI1_BlkOpn_stVal, false);
-    IedServer_updateBooleanAttributeValue(iedServer, IEDMODEL_STG_XSWI1_BlkCls_stVal, false);
+    IedServer_updateInt32AttributeValue(iedServer, IEDMODEL_B1STG_XSWI1_SwTyp_stVal, 1); // Load Break
+    IedServer_updateBooleanAttributeValue(iedServer, IEDMODEL_B1STG_XSWI1_Loc_stVal, false); // Remote
+    IedServer_updateInt32AttributeValue(iedServer, IEDMODEL_B1STG_XSWI1_OpCnt_stVal, 15); // Já operou 15 vezes
+    IedServer_updateInt32AttributeValue(iedServer, IEDMODEL_B1STG_XSWI1_Pos_stVal, 2); // ON (Fechado)
+    IedServer_updateBooleanAttributeValue(iedServer, IEDMODEL_B1STG_XSWI1_BlkOpn_stVal, false);
+    IedServer_updateBooleanAttributeValue(iedServer, IEDMODEL_B1STG_XSWI1_BlkCls_stVal, false);
 
     /* --- DBAT1 (Bateria) --- */
     /* Status */
-    IedServer_updateVisibleStringAttributeValue(iedServer, IEDMODEL_STG_DBAT1_EEName_vendor, "BikeFacil");
-    IedServer_updateVisibleStringAttributeValue(iedServer, IEDMODEL_STG_DBAT1_EEName_model, "BATERIA_STG_A");
-    IedServer_updateBooleanAttributeValue(iedServer, IEDMODEL_STG_DBAT1_ChaSt_stVal, true); // A carregar
-    IedServer_updateBooleanAttributeValue(iedServer, IEDMODEL_STG_DBAT1_DschSt_stVal, false);
-    IedServer_updateInt32AttributeValue(iedServer, IEDMODEL_STG_DBAT1_EEHealth_stVal, 1); // Ok
+    IedServer_updateVisibleStringAttributeValue(iedServer, IEDMODEL_B1STG_DBAT1_EEName_vendor, "BikeFacil");
+    IedServer_updateVisibleStringAttributeValue(iedServer, IEDMODEL_B1STG_DBAT1_EEName_model, "BATERIA_B1STG_A");
+    IedServer_updateBooleanAttributeValue(iedServer, IEDMODEL_B1STG_DBAT1_ChaSt_stVal, true); // A carregar
+    IedServer_updateBooleanAttributeValue(iedServer, IEDMODEL_B1STG_DBAT1_DschSt_stVal, false);
+    IedServer_updateInt32AttributeValue(iedServer, IEDMODEL_B1STG_DBAT1_EEHealth_stVal, 1); // Ok
     
     /* Medições */
-    IedServer_updateFloatAttributeValue(iedServer, IEDMODEL_STG_DBAT1_Amp_mag_f, 12.5);
-    IedServer_updateFloatAttributeValue(iedServer, IEDMODEL_STG_DBAT1_Watt_mag_f, 600.0);
-    IedServer_updateFloatAttributeValue(iedServer, IEDMODEL_STG_DBAT1_AvlChaAhr_mag_f, 100.0);
-    IedServer_updateFloatAttributeValue(iedServer, IEDMODEL_STG_DBAT1_AvlDschAhr_mag_f, 50.0);
+    IedServer_updateFloatAttributeValue(iedServer, IEDMODEL_B1STG_DBAT1_Amp_mag_f, 12.5);
+    IedServer_updateFloatAttributeValue(iedServer, IEDMODEL_B1STG_DBAT1_Watt_mag_f, 600.0);
+    IedServer_updateFloatAttributeValue(iedServer, IEDMODEL_B1STG_DBAT1_AvlChaAhr_mag_f, 100.0);
+    IedServer_updateFloatAttributeValue(iedServer, IEDMODEL_B1STG_DBAT1_AvlDschAhr_mag_f, 50.0);
 
     /* Settings (Configurações) */
-    IedServer_updateInt32AttributeValue(iedServer, IEDMODEL_STG_DBAT1_BatTyp_setVal, 1); // Ex: Li-Ion
-    IedServer_updateFloatAttributeValue(iedServer, IEDMODEL_STG_DBAT1_ChaAmpMax_setMag_f, 20.0);
-    IedServer_updateFloatAttributeValue(iedServer, IEDMODEL_STG_DBAT1_AhrRtg_setMag_f, 200.0);
-    IedServer_updateFloatAttributeValue(iedServer, IEDMODEL_STG_DBAT1_ChaVolMaxRtg_setMag_f, 48.0);
+    IedServer_updateInt32AttributeValue(iedServer, IEDMODEL_B1STG_DBAT1_BatTyp_setVal, 1); // Ex: Li-Ion
+    IedServer_updateFloatAttributeValue(iedServer, IEDMODEL_B1STG_DBAT1_ChaAmpMax_setMag_f, 20.0);
+    IedServer_updateFloatAttributeValue(iedServer, IEDMODEL_B1STG_DBAT1_AhrRtg_setMag_f, 200.0);
+    IedServer_updateFloatAttributeValue(iedServer, IEDMODEL_B1STG_DBAT1_ChaVolMaxRtg_setMag_f, 48.0);
 
     IedServer_unlockDataModel(iedServer); 
     
-    printf("Valores do STG inicializados!\n");
+    printf("Valores do B1STG inicializados!\n");
     /****************************************************************
      * FIM DA INICIALIZAÇÃO
      ***************************************************************/
