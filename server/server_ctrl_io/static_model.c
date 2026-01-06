@@ -1739,7 +1739,7 @@ LogicalNode iedModel_B1CTR_LTRK1 = {
     LogicalNodeModelType,
     "LTRK1",
     (ModelNode*) &iedModel_B1CTR,
-    NULL,  : Ajuste se houver outro nó após este */
+    NULL,
     (ModelNode*) &iedModel_B1CTR_LTRK1_NamPlt
 };
 

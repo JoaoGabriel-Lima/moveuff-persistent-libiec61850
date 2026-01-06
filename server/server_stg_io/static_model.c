@@ -653,7 +653,7 @@ DataObject iedModel_B1STG_XSWI1_BlkCls = {
     DataObjectModelType, "BlkCls",
     (ModelNode*) &iedModel_B1STG_XSWI1,
     NULL, /* Fim da cadeia */
-    (ModelNode*) &iedModel_B1STG_XSWI1_BlkCls_Oper, /
+    (ModelNode*) &iedModel_B1STG_XSWI1_BlkCls_Oper,
     0,
     -1
 };
