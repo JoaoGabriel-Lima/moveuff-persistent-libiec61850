@@ -76,26 +76,16 @@ extern DataAttribute iedModel_B1CTR_LLN0_NamPlt_vendor;
 extern DataAttribute iedModel_B1CTR_LLN0_NamPlt_swRev;
 extern DataAttribute iedModel_B1CTR_LLN0_NamPlt_lnNs;
 extern DataAttribute iedModel_B1CTR_LLN0_NamPlt_configRev;
-extern DataAttribute iedModel_B1CTR_LLN0_NamPlt_d;
+extern DataObject iedModel_B1CTR_LLN0_Diag;
+extern DataAttribute iedModel_B1CTR_LLN0_Diag_stVal;
+extern DataAttribute iedModel_B1CTR_LLN0_Diag_q;
+extern DataAttribute iedModel_B1CTR_LLN0_Diag_t;
 extern DataObject iedModel_B1CTR_LLN0_LEDRs;
-extern DataAttribute iedModel_B1CTR_LLN0_LEDRs_Oper;
-extern DataAttribute iedModel_B1CTR_LLN0_LEDRs_Oper_ctlVal;
-extern DataAttribute iedModel_B1CTR_LLN0_LEDRs_Oper_origin;
-extern DataAttribute iedModel_B1CTR_LLN0_LEDRs_Oper_origin_orCat;
-extern DataAttribute iedModel_B1CTR_LLN0_LEDRs_Oper_origin_orIdent;
-extern DataAttribute iedModel_B1CTR_LLN0_LEDRs_Oper_ctlNum;
-extern DataAttribute iedModel_B1CTR_LLN0_LEDRs_Oper_T;
-extern DataAttribute iedModel_B1CTR_LLN0_LEDRs_Oper_Test;
-extern DataAttribute iedModel_B1CTR_LLN0_LEDRs_Oper_Check;
 extern DataAttribute iedModel_B1CTR_LLN0_LEDRs_stVal;
 extern DataAttribute iedModel_B1CTR_LLN0_LEDRs_q;
 extern DataAttribute iedModel_B1CTR_LLN0_LEDRs_t;
 extern DataAttribute iedModel_B1CTR_LLN0_LEDRs_ctlModel;
- /* LTRK1 Data Objects and Attributes */
-extern DataObject iedModel_B1CTR_LTRK1_NamPlt;
-extern DataAttribute iedModel_B1CTR_LTRK1_NamPlt_vendor;
-extern DataAttribute iedModel_B1CTR_LTRK1_NamPlt_swRev;
-extern DataAttribute iedModel_B1CTR_LTRK1_NamPlt_d;
+/* LTRK1 Data Objects and Attributes */
 
 /* Beh */
 extern DataObject iedModel_B1CTR_LTRK1_Beh;
@@ -144,12 +134,8 @@ extern DataObject iedModel_B1CTR_LGOS1_Health;
 extern DataAttribute iedModel_B1CTR_LGOS1_Health_stVal;
 extern DataAttribute iedModel_B1CTR_LGOS1_Health_q;
 extern DataAttribute iedModel_B1CTR_LGOS1_Health_t;
-extern DataObject iedModel_B1CTR_LGOS1_NamPlt;
-extern DataAttribute iedModel_B1CTR_LGOS1_NamPlt_vendor;
 extern DataObject iedModel_B1CTR_LGOS1_GoCBRef;
-extern DataAttribute iedModel_B1CTR_LGOS1_GoCBRef_stVal;
-extern DataAttribute iedModel_B1CTR_LGOS1_GoCBRef_q;
-extern DataAttribute iedModel_B1CTR_LGOS1_GoCBRef_t;
+extern DataAttribute iedModel_B1CTR_LGOS1_GoCBRef_setSrcRef;
 extern DataAttribute iedModel_B1CTR_LGOS1_St_t;
 extern DataObject iedModel_B1CTR_LGOS1_St;
 extern DataAttribute iedModel_B1CTR_LGOS1_St_stVal;
@@ -249,12 +235,13 @@ extern DataAttribute iedModel_B1CTR_LTMS1_TmSrcTyp_t;
 #define IEDMODEL_B1CTR_LLN0_NamPlt (&iedModel_B1CTR_LLN0_NamPlt)
 #define IEDMODEL_B1CTR_LLN0_NamPlt_vendor (&iedModel_B1CTR_LLN0_NamPlt_vendor)
 #define IEDMODEL_B1CTR_LLN0_NamPlt_swRev (&iedModel_B1CTR_LLN0_NamPlt_swRev)
-#define IEDMODEL__B1CTR_LLN0_NamPlt_d (&iedModel_B1CTR_LLN0_NamPlt_d)
 #define IEDMODEL__B1CTR_LLN0_NamPlt_configRev (&iedModel_B1CTR_LLN0_NamPlt_configRev) 
 #define IEDMODEL_B1CTR_LLN0_NamPlt_lnNs (&iedModel_B1CTR_LLN0_NamPlt_lnNs)
+#define IEDMODEL_B1CTR_LLN0_Diag (&iedModel_B1CTR_LLN0_Diag)
+#define IEDMODEL_B1CTR_LLN0_Diag_stVal (&iedModel_B1CTR_LLN0_Diag_stVal)
+#define IEDMODEL_B1CTR_LLN0_Diag_q (&iedModel_B1CTR_LLN0_Diag_q)
+#define IEDMODEL_B1CTR_LLN0_Diag_t (&iedModel_B1CTR_LLN0_Diag_t)
 #define IEDMODEL_B1CTR_LLN0_LEDRs (&iedModel_B1CTR_LLN0_LEDRs)
-#define IEDMODEL_B1CTR_LLN0_LEDRs_Oper (&iedModel_B1CTR_LLN0_LEDRs_Oper)
-#define IEDMODEL_B1CTR_LLN0_LEDRs_Oper_ctlVal (&iedModel_B1CTR_LLN0_LEDRs_Oper_ctlVal)
 #define IEDMODEL_B1CTR_LLN0_LEDRs_stVal (&iedModel_B1CTR_LLN0_LEDRs_stVal)
 #define IEDMODEL_B1CTR_LLN0_LEDRs_q (&iedModel_B1CTR_LLN0_LEDRs_q)
 #define IEDMODEL_B1CTR_LLN0_LEDRs_t (&iedModel_B1CTR_LLN0_LEDRs_t)
@@ -270,12 +257,8 @@ extern DataAttribute iedModel_B1CTR_LTMS1_TmSrcTyp_t;
 #define IEDMODEL_B1CTR_LGOS1_Health_stVal (&iedModel_B1CTR_LGOS1_Health_stVal)
 #define IEDMODEL_B1CTR_LGOS1_Health_q (&iedModel_B1CTR_LGOS1_Health_q)
 #define IEDMODEL_B1CTR_LGOS1_Health_t (&iedModel_B1CTR_LGOS1_Health_t)
-#define IEDMODEL_B1CTR_LGOS1_NamPlt (&iedModel_B1CTR_LGOS1_NamPlt)
-#define IEDMODEL_B1CTR_LGOS1_NamPlt_vendor (&iedModel_B1CTR_LGOS1_NamPlt_vendor)
 #define IEDMODEL_B1CTR_LGOS1_GoCBRef (&iedModel_B1CTR_LGOS1_GoCBRef)
-#define IEDMODEL_B1CTR_LGOS1_GoCBRef_stVal (&iedModel_B1CTR_LGOS1_GoCBRef_stVal)
-#define IEDMODEL_B1CTR_LGOS1_GoCBRef_q (&iedModel_B1CTR_LGOS1_GoCBRef_q)
-#define IEDMODEL_B1CTR_LGOS1_GoCBRef_t (&iedModel_B1CTR_LGOS1_GoCBRef_t)
+#define IEDMODEL_B1CTR_LGOS1_GoCBRef_setSrcRef (&iedModel_B1CTR_LGOS1_GoCBRef_setSrcRef)
 #define IEDMODEL_B1CTR_LGOS1_St (&iedModel_B1CTR_LGOS1_St)
 #define IEDMODEL_B1CTR_LGOS1_St_stVal (&iedModel_B1CTR_LGOS1_St_stVal)
 #define IEDMODEL_B1CTR_LGOS1_St_q (&iedModel_B1CTR_LGOS1_St_q)
@@ -329,10 +312,6 @@ extern DataAttribute iedModel_B1CTR_LTMS1_TmSrcTyp_t;
 #define IEDMODEL_B1CTR_LTMS1_TmSrcTyp_q (&iedModel_B1CTR_LTMS1_TmSrcTyp_q)
 #define IEDMODEL_B1CTR_LTMS1_TmSrcTyp_t (&iedModel_B1CTR_LTMS1_TmSrcTyp_t)
 #define IEDMODEL_B1CTR_LTRK1 (&iedModel_B1CTR_LTRK1)
-/* NamPlt */
-#define IEDMODEL_B1CTR_LTRK1_NamPlt (&iedModel_B1CTR_LTRK1_NamPlt)
-#define IEDMODEL_B1CTR_LTRK1_NamPlt_vendor (&iedModel_B1CTR_LTRK1_NamPlt_vendor)
-#define IEDMODEL_B1CTR_LTRK1_NamPlt_swRev (&iedModel_B1CTR_LTRK1_NamPlt_swRev)
 /* Beh */
 #define IEDMODEL_B1CTR_LTRK1_Beh (&iedModel_B1CTR_LTRK1_Beh)
 #define IEDMODEL_B1CTR_LTRK1_Beh_stVal (&iedModel_B1CTR_LTRK1_Beh_stVal)
