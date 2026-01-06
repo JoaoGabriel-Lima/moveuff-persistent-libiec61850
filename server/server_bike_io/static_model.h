@@ -93,25 +93,25 @@ extern DataAttribute iedModel_B1EBK_DEEV1_DptTm_setTm;
 extern DataObject iedModel_B1EBK_DEEV1_VMax;
 extern DataAttribute iedModel_B1EBK_DEEV1_VMax_setMag;
 extern DataAttribute iedModel_B1EBK_DEEV1_VMax_setMag_f;
-extern DataAttribute iedModel_B1EBK_DEEV1_VMax_sVC; /* CORRIGIDO: Agora é Atributo */
+extern DataAttribute iedModel_B1EBK_DEEV1_VMax_sVC;  
 extern DataAttribute iedModel_B1EBK_DEEV1_VMax_sVC_scaleFactor;
 extern DataAttribute iedModel_B1EBK_DEEV1_VMax_sVC_offset;
 extern DataObject iedModel_B1EBK_DEEV1_AMax;
 extern DataAttribute iedModel_B1EBK_DEEV1_AMax_setMag;
 extern DataAttribute iedModel_B1EBK_DEEV1_AMax_setMag_f;
-extern DataAttribute iedModel_B1EBK_DEEV1_AMax_sVC; /* CORRIGIDO: Agora é Atributo */
+extern DataAttribute iedModel_B1EBK_DEEV1_AMax_sVC;  
 extern DataAttribute iedModel_B1EBK_DEEV1_AMax_sVC_scaleFactor;
 extern DataAttribute iedModel_B1EBK_DEEV1_AMax_sVC_offset;
 extern DataObject iedModel_B1EBK_DEEV1_AMin;
 extern DataAttribute iedModel_B1EBK_DEEV1_AMin_setMag;
 extern DataAttribute iedModel_B1EBK_DEEV1_AMin_setMag_f;
-extern DataAttribute iedModel_B1EBK_DEEV1_AMin_sVC; /* CORRIGIDO: Agora é Atributo */
+extern DataAttribute iedModel_B1EBK_DEEV1_AMin_sVC;  
 extern DataAttribute iedModel_B1EBK_DEEV1_AMin_sVC_scaleFactor;
 extern DataAttribute iedModel_B1EBK_DEEV1_AMin_sVC_offset;
 extern DataObject iedModel_B1EBK_DEEV1_EnAmnt;
 extern DataAttribute iedModel_B1EBK_DEEV1_EnAmnt_setMag;
 extern DataAttribute iedModel_B1EBK_DEEV1_EnAmnt_setMag_f;
-extern DataAttribute iedModel_B1EBK_DEEV1_EnAmnt_sVC; /* CORRIGIDO: Agora é Atributo */
+extern DataAttribute iedModel_B1EBK_DEEV1_EnAmnt_sVC; 
 extern DataAttribute iedModel_B1EBK_DEEV1_EnAmnt_sVC_scaleFactor;
 extern DataAttribute iedModel_B1EBK_DEEV1_EnAmnt_sVC_offset;
 
@@ -158,7 +158,6 @@ extern DataObject iedModel_B1EBK_LANTXSWI1_Health;
 extern DataAttribute iedModel_B1EBK_LANTXSWI1_Health_stVal;
 extern DataAttribute iedModel_B1EBK_LANTXSWI1_Health_q;
 extern DataAttribute iedModel_B1EBK_LANTXSWI1_Health_t;
-/* Pos (Position) */
 extern DataObject iedModel_B1EBK_LANTXSWI1_Pos;
 extern DataAttribute iedModel_B1EBK_LANTXSWI1_Pos_Oper;
 extern DataAttribute iedModel_B1EBK_LANTXSWI1_Pos_Oper_ctlVal;
@@ -173,7 +172,6 @@ extern DataAttribute iedModel_B1EBK_LANTXSWI1_Pos_stVal;
 extern DataAttribute iedModel_B1EBK_LANTXSWI1_Pos_q;
 extern DataAttribute iedModel_B1EBK_LANTXSWI1_Pos_t;
 extern DataAttribute iedModel_B1EBK_LANTXSWI1_Pos_ctlModel;
-/* BlkOpn (Block Opening) */
 extern DataObject iedModel_B1EBK_LANTXSWI1_BlkOpn;
 extern DataAttribute iedModel_B1EBK_LANTXSWI1_BlkOpn_Oper;
 extern DataAttribute iedModel_B1EBK_LANTXSWI1_BlkOpn_Oper_ctlVal;
@@ -188,7 +186,6 @@ extern DataAttribute iedModel_B1EBK_LANTXSWI1_BlkOpn_stVal;
 extern DataAttribute iedModel_B1EBK_LANTXSWI1_BlkOpn_q;
 extern DataAttribute iedModel_B1EBK_LANTXSWI1_BlkOpn_t;
 extern DataAttribute iedModel_B1EBK_LANTXSWI1_BlkOpn_ctlModel;
-/* BlkCls (Block Closing) */
 extern DataObject iedModel_B1EBK_LANTXSWI1_BlkCls;
 extern DataAttribute iedModel_B1EBK_LANTXSWI1_BlkCls_Oper;
 extern DataAttribute iedModel_B1EBK_LANTXSWI1_BlkCls_Oper_ctlVal;
@@ -229,7 +226,6 @@ extern DataObject iedModel_B1EBK_ALMXSWI2_Health;
 extern DataAttribute iedModel_B1EBK_ALMXSWI2_Health_stVal;
 extern DataAttribute iedModel_B1EBK_ALMXSWI2_Health_q;
 extern DataAttribute iedModel_B1EBK_ALMXSWI2_Health_t;
-/* Pos (Position) */
 extern DataObject iedModel_B1EBK_ALMXSWI2_Pos;
 extern DataAttribute iedModel_B1EBK_ALMXSWI2_Pos_Oper;
 extern DataAttribute iedModel_B1EBK_ALMXSWI2_Pos_Oper_ctlVal;
@@ -244,7 +240,6 @@ extern DataAttribute iedModel_B1EBK_ALMXSWI2_Pos_stVal;
 extern DataAttribute iedModel_B1EBK_ALMXSWI2_Pos_q;
 extern DataAttribute iedModel_B1EBK_ALMXSWI2_Pos_t;
 extern DataAttribute iedModel_B1EBK_ALMXSWI2_Pos_ctlModel;
-/* BlkOpn (Block Opening) */
 extern DataObject iedModel_B1EBK_ALMXSWI2_BlkOpn;
 extern DataAttribute iedModel_B1EBK_ALMXSWI2_BlkOpn_Oper;
 extern DataAttribute iedModel_B1EBK_ALMXSWI2_BlkOpn_Oper_ctlVal;
@@ -259,7 +254,6 @@ extern DataAttribute iedModel_B1EBK_ALMXSWI2_BlkOpn_stVal;
 extern DataAttribute iedModel_B1EBK_ALMXSWI2_BlkOpn_q;
 extern DataAttribute iedModel_B1EBK_ALMXSWI2_BlkOpn_t;
 extern DataAttribute iedModel_B1EBK_ALMXSWI2_BlkOpn_ctlModel;
-/* BlkCls (Block Closing) */
 extern DataObject iedModel_B1EBK_ALMXSWI2_BlkCls;
 extern DataAttribute iedModel_B1EBK_ALMXSWI2_BlkCls_Oper;
 extern DataAttribute iedModel_B1EBK_ALMXSWI2_BlkCls_Oper_ctlVal;
@@ -280,6 +274,7 @@ extern DataAttribute iedModel_B1EBK_ALMXSWI2_BlkCls_ctlModel;
  * TMVM1
  * ==================================================================
  */
+
 extern DataObject iedModel_B1EBK_TMVM1_EEHealth;
 extern DataAttribute iedModel_B1EBK_TMVM1_EEHealth_stVal;
 extern DataAttribute iedModel_B1EBK_TMVM1_EEHealth_q;
@@ -527,7 +522,6 @@ extern DataAttribute iedModel_B1EBK_TLOC1_AutDis_t;
 #define IEDMODEL_B1EBK_ALMXSWI2_Health_stVal (&iedModel_B1EBK_ALMXSWI2_Health_stVal)
 #define IEDMODEL_B1EBK_ALMXSWI2_Health_q (&iedModel_B1EBK_ALMXSWI2_Health_q)
 #define IEDMODEL_B1EBK_ALMXSWI2_Health_t (&iedModel_B1EBK_ALMXSWI2_Health_t)
-/* Pos */
 #define IEDMODEL_B1EBK_ALMXSWI2_Pos (&iedModel_B1EBK_ALMXSWI2_Pos)
 #define IEDMODEL_B1EBK_ALMXSWI2_Pos_Oper (&iedModel_B1EBK_ALMXSWI2_Pos_Oper)
 #define IEDMODEL_B1EBK_ALMXSWI2_Pos_Oper_ctlVal (&iedModel_B1EBK_ALMXSWI2_Pos_Oper_ctlVal)
@@ -535,7 +529,6 @@ extern DataAttribute iedModel_B1EBK_TLOC1_AutDis_t;
 #define IEDMODEL_B1EBK_ALMXSWI2_Pos_q (&iedModel_B1EBK_ALMXSWI2_Pos_q)
 #define IEDMODEL_B1EBK_ALMXSWI2_Pos_t (&iedModel_B1EBK_ALMXSWI2_Pos_t)
 #define IEDMODEL_B1EBK_ALMXSWI2_Pos_ctlModel (&iedModel_B1EBK_ALMXSWI2_Pos_ctlModel)
-/* BlkOpn */
 #define IEDMODEL_B1EBK_ALMXSWI2_BlkOpn (&iedModel_B1EBK_ALMXSWI2_BlkOpn)
 #define IEDMODEL_B1EBK_ALMXSWI2_BlkOpn_Oper (&iedModel_B1EBK_ALMXSWI2_BlkOpn_Oper)
 #define IEDMODEL_B1EBK_ALMXSWI2_BlkOpn_Oper_ctlVal (&iedModel_B1EBK_ALMXSWI2_BlkOpn_Oper_ctlVal)
@@ -543,7 +536,6 @@ extern DataAttribute iedModel_B1EBK_TLOC1_AutDis_t;
 #define IEDMODEL_B1EBK_ALMXSWI2_BlkOpn_q (&iedModel_B1EBK_ALMXSWI2_BlkOpn_q)
 #define IEDMODEL_B1EBK_ALMXSWI2_BlkOpn_t (&iedModel_B1EBK_ALMXSWI2_BlkOpn_t)
 #define IEDMODEL_B1EBK_ALMXSWI2_BlkOpn_ctlModel (&iedModel_B1EBK_ALMXSWI2_BlkOpn_ctlModel)
-/* BlkCls */
 #define IEDMODEL_B1EBK_ALMXSWI2_BlkCls (&iedModel_B1EBK_ALMXSWI2_BlkCls)
 #define IEDMODEL_B1EBK_ALMXSWI2_BlkCls_Oper (&iedModel_B1EBK_ALMXSWI2_BlkCls_Oper)
 #define IEDMODEL_B1EBK_ALMXSWI2_BlkCls_Oper_ctlVal (&iedModel_B1EBK_ALMXSWI2_BlkCls_Oper_ctlVal)
@@ -558,38 +550,26 @@ extern DataAttribute iedModel_B1EBK_TLOC1_AutDis_t;
  */
 
 #define IEDMODEL_B1EBK_LANTXSWI1 (&iedModel_B1EBK_LANTXSWI1)
-
-/* SwTyp */
 #define IEDMODEL_B1EBK_LANTXSWI1_SwTyp (&iedModel_B1EBK_LANTXSWI1_SwTyp)
 #define IEDMODEL_B1EBK_LANTXSWI1_SwTyp_stVal (&iedModel_B1EBK_LANTXSWI1_SwTyp_stVal)
 #define IEDMODEL_B1EBK_LANTXSWI1_SwTyp_q (&iedModel_B1EBK_LANTXSWI1_SwTyp_q)
 #define IEDMODEL_B1EBK_LANTXSWI1_SwTyp_t (&iedModel_B1EBK_LANTXSWI1_SwTyp_t)
-
-/* Loc */
 #define IEDMODEL_B1EBK_LANTXSWI1_Loc (&iedModel_B1EBK_LANTXSWI1_Loc)
 #define IEDMODEL_B1EBK_LANTXSWI1_Loc_stVal (&iedModel_B1EBK_LANTXSWI1_Loc_stVal)
 #define IEDMODEL_B1EBK_LANTXSWI1_Loc_q (&iedModel_B1EBK_LANTXSWI1_Loc_q)
 #define IEDMODEL_B1EBK_LANTXSWI1_Loc_t (&iedModel_B1EBK_LANTXSWI1_Loc_t)
-
-/* OpCnt */
 #define IEDMODEL_B1EBK_LANTXSWI1_OpCnt (&iedModel_B1EBK_LANTXSWI1_OpCnt)
 #define IEDMODEL_B1EBK_LANTXSWI1_OpCnt_stVal (&iedModel_B1EBK_LANTXSWI1_OpCnt_stVal)
 #define IEDMODEL_B1EBK_LANTXSWI1_OpCnt_q (&iedModel_B1EBK_LANTXSWI1_OpCnt_q)
 #define IEDMODEL_B1EBK_LANTXSWI1_OpCnt_t (&iedModel_B1EBK_LANTXSWI1_OpCnt_t)
-
-/* Beh */
 #define IEDMODEL_B1EBK_LANTXSWI1_Beh (&iedModel_B1EBK_LANTXSWI1_Beh)
 #define IEDMODEL_B1EBK_LANTXSWI1_Beh_stVal (&iedModel_B1EBK_LANTXSWI1_Beh_stVal)
 #define IEDMODEL_B1EBK_LANTXSWI1_Beh_q (&iedModel_B1EBK_LANTXSWI1_Beh_q)
 #define IEDMODEL_B1EBK_LANTXSWI1_Beh_t (&iedModel_B1EBK_LANTXSWI1_Beh_t)
-
-/* Health */
 #define IEDMODEL_B1EBK_LANTXSWI1_Health (&iedModel_B1EBK_LANTXSWI1_Health)
 #define IEDMODEL_B1EBK_LANTXSWI1_Health_stVal (&iedModel_B1EBK_LANTXSWI1_Health_stVal)
 #define IEDMODEL_B1EBK_LANTXSWI1_Health_q (&iedModel_B1EBK_LANTXSWI1_Health_q)
 #define IEDMODEL_B1EBK_LANTXSWI1_Health_t (&iedModel_B1EBK_LANTXSWI1_Health_t)
-
-/* Pos */
 #define IEDMODEL_B1EBK_LANTXSWI1_Pos (&iedModel_B1EBK_LANTXSWI1_Pos)
 #define IEDMODEL_B1EBK_LANTXSWI1_Pos_Oper (&iedModel_B1EBK_LANTXSWI1_Pos_Oper)
 #define IEDMODEL_B1EBK_LANTXSWI1_Pos_Oper_ctlVal (&iedModel_B1EBK_LANTXSWI1_Pos_Oper_ctlVal)
@@ -597,8 +577,6 @@ extern DataAttribute iedModel_B1EBK_TLOC1_AutDis_t;
 #define IEDMODEL_B1EBK_LANTXSWI1_Pos_q (&iedModel_B1EBK_LANTXSWI1_Pos_q)
 #define IEDMODEL_B1EBK_LANTXSWI1_Pos_t (&iedModel_B1EBK_LANTXSWI1_Pos_t)
 #define IEDMODEL_B1EBK_LANTXSWI1_Pos_ctlModel (&iedModel_B1EBK_LANTXSWI1_Pos_ctlModel)
-
-/* BlkOpn */
 #define IEDMODEL_B1EBK_LANTXSWI1_BlkOpn (&iedModel_B1EBK_LANTXSWI1_BlkOpn)
 #define IEDMODEL_B1EBK_LANTXSWI1_BlkOpn_Oper (&iedModel_B1EBK_LANTXSWI1_BlkOpn_Oper)
 #define IEDMODEL_B1EBK_LANTXSWI1_BlkOpn_Oper_ctlVal (&iedModel_B1EBK_LANTXSWI1_BlkOpn_Oper_ctlVal)
@@ -606,8 +584,6 @@ extern DataAttribute iedModel_B1EBK_TLOC1_AutDis_t;
 #define IEDMODEL_B1EBK_LANTXSWI1_BlkOpn_q (&iedModel_B1EBK_LANTXSWI1_BlkOpn_q)
 #define IEDMODEL_B1EBK_LANTXSWI1_BlkOpn_t (&iedModel_B1EBK_LANTXSWI1_BlkOpn_t)
 #define IEDMODEL_B1EBK_LANTXSWI1_BlkOpn_ctlModel (&iedModel_B1EBK_LANTXSWI1_BlkOpn_ctlModel)
-
-/* BlkCls */
 #define IEDMODEL_B1EBK_LANTXSWI1_BlkCls (&iedModel_B1EBK_LANTXSWI1_BlkCls)
 #define IEDMODEL_B1EBK_LANTXSWI1_BlkCls_Oper (&iedModel_B1EBK_LANTXSWI1_BlkCls_Oper)
 #define IEDMODEL_B1EBK_LANTXSWI1_BlkCls_Oper_ctlVal (&iedModel_B1EBK_LANTXSWI1_BlkCls_Oper_ctlVal)

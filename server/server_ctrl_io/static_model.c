@@ -5,7 +5,7 @@ static void initializeValues();
 LogicalDevice iedModel_B1CTR = {
     LogicalDeviceModelType,
     "B1CTR",
-    (ModelNode*) &iedModel, /* O parent agora vai funcionar */
+    (ModelNode*) &iedModel, 
     NULL,
     (ModelNode*) &iedModel_B1CTR_LPHD1,
     NULL,
@@ -15,7 +15,7 @@ LogicalNode iedModel_B1CTR_LPHD1 = {
     LogicalNodeModelType,
     "LPHD1",
     (ModelNode*) &iedModel_B1CTR,
-    (ModelNode*) &iedModel_B1CTR_LLN0, //(ModelNode*) &iedModel_B1CTR_LLN0,
+    (ModelNode*) &iedModel_B1CTR_LLN0, 
     (ModelNode*) &iedModel_B1CTR_LPHD1_NamPlt,
 };
 
@@ -335,18 +335,17 @@ DataAttribute iedModel_B1CTR_LPHD1_OpTmh_t = {
 /* --- Data Object: Sim (CDC: SPC - Simulation Mode) --- */
 DataObject iedModel_B1CTR_LPHD1_Sim = {
     DataObjectModelType, "Sim",
-    (ModelNode*) &iedModel_B1CTR_LPHD1, /* Pai */
-    NULL, /* Sibling: Ajuste se houver outro objeto depois */
-    (ModelNode*) &iedModel_B1CTR_LPHD1_Sim_stVal, /* Aponta para o 1º atributo */
+    (ModelNode*) &iedModel_B1CTR_LPHD1, 
+    NULL, 
+    (ModelNode*) &iedModel_B1CTR_LPHD1_Sim_stVal, 
     0,
     -1
 };
 
-/* Atributo: stVal (Status Value) */
 DataAttribute iedModel_B1CTR_LPHD1_Sim_stVal = {
     DataAttributeModelType, "stVal",
     (ModelNode*) &iedModel_B1CTR_LPHD1_Sim,
-    (ModelNode*) &iedModel_B1CTR_LPHD1_Sim_q, /* Sibling */
+    (ModelNode*) &iedModel_B1CTR_LPHD1_Sim_q, 
     NULL,
     0,
     -1,
@@ -355,11 +354,10 @@ DataAttribute iedModel_B1CTR_LPHD1_Sim_stVal = {
     TRG_OPT_DATA_CHANGED
 };
 
-/* Atributo: q (Quality) */
 DataAttribute iedModel_B1CTR_LPHD1_Sim_q = {
     DataAttributeModelType, "q",
     (ModelNode*) &iedModel_B1CTR_LPHD1_Sim,
-    (ModelNode*) &iedModel_B1CTR_LPHD1_Sim_t, /* Sibling */
+    (ModelNode*) &iedModel_B1CTR_LPHD1_Sim_t,  
     NULL,
     0,
     -1,
@@ -368,11 +366,10 @@ DataAttribute iedModel_B1CTR_LPHD1_Sim_q = {
     TRG_OPT_QUALITY_CHANGED
 };
 
-/* Atributo: t (Timestamp) */
 DataAttribute iedModel_B1CTR_LPHD1_Sim_t = {
     DataAttributeModelType, "t",
     (ModelNode*) &iedModel_B1CTR_LPHD1_Sim,
-    (ModelNode*) &iedModel_B1CTR_LPHD1_Sim_ctlModel, /* Sibling */
+    (ModelNode*) &iedModel_B1CTR_LPHD1_Sim_ctlModel,  
     NULL,
     0,
     -1,
@@ -381,11 +378,10 @@ DataAttribute iedModel_B1CTR_LPHD1_Sim_t = {
     0
 };
 
-/* Atributo: ctlModel (Control Model - Configuração) */
 DataAttribute iedModel_B1CTR_LPHD1_Sim_ctlModel = {
     DataAttributeModelType, "ctlModel",
     (ModelNode*) &iedModel_B1CTR_LPHD1_Sim,
-    NULL, /* Fim da lista de atributos */
+    NULL, 
     NULL,
     0,
     -1,
@@ -394,7 +390,10 @@ DataAttribute iedModel_B1CTR_LPHD1_Sim_ctlModel = {
     0
 };
 
-/*================================= LLN0 ===========================================*/
+/* ==================================================================
+ * IMPLEMENTAÇÃO LLN0
+ * ==================================================================
+ */
 
 LogicalNode iedModel_B1CTR_LLN0 = {
     LogicalNodeModelType,
@@ -676,7 +675,7 @@ DataObject iedModel_B1CTR_LLN0_LEDRs = {
     DataObjectModelType, "LEDRs",
     (ModelNode*) &iedModel_B1CTR_LLN0,
     NULL, 
-    (ModelNode*) &iedModel_B1CTR_LLN0_LEDRs_Oper, /* Aponta para Oper */
+    (ModelNode*) &iedModel_B1CTR_LLN0_LEDRs_Oper, 
     0,
     -1
 };
@@ -685,7 +684,7 @@ DataObject iedModel_B1CTR_LLN0_LEDRs = {
 DataAttribute iedModel_B1CTR_LLN0_LEDRs_Oper = {
     DataAttributeModelType, "Oper",
     (ModelNode*) &iedModel_B1CTR_LLN0_LEDRs,
-    (ModelNode*) &iedModel_B1CTR_LLN0_LEDRs_stVal, /* Sibling: stVal */
+    (ModelNode*) &iedModel_B1CTR_LLN0_LEDRs_stVal, 
     (ModelNode*) &iedModel_B1CTR_LLN0_LEDRs_Oper_ctlVal,
     0,
     -1,
@@ -697,7 +696,7 @@ DataAttribute iedModel_B1CTR_LLN0_LEDRs_Oper = {
 DataAttribute iedModel_B1CTR_LLN0_LEDRs_Oper_ctlVal = {
     DataAttributeModelType, "ctlVal",
     (ModelNode*) &iedModel_B1CTR_LLN0_LEDRs_Oper,
-    (ModelNode*) &iedModel_B1CTR_LLN0_LEDRs_Oper_origin, /* Sibling */
+    (ModelNode*) &iedModel_B1CTR_LLN0_LEDRs_Oper_origin,  
     NULL,
     0,
     -1,
@@ -709,8 +708,8 @@ DataAttribute iedModel_B1CTR_LLN0_LEDRs_Oper_ctlVal = {
 DataAttribute iedModel_B1CTR_LLN0_LEDRs_Oper_origin = {
     DataAttributeModelType, "origin",
     (ModelNode*) &iedModel_B1CTR_LLN0_LEDRs_Oper,
-    (ModelNode*) &iedModel_B1CTR_LLN0_LEDRs_Oper_ctlNum, /* Sibling */
-    (ModelNode*) &iedModel_B1CTR_LLN0_LEDRs_Oper_origin_orCat, /* Child */
+    (ModelNode*) &iedModel_B1CTR_LLN0_LEDRs_Oper_ctlNum,  
+    (ModelNode*) &iedModel_B1CTR_LLN0_LEDRs_Oper_origin_orCat,  
     0,
     -1,
     IEC61850_FC_CO,
@@ -721,7 +720,7 @@ DataAttribute iedModel_B1CTR_LLN0_LEDRs_Oper_origin = {
 DataAttribute iedModel_B1CTR_LLN0_LEDRs_Oper_origin_orCat = {
     DataAttributeModelType, "orCat",
     (ModelNode*) &iedModel_B1CTR_LLN0_LEDRs_Oper_origin,
-    (ModelNode*) &iedModel_B1CTR_LLN0_LEDRs_Oper_origin_orIdent, /* Sibling */
+    (ModelNode*) &iedModel_B1CTR_LLN0_LEDRs_Oper_origin_orIdent,  
     NULL,
     0,
     -1,
@@ -745,7 +744,7 @@ DataAttribute iedModel_B1CTR_LLN0_LEDRs_Oper_origin_orIdent = {
 DataAttribute iedModel_B1CTR_LLN0_LEDRs_Oper_ctlNum = {
     DataAttributeModelType, "ctlNum",
     (ModelNode*) &iedModel_B1CTR_LLN0_LEDRs_Oper,
-    (ModelNode*) &iedModel_B1CTR_LLN0_LEDRs_Oper_T, /* Sibling */
+    (ModelNode*) &iedModel_B1CTR_LLN0_LEDRs_Oper_T,  
     NULL,
     0,
     -1,
@@ -757,7 +756,7 @@ DataAttribute iedModel_B1CTR_LLN0_LEDRs_Oper_ctlNum = {
 DataAttribute iedModel_B1CTR_LLN0_LEDRs_Oper_T = {
     DataAttributeModelType, "T",
     (ModelNode*) &iedModel_B1CTR_LLN0_LEDRs_Oper,
-    (ModelNode*) &iedModel_B1CTR_LLN0_LEDRs_Oper_Test, /* Sibling */
+    (ModelNode*) &iedModel_B1CTR_LLN0_LEDRs_Oper_Test,  
     NULL,
     0,
     -1,
@@ -769,7 +768,7 @@ DataAttribute iedModel_B1CTR_LLN0_LEDRs_Oper_T = {
 DataAttribute iedModel_B1CTR_LLN0_LEDRs_Oper_Test = {
     DataAttributeModelType, "Test",
     (ModelNode*) &iedModel_B1CTR_LLN0_LEDRs_Oper,
-    (ModelNode*) &iedModel_B1CTR_LLN0_LEDRs_Oper_Check, /* Sibling */
+    (ModelNode*) &iedModel_B1CTR_LLN0_LEDRs_Oper_Check,  
     NULL,
     0,
     -1,
@@ -790,11 +789,10 @@ DataAttribute iedModel_B1CTR_LLN0_LEDRs_Oper_Check = {
     0
 };
 
-/* Atributos de Status */
 DataAttribute iedModel_B1CTR_LLN0_LEDRs_stVal = {
     DataAttributeModelType, "stVal",
     (ModelNode*) &iedModel_B1CTR_LLN0_LEDRs,
-    (ModelNode*) &iedModel_B1CTR_LLN0_LEDRs_q, /* Sibling */
+    (ModelNode*) &iedModel_B1CTR_LLN0_LEDRs_q,  
     NULL,
     0,
     -1,
@@ -806,7 +804,7 @@ DataAttribute iedModel_B1CTR_LLN0_LEDRs_stVal = {
 DataAttribute iedModel_B1CTR_LLN0_LEDRs_q = {
     DataAttributeModelType, "q",
     (ModelNode*) &iedModel_B1CTR_LLN0_LEDRs,
-    (ModelNode*) &iedModel_B1CTR_LLN0_LEDRs_t, /* Sibling */
+    (ModelNode*) &iedModel_B1CTR_LLN0_LEDRs_t,  
     NULL,
     0,
     -1,
@@ -818,7 +816,7 @@ DataAttribute iedModel_B1CTR_LLN0_LEDRs_q = {
 DataAttribute iedModel_B1CTR_LLN0_LEDRs_t = {
     DataAttributeModelType, "t",
     (ModelNode*) &iedModel_B1CTR_LLN0_LEDRs,
-    (ModelNode*) &iedModel_B1CTR_LLN0_LEDRs_ctlModel, /* Sibling */
+    (ModelNode*) &iedModel_B1CTR_LLN0_LEDRs_ctlModel,  
     NULL,
     0,
     -1,
@@ -841,16 +839,16 @@ DataAttribute iedModel_B1CTR_LLN0_LEDRs_ctlModel = {
 
 /*
  * ==================================================================
- * MODELAGEM NÓ LÓGICO LGOS1 (Goose Supervision)
+ * IMPLEMENTAÇÃO LGOS1
  * ==================================================================
  */
 
 LogicalNode iedModel_B1CTR_LGOS1 = {
     LogicalNodeModelType,
     "LGOS1",
-    (ModelNode*) &iedModel_B1CTR, /* Parent */
-    (ModelNode*) &iedModel_B1CTR_LTIM1, /* Sibling (Será o LTIM1 quando você o adicionar) */
-    (ModelNode*) &iedModel_B1CTR_LGOS1_Beh /* Child (Primeiro DO) */
+    (ModelNode*) &iedModel_B1CTR,  
+    (ModelNode*) &iedModel_B1CTR_LTIM1, 
+    (ModelNode*) &iedModel_B1CTR_LGOS1_Beh 
 };
 
 
@@ -1323,7 +1321,7 @@ DataObject iedModel_B1CTR_LGOS1_LastStNum = {
     DataObjectModelType,
     "LastStNum",
     (ModelNode*) &iedModel_B1CTR_LGOS1,
-    NULL, /* Fim da cadeia de DOs */
+    NULL, 
     (ModelNode*) &iedModel_B1CTR_LGOS1_LastStNum_stVal,
     0,
     -1
@@ -1376,16 +1374,16 @@ DataAttribute iedModel_B1CTR_LGOS1_LastStNum_t = {
 
 /*
  * ==================================================================
- * MODELAGEM NÓ LÓGICO LTIM1 (Time)
+ * IMPLEMENTAÇÃO LTIM1 (Time)
  * ==================================================================
  */
 
 LogicalNode iedModel_B1CTR_LTIM1 = {
     LogicalNodeModelType,
     "LTIM1",
-    (ModelNode*) &iedModel_B1CTR, /* Assumindo que o LD se chama iedModel_B1CTR */
-    (ModelNode*) &iedModel_B1CTR_LTMS1, /* Sibling (Próximo LN) - Mude se adicionar mais LNs */
-    (ModelNode*) &iedModel_B1CTR_LTIM1_Beh /* Child (Primeiro DO é Beh) */
+    (ModelNode*) &iedModel_B1CTR, 
+    (ModelNode*) &iedModel_B1CTR_LTMS1,
+    (ModelNode*) &iedModel_B1CTR_LTIM1_Beh 
 };
 
 DataObject iedModel_B1CTR_LTIM1_Beh = {
@@ -1498,18 +1496,11 @@ DataAttribute iedModel_B1CTR_LTIM1_Health_t = {
     0
 };
 
-/*
- * ------------------------------------------------------------------
- * LTIM1 - Data Object: TmDT (CDC: SPS)
- * (Adicionado conforme solicitado)
- * ------------------------------------------------------------------
- */
-
 DataObject iedModel_B1CTR_LTIM1_TmDT = {
     DataObjectModelType,
     "TmDT",
     (ModelNode*) &iedModel_B1CTR_LTIM1,
-    NULL, /* Fim da cadeia de DOs */
+    NULL,  
     (ModelNode*) &iedModel_B1CTR_LTIM1_TmDT_stVal,
     0,
     -1
@@ -1524,7 +1515,7 @@ DataAttribute iedModel_B1CTR_LTIM1_TmDT_stVal = {
     0,
     -1,
     IEC61850_FC_ST,
-    IEC61850_BOOLEAN, /* Tipo de SPS (conforme seu pedido) */
+    IEC61850_BOOLEAN, 
     0 + TRG_OPT_DATA_CHANGED,
     NULL,
     0
@@ -1562,7 +1553,7 @@ DataAttribute iedModel_B1CTR_LTIM1_TmDT_t = {
 
 /*
  * ==================================================================
- * MODELAGEM NÓ LÓGICO LTMS1 (Time Supervision)
+ * IMPLEMENTAÇÃO LTMS1 (Time Supervision)
  * ==================================================================
 */
 
@@ -1593,7 +1584,7 @@ DataAttribute iedModel_B1CTR_LTMS1_TmSrc_stVal = {
     0,
     -1,
     IEC61850_FC_ST,
-    IEC61850_VISIBLE_STRING_255, /* Tipo VSS (Visible String Status) */
+    IEC61850_VISIBLE_STRING_255,
     0 + TRG_OPT_DATA_CHANGED,
     NULL,
     0
@@ -1648,7 +1639,7 @@ DataAttribute iedModel_B1CTR_LTMS1_TmSrcTyp_stVal = {
     0,
     -1,
     IEC61850_FC_ST,
-    IEC61850_INT32, /* Tipo INS (Integer Status) */
+    IEC61850_INT32,
     0 + TRG_OPT_DATA_CHANGED,
     NULL,
     0
@@ -1688,7 +1679,7 @@ DataObject iedModel_B1CTR_LTMS1_Beh = {
     DataObjectModelType,
     "Beh",
     (ModelNode*) &iedModel_B1CTR_LTMS1,
-    NULL, /* Fim da cadeia de DOs */
+    NULL,  
     (ModelNode*) &iedModel_B1CTR_LTMS1_Beh_stVal,
     0,
     -1
@@ -1703,7 +1694,7 @@ DataAttribute iedModel_B1CTR_LTMS1_Beh_stVal = {
     0,
     -1,
     IEC61850_FC_ST,
-    IEC61850_ENUMERATED, /* Tipo ENS (Enumerated Status) */
+    IEC61850_ENUMERATED,
     0 + TRG_OPT_DATA_CHANGED,
     NULL,
     0
@@ -1717,7 +1708,7 @@ DataAttribute iedModel_B1CTR_LTMS1_Beh_q = {
     NULL,
     0,
     -1,
-    IEC61850_FC_ST, //CONFIRMAR
+    IEC61850_FC_ST,
     IEC61850_QUALITY,
     0 + TRG_OPT_QUALITY_CHANGED,
     NULL,
@@ -1740,7 +1731,7 @@ DataAttribute iedModel_B1CTR_LTMS1_Beh_t = {
 };
 
 /* ==================================================================
- * MODELAGEM NÓ LÓGICO LTRK1 (Service Tracking - Diagnóstico)
+ * IMPLEMENTAÇÃO LTRK1 
  * ==================================================================
  */
 
@@ -1748,11 +1739,10 @@ LogicalNode iedModel_B1CTR_LTRK1 = {
     LogicalNodeModelType,
     "LTRK1",
     (ModelNode*) &iedModel_B1CTR,
-    NULL, /* Sibling: Ajuste se houver outro nó após este */
+    NULL,  : Ajuste se houver outro nó após este */
     (ModelNode*) &iedModel_B1CTR_LTRK1_NamPlt
 };
 
-/* --- NamPlt (CDC: LPL) --- */
 DataObject iedModel_B1CTR_LTRK1_NamPlt = {
     DataObjectModelType, "NamPlt",
     (ModelNode*) &iedModel_B1CTR_LTRK1,
@@ -1798,7 +1788,6 @@ DataAttribute iedModel_B1CTR_LTRK1_NamPlt_d = {
     0
 };
 
-/* --- Beh (CDC: ENS) --- */
 DataObject iedModel_B1CTR_LTRK1_Beh = {
     DataObjectModelType, "Beh",
     (ModelNode*) &iedModel_B1CTR_LTRK1,
@@ -1844,7 +1833,6 @@ DataAttribute iedModel_B1CTR_LTRK1_Beh_t = {
     0
 };
 
-/* --- Health (CDC: ENS) --- */
 DataObject iedModel_B1CTR_LTRK1_Health = {
     DataObjectModelType, "Health",
     (ModelNode*) &iedModel_B1CTR_LTRK1,
@@ -1894,7 +1882,7 @@ DataAttribute iedModel_B1CTR_LTRK1_Health_t = {
 DataObject iedModel_B1CTR_LTRK1_GenTrk = {
     DataObjectModelType, "GenTrk",
     (ModelNode*) &iedModel_B1CTR_LTRK1,
-    (ModelNode*) &iedModel_B1CTR_LTRK1_GocbTrk, /* Aponta para GocbTrk */
+    (ModelNode*) &iedModel_B1CTR_LTRK1_GocbTrk,
     (ModelNode*) &iedModel_B1CTR_LTRK1_GenTrk_objRef,
     0,
     -1
@@ -1952,7 +1940,7 @@ DataAttribute iedModel_B1CTR_LTRK1_GenTrk_t = {
 DataObject iedModel_B1CTR_LTRK1_GocbTrk = {
     DataObjectModelType, "GocbTrk",
     (ModelNode*) &iedModel_B1CTR_LTRK1,
-    NULL, /* Fim da cadeia LTRK1 */
+    NULL, 
     (ModelNode*) &iedModel_B1CTR_LTRK1_GocbTrk_objRef,
     0,
     -1
@@ -2092,8 +2080,6 @@ IedModel iedModel = {
 };
 
 /*=================================  STATIC VOID  ===========================================*/
-
-
 
 static void
 initializeValues()

@@ -24,6 +24,7 @@ extern LogicalNode iedModel_B1STG_ZBAT1;
  * LLN0
  * ==================================================================
  */
+ 
 extern DataObject iedModel_B1STG_LLN0_Beh;
 extern DataAttribute iedModel_B1STG_LLN0_Beh_stVal;
 extern DataAttribute iedModel_B1STG_LLN0_Beh_q;
@@ -41,6 +42,7 @@ extern DataAttribute iedModel_B1STG_LLN0_NamPlt_d;
  * XSWI1
  * ==================================================================
  */
+
 extern DataObject iedModel_B1STG_XSWI1_SwTyp;
 extern DataAttribute iedModel_B1STG_XSWI1_SwTyp_stVal;
 extern DataAttribute iedModel_B1STG_XSWI1_SwTyp_q;
@@ -99,6 +101,7 @@ extern DataAttribute iedModel_B1STG_XSWI1_BlkCls_ctlModel;
  * TTMP1 (NOVO - Temperature)
  * ==================================================================
  */
+
 extern DataObject iedModel_B1STG_TTMP1_NamPlt;
 extern DataAttribute iedModel_B1STG_TTMP1_NamPlt_vendor;
 extern DataAttribute iedModel_B1STG_TTMP1_NamPlt_swRev;
@@ -128,6 +131,7 @@ extern DataAttribute iedModel_B1STG_TTMP1_TmpTgt_sVC_offset;
  * DBAT1
  * ==================================================================
  */
+
 extern DataObject iedModel_B1STG_DBAT1_EEName;
 extern DataAttribute iedModel_B1STG_DBAT1_EEName_vendor; /* Novo */
 extern DataAttribute iedModel_B1STG_DBAT1_EEName_model;  /* Novo */
@@ -198,6 +202,7 @@ extern DataAttribute iedModel_B1STG_DBAT1_SocPro_t;
  * ZBAT1
  * ==================================================================
  */
+
 extern DataObject iedModel_B1STG_ZBAT1_BatHi;
 extern DataAttribute iedModel_B1STG_ZBAT1_BatHi_stVal;
 extern DataAttribute iedModel_B1STG_ZBAT1_BatHi_q;

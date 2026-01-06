@@ -25,8 +25,8 @@ LogicalNode iedModel_B1EBK_LLN0 = {
     LogicalNodeModelType,
     "LLN0",
     (ModelNode*) &iedModel_B1EBK,
-    (ModelNode*) &iedModel_B1EBK_DEEV1, /* 'sibling' (irmão) é LPHD1 */
-    (ModelNode*) &iedModel_B1EBK_LLN0_Beh, /* 'child' (filho) é Beh */
+    (ModelNode*) &iedModel_B1EBK_DEEV1, 
+    (ModelNode*) &iedModel_B1EBK_LLN0_Beh, 
 };
 
 DataObject iedModel_B1EBK_LLN0_Beh = {
@@ -274,7 +274,7 @@ DataAttribute iedModel_B1EBK_LLN0_LEDRs_t = {
 DataObject iedModel_B1EBK_LLN0_NamPlt = {
     DataObjectModelType, "NamPlt",
     (ModelNode*) &iedModel_B1EBK_LLN0,
-    NULL, /* Fim da cadeia de DOs do LLN0 */
+    NULL,
     (ModelNode*) &iedModel_B1EBK_LLN0_NamPlt_vendor,
     0,
     -1
@@ -311,7 +311,7 @@ DataAttribute iedModel_B1EBK_LLN0_NamPlt_d = {
     NULL,
     0,
     -1,
-    IEC61850_FC_DC, /* CORRIGIDO: Era IEC6G5 */
+    IEC61850_FC_DC,
     IEC61850_VISIBLE_STRING_255,
     0
 };
@@ -340,9 +340,9 @@ DataAttribute iedModel_B1EBK_LLN0_NamPlt_lnNs = {
     0
 };
 
-/* * ------------------------------------------------------------------
- * DEEV1 - DEFINIÇÕES (Na ordem lógica solicitada)
- * ------------------------------------------------------------------
+/* ==================================================================
+ * IMPLEMENTAÇÃO DEEV1
+ * ==================================================================
  */
 
 LogicalNode iedModel_B1EBK_DEEV1 = {
@@ -353,8 +353,7 @@ LogicalNode iedModel_B1EBK_DEEV1 = {
     (ModelNode*) &iedModel_B1EBK_DEEV1_EVNam
 };
 
-/* ------------------- Data Object: EVNam (CDC: DPL) ------------------- */
-
+/* Data Object: EVNam (CDC: DPL) */
 DataObject iedModel_B1EBK_DEEV1_EVNam = {
     DataObjectModelType,
     "EVNam",
@@ -381,7 +380,7 @@ DataAttribute iedModel_B1EBK_DEEV1_EVNam_vendor = {
 DataAttribute iedModel_B1EBK_DEEV1_EVNam_model = {
     DataAttributeModelType, "model",
     (ModelNode*) &iedModel_B1EBK_DEEV1_NamPlt,
-    NULL, /* Aponta para swRev */
+    NULL,  
     NULL,
     0,
     -1,
@@ -390,7 +389,7 @@ DataAttribute iedModel_B1EBK_DEEV1_EVNam_model = {
     0
 };
 
-/* ------------------- Data Object: NamPlt (CDC: LPL) ------------------- */
+/* Data Object: EVNam (CDC: LPL) */
 DataObject iedModel_B1EBK_DEEV1_NamPlt = {
     DataObjectModelType,
     "NamPlt",
@@ -466,7 +465,7 @@ DataAttribute iedModel_B1EBK_DEEV1_NamPlt_lnNs = {
     0
 };
 
-/* ------------------- Data Object: ConnTypSel (CDC: ENS) ------------------- */
+/* Data Object ConnTypSel (CDC: Beh) */
 DataObject iedModel_B1EBK_DEEV1_ConnTypSel = {
     DataObjectModelType,
     "ConnTypSel",
@@ -516,8 +515,8 @@ DataAttribute iedModel_B1EBK_DEEV1_ConnTypSel_t = {
     0
 };
 
-/* ------------------- Data Object: Beh (CDC: ENS) ------------------- */
-DataObject iedModel_B1EBK_DEEV1_Beh = {
+/* Data Object: Beh (CDC: ENS) */
+DataObject iedModel_B1EBK_DEEV1_Beh = { 
     DataObjectModelType,
     "Beh",
     (ModelNode*) &iedModel_B1EBK_DEEV1,
@@ -566,7 +565,7 @@ DataAttribute iedModel_B1EBK_DEEV1_Beh_t = {
     0
 };
 
-/* ------------------- Data Object: Health (CDC: ENS) ------------------- */
+/*  Data Object: Health (CDC: ENS) */
 DataObject iedModel_B1EBK_DEEV1_Health = {
     DataObjectModelType,
     "Health",
@@ -616,7 +615,7 @@ DataAttribute iedModel_B1EBK_DEEV1_Health_t = {
     0
 };
 
-/* ------------------- Data Object: Soc (CDC: MV) ------------------- */
+/*  Data Object: Soc (CDC: MV)  */
 DataObject iedModel_B1EBK_DEEV1_Soc = {
     DataObjectModelType,
     "Soc",
@@ -739,7 +738,7 @@ DataAttribute iedModel_B1EBK_DEEV1_Soc_subID = {
     NULL,
     0,
     -1,
-    IEC61850_FC_SV, /* CORRIGIDO: Era IEC61850-Access-Point */
+    IEC61850_FC_SV, 
     IEC61850_VISIBLE_STRING_64,
     0 + TRG_OPT_DATA_CHANGED
 };
@@ -770,7 +769,7 @@ DataAttribute iedModel_B1EBK_DEEV1_Soc_db = {
     0 + TRG_OPT_DATA_CHANGED
 };
 
-/* ------------------- Data Object: EVId (CDC: VSG) ------------------- */
+/*  Data Object: EVId (CDC: VSG)  */
 DataObject iedModel_B1EBK_DEEV1_EVId = {
     DataObjectModelType,
     "EVId",
@@ -794,7 +793,7 @@ DataAttribute iedModel_B1EBK_DEEV1_EVId_setVal = {
     0 + TRG_OPT_DATA_CHANGED
 };
 
-/* ------------------- Data Object: DptTm (CDC: TSG) ------------------- */
+/*  Data Object: DptTm (CDC: TSG)  */
 DataObject iedModel_B1EBK_DEEV1_DptTm = {
     DataObjectModelType,
     "DptTm",
@@ -818,7 +817,7 @@ DataAttribute iedModel_B1EBK_DEEV1_DptTm_setTm = {
     0 + TRG_OPT_DATA_CHANGED
 };
 
-/* ------------------- Data Object: VMax (CDC: ASG) ------------------- */
+/*  Data Object: VMax (CDC: ASG)  */
 DataObject iedModel_B1EBK_DEEV1_VMax = {
     DataObjectModelType,
     "VMax",
@@ -894,7 +893,7 @@ DataAttribute iedModel_B1EBK_DEEV1_VMax_sVC_offset = {
     0
 };
 
-/* ------------------- Data Object: AMax (CDC: ASG) ------------------- */
+/*  Data Object: AMax (CDC: ASG)  */
 DataObject iedModel_B1EBK_DEEV1_AMax = {
     DataObjectModelType,
     "AMax",
@@ -952,7 +951,7 @@ DataAttribute iedModel_B1EBK_DEEV1_AMax_sVC_scaleFactor = {
     NULL,
     0,
     -1,
-    IEC61850_FC_CF, /* CORRIGIDO: Era IEC6Address */
+    IEC61850_FC_CF,
     IEC61850_FLOAT32,
     0
 };
@@ -970,7 +969,7 @@ DataAttribute iedModel_B1EBK_DEEV1_AMax_sVC_offset = {
     0
 };
 
-/* ------------------- Data Object: AMin (CDC: ASG) ------------------- */
+/*  Data Object: AMin (CDC: ASG)  */
 DataObject iedModel_B1EBK_DEEV1_AMin = {
     DataObjectModelType,
     "AMin",
@@ -1002,7 +1001,7 @@ DataAttribute iedModel_B1EBK_DEEV1_AMin_setMag_f = {
     NULL,
     0,
     -1,
-    IEC61850_FC_SP, /* CORRIGIDO: Era IEC6Opening-Time */
+    IEC61850_FC_SP,
     IEC61850_FLOAT32,
     0
 };
@@ -1046,7 +1045,7 @@ DataAttribute iedModel_B1EBK_DEEV1_AMin_sVC_offset = {
     0
 };
 
-/* ------------------- Data Object: EnAmnt (CDC: ASG) ------------------- */
+/*  Data Object: EnAmnt (CDC: ASG)  */
 DataObject iedModel_B1EBK_DEEV1_EnAmnt = {
     DataObjectModelType,
     "EnAmnt",
@@ -1135,7 +1134,7 @@ LogicalNode iedModel_B1EBK_ISAF1 = {
     (ModelNode*) &iedModel_B1EBK_ISAF1_Alm
 };
 
-/* --- Data Object: Alm (CDC: SPS - Status Ponto Simples) --- */
+/* Data Object: Alm (CDC: SPS - Status Ponto Simples) */
 DataObject iedModel_B1EBK_ISAF1_Alm = {
     DataObjectModelType,
     "Alm",
@@ -1182,12 +1181,12 @@ DataAttribute iedModel_B1EBK_ISAF1_Alm_t = {
     0
 };
 
-/* --- Data Object: Beh (CDC: ENS - Status Enumerado) --- */
+/*  Data Object: Beh (CDC: ENS - Status Enumerado)  */
 DataObject iedModel_B1EBK_ISAF1_Beh = {
     DataObjectModelType,
     "Beh",
     (ModelNode*) &iedModel_B1EBK_ISAF1,
-    (ModelNode*) &iedModel_B1EBK_ISAF1_Health, /* 'sibling' (irmão) é Health */
+    (ModelNode*) &iedModel_B1EBK_ISAF1_Health,
     (ModelNode*) &iedModel_B1EBK_ISAF1_Beh_stVal,
     0,
     -1
@@ -1229,12 +1228,12 @@ DataAttribute iedModel_B1EBK_ISAF1_Beh_t = {
     0
 };
 
-/* --- Data Object: Health (CDC: ENS - Status Enumerado) --- */
+/*  Data Object: Health (CDC: ENS - Status Enumerado)  */
 DataObject iedModel_B1EBK_ISAF1_Health = {
     DataObjectModelType,
     "Health",
     (ModelNode*) &iedModel_B1EBK_ISAF1,
-    NULL, /* Fim da cadeia de DOs */
+    NULL,  
     (ModelNode*) &iedModel_B1EBK_ISAF1_Health_stVal,
     0,
     -1
@@ -1285,16 +1284,16 @@ LogicalNode iedModel_B1EBK_LANTXSWI1 = {
     LogicalNodeModelType,
     "LANTXSWI1",
     (ModelNode*) &iedModel_B1EBK,
-    (ModelNode*) &iedModel_B1EBK_ALMXSWI2, /* <-- LIGAÇÃO FEITA */
+    (ModelNode*) &iedModel_B1EBK_ALMXSWI2,  
     (ModelNode*) &iedModel_B1EBK_LANTXSWI1_SwTyp
 };
 
-/* --- Data Object: SwTyp (CDC: INS - Integer Status) --- */
+/*  Data Object: SwTyp (CDC: INS - Integer Status)  */
 DataObject iedModel_B1EBK_LANTXSWI1_SwTyp = {
     DataObjectModelType,
     "SwTyp",
     (ModelNode*) &iedModel_B1EBK_LANTXSWI1,
-    (ModelNode*) &iedModel_B1EBK_LANTXSWI1_Loc, /* sibling */
+    (ModelNode*) &iedModel_B1EBK_LANTXSWI1_Loc,  
     (ModelNode*) &iedModel_B1EBK_LANTXSWI1_SwTyp_stVal,
     0,
     -1
@@ -1336,12 +1335,12 @@ DataAttribute iedModel_B1EBK_LANTXSWI1_SwTyp_t = {
     0
 };
 
-/* --- Data Object: Loc (CDC: SPS - Simple Point Status) --- */
+/*  Data Object: Loc (CDC: SPS - Simple Point Status)  */
 DataObject iedModel_B1EBK_LANTXSWI1_Loc = {
     DataObjectModelType,
     "Loc",
     (ModelNode*) &iedModel_B1EBK_LANTXSWI1,
-    (ModelNode*) &iedModel_B1EBK_LANTXSWI1_OpCnt, /* sibling */
+    (ModelNode*) &iedModel_B1EBK_LANTXSWI1_OpCnt,  
     (ModelNode*) &iedModel_B1EBK_LANTXSWI1_Loc_stVal,
     0,
     -1
@@ -1383,12 +1382,12 @@ DataAttribute iedModel_B1EBK_LANTXSWI1_Loc_t = {
     0
 };
 
-/* --- Data Object: OpCnt (CDC: INS - Integer Status) --- */
+/*  Data Object: OpCnt (CDC: INS - Integer Status)  */
 DataObject iedModel_B1EBK_LANTXSWI1_OpCnt = {
     DataObjectModelType,
     "OpCnt",
     (ModelNode*) &iedModel_B1EBK_LANTXSWI1,
-    (ModelNode*) &iedModel_B1EBK_LANTXSWI1_Beh, /* sibling */
+    (ModelNode*) &iedModel_B1EBK_LANTXSWI1_Beh,  
     (ModelNode*) &iedModel_B1EBK_LANTXSWI1_OpCnt_stVal,
     0,
     -1
@@ -1430,12 +1429,12 @@ DataAttribute iedModel_B1EBK_LANTXSWI1_OpCnt_t = {
     0
 };
 
-/* --- Data Object: Beh (CDC: ENS - Status Enumerado) --- */
+/*  Data Object: Beh (CDC: ENS - Status Enumerado)  */
 DataObject iedModel_B1EBK_LANTXSWI1_Beh = {
     DataObjectModelType,
     "Beh",
     (ModelNode*) &iedModel_B1EBK_LANTXSWI1,
-    (ModelNode*) &iedModel_B1EBK_LANTXSWI1_Health, /* sibling */
+    (ModelNode*) &iedModel_B1EBK_LANTXSWI1_Health,  
     (ModelNode*) &iedModel_B1EBK_LANTXSWI1_Beh_stVal,
     0,
     -1
@@ -1477,12 +1476,12 @@ DataAttribute iedModel_B1EBK_LANTXSWI1_Beh_t = {
     0
 };
 
-/* --- Data Object: Health (CDC: ENS - Status Enumerado) --- */
+/*  Data Object: Health (CDC: ENS - Status Enumerado)  */
 DataObject iedModel_B1EBK_LANTXSWI1_Health = {
     DataObjectModelType,
     "Health",
     (ModelNode*) &iedModel_B1EBK_LANTXSWI1,
-    (ModelNode*) &iedModel_B1EBK_LANTXSWI1_Pos, /* sibling */
+    (ModelNode*) &iedModel_B1EBK_LANTXSWI1_Pos,  
     (ModelNode*) &iedModel_B1EBK_LANTXSWI1_Health_stVal,
     0,
     -1
@@ -1524,29 +1523,28 @@ DataAttribute iedModel_B1EBK_LANTXSWI1_Health_t = {
     0
 };
 
-/* --- Data Object: Pos (CDC: DPC - modelado como Status) --- */
 /* ==================================================================
  * LANTXSWI1 - IMPLEMENTAÇÃO COM OPER (Comando)
  * ==================================================================
  */
 
-/* --- Data Object: Pos (CDC: DPC - Double Point Control) --- */
+/*  Data Object: Pos (CDC: DPC - Double Point Control)  */
 DataObject iedModel_B1EBK_LANTXSWI1_Pos = {
     DataObjectModelType,
     "Pos",
     (ModelNode*) &iedModel_B1EBK_LANTXSWI1,
-    (ModelNode*) &iedModel_B1EBK_LANTXSWI1_BlkOpn, /* sibling */
-    (ModelNode*) &iedModel_B1EBK_LANTXSWI1_Pos_Oper, /* Aponta para Oper agora! */
+    (ModelNode*) &iedModel_B1EBK_LANTXSWI1_BlkOpn,  
+    (ModelNode*) &iedModel_B1EBK_LANTXSWI1_Pos_Oper,  
     0,
     -1
 };
 
-/* --- Estrutura Oper do Pos --- */
+/*  Estrutura Oper do Pos  */
 DataAttribute iedModel_B1EBK_LANTXSWI1_Pos_Oper = {
     DataAttributeModelType, "Oper",
     (ModelNode*) &iedModel_B1EBK_LANTXSWI1_Pos,
-    (ModelNode*) &iedModel_B1EBK_LANTXSWI1_Pos_stVal, /* Sibling aponta para stVal */
-    (ModelNode*) &iedModel_B1EBK_LANTXSWI1_Pos_Oper_ctlVal, /* Child */
+    (ModelNode*) &iedModel_B1EBK_LANTXSWI1_Pos_stVal,  
+    (ModelNode*) &iedModel_B1EBK_LANTXSWI1_Pos_Oper_ctlVal,  
     0,
     -1,
     IEC61850_FC_CO,
@@ -1650,7 +1648,6 @@ DataAttribute iedModel_B1EBK_LANTXSWI1_Pos_Oper_Check = {
     0
 };
 
-/* --- Atributos de Status Pos (Sem Alteração além dos ponteiros) --- */
 DataAttribute iedModel_B1EBK_LANTXSWI1_Pos_stVal = {
     DataAttributeModelType, "stVal",
     (ModelNode*) &iedModel_B1EBK_LANTXSWI1_Pos,
@@ -1700,22 +1697,22 @@ DataAttribute iedModel_B1EBK_LANTXSWI1_Pos_ctlModel = {
 };
 
 
-/* --- Data Object: BlkOpn (CDC: SPC) --- */
+/*  Data Object: BlkOpn (CDC: SPC)  */
 DataObject iedModel_B1EBK_LANTXSWI1_BlkOpn = {
     DataObjectModelType,
     "BlkOpn",
     (ModelNode*) &iedModel_B1EBK_LANTXSWI1,
-    (ModelNode*) &iedModel_B1EBK_LANTXSWI1_BlkCls, /* sibling */
-    (ModelNode*) &iedModel_B1EBK_LANTXSWI1_BlkOpn_Oper, /* Aponta para Oper agora! */
+    (ModelNode*) &iedModel_B1EBK_LANTXSWI1_BlkCls,  
+    (ModelNode*) &iedModel_B1EBK_LANTXSWI1_BlkOpn_Oper,  
     0,
     -1
 };
 
-/* --- Estrutura Oper do BlkOpn --- */
+/*  Estrutura Oper do BlkOpn  */
 DataAttribute iedModel_B1EBK_LANTXSWI1_BlkOpn_Oper = {
     DataAttributeModelType, "Oper",
     (ModelNode*) &iedModel_B1EBK_LANTXSWI1_BlkOpn,
-    (ModelNode*) &iedModel_B1EBK_LANTXSWI1_BlkOpn_stVal, /* Sibling aponta para stVal */
+    (ModelNode*) &iedModel_B1EBK_LANTXSWI1_BlkOpn_stVal,  
     (ModelNode*) &iedModel_B1EBK_LANTXSWI1_BlkOpn_Oper_ctlVal,
     0,
     -1,
@@ -1820,8 +1817,6 @@ DataAttribute iedModel_B1EBK_LANTXSWI1_BlkOpn_Oper_Check = {
     0
 };
 
-
-/* --- Atributos de Status BlkOpn (Sem Alteração além dos ponteiros) --- */
 DataAttribute iedModel_B1EBK_LANTXSWI1_BlkOpn_stVal = {
     DataAttributeModelType, "stVal",
     (ModelNode*) &iedModel_B1EBK_LANTXSWI1_BlkOpn,
@@ -1871,22 +1866,22 @@ DataAttribute iedModel_B1EBK_LANTXSWI1_BlkOpn_ctlModel = {
 };
 
 
-/* --- Data Object: BlkCls (CDC: SPC) --- */
+/*  Data Object: BlkCls (CDC: SPC)  */
 DataObject iedModel_B1EBK_LANTXSWI1_BlkCls = {
     DataObjectModelType,
     "BlkCls",
     (ModelNode*) &iedModel_B1EBK_LANTXSWI1,
-    NULL, /* Fim da cadeia de DOs */
-    (ModelNode*) &iedModel_B1EBK_LANTXSWI1_BlkCls_Oper, /* Aponta para Oper agora! */
+    NULL,  
+    (ModelNode*) &iedModel_B1EBK_LANTXSWI1_BlkCls_Oper,  
     0,
     -1
 };
 
-/* --- Estrutura Oper do BlkCls --- */
+/*  Estrutura Oper do BlkCls  */
 DataAttribute iedModel_B1EBK_LANTXSWI1_BlkCls_Oper = {
     DataAttributeModelType, "Oper",
     (ModelNode*) &iedModel_B1EBK_LANTXSWI1_BlkCls,
-    (ModelNode*) &iedModel_B1EBK_LANTXSWI1_BlkCls_stVal, /* Sibling aponta para stVal */
+    (ModelNode*) &iedModel_B1EBK_LANTXSWI1_BlkCls_stVal,  
     (ModelNode*) &iedModel_B1EBK_LANTXSWI1_BlkCls_Oper_ctlVal,
     0,
     -1,
@@ -1991,7 +1986,6 @@ DataAttribute iedModel_B1EBK_LANTXSWI1_BlkCls_Oper_Check = {
     0
 };
 
-/* --- Atributos de Status BlkCls (Sem Alteração além dos ponteiros) --- */
 DataAttribute iedModel_B1EBK_LANTXSWI1_BlkCls_stVal = {
     DataAttributeModelType, "stVal",
     (ModelNode*) &iedModel_B1EBK_LANTXSWI1_BlkCls,
@@ -2049,16 +2043,16 @@ LogicalNode iedModel_B1EBK_ALMXSWI2 = {
     LogicalNodeModelType,
     "ALMXSWI2",
     (ModelNode*) &iedModel_B1EBK,
-    (ModelNode*) &iedModel_B1EBK_TMVM1, /* <-- LIGAÇÃO FEITA */
+    (ModelNode*) &iedModel_B1EBK_TMVM1,  
     (ModelNode*) &iedModel_B1EBK_ALMXSWI2_SwTyp
 };
 
-/* --- Data Object: SwTyp (CDC: INS - Integer Status) --- */
+/*  Data Object: SwTyp (CDC: INS - Integer Status)  */
 DataObject iedModel_B1EBK_ALMXSWI2_SwTyp = {
     DataObjectModelType,
     "SwTyp",
     (ModelNode*) &iedModel_B1EBK_ALMXSWI2,
-    (ModelNode*) &iedModel_B1EBK_ALMXSWI2_Loc, /* sibling */
+    (ModelNode*) &iedModel_B1EBK_ALMXSWI2_Loc,  
     (ModelNode*) &iedModel_B1EBK_ALMXSWI2_SwTyp_stVal,
     0,
     -1
@@ -2100,12 +2094,12 @@ DataAttribute iedModel_B1EBK_ALMXSWI2_SwTyp_t = {
     0
 };
 
-/* --- Data Object: Loc (CDC: SPS - Simple Point Status) --- */
+/*  Data Object: Loc (CDC: SPS - Simple Point Status)  */
 DataObject iedModel_B1EBK_ALMXSWI2_Loc = {
     DataObjectModelType,
     "Loc",
     (ModelNode*) &iedModel_B1EBK_ALMXSWI2,
-    (ModelNode*) &iedModel_B1EBK_ALMXSWI2_OpCnt, /* sibling */
+    (ModelNode*) &iedModel_B1EBK_ALMXSWI2_OpCnt,  
     (ModelNode*) &iedModel_B1EBK_ALMXSWI2_Loc_stVal,
     0,
     -1
@@ -2147,12 +2141,12 @@ DataAttribute iedModel_B1EBK_ALMXSWI2_Loc_t = {
     0
 };
 
-/* --- Data Object: OpCnt (CDC: INS - Integer Status) --- */
+/*  Data Object: OpCnt (CDC: INS - Integer Status)  */
 DataObject iedModel_B1EBK_ALMXSWI2_OpCnt = {
     DataObjectModelType,
     "OpCnt",
     (ModelNode*) &iedModel_B1EBK_ALMXSWI2,
-    (ModelNode*) &iedModel_B1EBK_ALMXSWI2_Beh, /* sibling */
+    (ModelNode*) &iedModel_B1EBK_ALMXSWI2_Beh,  
     (ModelNode*) &iedModel_B1EBK_ALMXSWI2_OpCnt_stVal,
     0,
     -1
@@ -2194,12 +2188,12 @@ DataAttribute iedModel_B1EBK_ALMXSWI2_OpCnt_t = {
     0
 };
 
-/* --- Data Object: Beh (CDC: ENS - Status Enumerado) --- */
+/*  Data Object: Beh (CDC: ENS - Status Enumerado)  */
 DataObject iedModel_B1EBK_ALMXSWI2_Beh = {
     DataObjectModelType,
     "Beh",
     (ModelNode*) &iedModel_B1EBK_ALMXSWI2,
-    (ModelNode*) &iedModel_B1EBK_ALMXSWI2_Health, /* sibling */
+    (ModelNode*) &iedModel_B1EBK_ALMXSWI2_Health,  
     (ModelNode*) &iedModel_B1EBK_ALMXSWI2_Beh_stVal,
     0,
     -1
@@ -2241,12 +2235,12 @@ DataAttribute iedModel_B1EBK_ALMXSWI2_Beh_t = {
     0
 };
 
-/* --- Data Object: Health (CDC: ENS - Status Enumerado) --- */
+/*  Data Object: Health (CDC: ENS - Status Enumerado)  */
 DataObject iedModel_B1EBK_ALMXSWI2_Health = {
     DataObjectModelType,
     "Health",
     (ModelNode*) &iedModel_B1EBK_ALMXSWI2,
-    (ModelNode*) &iedModel_B1EBK_ALMXSWI2_Pos, /* sibling */
+    (ModelNode*) &iedModel_B1EBK_ALMXSWI2_Pos,  
     (ModelNode*) &iedModel_B1EBK_ALMXSWI2_Health_stVal,
     0,
     -1
@@ -2288,29 +2282,27 @@ DataAttribute iedModel_B1EBK_ALMXSWI2_Health_t = {
     0
 };
 
-/* --- Data Object: Pos (CDC: DPC - modelado como Status) --- */
 /* ==================================================================
  * ALMXSWI2 - IMPLEMENTAÇÃO COM OPER (Comando)
  * ==================================================================
  */
 
-/* --- Data Object: Pos (CDC: DPC - Double Point Control) --- */
 DataObject iedModel_B1EBK_ALMXSWI2_Pos = {
     DataObjectModelType,
     "Pos",
     (ModelNode*) &iedModel_B1EBK_ALMXSWI2,
-    (ModelNode*) &iedModel_B1EBK_ALMXSWI2_BlkOpn, /* sibling */
-    (ModelNode*) &iedModel_B1EBK_ALMXSWI2_Pos_Oper, /* Aponta para Oper agora! */
+    (ModelNode*) &iedModel_B1EBK_ALMXSWI2_BlkOpn,  
+    (ModelNode*) &iedModel_B1EBK_ALMXSWI2_Pos_Oper, 
     0,
     -1
 };
 
-/* --- Estrutura Oper do Pos --- */
+/*  Estrutura Oper do Pos  */
 DataAttribute iedModel_B1EBK_ALMXSWI2_Pos_Oper = {
     DataAttributeModelType, "Oper",
     (ModelNode*) &iedModel_B1EBK_ALMXSWI2_Pos,
-    (ModelNode*) &iedModel_B1EBK_ALMXSWI2_Pos_stVal, /* Sibling aponta para stVal */
-    (ModelNode*) &iedModel_B1EBK_ALMXSWI2_Pos_Oper_ctlVal, /* Child */
+    (ModelNode*) &iedModel_B1EBK_ALMXSWI2_Pos_stVal,  
+    (ModelNode*) &iedModel_B1EBK_ALMXSWI2_Pos_Oper_ctlVal,  
     0,
     -1,
     IEC61850_FC_CO,
@@ -2414,7 +2406,7 @@ DataAttribute iedModel_B1EBK_ALMXSWI2_Pos_Oper_Check = {
     0
 };
 
-/* --- Atributos de Status Pos (Sem Alteração além dos ponteiros) --- */
+/*  Atributos de Status Pos (Sem Alteração além dos ponteiros)  */
 DataAttribute iedModel_B1EBK_ALMXSWI2_Pos_stVal = {
     DataAttributeModelType, "stVal",
     (ModelNode*) &iedModel_B1EBK_ALMXSWI2_Pos,
@@ -2464,22 +2456,22 @@ DataAttribute iedModel_B1EBK_ALMXSWI2_Pos_ctlModel = {
 };
 
 
-/* --- Data Object: BlkOpn (CDC: SPC) --- */
+/*  Data Object: BlkOpn (CDC: SPC)  */
 DataObject iedModel_B1EBK_ALMXSWI2_BlkOpn = {
     DataObjectModelType,
     "BlkOpn",
     (ModelNode*) &iedModel_B1EBK_ALMXSWI2,
-    (ModelNode*) &iedModel_B1EBK_ALMXSWI2_BlkCls, /* sibling */
-    (ModelNode*) &iedModel_B1EBK_ALMXSWI2_BlkOpn_Oper, /* Aponta para Oper agora! */
+    (ModelNode*) &iedModel_B1EBK_ALMXSWI2_BlkCls,  
+    (ModelNode*) &iedModel_B1EBK_ALMXSWI2_BlkOpn_Oper,  
     0,
     -1
 };
 
-/* --- Estrutura Oper do BlkOpn --- */
+/*  Estrutura Oper do BlkOpn  */
 DataAttribute iedModel_B1EBK_ALMXSWI2_BlkOpn_Oper = {
     DataAttributeModelType, "Oper",
     (ModelNode*) &iedModel_B1EBK_ALMXSWI2_BlkOpn,
-    (ModelNode*) &iedModel_B1EBK_ALMXSWI2_BlkOpn_stVal, /* Sibling aponta para stVal */
+    (ModelNode*) &iedModel_B1EBK_ALMXSWI2_BlkOpn_stVal,  
     (ModelNode*) &iedModel_B1EBK_ALMXSWI2_BlkOpn_Oper_ctlVal,
     0,
     -1,
@@ -2584,8 +2576,6 @@ DataAttribute iedModel_B1EBK_ALMXSWI2_BlkOpn_Oper_Check = {
     0
 };
 
-
-/* --- Atributos de Status BlkOpn (Sem Alteração além dos ponteiros) --- */
 DataAttribute iedModel_B1EBK_ALMXSWI2_BlkOpn_stVal = {
     DataAttributeModelType, "stVal",
     (ModelNode*) &iedModel_B1EBK_ALMXSWI2_BlkOpn,
@@ -2635,22 +2625,22 @@ DataAttribute iedModel_B1EBK_ALMXSWI2_BlkOpn_ctlModel = {
 };
 
 
-/* --- Data Object: BlkCls (CDC: SPC) --- */
+/*  Data Object: BlkCls (CDC: SPC)  */
 DataObject iedModel_B1EBK_ALMXSWI2_BlkCls = {
     DataObjectModelType,
     "BlkCls",
     (ModelNode*) &iedModel_B1EBK_ALMXSWI2,
-    NULL, /* Fim da cadeia de DOs */
-    (ModelNode*) &iedModel_B1EBK_ALMXSWI2_BlkCls_Oper, /* Aponta para Oper agora! */
+    NULL,  
+    (ModelNode*) &iedModel_B1EBK_ALMXSWI2_BlkCls_Oper,  
     0,
     -1
 };
 
-/* --- Estrutura Oper do BlkCls --- */
+/*  Estrutura Oper do BlkCls  */
 DataAttribute iedModel_B1EBK_ALMXSWI2_BlkCls_Oper = {
     DataAttributeModelType, "Oper",
     (ModelNode*) &iedModel_B1EBK_ALMXSWI2_BlkCls,
-    (ModelNode*) &iedModel_B1EBK_ALMXSWI2_BlkCls_stVal, /* Sibling aponta para stVal */
+    (ModelNode*) &iedModel_B1EBK_ALMXSWI2_BlkCls_stVal,  
     (ModelNode*) &iedModel_B1EBK_ALMXSWI2_BlkCls_Oper_ctlVal,
     0,
     -1,
@@ -2755,7 +2745,6 @@ DataAttribute iedModel_B1EBK_ALMXSWI2_BlkCls_Oper_Check = {
     0
 };
 
-/* --- Atributos de Status BlkCls (Sem Alteração além dos ponteiros) --- */
 DataAttribute iedModel_B1EBK_ALMXSWI2_BlkCls_stVal = {
     DataAttributeModelType, "stVal",
     (ModelNode*) &iedModel_B1EBK_ALMXSWI2_BlkCls,
@@ -2817,7 +2806,7 @@ LogicalNode iedModel_B1EBK_TMVM1 = {
     (ModelNode*) &iedModel_B1EBK_TMVM1_EEHealth
 };
 
-/* --- Data Object: EEHealth (CDC: ENS - Status Enumerado) --- */
+/*  Data Object: EEHealth (CDC: ENS - Status Enumerado)  */
 DataObject iedModel_B1EBK_TMVM1_EEHealth = {
     DataObjectModelType,
     "EEHealth",
@@ -2864,12 +2853,12 @@ DataAttribute iedModel_B1EBK_TMVM1_EEHealth_t = {
     0
 };
 
-/* --- Data Object: Beh (CDC: ENS - Status Enumerado) --- */
+/*  Data Object: Beh (CDC: ENS - Status Enumerado)  */
 DataObject iedModel_B1EBK_TMVM1_Beh = {
     DataObjectModelType,
     "Beh",
     (ModelNode*) &iedModel_B1EBK_TMVM1,
-    (ModelNode*) &iedModel_B1EBK_TMVM1_Health, /* sibling */
+    (ModelNode*) &iedModel_B1EBK_TMVM1_Health,  
     (ModelNode*) &iedModel_B1EBK_TMVM1_Beh_stVal,
     0,
     -1
@@ -2911,12 +2900,12 @@ DataAttribute iedModel_B1EBK_TMVM1_Beh_t = {
     0
 };
 
-/* --- Data Object: Health (CDC: ENS - Status Enumerado) --- */
+/*  Data Object: Health (CDC: ENS - Status Enumerado)  */
 DataObject iedModel_B1EBK_TMVM1_Health = {
     DataObjectModelType,
     "Health",
     (ModelNode*) &iedModel_B1EBK_TMVM1,
-    (ModelNode*) &iedModel_B1EBK_TMVM1_MvmRteSv, /* sibling */
+    (ModelNode*) &iedModel_B1EBK_TMVM1_MvmRteSv,  
     (ModelNode*) &iedModel_B1EBK_TMVM1_Health_stVal,
     0,
     -1
@@ -2958,12 +2947,12 @@ DataAttribute iedModel_B1EBK_TMVM1_Health_t = {
     0
 };
 
-/* --- Data Object: MvmRteSv (CDC: SAV - Settable Analogue Value) --- */
+/*  Data Object: MvmRteSv (CDC: SAV - Settable Analogue Value)  */
 DataObject iedModel_B1EBK_TMVM1_MvmRteSv = {
     DataObjectModelType,
     "MvmRteSv",
     (ModelNode*) &iedModel_B1EBK_TMVM1,
-    NULL, /* Fim da cadeia de DOs */
+    NULL,  
     (ModelNode*) &iedModel_B1EBK_TMVM1_MvmRteSv_instMag,
     0,
     -1
@@ -2973,8 +2962,8 @@ DataAttribute iedModel_B1EBK_TMVM1_MvmRteSv_instMag = {
     DataAttributeModelType,
     "instMag",
     (ModelNode*) &iedModel_B1EBK_TMVM1_MvmRteSv,
-    (ModelNode*) &iedModel_B1EBK_TMVM1_MvmRteSv_q, /* sibling */
-    (ModelNode*) &iedModel_B1EBK_TMVM1_MvmRteSv_instMag_f, /* child */
+    (ModelNode*) &iedModel_B1EBK_TMVM1_MvmRteSv_q,  
+    (ModelNode*) &iedModel_B1EBK_TMVM1_MvmRteSv_instMag_f,  
     0,
     -1,
     IEC61850_FC_MX,
@@ -2985,7 +2974,7 @@ DataAttribute iedModel_B1EBK_TMVM1_MvmRteSv_instMag = {
 DataAttribute iedModel_B1EBK_TMVM1_MvmRteSv_instMag_f = {
     DataAttributeModelType,
     "f",
-    (ModelNode*) &iedModel_B1EBK_TMVM1_MvmRteSv_instMag, /* parent é setMag */
+    (ModelNode*) &iedModel_B1EBK_TMVM1_MvmRteSv_instMag,  
     NULL,
     NULL,
     0,
@@ -2995,12 +2984,11 @@ DataAttribute iedModel_B1EBK_TMVM1_MvmRteSv_instMag_f = {
     0
 };
 
-/* --- Atributo: q (Quality) --- */
 DataAttribute iedModel_B1EBK_TMVM1_MvmRteSv_q = {
     DataAttributeModelType,
     "q",
-    (ModelNode*) &iedModel_B1EBK_TMVM1_MvmRteSv,      /* Parent */
-    (ModelNode*) &iedModel_B1EBK_TMVM1_MvmRteSv_t,    /* Sibling: aponta para 't' */
+    (ModelNode*) &iedModel_B1EBK_TMVM1_MvmRteSv,       
+    (ModelNode*) &iedModel_B1EBK_TMVM1_MvmRteSv_t,     
     NULL,
     0,
     -1,
@@ -3009,12 +2997,11 @@ DataAttribute iedModel_B1EBK_TMVM1_MvmRteSv_q = {
     TRG_OPT_QUALITY_CHANGED | TRG_OPT_DATA_CHANGED
 };
 
-/* --- Atributo: t (Timestamp) --- */
 DataAttribute iedModel_B1EBK_TMVM1_MvmRteSv_t = {
     DataAttributeModelType,
     "t",
-    (ModelNode*) &iedModel_B1EBK_TMVM1_MvmRteSv,      /* Parent */
-    (ModelNode*) &iedModel_B1EBK_TMVM1_MvmRteSv_units, /* Sibling: aponta para 'units' */
+    (ModelNode*) &iedModel_B1EBK_TMVM1_MvmRteSv,       
+    (ModelNode*) &iedModel_B1EBK_TMVM1_MvmRteSv_units,  
     NULL,
     0,
     -1,
@@ -3023,13 +3010,12 @@ DataAttribute iedModel_B1EBK_TMVM1_MvmRteSv_t = {
     0
 };
 
-/* --- Atributo: units (Unit - Construído) --- */
 DataAttribute iedModel_B1EBK_TMVM1_MvmRteSv_units = {
     DataAttributeModelType,
     "units",
-    (ModelNode*) &iedModel_B1EBK_TMVM1_MvmRteSv,      /* Parent */
-    (ModelNode*) &iedModel_B1EBK_TMVM1_MvmRteSv_sVC,  /* Sibling: aponta para o sVC (ou NULL se não tiver) */
-    (ModelNode*) &iedModel_B1EBK_TMVM1_MvmRteSv_units_SIUnit, /* Child: aponta para SIUnit */
+    (ModelNode*) &iedModel_B1EBK_TMVM1_MvmRteSv,       
+    (ModelNode*) &iedModel_B1EBK_TMVM1_MvmRteSv_sVC,   
+    (ModelNode*) &iedModel_B1EBK_TMVM1_MvmRteSv_units_SIUnit,  
     0,
     -1,
     IEC61850_FC_CF,
@@ -3037,12 +3023,11 @@ DataAttribute iedModel_B1EBK_TMVM1_MvmRteSv_units = {
     0
 };
 
-/* --- Sub-atributo: units.SIUnit --- */
 DataAttribute iedModel_B1EBK_TMVM1_MvmRteSv_units_SIUnit = {
     DataAttributeModelType,
     "SIUnit",
-    (ModelNode*) &iedModel_B1EBK_TMVM1_MvmRteSv_units, /* Parent é o 'units' */
-    (ModelNode*) &iedModel_B1EBK_TMVM1_MvmRteSv_units_multiplier, /* Sibling */
+    (ModelNode*) &iedModel_B1EBK_TMVM1_MvmRteSv_units,  
+    (ModelNode*) &iedModel_B1EBK_TMVM1_MvmRteSv_units_multiplier,  
     NULL,
     0,
     -1,
@@ -3051,12 +3036,11 @@ DataAttribute iedModel_B1EBK_TMVM1_MvmRteSv_units_SIUnit = {
     0
 };
 
-/* --- Sub-atributo: units.multiplier --- */
 DataAttribute iedModel_B1EBK_TMVM1_MvmRteSv_units_multiplier = {
     DataAttributeModelType,
     "multiplier",
-    (ModelNode*) &iedModel_B1EBK_TMVM1_MvmRteSv_units, /* Parent é o 'units' */
-    NULL,                                              /* Fim da lista de filhos do units */
+    (ModelNode*) &iedModel_B1EBK_TMVM1_MvmRteSv_units,  
+    NULL,                                               
     NULL,
     0,
     -1,
@@ -3068,9 +3052,9 @@ DataAttribute iedModel_B1EBK_TMVM1_MvmRteSv_units_multiplier = {
 DataAttribute iedModel_B1EBK_TMVM1_MvmRteSv_sVC = {
     DataAttributeModelType,
     "sVC",
-    (ModelNode*) &iedModel_B1EBK_TMVM1_MvmRteSv, /* parent é o DO */
+    (ModelNode*) &iedModel_B1EBK_TMVM1_MvmRteSv, 
     NULL,
-    (ModelNode*) &iedModel_B1EBK_TMVM1_MvmRteSv_sVC_scaleFactor, /* child */
+    (ModelNode*) &iedModel_B1EBK_TMVM1_MvmRteSv_sVC_scaleFactor,  
     0,
     -1,
     IEC61850_FC_CF,
@@ -3081,8 +3065,8 @@ DataAttribute iedModel_B1EBK_TMVM1_MvmRteSv_sVC = {
 DataAttribute iedModel_B1EBK_TMVM1_MvmRteSv_sVC_scaleFactor = {
     DataAttributeModelType,
     "scaleFactor",
-    (ModelNode*) &iedModel_B1EBK_TMVM1_MvmRteSv_sVC, /* parent é sVC */
-    (ModelNode*) &iedModel_B1EBK_TMVM1_MvmRteSv_sVC_offset, /* sibling */
+    (ModelNode*) &iedModel_B1EBK_TMVM1_MvmRteSv_sVC, 
+    (ModelNode*) &iedModel_B1EBK_TMVM1_MvmRteSv_sVC_offset,  
     NULL,
     0,
     -1,
@@ -3094,7 +3078,7 @@ DataAttribute iedModel_B1EBK_TMVM1_MvmRteSv_sVC_scaleFactor = {
 DataAttribute iedModel_B1EBK_TMVM1_MvmRteSv_sVC_offset = {
     DataAttributeModelType,
     "offset",
-    (ModelNode*) &iedModel_B1EBK_TMVM1_MvmRteSv_sVC, /* parent é sVC */
+    (ModelNode*) &iedModel_B1EBK_TMVM1_MvmRteSv_sVC,  
     NULL,
     NULL,
     0,
@@ -3132,7 +3116,7 @@ LogicalNode iedModel_B1EBK_ZMOT1 = {
     (ModelNode*) &iedModel_B1EBK_ZMOT1_EEName,
 };
 
-/* --- Data Object: EEName (CDC: DPL - modelado como status) --- */
+/*  Data Object: EEName (CDC: DPL - modelado como status)  */
 DataObject iedModel_B1EBK_ZMOT1_EEName = {
     DataObjectModelType,
     "EEName",
@@ -3169,7 +3153,7 @@ DataAttribute iedModel_B1EBK_ZMOT1_EEName_vendor = {
 DataAttribute iedModel_B1EBK_ZMOT1_EEName_model = {
     DataAttributeModelType, "model",
     (ModelNode*) &iedModel_B1EBK_ZMOT1_NamPlt,
-    NULL, /* Aponta para swRev */
+    NULL,  
     NULL,
     0,
     -1,
@@ -3200,7 +3184,7 @@ DataAttribute iedModel_B1EBK_ZMOT1_NamPlt_vendor = {
     0
 };
 
-/* --- Data Object: RotThmSt (CDC: ENS - Status Enumerado) --- */
+/*  Data Object: RotThmSt (CDC: ENS - Status Enumerado)  */
 DataObject iedModel_B1EBK_ZMOT1_RotThmSt = {
     DataObjectModelType,
     "RotThmSt",
@@ -3247,7 +3231,7 @@ DataAttribute iedModel_B1EBK_ZMOT1_RotThmSt_t = {
     0
 };
 
-/* --- Data Object: PresAlm (CDC: SPS - Status Ponto Simples) --- */
+/*  Data Object: PresAlm (CDC: SPS - Status Ponto Simples)  */
 DataObject iedModel_B1EBK_ZMOT1_PresAlm = {
     DataObjectModelType,
     "PresAlm",
@@ -3294,7 +3278,7 @@ DataAttribute iedModel_B1EBK_ZMOT1_PresAlm_t = {
     0
 };
 
-/* --- Data Object: EEHealth (CDC: ENS - Status Enumerado) --- */
+/*  Data Object: EEHealth (CDC: ENS - Status Enumerado)  */
 DataObject iedModel_B1EBK_ZMOT1_EEHealth = {
     DataObjectModelType,
     "EEHealth",
@@ -3364,7 +3348,6 @@ DataAttribute iedModel_B1EBK_ZMOT1_MotSt_stVal = {
     TRG_OPT_DATA_CHANGED
 };
 
-/* --- Attribute: q (Quality) --- */
 DataAttribute iedModel_B1EBK_ZMOT1_MotSt_q = {
     DataAttributeModelType,
     "q",
@@ -3378,7 +3361,6 @@ DataAttribute iedModel_B1EBK_ZMOT1_MotSt_q = {
     TRG_OPT_QUALITY_CHANGED
 };
 
-/* --- Attribute: t (Timestamp) --- */
 DataAttribute iedModel_B1EBK_ZMOT1_MotSt_t = {
     DataAttributeModelType,
     "t",
@@ -3405,7 +3387,7 @@ LogicalNode iedModel_B1EBK_MMXU1 = {
     (ModelNode*) &iedModel_B1EBK_MMXU1_NamPlt
 };
 
-/* --- Data Object: NamPlt (CDC: LPL) --- */
+/*  Data Object: NamPlt (CDC: LPL)  */
 DataObject iedModel_B1EBK_MMXU1_NamPlt = {
     DataObjectModelType,
     "NamPlt",
@@ -3452,7 +3434,7 @@ DataAttribute iedModel_B1EBK_MMXU1_NamPlt_lnNs = {
     0
 };
 
-/* --- Data Object: Beh (CDC: ENS - Status Enumerado) --- */
+/*  Data Object: Beh (CDC: ENS - Status Enumerado)  */
 DataObject iedModel_B1EBK_MMXU1_Beh = {
     DataObjectModelType,
     "Beh",
@@ -3499,7 +3481,7 @@ DataAttribute iedModel_B1EBK_MMXU1_Beh_t = {
     0
 };
 
-/* --- Data Object: Health (CDC: ENS - Status Enumerado) --- */
+/*  Data Object: Health (CDC: ENS - Status Enumerado)  */
 DataObject iedModel_B1EBK_MMXU1_Health = {
     DataObjectModelType,
     "Health",
@@ -3546,12 +3528,12 @@ DataAttribute iedModel_B1EBK_MMXU1_Health_t = {
     0
 };
 
-/* --- Data Object: TotW (CDC: MV - Measured Value) --- */
+/*  Data Object: TotW (CDC: MV - Measured Value)  */
 DataObject iedModel_B1EBK_MMXU1_TotW = {
     DataObjectModelType,
     "TotW",
     (ModelNode*) &iedModel_B1EBK_MMXU1,
-    NULL, /* Por enquanto, fim da cadeia (PPV e AWYE incompletos) */
+    NULL, 
     (ModelNode*) &iedModel_B1EBK_MMXU1_TotW_mag,
     0,
     -1
@@ -3627,7 +3609,6 @@ DataAttribute iedModel_B1EBK_MMXU1_TotW_db = {
  * ==================================================================
  */
 
-/* --- Nó Lógico: TLOC1 --- */
 LogicalNode iedModel_B1EBK_TLOC1 = {
     LogicalNodeModelType,
     "TLOC1",
@@ -3636,12 +3617,11 @@ LogicalNode iedModel_B1EBK_TLOC1 = {
     (ModelNode*) &iedModel_B1EBK_TLOC1_DistTot
 };
 
-/* --- 1. DistTot (Distance Total - MV) --- */
 DataObject iedModel_B1EBK_TLOC1_DistTot = {
     DataObjectModelType,
     "DistTot",
     (ModelNode*) &iedModel_B1EBK_TLOC1,
-    (ModelNode*) &iedModel_B1EBK_TLOC1_DistSess, /* Sibling */
+    (ModelNode*) &iedModel_B1EBK_TLOC1_DistSess,  
     (ModelNode*) &iedModel_B1EBK_TLOC1_DistTot_mag,
     0,
     -1
@@ -3699,12 +3679,11 @@ DataAttribute iedModel_B1EBK_TLOC1_DistTot_t = {
     0
 };
 
-/* --- 2. DistSess (Distance Session - MV) --- */
 DataObject iedModel_B1EBK_TLOC1_DistSess = {
     DataObjectModelType,
     "DistSess",
     (ModelNode*) &iedModel_B1EBK_TLOC1,
-    (ModelNode*) &iedModel_B1EBK_TLOC1_NavFal, /* Sibling */
+    (ModelNode*) &iedModel_B1EBK_TLOC1_NavFal,  
     (ModelNode*) &iedModel_B1EBK_TLOC1_DistSess_mag,
     0,
     -1
@@ -3762,12 +3741,11 @@ DataAttribute iedModel_B1EBK_TLOC1_DistSess_t = {
     0
 };
 
-/* --- 3. NavFal (Navigation Failure - SPS) --- */
 DataObject iedModel_B1EBK_TLOC1_NavFal = {
     DataObjectModelType,
     "NavFal",
     (ModelNode*) &iedModel_B1EBK_TLOC1,
-    (ModelNode*) &iedModel_B1EBK_TLOC1_SatAvl, /* Sibling */
+    (ModelNode*) &iedModel_B1EBK_TLOC1_SatAvl,  
     (ModelNode*) &iedModel_B1EBK_TLOC1_NavFal_stVal,
     0,
     -1
@@ -3812,12 +3790,12 @@ DataAttribute iedModel_B1EBK_TLOC1_NavFal_t = {
     0
 };
 
-/* --- 4. SatAvl (Satellite Available - SPS) --- */
+/*  4. SatAvl (Satellite Available - SPS)  */
 DataObject iedModel_B1EBK_TLOC1_SatAvl = {
     DataObjectModelType,
     "SatAvl",
     (ModelNode*) &iedModel_B1EBK_TLOC1,
-    (ModelNode*) &iedModel_B1EBK_TLOC1_LocPrec, /* Sibling */
+    (ModelNode*) &iedModel_B1EBK_TLOC1_LocPrec,  
     (ModelNode*) &iedModel_B1EBK_TLOC1_SatAvl_stVal,
     0,
     -1
@@ -3862,12 +3840,12 @@ DataAttribute iedModel_B1EBK_TLOC1_SatAvl_t = {
     0
 };
 
-/* --- 5. LocPrec (Location Precision - INS) --- */
+/*  5. LocPrec (Location Precision - INS)  */
 DataObject iedModel_B1EBK_TLOC1_LocPrec = {
     DataObjectModelType,
     "LocPrec",
     (ModelNode*) &iedModel_B1EBK_TLOC1,
-    (ModelNode*) &iedModel_B1EBK_TLOC1_LocDist, /* Sibling */
+    (ModelNode*) &iedModel_B1EBK_TLOC1_LocDist,  
     (ModelNode*) &iedModel_B1EBK_TLOC1_LocPrec_stVal,
     0,
     -1
@@ -3912,12 +3890,12 @@ DataAttribute iedModel_B1EBK_TLOC1_LocPrec_t = {
     0
 };
 
-/* --- 6. LocDist (Location Distance - MV/SAV) --- */
+/*  6. LocDist (Location Distance - MV/SAV)  */
 DataObject iedModel_B1EBK_TLOC1_LocDist = {
     DataObjectModelType,
     "LocDist",
     (ModelNode*) &iedModel_B1EBK_TLOC1,
-    (ModelNode*) &iedModel_B1EBK_TLOC1_AutDis, /* Sibling */
+    (ModelNode*) &iedModel_B1EBK_TLOC1_AutDis,  
     (ModelNode*) &iedModel_B1EBK_TLOC1_LocDist_instMag,
     0,
     -1
@@ -3975,12 +3953,12 @@ DataAttribute iedModel_B1EBK_TLOC1_LocDist_t = {
     0
 };
 
-/* --- 7. AutDis (Auto Disable - INS) --- */
+/*  7. AutDis (Auto Disable - INS)  */
 DataObject iedModel_B1EBK_TLOC1_AutDis = {
     DataObjectModelType,
     "AutDis",
     (ModelNode*) &iedModel_B1EBK_TLOC1,
-    NULL, /* Fim da lista */
+    NULL,
     (ModelNode*) &iedModel_B1EBK_TLOC1_AutDis_stVal,
     0,
     -1

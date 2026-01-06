@@ -182,7 +182,7 @@ DataAttribute iedModel_B1STG_LLN0_NamPlt_d = {
 };
 
 /* ==================================================================
- * MODELAGEM NÓ LÓGICO XSWI1
+ * IMPLEMENTAÇÃO XSWI1
  * ==================================================================
  */
 
@@ -190,7 +190,7 @@ LogicalNode iedModel_B1STG_XSWI1 = {
     LogicalNodeModelType,
     "XSWI1",
     (ModelNode*) &iedModel_B1STG,
-    (ModelNode*) &iedModel_B1STG_TTMP1, /* <-- CORRIGIDO: Aponta para TTMP1 */
+    (ModelNode*) &iedModel_B1STG_TTMP1, 
     (ModelNode*) &iedModel_B1STG_XSWI1_SwTyp
 };
 
@@ -487,7 +487,7 @@ DataObject iedModel_B1STG_XSWI1_BlkOpn = {
     DataObjectModelType, "BlkOpn",
     (ModelNode*) &iedModel_B1STG_XSWI1,
     (ModelNode*) &iedModel_B1STG_XSWI1_BlkCls,
-    (ModelNode*) &iedModel_B1STG_XSWI1_BlkOpn_Oper, /* Child aponta para Oper */
+    (ModelNode*) &iedModel_B1STG_XSWI1_BlkOpn_Oper, 
     0,
     -1
 };
@@ -495,8 +495,8 @@ DataObject iedModel_B1STG_XSWI1_BlkOpn = {
 DataAttribute iedModel_B1STG_XSWI1_BlkOpn_Oper = {
     DataAttributeModelType, "Oper",
     (ModelNode*) &iedModel_B1STG_XSWI1_BlkOpn,
-    (ModelNode*) &iedModel_B1STG_XSWI1_BlkOpn_stVal, /* Sibling é stVal */
-    (ModelNode*) &iedModel_B1STG_XSWI1_BlkOpn_Oper_ctlVal, /* Child */
+    (ModelNode*) &iedModel_B1STG_XSWI1_BlkOpn_stVal, 
+    (ModelNode*) &iedModel_B1STG_XSWI1_BlkOpn_Oper_ctlVal, 
     0,
     -1,
     IEC61850_FC_CO,
@@ -507,7 +507,7 @@ DataAttribute iedModel_B1STG_XSWI1_BlkOpn_Oper = {
 DataAttribute iedModel_B1STG_XSWI1_BlkOpn_Oper_ctlVal = {
     DataAttributeModelType, "ctlVal",
     (ModelNode*) &iedModel_B1STG_XSWI1_BlkOpn_Oper,
-    (ModelNode*) &iedModel_B1STG_XSWI1_BlkOpn_Oper_origin, /* Sibling */
+    (ModelNode*) &iedModel_B1STG_XSWI1_BlkOpn_Oper_origin, 
     NULL,
     0,
     -1,
@@ -519,8 +519,8 @@ DataAttribute iedModel_B1STG_XSWI1_BlkOpn_Oper_ctlVal = {
 DataAttribute iedModel_B1STG_XSWI1_BlkOpn_Oper_origin = {
     DataAttributeModelType, "origin",
     (ModelNode*) &iedModel_B1STG_XSWI1_BlkOpn_Oper,
-    (ModelNode*) &iedModel_B1STG_XSWI1_BlkOpn_Oper_ctlNum, /* Sibling */
-    (ModelNode*) &iedModel_B1STG_XSWI1_BlkOpn_Oper_origin_orCat, /* Child */
+    (ModelNode*) &iedModel_B1STG_XSWI1_BlkOpn_Oper_ctlNum, 
+    (ModelNode*) &iedModel_B1STG_XSWI1_BlkOpn_Oper_origin_orCat, 
     0,
     -1,
     IEC61850_FC_CO,
@@ -531,7 +531,7 @@ DataAttribute iedModel_B1STG_XSWI1_BlkOpn_Oper_origin = {
 DataAttribute iedModel_B1STG_XSWI1_BlkOpn_Oper_origin_orCat = {
     DataAttributeModelType, "orCat",
     (ModelNode*) &iedModel_B1STG_XSWI1_BlkOpn_Oper_origin,
-    (ModelNode*) &iedModel_B1STG_XSWI1_BlkOpn_Oper_origin_orIdent, /* Sibling */
+    (ModelNode*) &iedModel_B1STG_XSWI1_BlkOpn_Oper_origin_orIdent, 
     NULL,
     0,
     -1,
@@ -555,7 +555,7 @@ DataAttribute iedModel_B1STG_XSWI1_BlkOpn_Oper_origin_orIdent = {
 DataAttribute iedModel_B1STG_XSWI1_BlkOpn_Oper_ctlNum = {
     DataAttributeModelType, "ctlNum",
     (ModelNode*) &iedModel_B1STG_XSWI1_BlkOpn_Oper,
-    (ModelNode*) &iedModel_B1STG_XSWI1_BlkOpn_Oper_T, /* Sibling */
+    (ModelNode*) &iedModel_B1STG_XSWI1_BlkOpn_Oper_T, 
     NULL,
     0,
     -1,
@@ -567,7 +567,7 @@ DataAttribute iedModel_B1STG_XSWI1_BlkOpn_Oper_ctlNum = {
 DataAttribute iedModel_B1STG_XSWI1_BlkOpn_Oper_T = {
     DataAttributeModelType, "T",
     (ModelNode*) &iedModel_B1STG_XSWI1_BlkOpn_Oper,
-    (ModelNode*) &iedModel_B1STG_XSWI1_BlkOpn_Oper_Test, /* Sibling */
+    (ModelNode*) &iedModel_B1STG_XSWI1_BlkOpn_Oper_Test, 
     NULL,
     0,
     -1,
@@ -579,7 +579,7 @@ DataAttribute iedModel_B1STG_XSWI1_BlkOpn_Oper_T = {
 DataAttribute iedModel_B1STG_XSWI1_BlkOpn_Oper_Test = {
     DataAttributeModelType, "Test",
     (ModelNode*) &iedModel_B1STG_XSWI1_BlkOpn_Oper,
-    (ModelNode*) &iedModel_B1STG_XSWI1_BlkOpn_Oper_Check, /* Sibling */
+    (ModelNode*) &iedModel_B1STG_XSWI1_BlkOpn_Oper_Check, 
     NULL,
     0,
     -1,
@@ -653,7 +653,7 @@ DataObject iedModel_B1STG_XSWI1_BlkCls = {
     DataObjectModelType, "BlkCls",
     (ModelNode*) &iedModel_B1STG_XSWI1,
     NULL, /* Fim da cadeia */
-    (ModelNode*) &iedModel_B1STG_XSWI1_BlkCls_Oper, /* Child aponta para Oper */
+    (ModelNode*) &iedModel_B1STG_XSWI1_BlkCls_Oper, /
     0,
     -1
 };
@@ -661,8 +661,8 @@ DataObject iedModel_B1STG_XSWI1_BlkCls = {
 DataAttribute iedModel_B1STG_XSWI1_BlkCls_Oper = {
     DataAttributeModelType, "Oper",
     (ModelNode*) &iedModel_B1STG_XSWI1_BlkCls,
-    (ModelNode*) &iedModel_B1STG_XSWI1_BlkCls_stVal, /* Sibling é stVal */
-    (ModelNode*) &iedModel_B1STG_XSWI1_BlkCls_Oper_ctlVal, /* Child */
+    (ModelNode*) &iedModel_B1STG_XSWI1_BlkCls_stVal,
+    (ModelNode*) &iedModel_B1STG_XSWI1_BlkCls_Oper_ctlVal, 
     0,
     -1,
     IEC61850_FC_CO,
@@ -673,7 +673,7 @@ DataAttribute iedModel_B1STG_XSWI1_BlkCls_Oper = {
 DataAttribute iedModel_B1STG_XSWI1_BlkCls_Oper_ctlVal = {
     DataAttributeModelType, "ctlVal",
     (ModelNode*) &iedModel_B1STG_XSWI1_BlkCls_Oper,
-    (ModelNode*) &iedModel_B1STG_XSWI1_BlkCls_Oper_origin, /* Sibling */
+    (ModelNode*) &iedModel_B1STG_XSWI1_BlkCls_Oper_origin, 
     NULL,
     0,
     -1,
@@ -685,8 +685,8 @@ DataAttribute iedModel_B1STG_XSWI1_BlkCls_Oper_ctlVal = {
 DataAttribute iedModel_B1STG_XSWI1_BlkCls_Oper_origin = {
     DataAttributeModelType, "origin",
     (ModelNode*) &iedModel_B1STG_XSWI1_BlkCls_Oper,
-    (ModelNode*) &iedModel_B1STG_XSWI1_BlkCls_Oper_ctlNum, /* Sibling */
-    (ModelNode*) &iedModel_B1STG_XSWI1_BlkCls_Oper_origin_orCat, /* Child */
+    (ModelNode*) &iedModel_B1STG_XSWI1_BlkCls_Oper_ctlNum, 
+    (ModelNode*) &iedModel_B1STG_XSWI1_BlkCls_Oper_origin_orCat, 
     0,
     -1,
     IEC61850_FC_CO,
@@ -697,7 +697,7 @@ DataAttribute iedModel_B1STG_XSWI1_BlkCls_Oper_origin = {
 DataAttribute iedModel_B1STG_XSWI1_BlkCls_Oper_origin_orCat = {
     DataAttributeModelType, "orCat",
     (ModelNode*) &iedModel_B1STG_XSWI1_BlkCls_Oper_origin,
-    (ModelNode*) &iedModel_B1STG_XSWI1_BlkCls_Oper_origin_orIdent, /* Sibling */
+    (ModelNode*) &iedModel_B1STG_XSWI1_BlkCls_Oper_origin_orIdent, 
     NULL,
     0,
     -1,
@@ -721,7 +721,7 @@ DataAttribute iedModel_B1STG_XSWI1_BlkCls_Oper_origin_orIdent = {
 DataAttribute iedModel_B1STG_XSWI1_BlkCls_Oper_ctlNum = {
     DataAttributeModelType, "ctlNum",
     (ModelNode*) &iedModel_B1STG_XSWI1_BlkCls_Oper,
-    (ModelNode*) &iedModel_B1STG_XSWI1_BlkCls_Oper_T, /* Sibling */
+    (ModelNode*) &iedModel_B1STG_XSWI1_BlkCls_Oper_T, 
     NULL,
     0,
     -1,
@@ -733,7 +733,7 @@ DataAttribute iedModel_B1STG_XSWI1_BlkCls_Oper_ctlNum = {
 DataAttribute iedModel_B1STG_XSWI1_BlkCls_Oper_T = {
     DataAttributeModelType, "T",
     (ModelNode*) &iedModel_B1STG_XSWI1_BlkCls_Oper,
-    (ModelNode*) &iedModel_B1STG_XSWI1_BlkCls_Oper_Test, /* Sibling */
+    (ModelNode*) &iedModel_B1STG_XSWI1_BlkCls_Oper_Test, 
     NULL,
     0,
     -1,
@@ -745,7 +745,7 @@ DataAttribute iedModel_B1STG_XSWI1_BlkCls_Oper_T = {
 DataAttribute iedModel_B1STG_XSWI1_BlkCls_Oper_Test = {
     DataAttributeModelType, "Test",
     (ModelNode*) &iedModel_B1STG_XSWI1_BlkCls_Oper,
-    (ModelNode*) &iedModel_B1STG_XSWI1_BlkCls_Oper_Check, /* Sibling */
+    (ModelNode*) &iedModel_B1STG_XSWI1_BlkCls_Oper_Check, 
     NULL,
     0,
     -1,
@@ -824,8 +824,8 @@ LogicalNode iedModel_B1STG_TTMP1 = {
     LogicalNodeModelType,
     "TTMP1",
     (ModelNode*) &iedModel_B1STG,
-    (ModelNode*) &iedModel_B1STG_DBAT1, /* <-- Sibling aponta para DBAT1 */
-    (ModelNode*) &iedModel_B1STG_TTMP1_NamPlt /* Child */
+    (ModelNode*) &iedModel_B1STG_DBAT1,
+    (ModelNode*) &iedModel_B1STG_TTMP1_NamPlt 
 };
 
 /* --- Data Object: NamPlt (CDC: LPL) --- */
@@ -1028,7 +1028,7 @@ DataAttribute iedModel_B1STG_TTMP1_TmpSv_t = {
 DataObject iedModel_B1STG_TTMP1_TmpTgt = {
     DataObjectModelType, "TmpTgt",
     (ModelNode*) &iedModel_B1STG_TTMP1,
-    NULL, /* Fim da cadeia de DOs do TTMP1 */
+    NULL,
     (ModelNode*) &iedModel_B1STG_TTMP1_TmpTgt_setMag,
     0,
     -1
@@ -1094,21 +1094,6 @@ DataAttribute iedModel_B1STG_TTMP1_TmpTgt_sVC_offset = {
     0
 };
 
-
-/* ==================================================================
- * MODELAGEM NÓ LÓGICO ZBAT1 (Comentado)
- * ==================================================================
- */
-/*
-LogicalNode iedModel_B1STG_ZBAT1 = {
-    LogicalNodeModelType, "ZBAT1",
-    (ModelNode*) &iedModel_B1STG,
-    NULL,
-    NULL
-};
-*/
-
-
 /* ==================================================================
  * MODELAGEM NÓ LÓGICO DBAT1
  * ==================================================================
@@ -1127,7 +1112,7 @@ DataObject iedModel_B1STG_DBAT1_EEName = {
     DataObjectModelType, "EEName",
     (ModelNode*) &iedModel_B1STG_DBAT1,
     (ModelNode*) &iedModel_B1STG_DBAT1_ChaSt,
-    (ModelNode*) &iedModel_B1STG_DBAT1_EEName_vendor, /* Aponta para o primeiro filho: vendor */
+    (ModelNode*) &iedModel_B1STG_DBAT1_EEName_vendor, 
     0,
     -1
 };
@@ -1136,7 +1121,7 @@ DataObject iedModel_B1STG_DBAT1_EEName = {
 DataAttribute iedModel_B1STG_DBAT1_EEName_vendor = {
     DataAttributeModelType, "vendor",
     (ModelNode*) &iedModel_B1STG_DBAT1_EEName,
-    (ModelNode*) &iedModel_B1STG_DBAT1_EEName_model, /* Sibling: model */
+    (ModelNode*) &iedModel_B1STG_DBAT1_EEName_model,
     NULL,
     0,
     -1,
@@ -1145,7 +1130,6 @@ DataAttribute iedModel_B1STG_DBAT1_EEName_vendor = {
     0
 };
 
-/* Atributo: model (ADICIONADO) */
 DataAttribute iedModel_B1STG_DBAT1_EEName_model = {
     DataAttributeModelType, "model",
     (ModelNode*) &iedModel_B1STG_DBAT1_EEName,
@@ -1887,8 +1871,8 @@ LogicalNode iedModel_B1STG_ZBAT1 = {
     LogicalNodeModelType,
     "ZBAT1",
     (ModelNode*) &iedModel_B1STG,
-    NULL, /* Sibling aponta para DBAT1 */
-    (ModelNode*) &iedModel_B1STG_ZBAT1_BatHi /* Child */
+    NULL,
+    (ModelNode*) &iedModel_B1STG_ZBAT1_BatHi 
 };
 
 /* --- Data Object: BatHi (CDC: SPS - Status) --- */
@@ -2079,7 +2063,7 @@ DataAttribute iedModel_B1STG_ZBAT1_Health_t = {
 DataObject iedModel_B1STG_ZBAT1_VolChgRte = {
     DataObjectModelType, "VolChgRte",
     (ModelNode*) &iedModel_B1STG_ZBAT1,
-    NULL, /* Fim da cadeia de DOs do ZBAT1 */
+    NULL,
     (ModelNode*) &iedModel_B1STG_ZBAT1_VolChgRte_mag,
     0,
     -1
@@ -2133,7 +2117,6 @@ DataAttribute iedModel_B1STG_ZBAT1_VolChgRte_t = {
     0
 };
 
-/* Função de inicialização de valores (vazia por enquanto) */
 static void
 initializeValues()
 {
