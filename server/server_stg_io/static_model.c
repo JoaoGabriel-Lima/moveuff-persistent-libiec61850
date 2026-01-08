@@ -1,26 +1,6 @@
-/*
- * static_model.c
- * Dispositivo: B1STG
- * Nós Ativos: LLN0, XSWI1, TTMP1, DBAT1
- * (ZBAT1 está comentado)
- */
-
 #include "static_model.h"
 
 static void initializeValues();
-
-IedModel iedModel = {
-    "MoveUFF_",                      /* name */
-    (LogicalDevice*) &iedModel_B1STG, /* firstChild */
-    NULL,                           /* dataSets */
-    NULL,                           /* allDataSets */
-    NULL,                           /* GCBs */
-    NULL,                           /* SVCBs */
-    NULL,                           /* GoCBs */
-    NULL,                           /* pendingRequests */
-    NULL,                           /* mmsServer */
-    initializeValues                /* initialize callback */
-};
 
 LogicalDevice iedModel_B1STG = {
     LogicalDeviceModelType,
@@ -536,7 +516,7 @@ DataAttribute iedModel_B1STG_XSWI1_BlkOpn_Oper_origin_orCat = {
     0,
     -1,
     IEC61850_FC_CO,
-    IEC61850_INT8, /* Enum OrCat */
+    IEC61850_INT8, 
     0
 };
 
@@ -652,7 +632,7 @@ DataAttribute iedModel_B1STG_XSWI1_BlkOpn_ctlModel = {
 DataObject iedModel_B1STG_XSWI1_BlkCls = {
     DataObjectModelType, "BlkCls",
     (ModelNode*) &iedModel_B1STG_XSWI1,
-    NULL, /* Fim da cadeia */
+    NULL, 
     (ModelNode*) &iedModel_B1STG_XSWI1_BlkCls_Oper,
     0,
     -1
@@ -2115,6 +2095,20 @@ DataAttribute iedModel_B1STG_ZBAT1_VolChgRte_t = {
     IEC61850_FC_MX,
     IEC61850_TIMESTAMP,
     0
+};
+
+
+IedModel iedModel = {
+    "MoveUFF_",                     
+    (LogicalDevice*) &iedModel_B1STG, 
+    NULL,                           
+    NULL,                           
+    NULL,                         
+    NULL,                          
+    NULL,                           
+    NULL,                          
+    NULL,                          
+    initializeValues                
 };
 
 static void
