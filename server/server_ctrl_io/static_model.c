@@ -1745,7 +1745,7 @@ DataAttribute iedModel_B1CTR_LTRK1_GenTrk_t = {
     0
 };
 
-/* --- Data Object: GocbTrk (CDC: GTS - GOOSE Tracking) --- */
+/* --- Data Object: CDC: GTS - GOOSE Tracking --- */
 DataObject iedModel_B1CTR_LTRK1_GocbTrk = {
     DataObjectModelType, "GocbTrk",
     (ModelNode*) &iedModel_B1CTR_LTRK1,
