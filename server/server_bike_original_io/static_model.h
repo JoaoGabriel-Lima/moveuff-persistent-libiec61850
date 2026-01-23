@@ -48,9 +48,9 @@ extern DataAttribute iedModel_B1EBK_LLN0_LEDRs_stVal;
 extern DataAttribute iedModel_B1EBK_LLN0_LEDRs_q;
 extern DataAttribute iedModel_B1EBK_LLN0_LEDRs_t;
 
-/* ==================================================================
+/* =================================================================
  * DEEV1
- * ==================================================================
+ * =================================================================
  */
 
 extern DataObject iedModel_B1EBK_DEEV1_EVNam;

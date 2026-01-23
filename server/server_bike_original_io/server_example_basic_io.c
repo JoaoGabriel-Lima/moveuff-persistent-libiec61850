@@ -20,9 +20,9 @@
 /* Defina aqui o comando real do sistema. 
  * O system() não enxerga 'alias' do .bashrc, então usamos o comando completo.
  */
-#define PIN_MOTOR "3" 
-#define CMD_MOTOR_LIGAR    "gpio write " PIN_MOTOR " 1"  // Equivalente ao 'motor1'
-#define CMD_MOTOR_DESLIGAR "gpio write " PIN_MOTOR " 0"  // Equivalente ao 'motor0' (Corte)
+#define PIN_MOTOR "1" 
+#define CMD_MOTOR_LIGAR    "gpio write " PIN_MOTOR " 0"  // Equivalente ao 'motor0' (Corte)
+#define CMD_MOTOR_DESLIGAR "gpio write " PIN_MOTOR " 1"  // Equivalente ao 'motor1' (Habilitar)
 
 static int running = 0;
 static IedServer iedServer = NULL;
@@ -47,21 +47,9 @@ void hardware_atuar_motor(bool ligar) {
 void atualizar_medicoes(IedServer server) {
     uint64_t timestamp = Hal_getTimeInMs();
 
-     /* Por enquanto, geramos valores simulados para garantir que a transmissão funciona. */
-    
-    // 1. Tensão do Barramento (Ex: Simulando ~48V)
-    float tensao = 48.0 + ((rand() % 100) / 100.0); 
-    // IedServer_updateFloatAttributeValue(server, IEDMODEL_NOME_DO_NO_TENSAO_mag_f, tensao);
-    
-    // 2. Corrente do Motor (Ex: Simulando ~15A)
-    float corrente = 15.0 + ((rand() % 100) / 100.0);
-    // IedServer_updateFloatAttributeValue(server, IEDMODEL_NOME_DO_NO_CORRENTE_mag_f, corrente);
+   //AQUI VAMOS LER O JSON DO ADRIANO E ATUALIZAR OS VALORES
 
-    // 3. Temperatura do Cilindro (Ex: Simulando ~25°C)
-    float temperatura = 25.0 + ((rand() % 50) / 100.0);
-    // IedServer_updateFloatAttributeValue(server, IEDMODEL_NOME_DO_NO_TEMP_mag_f, temperatura);
-
-    /* Descomente os printf abaixo para debugar as leituras no terminal */
+    /* Descomentar para debugar as leituras no terminal */
     // printf("[SENSOR] V: %.2f V | I: %.2f A | T: %.2f C\n", tensao, corrente, temperatura);
 }
 
@@ -81,10 +69,6 @@ void verificar_comando_motor() {
     if (valor_atual != -1 && valor_atual != ultimo_estado_motor) {
         printf("\n[LOGICA] Comando recebido via Rede (Valor IEC: %d)\n", valor_atual);
 
-        /* MAPEAMENTO IEC 61850 -> HARDWARE
-         * 1 = Open   -> Vamos definir como LIGADO (Habilitado)
-         * 2 = Closed -> Vamos definir como DESLIGADO (Cortado/Segurança)
-         */
         if (valor_atual == 1) {
             hardware_atuar_motor(true); // motor1
         } 
