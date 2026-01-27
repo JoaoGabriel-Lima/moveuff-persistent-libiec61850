@@ -33,7 +33,7 @@ Optionally execute the following stop to install the library and header files in
 
 `sudo make install`
 
-## Using sqlite3 for data base
+## Using sqlite3 for database
 
 `sudo apt update`
 
