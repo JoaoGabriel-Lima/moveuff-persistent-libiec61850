@@ -1,7 +1,11 @@
+/*
+ * static_model.c
+ * * Versão "Do Zero" (LLN0 + LPHD1 + DEEV1)
+ * * CORRIGIDO PARA A BIBLIOTECA DE 10 CAMPOS
+ */
+
 #include "static_model.h"
-#include <stdio.h>              // Para o printf
-#include "iec61850_server.h"    // Para funções MmsValue
- 
+
 static void initializeValues();
 
 LogicalDevice iedModel_B1EBK = {
@@ -4856,82 +4860,4 @@ DataAttribute iedModel_B1EBK_MOTXSWI1_NamPlt_lnNs = {
 static void
 initializeValues()
 {
-    printf("Inicializando Modelos de Controle (ctlModel = 1)...\n");
-
-    /* =================================================================
-     * LLN0
-     * ================================================================= */
-
-    if (iedModel_B1EBK_LLN0_Mod_ctlModel.mmsValue != NULL) {
-        MmsValue_setInt32(iedModel_B1EBK_LLN0_Mod_ctlModel.mmsValue, 1);
-    } else {
-        iedModel_B1EBK_LLN0_Mod_ctlModel.mmsValue = MmsValue_newIntegerFromInt32(1);
-    }
-
-    /* =================================================================
-     * LANTXSWI1 (Lanterna)
-     * ================================================================= */
-   
-    //Seta um valor no SCADA
-    if (iedModel_B1EBK_LANTXSWI1_Pos_ctlModel.mmsValue != NULL) {
-        MmsValue_setInt32(iedModel_B1EBK_LANTXSWI1_Pos_ctlModel.mmsValue, 1);
-    } else {
-        iedModel_B1EBK_LANTXSWI1_Pos_ctlModel.mmsValue = MmsValue_newIntegerFromInt32(1);
-    }
-    //Bloqueia a entrada de novos valores
-    if (iedModel_B1EBK_LANTXSWI1_BlkOpn_ctlModel.mmsValue != NULL) {
-        MmsValue_setInt32(iedModel_B1EBK_LANTXSWI1_BlkOpn_ctlModel.mmsValue, 1);
-    } else {
-        iedModel_B1EBK_LANTXSWI1_BlkOpn_ctlModel.mmsValue = MmsValue_newIntegerFromInt32(1);
-    }
-    //Bloqueia a saída dos valores
-    if (iedModel_B1EBK_LANTXSWI1_BlkCls_ctlModel.mmsValue != NULL) {
-        MmsValue_setInt32(iedModel_B1EBK_LANTXSWI1_BlkCls_ctlModel.mmsValue, 1);
-    } else {
-        iedModel_B1EBK_LANTXSWI1_BlkCls_ctlModel.mmsValue = MmsValue_newIntegerFromInt32(1);
-    }
-
-    /* =================================================================
-     * ALMXSWI1 (Alarme)
-     * ================================================================= */
-    
-    if (iedModel_B1EBK_ALMXSWI1_Pos_ctlModel.mmsValue != NULL) {
-        MmsValue_setInt32(iedModel_B1EBK_ALMXSWI1_Pos_ctlModel.mmsValue, 1);
-    } else {
-        iedModel_B1EBK_ALMXSWI1_Pos_ctlModel.mmsValue = MmsValue_newIntegerFromInt32(1);
-    }
-
-    if (iedModel_B1EBK_ALMXSWI1_BlkOpn_ctlModel.mmsValue != NULL) {
-        MmsValue_setInt32(iedModel_B1EBK_ALMXSWI1_BlkOpn_ctlModel.mmsValue, 1);
-    } else {
-        iedModel_B1EBK_ALMXSWI1_BlkOpn_ctlModel.mmsValue = MmsValue_newIntegerFromInt32(1);
-    }
-
-    if (iedModel_B1EBK_ALMXSWI1_BlkCls_ctlModel.mmsValue != NULL) {
-        MmsValue_setInt32(iedModel_B1EBK_ALMXSWI1_BlkCls_ctlModel.mmsValue, 1);
-    } else {
-        iedModel_B1EBK_ALMXSWI1_BlkCls_ctlModel.mmsValue = MmsValue_newIntegerFromInt32(1);
-    }
-
-    /* =================================================================
-     * MOTXSWI1 (Motor)
-     * ================================================================= */
-
-    if (iedModel_B1EBK_MOTXSWI1_Pos_ctlModel.mmsValue != NULL) {
-        MmsValue_setInt32(iedModel_B1EBK_MOTXSWI1_Pos_ctlModel.mmsValue, 1);
-    } else {
-        iedModel_B1EBK_MOTXSWI1_Pos_ctlModel.mmsValue = MmsValue_newIntegerFromInt32(1);
-    }
-    
-    if (iedModel_B1EBK_MOTXSWI1_BlkOpn_ctlModel.mmsValue != NULL) {
-        MmsValue_setInt32(iedModel_B1EBK_MOTXSWI1_BlkOpn_ctlModel.mmsValue, 1);
-    } else {
-        iedModel_B1EBK_MOTXSWI1_BlkOpn_ctlModel.mmsValue = MmsValue_newIntegerFromInt32(1);
-    }
-    
-    if (iedModel_B1EBK_MOTXSWI1_BlkCls_ctlModel.mmsValue != NULL) {
-        MmsValue_setInt32(iedModel_B1EBK_MOTXSWI1_BlkCls_ctlModel.mmsValue, 1);
-    } else {
-        iedModel_B1EBK_MOTXSWI1_BlkCls_ctlModel.mmsValue = MmsValue_newIntegerFromInt32(1);
-    }
 }

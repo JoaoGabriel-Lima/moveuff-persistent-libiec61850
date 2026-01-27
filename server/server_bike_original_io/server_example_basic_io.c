@@ -1,9 +1,6 @@
 /*
  * server_example_basic_io.c
- * PROJETO BIKE H2 - MoveUFF
- * 1. CONTROLE: Atua no Relé do Motor (MOTXSWI1) via GPIO.
- * - Comando 'motor1' (Ligar) via GPIO HIGH
- * - Comando 'motor0' (Desligar/Corte) via GPIO LOW
+ * CORREÇÃO: Tradução de Booleano (Comando) para DoublePoint (Status)
  */
 
 #include "iec61850_server.h"
@@ -11,152 +8,138 @@
 #include <signal.h>
 #include <stdlib.h>
 #include <stdio.h>
-#include <string.h>
-#include <math.h>
-
 #include "static_model.h"
 
-/* --- CONFIGURAÇÃO DE HARDWARE --- */
-/* Defina aqui o comando real do sistema. 
- * O system() não enxerga 'alias' do .bashrc, então usamos o comando completo.
- */
+/* --- HARDWARE --- */
 #define PIN_MOTOR "1" 
-#define CMD_MOTOR_LIGAR    "gpio write " PIN_MOTOR " 0"  // Equivalente ao 'motor0' (Corte)
-#define CMD_MOTOR_DESLIGAR "gpio write " PIN_MOTOR " 1"  // Equivalente ao 'motor1' (Habilitar)
+#define CMD_MOTOR_LIGAR    "gpio write " PIN_MOTOR " 0" 
+#define CMD_MOTOR_DESLIGAR "gpio write " PIN_MOTOR " 1" 
 
 static int running = 0;
 static IedServer iedServer = NULL;
 static int ultimo_estado_motor = -1; 
 
-void sigint_handler(int signalId) {
-    running = 0;
-}
+void sigint_handler(int signalId) { running = 0; }
 
-/* --- FUNÇÃO 1: ATUADOR (O "motor0" e "motor1") --- */
 void hardware_atuar_motor(bool ligar) {
-    if (ligar) {
-        printf(">>> [HARDWARE] Executando: %s (Habilitar Motor) <<<\n", CMD_MOTOR_LIGAR);
-        system(CMD_MOTOR_LIGAR);
-    } else {
-        printf(">>> [HARDWARE] Executando: %s (CORTAR Motor) <<<\n", CMD_MOTOR_DESLIGAR);
-        system(CMD_MOTOR_DESLIGAR);
-    }
+    if (ligar) system(CMD_MOTOR_LIGAR);
+    else system(CMD_MOTOR_DESLIGAR);
 }
 
-/* --- FUNÇÃO 2: LEITURA DE SENSORES --- */
-void atualizar_medicoes(IedServer server) {
-    uint64_t timestamp = Hal_getTimeInMs();
-
-   //AQUI VAMOS LER O JSON DO ADRIANO E ATUALIZAR OS VALORES
-
-    /* Descomentar para debugar as leituras no terminal */
-    // printf("[SENSOR] V: %.2f V | I: %.2f A | T: %.2f C\n", tensao, corrente, temperatura);
-}
-
-/* --- L[ogica de Controle --- */
+/* --- VIGIA (Loop que atua no Hardware) --- */
 void verificar_comando_motor() {
     IedServer_lockDataModel(iedServer);
-    
-    // Lê o estado atual do nó MOTXSWI1 (Posição)
     MmsValue* mmsVal = IedServer_getAttributeValue(iedServer, IEDMODEL_B1EBK_MOTXSWI1_Pos_stVal);
     int valor_atual = -1;
-    
     if (mmsVal != NULL) valor_atual = MmsValue_toInt32(mmsVal);
-    
     IedServer_unlockDataModel(iedServer);
 
-    // Se o valor mudou desde a última verificação, atua no hardware
     if (valor_atual != -1 && valor_atual != ultimo_estado_motor) {
-        printf("\n[LOGICA] Comando recebido via Rede (Valor IEC: %d)\n", valor_atual);
-
-        if (valor_atual == 1) {
-            hardware_atuar_motor(true); // motor1
+        printf("\n===========================================\n");
+        printf(">>> [VIGIA] MUDANÇA DE ESTADO DETECTADA: %d\n", valor_atual);
+        
+        if (valor_atual == 2) { // 2 = FECHADO = ON
+            printf("    AÇÃO: LIGAR MOTOR (ON) \n");
+            hardware_atuar_motor(true);
         } 
-        else if (valor_atual == 2) {
-            hardware_atuar_motor(false); // motor0
+        else if (valor_atual == 1) { // 1 = ABERTO = OFF
+            printf("    AÇÃO: DESLIGAR MOTOR (OFF) \n");
+            hardware_atuar_motor(false);
         }
+        else {
+            printf("    AÇÃO: Estado Inválido (%d) - Nenhuma ação.\n", valor_atual);
+        }
+        printf("===========================================\n");
         
         ultimo_estado_motor = valor_atual;
     }
 }
 
-/* --- HANDLERS IEC 61850 (Padrão) --- */
-static ControlHandlerResult
-controlHandlerForDbpos(ControlAction action, void* parameter, MmsValue* value, bool test)
-{
-    // Apenas aceita o comando e atualiza a memória. O Vigia atua no hardware.
+static bool controlBlockAccessHandler(void* parameter, ClientConnection connection, ACSIClass acsiClass, LogicalDevice* ld, LogicalNode* ln, const char* objectName, const char* subObjectName, IedServer_ControlBlockAccessType accessType) {
+    return true; 
+}
+
+/* * --- SECRETÁRIO (O TRADUTOR) ---
+ * Recebe o comando do Elipse e converte para o formato certo do Status.
+ */
+static ControlHandlerResult controlHandlerForDbpos(ControlAction action, void* parameter, MmsValue* value, bool test) {
     if (test) return CONTROL_RESULT_FAILED;
 
+    printf("\n[REDE] Pacote recebido. Analisando...\n");
+
+    int novo_status = 0;
+
+    // 1. Verifica se o Elipse mandou Booleano (TRUE/FALSE)
+    if (MmsValue_getType(value) == MMS_BOOLEAN) {
+        bool comando = MmsValue_getBoolean(value);
+        printf("   > Tipo: BOOLEAN | Valor: %s\n", comando ? "TRUE" : "FALSE");
+        
+        // TRADUÇÃO: TRUE -> 2 (Ligar), FALSE -> 1 (Desligar)
+        if (comando == true) novo_status = 2;
+        else novo_status = 1;
+    }
+    // 2. Verifica se o Elipse mandou Inteiro Direto (1 ou 2)
+    else if (MmsValue_getType(value) == MMS_INTEGER) {
+        novo_status = MmsValue_toInt32(value);
+        printf("   > Tipo: INTEGER | Valor: %d\n", novo_status);
+    }
+    else {
+        printf("   > Tipo Desconhecido! Ignorando.\n");
+        return CONTROL_RESULT_FAILED;
+    }
+
+    // 3. Atualiza a memória com o valor TRADUZIDO (Inteiro)
     uint64_t t = Hal_getTimeInMs();
     IedServer_updateUTCTimeAttributeValue(iedServer, IEDMODEL_B1EBK_MOTXSWI1_Pos_t, t);
-    IedServer_updateAttributeValue(iedServer, IEDMODEL_B1EBK_MOTXSWI1_Pos_stVal, value);
+    
+    // Cria um objeto inteiro temporário para salvar no Status
+    MmsValue* status_final = MmsValue_newIntegerFromInt32(novo_status);
+    IedServer_updateAttributeValue(iedServer, IEDMODEL_B1EBK_MOTXSWI1_Pos_stVal, status_final);
+    MmsValue_delete(status_final); // Limpa a memória temporária
 
+    printf("   > Memória Atualizada para: %d\n", novo_status);
     return CONTROL_RESULT_OK;
 }
 
 static void connectionHandler(IedServer self, ClientConnection connection, bool connected, void* parameter) {
-    if (connected) printf(">> Cliente Conectado <<\n");
-    else printf("<< Cliente Desconectado >>\n");
+    if (connected) printf(">> [REDE] Cliente Conectado\n");
+    else printf("<< [REDE] Cliente Desconectado\n");
 }
 
-/* --- MAIN --- */
 int main(int argc, char** argv) {
-    printf("--- SERVIDOR BIKE H2 (MOTXSWI1) ---\n");
-    printf("--- Modo: Controle + Monitoramento ---\n");
-
-    /* 1. Setup Inicial do Hardware */
-    char cmd_config[50];
-    sprintf(cmd_config, "gpio mode %s out", PIN_MOTOR);
-    system(cmd_config);
-    hardware_atuar_motor(true); // Estado Seguro Inicial: Ligado? Ou Desligado? Ajuste aqui.
-
-    /* 2. Setup do Servidor IEC 61850 */
+    printf("--- SERVIDOR BIKE H2 (Versão Corrigida) ---\n");
+    char cmd[50]; sprintf(cmd, "gpio mode %s out", PIN_MOTOR); system(cmd);
+    
     IedServerConfig config = IedServerConfig_create();
     IedServerConfig_setFileServiceBasePath(config, "./vmd-filestore/");
     IedServerConfig_enableDynamicDataSetService(config, true);
+    IedServerConfig_setReportBufferSize(config, 200000);
 
     iedServer = IedServer_createWithConfig(&iedModel, NULL, config);
     IedServerConfig_destroy(config);
     IedServer_setServerIdentity(iedServer, "MoveUFF", "BikeH2", "1.0");
 
-    /* Registra o Handler do Switch (MOTXSWI1) */
-    IedServer_setControlHandler(iedServer, IEDMODEL_B1EBK_MOTXSWI1_Pos, 
-        (ControlHandler) controlHandlerForDbpos, IEDMODEL_B1EBK_MOTXSWI1_Pos_stVal);
-
+    IedServer_setControlHandler(iedServer, IEDMODEL_B1EBK_MOTXSWI1_Pos, (ControlHandler) controlHandlerForDbpos, IEDMODEL_B1EBK_MOTXSWI1_Pos_stVal);
     IedServer_setConnectionIndicationHandler(iedServer, (IedConnectionIndicationHandler) connectionHandler, NULL);
-    
-    // Permite escrita direta (para facilitar integração com SCADAs simples)
+    IedServer_setControlBlockAccessHandler(iedServer, controlBlockAccessHandler, NULL);
     IedServer_setWriteAccessPolicy(iedServer, IEC61850_FC_ALL, ACCESS_POLICY_ALLOW);
 
     IedServer_start(iedServer, 102);
+    if (!IedServer_isRunning(iedServer)) { printf("Erro Porta 102 (Use sudo)\n"); exit(-1); }
 
-    if (!IedServer_isRunning(iedServer)) {
-        printf("Erro ao iniciar servidor (Use sudo!).\n");
-        exit(-1);
-    }
-
-    // Estado Inicial da Lógica
-    ultimo_estado_motor = 1; 
+    running = 1; signal(SIGINT, sigint_handler);
     
-    running = 1;
-    signal(SIGINT, sigint_handler);
+    // Força atualização inicial
+    ultimo_estado_motor = -1;
 
-    printf("Sistema Pronto. Loop principal iniciado.\n");
-
-    /* --- LOOP PRINCIPAL --- */
+    printf("Servidor pronto.\n");
+    
     while (running) {
-        
-        // A. Verifica se precisa ligar/desligar o motor
         verificar_comando_motor();
-
-        // B. Atualiza sensores (Tensão, Corrente, Temp)
-        atualizar_medicoes(iedServer);
-
-        Thread_sleep(100); // Ciclo de 100ms
+        Thread_sleep(100);
     }
-
-    // Shutdown seguro
-    hardware_atuar_motor(false); // Garante motor desligado ao sair
+    
+    hardware_atuar_motor(false);
     IedServer_stop(iedServer);
     IedServer_destroy(iedServer);
     return 0;
