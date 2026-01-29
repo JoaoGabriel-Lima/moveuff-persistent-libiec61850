@@ -1,14 +1,5 @@
-/* ------------------------------------------------------------------
- MODELAGEM INICIAL
- * ------------------------------------------------------------------ */
-
-
 #include "static_model.h"
 static void initializeValues();
-
-
-/* ------------------- Logical Device - O dispositivo se chama �B1BYD� ------------------- */
-
 
 LogicalDevice iedModel_B1BYD = {
     LogicalDeviceModelType,
@@ -18,17 +9,13 @@ LogicalDevice iedModel_B1BYD = {
     (ModelNode*) &iedModel_B1BYD_LLN0
 };
 
-/* ---------------- MODELAGEM N� L�GICO LLNO - N� l�gico de controle e supervis�o do Logical Device --------------------------- */
-
 LogicalNode iedModel_B1BYD_LLN0 = {
     LogicalNodeModelType,
     "LLN0",
     (ModelNode*) &iedModel_B1BYD,
-    (ModelNode*) &iedModel_B1BYD_KTNK1,
+    NULL, //(ModelNode*) &iedModel_B1BYD_KTNK1,
     (ModelNode*) &iedModel_B1BYD_LLN0_Mod,
 };
-
-/* DO: Mod */
 
 DataObject iedModel_B1BYD_LLN0_Mod = {
     DataObjectModelType,
@@ -92,8 +79,6 @@ DataAttribute iedModel_B1BYD_LLN0_Mod_ctlModel = {
     0 + TRG_OPT_DATA_CHANGED,
 };
 
-/* DO: Beh */
-
 DataObject iedModel_B1BYD_LLN0_Beh = {
     DataObjectModelType,
     "Beh",
@@ -143,8 +128,6 @@ DataAttribute iedModel_B1BYD_LLN0_Beh_t = {
     0
 };
 
-/* DO: Health */
-
 DataObject iedModel_B1BYD_LLN0_Health = {
     DataObjectModelType,
     "Health",
@@ -193,8 +176,6 @@ DataAttribute iedModel_B1BYD_LLN0_Health_t = {
     IEC61850_TIMESTAMP,
     0
 };
-
-/* DO: NamPlt */
 
 DataObject iedModel_B1BYD_LLN0_NamPlt = {
     DataObjectModelType,
@@ -258,8 +239,6 @@ DataAttribute iedModel_B1BYD_LLN0_NamPlt_lnNs = {
     0
 };
 
-/* DO: Diag */
-
 DataObject iedModel_B1BYD_LLN0_Diag = {
     DataObjectModelType,
     "Diag",
@@ -308,8 +287,6 @@ DataAttribute iedModel_B1BYD_LLN0_Diag_t = {
     IEC61850_TIMESTAMP,
     0
 };
-
-/* DO: LEDRs */
 
 DataObject iedModel_B1BYD_LLN0_LEDRs = {
     DataObjectModelType,
@@ -361,7 +338,9 @@ DataAttribute iedModel_B1BYD_LLN0_LEDRs_t = {
 };
 
 
-/* ---------------- MODELAGEM N� L�GICO KTNK1 --------------------------- */
+/* ==================================================================
+ * KTNK1
+ * ==================================================================
 
 LogicalNode iedModel_B1BYD_KTNK1 = {
     LogicalNodeModelType,
@@ -371,7 +350,6 @@ LogicalNode iedModel_B1BYD_KTNK1 = {
     (ModelNode*) &iedModel_B1BYD_KTNK1_NamPlt,
 };
 
-/* DO: NamPlt */
 
 DataObject iedModel_B1BYD_KTNK1_NamPlt = {
     DataObjectModelType,
@@ -423,7 +401,6 @@ DataAttribute iedModel_B1BYD_KTNK1_NamPlt_InNs = {
     0
 };
 
-/* DO: EEHealth */
 
  DataObject iedModel_B1BYD_KTNK1_EEHealth = {
     DataObjectModelType,
@@ -474,8 +451,6 @@ DataAttribute iedModel_B1BYD_KTNK1_EEHealth_t = {
     0,
 };
 
-/* DO: OpTmh */
-
 DataObject iedModel_B1BYD_KTNK1_OpTmh = {
     DataObjectModelType,
     "OpTmh",
@@ -524,8 +499,6 @@ DataAttribute iedModel_B1BYD_KTNK1_OpTmh_t = {
     IEC61850_TIMESTAMP,
     0,
 };
-
-/* DO: Beh */
 
 DataObject iedModel_B1BYD_KTNK1_Beh = {
     DataObjectModelType,
@@ -576,8 +549,6 @@ DataAttribute iedModel_B1BYD_KTNK1_Beh_t = {
     0,
 };
 
-/* DO: Health */ 
-
 DataObject iedModel_B1BYD_KTNK1_Health = {
     DataObjectModelType,
     "Health",
@@ -626,8 +597,6 @@ DataAttribute iedModel_B1BYD_KTNK1_Health_t = {
     IEC61850_TIMESTAMP,
     0,
 };
-
-/* DO: LevPct */
 
 DataObject iedModel_B1BYD_KTNK1_LevPct = {
     DataObjectModelType,
@@ -691,9 +660,7 @@ DataAttribute iedModel_B1BYD_KTNK1_LevPct_t = {
     0,
 };
 
-/* DO: Vlm */
-
- DataObject iedModel_B1BYD_KTNK1_Vlm = {
+DataObject iedModel_B1BYD_KTNK1_Vlm = {
     DataObjectModelType,
     "Vlm",
     (ModelNode*) &iedModel_B1BYD_KTNK1,
@@ -754,8 +721,6 @@ DataAttribute iedModel_B1BYD_KTNK1_Vlm_t = {
     IEC61850_TIMESTAMP,
     0,
 };
-
-/* DO: VlmCap */
 
 DataObject iedModel_B1BYD_KTNK1_VlmCap = {  
     DataObjectModelType,
@@ -832,11 +797,6 @@ DataAttribute iedModel_B1BYD_KTNK1_VlmCap_sVC_offset = {
     0,
 };
 
-/* ------------------------------------------------------------------
- * DO: TnkTyp (ENG - Enumerated Setting)
- * TankFillKind
- * ------------------------------------------------------------------ */
-
 DataObject iedModel_B1BYD_KTNK1_TnkTyp = {
     DataObjectModelType,
     "TnkTyp",
@@ -860,9 +820,9 @@ DataAttribute iedModel_B1BYD_KTNK1_TnkTyp_setVal = {
     0 + TRG_OPT_DATA_CHANGED,
 };
 
-/* ------------------------------------------------------------------
- * MODELAGEM N� L�GICO STMP1
- * ------------------------------------------------------------------ */
+/* ==================================================================
+ * STMP1 - Temporizador de superaquecimento 
+ * ==================================================================
 
 LogicalNode iedModel_B1BYD_STMP1 = {
     LogicalNodeModelType,
@@ -871,9 +831,6 @@ LogicalNode iedModel_B1BYD_STMP1 = {
     (ModelNode*) &iedModel_B1BYD_KVLV1,
     (ModelNode*) &iedModel_B1BYD_STMP1_Trip,
 };
-
-
-/* DO: Trip */
 
 DataObject iedModel_B1BYD_STMP1_Trip = {
     DataObjectModelType,
@@ -925,8 +882,6 @@ DataAttribute iedModel_B1BYD_STMP1_Trip_t = {
     0,
 };
 
-/* DO: RteTrip */
-
 DataObject iedModel_B1BYD_STMP1_RteTrip = {
     DataObjectModelType,
     "RteTrip",
@@ -975,8 +930,6 @@ DataAttribute iedModel_B1BYD_STMP1_RteTrip_t = {
     IEC61850_TIMESTAMP,
     0,
 };
-
-/* DO: Tmp */
 
 DataObject iedModel_B1BYD_STMP1_Tmp = {
     DataObjectModelType,
@@ -1040,8 +993,6 @@ DataAttribute iedModel_B1BYD_STMP1_Tmp_t = {
     0,
 };
 
-/* DO: TmpRte */
-
 DataObject iedModel_B1BYD_STMP1_TmpRte = {
     DataObjectModelType,
     "TmpRte",
@@ -1103,8 +1054,6 @@ DataAttribute iedModel_B1BYD_STMP1_TmpRte_t = {
     IEC61850_TIMESTAMP,
     0,
 };
-
-/* DO: TripSet */
 
 DataObject iedModel_B1BYD_STMP1_TripSet = {
     DataObjectModelType,
@@ -1180,8 +1129,6 @@ DataAttribute iedModel_B1BYD_STMP1_TripSet_sVC_offset = {
     IEC61850_FLOAT32,
     0,
 };
-
-/* DO: RteTripSet */
 
 DataObject iedModel_B1BYD_STMP1_RteTripSet = {
     DataObjectModelType,
@@ -1260,9 +1207,7 @@ DataAttribute iedModel_B1BYD_STMP1_RteTripSet_sVC_offset = {
 
 /* ==================================================================
  * MODELAGEM NÓ LÓGICO KVLV1 (Válvula)
- * Baseado nos dados fornecidos: OpCnt, ClsPos, OpnPos, Mvm, Stuck, 
- * PosVlv, PosSpt (APC), Pos (DPC), OpnLim, ClsLim
- * ================================================================== */
+ * ================================================================== 
 
 LogicalNode iedModel_B1BYD_KVLV1 = {
     LogicalNodeModelType,
@@ -1271,8 +1216,6 @@ LogicalNode iedModel_B1BYD_KVLV1 = {
     (ModelNode*) &iedModel_B1BYD_DFCL1,
     (ModelNode*) &iedModel_B1BYD_KVLV1_OpCnt,
 };
-
-/* 1. DO: OpCnt (INS - Integer Status) */
 
 DataObject iedModel_B1BYD_KVLV1_OpCnt = {
     DataObjectModelType,
@@ -1323,8 +1266,6 @@ DataAttribute iedModel_B1BYD_KVLV1_OpCnt_t = {
     0,
 };
 
-/* 2. DO: ClsPos (SPS - Single Point Status) */
-
 DataObject iedModel_B1BYD_KVLV1_ClsPos = {
     DataObjectModelType,
     "ClsPos",
@@ -1373,8 +1314,6 @@ DataAttribute iedModel_B1BYD_KVLV1_ClsPos_t = {
     IEC61850_TIMESTAMP,
     0,
 };
-
-/* 3. DO: OpnPos (SPS - Single Point Status) */
 
 DataObject iedModel_B1BYD_KVLV1_OpnPos = {
     DataObjectModelType,
@@ -1425,8 +1364,6 @@ DataAttribute iedModel_B1BYD_KVLV1_OpnPos_t = {
     0,
 };
 
-/* 4. DO: Mvm (SPS - Single Point Status) */
-
 DataObject iedModel_B1BYD_KVLV1_Mvm = {
     DataObjectModelType,
     "Mvm",
@@ -1475,8 +1412,6 @@ DataAttribute iedModel_B1BYD_KVLV1_Mvm_t = {
     IEC61850_TIMESTAMP,
     0,
 };
-
-/* 5. DO: Stuck (SPS - Single Point Status) */
 
 DataObject iedModel_B1BYD_KVLV1_Stuck = {
     DataObjectModelType,
@@ -1527,13 +1462,11 @@ DataAttribute iedModel_B1BYD_KVLV1_Stuck_t = {
     0,
 };
 
-/* 6. DO: PosVlv (MV - Measurement) */
-
 DataObject iedModel_B1BYD_KVLV1_PosVlv = {
     DataObjectModelType,
     "PosVlv",
     (ModelNode*) &iedModel_B1BYD_KVLV1,
-    (ModelNode*) &iedModel_B1BYD_KVLV1_PosSpt,
+    (ModelNode*) &iedModel_B1BYD_KVLV1_Pos,
     (ModelNode*) &iedModel_B1BYD_KVLV1_PosVlv_mag,
     0,
     -1
@@ -1591,25 +1524,21 @@ DataAttribute iedModel_B1BYD_KVLV1_PosVlv_t = {
     0,
 };
 
-/* 7. DO: PosSpt (APC - Controllable Analogue Setpoint) */
-
 DataObject iedModel_B1BYD_KVLV1_PosSpt = {
     DataObjectModelType,
     "PosSpt",
     (ModelNode*) &iedModel_B1BYD_KVLV1,
     (ModelNode*) &iedModel_B1BYD_KVLV1_Pos,
-    (ModelNode*) &iedModel_B1BYD_KVLV1_PosSpt_Oper, /* CORREÇÃO: Filho é Oper */
+    (ModelNode*) &iedModel_B1BYD_KVLV1_PosSpt_Oper,
     0,
     -1
 };
-
-/* Oper (Primeiro) */
 
 DataAttribute iedModel_B1BYD_KVLV1_PosSpt_Oper = {
     DataAttributeModelType,
     "Oper",
     (ModelNode*) &iedModel_B1BYD_KVLV1_PosSpt,
-    (ModelNode*) &iedModel_B1BYD_KVLV1_PosSpt_mxVal, /* Irmão é mxVal */
+    (ModelNode*) &iedModel_B1BYD_KVLV1_PosSpt_mxVal, 
     (ModelNode*) &iedModel_B1BYD_KVLV1_PosSpt_Oper_ctlVal,
     0,
     -1,
@@ -1623,24 +1552,11 @@ DataAttribute iedModel_B1BYD_KVLV1_PosSpt_Oper_ctlVal = {
     "ctlVal",
     (ModelNode*) &iedModel_B1BYD_KVLV1_PosSpt_Oper,
     (ModelNode*) &iedModel_B1BYD_KVLV1_PosSpt_Oper_origin,
-    (ModelNode*) &iedModel_B1BYD_KVLV1_PosSpt_Oper_ctlVal_f, /* ctlVal é CONSTRUCTED (AnalogueValue) */
+    NULL, 
     0,
     -1,
     IEC61850_FC_CO,
     IEC61850_CONSTRUCTED, 
-    0,
-};
-
-DataAttribute iedModel_B1BYD_KVLV1_PosSpt_Oper_ctlVal_f = {
-    DataAttributeModelType,
-    "f",
-    (ModelNode*) &iedModel_B1BYD_KVLV1_PosSpt_Oper_ctlVal,
-    NULL,
-    NULL,
-    0,
-    -1,
-    IEC61850_FC_CO,
-    IEC61850_FLOAT32,
     0,
 };
 
@@ -1735,8 +1651,6 @@ DataAttribute iedModel_B1BYD_KVLV1_PosSpt_Oper_Check = {
     0,
 };
 
-/* mxVal (Medição do Setpoint) */
-
 DataAttribute iedModel_B1BYD_KVLV1_PosSpt_mxVal = {
     DataAttributeModelType,
     "mxVal",
@@ -1802,25 +1716,20 @@ DataAttribute iedModel_B1BYD_KVLV1_PosSpt_ctlModel = {
     0 + TRG_OPT_DATA_CHANGED,
 };
 
-/* 8. DO: Pos (DPC - Double Point Control) */
-
 DataObject iedModel_B1BYD_KVLV1_Pos = {
     DataObjectModelType,
     "Pos",
     (ModelNode*) &iedModel_B1BYD_KVLV1,
     (ModelNode*) &iedModel_B1BYD_KVLV1_OpnLim,
-    (ModelNode*) &iedModel_B1BYD_KVLV1_Pos_Oper, /* CORREÇÃO: Filho é Oper */
-    0,
+    (ModelNode*) &iedModel_B1BYD_KVLV1_Pos_Oper,
     -1
 };
-
-/* Oper (Primeiro) */
 
 DataAttribute iedModel_B1BYD_KVLV1_Pos_Oper = {
     DataAttributeModelType,
     "Oper",
     (ModelNode*) &iedModel_B1BYD_KVLV1_Pos,
-    (ModelNode*) &iedModel_B1BYD_KVLV1_Pos_stVal, /* Irmão é stVal */
+    (ModelNode*) &iedModel_B1BYD_KVLV1_Pos_stVal,
     (ModelNode*) &iedModel_B1BYD_KVLV1_Pos_Oper_ctlVal,
     0,
     -1,
@@ -1933,8 +1842,6 @@ DataAttribute iedModel_B1BYD_KVLV1_Pos_Oper_Check = {
     0,
 };
 
-/* stVal (Status) */
-
 DataAttribute iedModel_B1BYD_KVLV1_Pos_stVal = {
     DataAttributeModelType,
     "stVal",
@@ -1986,8 +1893,6 @@ DataAttribute iedModel_B1BYD_KVLV1_Pos_ctlModel = {
     IEC61850_ENUMERATED,
     0 + TRG_OPT_DATA_CHANGED,
 };
-
-/* 9. DO: OpnLim (ASG) */
 
 DataObject iedModel_B1BYD_KVLV1_OpnLim = {
     DataObjectModelType,
@@ -2064,8 +1969,6 @@ DataAttribute iedModel_B1BYD_KVLV1_OpnLim_sVC_offset = {
     0,
 };
 
-/* 10. DO: ClsLim (ASG) */
-
 DataObject iedModel_B1BYD_KVLV1_ClsLim = {
     DataObjectModelType,
     "ClsLim",
@@ -2141,9 +2044,10 @@ DataAttribute iedModel_B1BYD_KVLV1_ClsLim_sVC_offset = {
     0,
 };
 
-/* ------------------------------------------------------------------
- * MODELAGEM N� L�GICO DFCL1
- * ------------------------------------------------------------------ */
+/* ==================================================================
+ * DFCL1
+ * ==================================================================
+
 
 LogicalNode iedModel_B1BYD_DFCL1 = {
     LogicalNodeModelType,
@@ -2152,8 +2056,6 @@ LogicalNode iedModel_B1BYD_DFCL1 = {
     (ModelNode*) &iedModel_B1BYD_DSTK1,
     (ModelNode*) &iedModel_B1BYD_DFCL1_LifeEfcPct,
 };
-
-/* DO: LifeEfcPct */
 
 DataObject iedModel_B1BYD_DFCL1_LifeEfcPct = {
     DataObjectModelType,
@@ -2204,8 +2106,6 @@ DataAttribute iedModel_B1BYD_DFCL1_LifeEfcPct_t = {
     0,
 };
 
-/* DO: MaintTms */
-
 DataObject iedModel_B1BYD_DFCL1_MaintTms = {
     DataObjectModelType,
     "MaintTms",
@@ -2255,8 +2155,6 @@ DataAttribute iedModel_B1BYD_DFCL1_MaintTms_t = {
     0,
 };
 
-/* DO: EEHealth */
-
 DataObject iedModel_B1BYD_DFCL1_EEHealth = {
     DataObjectModelType,
     "EEHealth",
@@ -2305,8 +2203,6 @@ DataAttribute iedModel_B1BYD_DFCL1_EEHealth_t = {
     IEC61850_TIMESTAMP,
     0,
 };
-
-/* DO: WtrLev */
 
 DataObject iedModel_B1BYD_DFCL1_WtrLev = {
     DataObjectModelType,
@@ -2370,8 +2266,6 @@ DataAttribute iedModel_B1BYD_DFCL1_WtrLev_t = {
     0,
 };
 
-/* DO: OutH2Lev */
-
 DataObject iedModel_B1BYD_DFCL1_OutH2Lev = {
     DataObjectModelType,
     "OutH2Lev",
@@ -2433,8 +2327,6 @@ DataAttribute iedModel_B1BYD_DFCL1_OutH2Lev_t = {
     IEC61850_TIMESTAMP,
     0,
 };
-
-/* DO: Alim */
 
 DataObject iedModel_B1BYD_DFCL1_Alim = {
     DataObjectModelType,
@@ -2510,9 +2402,6 @@ DataAttribute iedModel_B1BYD_DFCL1_Alim_sVC_offset = {
     IEC61850_FLOAT32,
     0,
 };
-
-
-/* DO: Vlim */
 
 DataObject iedModel_B1BYD_DFCL1_Vlim = {
     DataObjectModelType,
@@ -2590,9 +2479,10 @@ DataAttribute iedModel_B1BYD_DFCL1_Vlim_sVC_offset = {
 };
 
 
-/* ------------------------------------------------------------------
- * MODELAGEM N� L�GICO DSTK1
- * ------------------------------------------------------------------ */
+/* ==================================================================
+ * DSTK1
+ * ==================================================================
+ 
 
 LogicalNode iedModel_B1BYD_DSTK1 = {
     LogicalNodeModelType,
@@ -2601,8 +2491,6 @@ LogicalNode iedModel_B1BYD_DSTK1 = {
     (ModelNode*) &iedModel_B1BYD_SPRS1,
     (ModelNode*) &iedModel_B1BYD_DSTK1_NamPlt,
 };
-
-/* DO: NamPlt */
 
 DataObject iedModel_B1BYD_DSTK1_NamPlt = {
     DataObjectModelType,
@@ -2653,8 +2541,6 @@ DataAttribute iedModel_B1BYD_DSTK1_NamPlt_InNs = {
     0,
 };
 
-/* DO: StcSt */
-
 DataObject iedModel_B1BYD_DSTK1_StcSt = {
     DataObjectModelType,
     "StcSt",
@@ -2703,8 +2589,6 @@ DataAttribute iedModel_B1BYD_DSTK1_StcSt_t = {
     IEC61850_TIMESTAMP,
     0,
 };
-
-/* DO: CelVTrCnt */
 
 DataObject iedModel_B1BYD_DSTK1_CelVTrCnt = {
     DataObjectModelType,
@@ -2755,8 +2639,6 @@ DataAttribute iedModel_B1BYD_DSTK1_CelVTrCnt_t = {
     0,
 };
 
-/* DO: StcLodTms */
-
 DataObject iedModel_B1BYD_DSTK1_StcLodTms = {
     DataObjectModelType,
     "StcLodTms",
@@ -2805,8 +2687,6 @@ DataAttribute iedModel_B1BYD_DSTK1_StcLodTms_t = {
     IEC61850_TIMESTAMP,
     0,
 };
-
-/* DO: MaintTms */
 
 DataObject iedModel_B1BYD_DSTK1_MaintTms = {
     DataObjectModelType,
@@ -2857,8 +2737,6 @@ DataAttribute iedModel_B1BYD_DSTK1_MaintTms_t = {
     0,
 };
 
-/* DO: Beh */
-
 DataObject iedModel_B1BYD_DSTK1_Beh = {
     DataObjectModelType,
     "Beh",
@@ -2908,8 +2786,6 @@ DataAttribute iedModel_B1BYD_DSTK1_Beh_t = {
     0,
 };
 
-/* DO: Health */
-
 DataObject iedModel_B1BYD_DSTK1_Health = {
     DataObjectModelType,
     "Health",
@@ -2958,8 +2834,6 @@ DataAttribute iedModel_B1BYD_DSTK1_Health_t = {
     IEC61850_TIMESTAMP,
     0,
 };
-
-/* DO: StcEfcPct */
 
 DataObject iedModel_B1BYD_DSTK1_StcEfcPct = {
     DataObjectModelType,
@@ -3062,8 +2936,6 @@ DataAttribute iedModel_B1BYD_DSTK1_StcEfcPct_units = {
     0 + TRG_OPT_DATA_CHANGED,
 };
 
-/* DO: OutDCV */
-
 DataObject iedModel_B1BYD_DSTK1_OutDCV = {
     DataObjectModelType,
     "OutDCV",
@@ -3164,8 +3036,6 @@ DataAttribute iedModel_B1BYD_DSTK1_OutDCV_units = {
     IEC61850_CONSTRUCTED,
     0 + TRG_OPT_DATA_CHANGED,
 };
-
-/* DO: OutDCA */
 
 DataObject iedModel_B1BYD_DSTK1_OutDCA = {
     DataObjectModelType,
@@ -3268,8 +3138,6 @@ DataAttribute iedModel_B1BYD_DSTK1_OutDCA_units = {
     0 + TRG_OPT_DATA_CHANGED,
 };
 
-/* DO: InClTmp */
-
 DataObject iedModel_B1BYD_DSTK1_InClTmp = {
     DataObjectModelType,
     "InClTmp",
@@ -3370,8 +3238,6 @@ DataAttribute iedModel_B1BYD_DSTK1_InClTmp_units = {
     IEC61850_CONSTRUCTED,
     0 + TRG_OPT_DATA_CHANGED,
 };
-
-/* DO: OutClTmp */
 
 DataObject iedModel_B1BYD_DSTK1_OutClTmp = {
     DataObjectModelType,
@@ -3474,8 +3340,6 @@ DataAttribute iedModel_B1BYD_DSTK1_OutClTmp_units = {
     0 + TRG_OPT_DATA_CHANGED,
 };
 
-/* DO: InH2Pres */
-
 DataObject iedModel_B1BYD_DSTK1_InH2Pres = {
     DataObjectModelType,
     "InH2Pres",
@@ -3577,10 +3441,10 @@ DataAttribute iedModel_B1BYD_DSTK1_InH2Pres_units = {
     0 + TRG_OPT_DATA_CHANGED,
 };
 
-
-/* ------------------------------------------------------------------
- * MODELAGEM N� L�GICO SPRS1
- * ------------------------------------------------------------------ */
+/* ==================================================================
+ * SPRS1
+ * ==================================================================
+ 
 
 LogicalNode iedModel_B1BYD_SPRS1 = {
     LogicalNodeModelType,
@@ -3589,8 +3453,6 @@ LogicalNode iedModel_B1BYD_SPRS1 = {
     (ModelNode*) &iedModel_B1BYD_TPRS1,
     (ModelNode*) &iedModel_B1BYD_SPRS1_Alm,
 };
-
-/* DO: Alm */
 
 DataObject iedModel_B1BYD_SPRS1_Alm = {
     DataObjectModelType,
@@ -3641,8 +3503,6 @@ DataAttribute iedModel_B1BYD_SPRS1_Alm_t = {
     0,
 };
 
-/* DO: Trip */
-
 DataObject iedModel_B1BYD_SPRS1_Trip = {
     DataObjectModelType,
     "Trip",
@@ -3691,8 +3551,6 @@ DataAttribute iedModel_B1BYD_SPRS1_Trip_t = {
     IEC61850_TIMESTAMP,
     0,
 };
-
-/* DO: Beh */
 
 DataObject iedModel_B1BYD_SPRS1_Beh = {
     DataObjectModelType,
@@ -3743,8 +3601,6 @@ DataAttribute iedModel_B1BYD_SPRS1_Beh_t = {
     0,
 };
 
-/* DO: Health */
-
 DataObject iedModel_B1BYD_SPRS1_Health = {
     DataObjectModelType,
     "Health",
@@ -3793,8 +3649,6 @@ DataAttribute iedModel_B1BYD_SPRS1_Health_t = {
     IEC61850_TIMESTAMP,
     0,
 };
-
-/* DO: AlmSet */
 
 DataObject iedModel_B1BYD_SPRS1_AlmSet = {
     DataObjectModelType,
@@ -3882,11 +3736,12 @@ DataAttribute iedModel_B1BYD_SPRS1_AlmSet_maxVal_f = {
     IEC61850_FC_CF,
     IEC61850_FLOAT32,
     0,
-};
+}; 
 
-/* ------------------------------------------------------------------
- * MODELAGEM N� L�GICO TPRS1
- * ------------------------------------------------------------------ */
+/* ==================================================================
+ * TPRS1
+ * ==================================================================
+ 
 
 LogicalNode iedModel_B1BYD_TPRS1 = {
     LogicalNodeModelType,
@@ -3895,8 +3750,6 @@ LogicalNode iedModel_B1BYD_TPRS1 = {
     (ModelNode*) &iedModel_B1BYD_DFPM1,
     (ModelNode*) &iedModel_B1BYD_TPRS1_EEName,
 };
-
-/* DO: EEName */
 
 DataObject iedModel_B1BYD_TPRS1_EEName = {
     DataObjectModelType,
@@ -3933,8 +3786,6 @@ DataAttribute iedModel_B1BYD_TPRS1_EEName_model = {
     IEC61850_VISIBLE_STRING_255,
     0,
 };
-
-/* DO: EEHealth */
 
 DataObject iedModel_B1BYD_TPRS1_EEHealth = {
     DataObjectModelType,
@@ -3985,8 +3836,6 @@ DataAttribute iedModel_B1BYD_TPRS1_EEHealth_t = {
     0,
 };
 
-/* DO: Beh */
-
 DataObject iedModel_B1BYD_TPRS1_Beh = {
     DataObjectModelType,
     "Beh",
@@ -4036,8 +3885,6 @@ DataAttribute iedModel_B1BYD_TPRS1_Beh_t = {
     0,
 };
 
-/* DO: Health */
-
 DataObject iedModel_B1BYD_TPRS1_Health = {
     DataObjectModelType,
     "Health",
@@ -4086,8 +3933,6 @@ DataAttribute iedModel_B1BYD_TPRS1_Health_t = {
     IEC61850_TIMESTAMP,
     0,
 };
-
-/* DO: PresSv */
 
 DataObject iedModel_B1BYD_TPRS1_PresSv = {
     DataObjectModelType,
@@ -4151,9 +3996,10 @@ DataAttribute iedModel_B1BYD_TPRS1_PresSv_t = {
     0,
 };
 
-/* ------------------------------------------------------------------
- * MODELAGEM N� L�GICO DFPM1
- * ------------------------------------------------------------------ */
+/* ==================================================================
+ * ALMXSWI1
+ * ==================================================================
+ 
 
 LogicalNode iedModel_B1BYD_DFPM1 = {
     LogicalNodeModelType,
@@ -4162,8 +4008,6 @@ LogicalNode iedModel_B1BYD_DFPM1 = {
     (ModelNode*) &iedModel_B1BYD_TTMP1,
     (ModelNode*) &iedModel_B1BYD_DFPM1_FPMSt,
 };
-
-/* DO: FPMSt */
 
 DataObject iedModel_B1BYD_DFPM1_FPMSt = {
     DataObjectModelType,
@@ -4213,8 +4057,6 @@ DataAttribute iedModel_B1BYD_DFPM1_FPMSt_t = {
     IEC61850_TIMESTAMP,
     0,
 };
-
-/* DO: CnvEfc */
 
 DataObject iedModel_B1BYD_DFPM1_CnvEfc = {
     DataObjectModelType,
@@ -4291,8 +4133,6 @@ DataAttribute iedModel_B1BYD_DFPM1_CnvEfc_units = {
     0 + TRG_OPT_DATA_CHANGED,
 };
 
-/* DO: ProcTyp */
-
 DataObject iedModel_B1BYD_DFPM1_ProcTyp = {
     DataObjectModelType,
     "ProcTyp",
@@ -4316,10 +4156,10 @@ DataAttribute iedModel_B1BYD_DFPM1_ProcTyp_setVal = {
     0 + TRG_OPT_DATA_CHANGED,
 };
 
+/* ==================================================================
+ * TTMP1
+ * ==================================================================
 
-/* ------------------------------------------------------------------
- * MODELAGEM N� L�GICO TTMP1
- * ------------------------------------------------------------------ */
 
 LogicalNode iedModel_B1BYD_TTMP1 = {
     LogicalNodeModelType,
@@ -4328,8 +4168,6 @@ LogicalNode iedModel_B1BYD_TTMP1 = {
         (ModelNode*) &iedModel_B1BYD_TNKXSWI1,
         (ModelNode*) &iedModel_B1BYD_TTMP1_Beh,
 };
-
-/* DO: Beh */
 
 DataObject iedModel_B1BYD_TTMP1_Beh = {
     DataObjectModelType,
@@ -4380,8 +4218,6 @@ DataAttribute iedModel_B1BYD_TTMP1_Beh_t = {
     0,
 };
 
-/* DO: Health */
-
 DataObject iedModel_B1BYD_TTMP1_Health = {
     DataObjectModelType,
     "Health",
@@ -4430,8 +4266,6 @@ DataAttribute iedModel_B1BYD_TTMP1_Health_t = {
     IEC61850_TIMESTAMP,
     0,
 };
-
-/* DO: TmpSv */
 
 DataObject iedModel_B1BYD_TTMP1_TmpSv = {
     DataObjectModelType,
@@ -4507,9 +4341,10 @@ DataAttribute iedModel_B1BYD_TTMP1_TmpSv_units = {
     IEC61850_CONSTRUCTED,
     0 + TRG_OPT_DATA_CHANGED,
 };
-/* ------------------------------------------------------------------
- * MODELAGEM NO LOGICO TNKXSWI1 (Formatado e Corrigido)
- * ------------------------------------------------------------------ */
+
+/* ==================================================================
+ * TNKXSWI1
+ * ==================================================================
 
 LogicalNode iedModel_B1BYD_TNKXSWI1 = {
     LogicalNodeModelType,
@@ -4518,8 +4353,6 @@ LogicalNode iedModel_B1BYD_TNKXSWI1 = {
     (ModelNode*) &iedModel_B1BYD_CELXSWI1,
     (ModelNode*) &iedModel_B1BYD_TNKXSWI1_SwTyp,
 };
-
-/* DO: SwTyp */
 
 DataObject iedModel_B1BYD_TNKXSWI1_SwTyp = {
     DataObjectModelType,
@@ -4570,8 +4403,6 @@ DataAttribute iedModel_B1BYD_TNKXSWI1_SwTyp_t = {
     0
 };
 
-/* DO: Loc */
-
 DataObject iedModel_B1BYD_TNKXSWI1_Loc = {
     DataObjectModelType,
     "Loc",
@@ -4620,8 +4451,6 @@ DataAttribute iedModel_B1BYD_TNKXSWI1_Loc_t = {
     IEC61850_TIMESTAMP,
     0
 };
-
-/* DO: OpCnt */
 
 DataObject iedModel_B1BYD_TNKXSWI1_OpCnt = {
     DataObjectModelType,
@@ -4672,8 +4501,6 @@ DataAttribute iedModel_B1BYD_TNKXSWI1_OpCnt_t = {
     0
 };
 
-/* DO: Beh */
-
 DataObject iedModel_B1BYD_TNKXSWI1_Beh = {
     DataObjectModelType,
     "Beh",
@@ -4722,8 +4549,6 @@ DataAttribute iedModel_B1BYD_TNKXSWI1_Beh_t = {
     IEC61850_TIMESTAMP,
     0
 };
-
-/* DO: Health */
 
 DataObject iedModel_B1BYD_TNKXSWI1_Health = {
     DataObjectModelType,
@@ -4774,12 +4599,6 @@ DataAttribute iedModel_B1BYD_TNKXSWI1_Health_t = {
     0
 };
 
-/* DO: Pos */
-
-/* ------------------------------------------------------------------
- * TNKXSWI1 - Pos, BlkOpn, BlkCls
- * ------------------------------------------------------------------ */
-
 DataObject iedModel_B1BYD_TNKXSWI1_Pos = {
     DataObjectModelType,
     "Pos",
@@ -4790,7 +4609,6 @@ DataObject iedModel_B1BYD_TNKXSWI1_Pos = {
     -1
 };
 
-/* Estrutura Oper do Pos */
 DataAttribute iedModel_B1BYD_TNKXSWI1_Pos_Oper = {
     DataAttributeModelType,
     "Oper",
@@ -4960,7 +4778,6 @@ DataAttribute iedModel_B1BYD_TNKXSWI1_Pos_ctlModel = {
     0
 };
 
-/* Data Object: BlkOpn */
 DataObject iedModel_B1BYD_TNKXSWI1_BlkOpn = {
     DataObjectModelType,
     "BlkOpn",
@@ -4971,7 +4788,6 @@ DataObject iedModel_B1BYD_TNKXSWI1_BlkOpn = {
     -1
 };
 
-/* Estrutura Oper do BlkOpn */
 DataAttribute iedModel_B1BYD_TNKXSWI1_BlkOpn_Oper = {
     DataAttributeModelType,
     "Oper",
@@ -5141,7 +4957,6 @@ DataAttribute iedModel_B1BYD_TNKXSWI1_BlkOpn_ctlModel = {
     0
 };
 
-/* Data Object: BlkCls */
 DataObject iedModel_B1BYD_TNKXSWI1_BlkCls = {
     DataObjectModelType,
     "BlkCls",
@@ -5152,7 +4967,6 @@ DataObject iedModel_B1BYD_TNKXSWI1_BlkCls = {
     -1
 };
 
-/* Estrutura Oper do BlkCls */
 DataAttribute iedModel_B1BYD_TNKXSWI1_BlkCls_Oper = {
     DataAttributeModelType,
     "Oper",
@@ -5323,9 +5137,10 @@ DataAttribute iedModel_B1BYD_TNKXSWI1_BlkCls_ctlModel = {
 };
 
 
-/* ------------------------------------------------------------------
- * MODELAGEM NO LOGICO CELXSWI1 (Formatado e Corrigido)
- * ------------------------------------------------------------------ */
+/* ==================================================================
+ * CELXSWI1
+ * ==================================================================
+
 
 LogicalNode iedModel_B1BYD_CELXSWI1 = {
     LogicalNodeModelType,
@@ -5334,8 +5149,6 @@ LogicalNode iedModel_B1BYD_CELXSWI1 = {
     NULL,
     (ModelNode*) &iedModel_B1BYD_CELXSWI1_SwTyp,
 };
-
-/* DO: SwTyp */
 
 DataObject iedModel_B1BYD_CELXSWI1_SwTyp = {
     DataObjectModelType,
@@ -5386,8 +5199,6 @@ DataAttribute iedModel_B1BYD_CELXSWI1_SwTyp_t = {
     0
 };
 
-/* DO: Loc */
-
 DataObject iedModel_B1BYD_CELXSWI1_Loc = {
     DataObjectModelType,
     "Loc",
@@ -5436,8 +5247,6 @@ DataAttribute iedModel_B1BYD_CELXSWI1_Loc_t = {
     IEC61850_TIMESTAMP,
     0
 };
-
-/* DO: OpCnt */
 
 DataObject iedModel_B1BYD_CELXSWI1_OpCnt = {
     DataObjectModelType,
@@ -5488,8 +5297,6 @@ DataAttribute iedModel_B1BYD_CELXSWI1_OpCnt_t = {
     0
 };
 
-/* DO: Beh */
-
 DataObject iedModel_B1BYD_CELXSWI1_Beh = {
     DataObjectModelType,
     "Beh",
@@ -5538,8 +5345,6 @@ DataAttribute iedModel_B1BYD_CELXSWI1_Beh_t = {
     IEC61850_TIMESTAMP,
     0
 };
-
-/* DO: Health */
 
 DataObject iedModel_B1BYD_CELXSWI1_Health = {
     DataObjectModelType,
@@ -5590,10 +5395,6 @@ DataAttribute iedModel_B1BYD_CELXSWI1_Health_t = {
     0
 };
 
-/* ------------------------------------------------------------------
- * CELXSWI1 - Pos, BlkOpn, BlkCls
- * ------------------------------------------------------------------ */
-
 DataObject iedModel_B1BYD_CELXSWI1_Pos = {
     DataObjectModelType,
     "Pos",
@@ -5604,7 +5405,6 @@ DataObject iedModel_B1BYD_CELXSWI1_Pos = {
     -1
 };
 
-/* Estrutura Oper do Pos */
 DataAttribute iedModel_B1BYD_CELXSWI1_Pos_Oper = {
     DataAttributeModelType,
     "Oper",
@@ -5774,7 +5574,6 @@ DataAttribute iedModel_B1BYD_CELXSWI1_Pos_ctlModel = {
     0
 };
 
-/* Data Object: BlkOpn */
 DataObject iedModel_B1BYD_CELXSWI1_BlkOpn = {
     DataObjectModelType,
     "BlkOpn",
@@ -5785,7 +5584,6 @@ DataObject iedModel_B1BYD_CELXSWI1_BlkOpn = {
     -1
 };
 
-/* Estrutura Oper do BlkOpn */
 DataAttribute iedModel_B1BYD_CELXSWI1_BlkOpn_Oper = {
     DataAttributeModelType,
     "Oper",
@@ -5955,7 +5753,6 @@ DataAttribute iedModel_B1BYD_CELXSWI1_BlkOpn_ctlModel = {
     0
 };
 
-/* Data Object: BlkCls */
 DataObject iedModel_B1BYD_CELXSWI1_BlkCls = {
     DataObjectModelType,
     "BlkCls",
@@ -5966,7 +5763,6 @@ DataObject iedModel_B1BYD_CELXSWI1_BlkCls = {
     -1
 };
 
-/* Estrutura Oper do BlkCls */
 DataAttribute iedModel_B1BYD_CELXSWI1_BlkCls_Oper = {
     DataAttributeModelType,
     "Oper",
@@ -6136,6 +5932,7 @@ DataAttribute iedModel_B1BYD_CELXSWI1_BlkCls_ctlModel = {
     0
 };
 
+*/
 
 IedModel iedModel = {
     "MoveUFF_",
