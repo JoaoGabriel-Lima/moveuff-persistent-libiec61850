@@ -1,6 +1,6 @@
 /*
  * server_example_basic_io.c
- * CORREÇÃO: Tradução de Booleano (Comando) para DoublePoint (Status)
+ * Com CheckHandler para permitir SBO (Select-Before-Operate)
  */
 
 #include "iec61850_server.h"
@@ -59,13 +59,21 @@ static bool controlBlockAccessHandler(void* parameter, ClientConnection connecti
     return true; 
 }
 
+/* * --- O PORTEIRO (CheckHandler) ---
+ * Necessário para o protocolo SBO. Ele autoriza o comando.
+ */
+static CheckHandlerResult checkHandler(ControlAction action, void* parameter, MmsValue* ctlVal, bool test, bool interlockCheck) {
+    printf("[CHECK] Recebido pedido de acesso (Select/Operate)... AUTORIZADO.\n");
+    return CONTROL_ACCEPTED; // Autoriza o cliente a prosseguir
+}
+
 /* * --- SECRETÁRIO (O TRADUTOR) ---
- * Recebe o comando do Elipse e converte para o formato certo do Status.
+ * Recebe o comando do Elipse e converte para o formato certo.
  */
 static ControlHandlerResult controlHandlerForDbpos(ControlAction action, void* parameter, MmsValue* value, bool test) {
     if (test) return CONTROL_RESULT_FAILED;
 
-    printf("\n[REDE] Pacote recebido. Analisando...\n");
+    printf("\n[REDE] Pacote OPERATE recebido. Analisando...\n");
 
     int novo_status = 0;
 
@@ -107,7 +115,7 @@ static void connectionHandler(IedServer self, ClientConnection connection, bool 
 }
 
 int main(int argc, char** argv) {
-    printf("--- SERVIDOR BIKE H2 (Versão Corrigida) ---\n");
+    printf("--- SERVIDOR BIKE H2 (Versão Corrigida FINAL) ---\n");
     char cmd[50]; sprintf(cmd, "gpio mode %s out", PIN_MOTOR); system(cmd);
     
     IedServerConfig config = IedServerConfig_create();
@@ -119,7 +127,14 @@ int main(int argc, char** argv) {
     IedServerConfig_destroy(config);
     IedServer_setServerIdentity(iedServer, "MoveUFF", "BikeH2", "1.0");
 
+    /* REGISTRO DOS HANDLERS */
+    
+    // 1. Handler de Operação (Executa a ação)
     IedServer_setControlHandler(iedServer, IEDMODEL_B1EBK_MOTXSWI1_Pos, (ControlHandler) controlHandlerForDbpos, IEDMODEL_B1EBK_MOTXSWI1_Pos_stVal);
+    
+    // 2. Handler de Checagem (Autoriza a Seleção/Select)
+    IedServer_setPerformCheckHandler(iedServer, IEDMODEL_B1EBK_MOTXSWI1_Pos, checkHandler, IEDMODEL_B1EBK_MOTXSWI1_Pos_stVal);
+
     IedServer_setConnectionIndicationHandler(iedServer, (IedConnectionIndicationHandler) connectionHandler, NULL);
     IedServer_setControlBlockAccessHandler(iedServer, controlBlockAccessHandler, NULL);
     IedServer_setWriteAccessPolicy(iedServer, IEC61850_FC_ALL, ACCESS_POLICY_ALLOW);
@@ -129,10 +144,14 @@ int main(int argc, char** argv) {
 
     running = 1; signal(SIGINT, sigint_handler);
     
-    // Força atualização inicial
-    ultimo_estado_motor = -1;
+    // Força atualização inicial para sincronização do estado do motor
+    IedServer_lockDataModel(iedServer);
+    MmsValue* initVal = IedServer_getAttributeValue(iedServer, IEDMODEL_B1EBK_MOTXSWI1_Pos_stVal);
+    if (initVal) ultimo_estado_motor = MmsValue_toInt32(initVal);
+    else ultimo_estado_motor = 0;
+    IedServer_unlockDataModel(iedServer);
 
-    printf("Servidor pronto.\n");
+    printf("Servidor pronto. Aguardando comando...\n");
     
     while (running) {
         verificar_comando_motor();
