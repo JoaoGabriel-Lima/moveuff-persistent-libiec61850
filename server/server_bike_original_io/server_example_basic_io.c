@@ -1,6 +1,6 @@
 /*
  * server_example_basic_io.c
- * Com CheckHandler para permitir SBO (Select-Before-Operate)
+ * CORRIGIDO
  */
 
 #include "iec61850_server.h"
@@ -8,157 +8,170 @@
 #include <signal.h>
 #include <stdlib.h>
 #include <stdio.h>
-#include "static_model.h"
 
-/* --- HARDWARE --- */
-#define PIN_MOTOR "1" 
-#define CMD_MOTOR_LIGAR    "gpio write " PIN_MOTOR " 0" 
-#define CMD_MOTOR_DESLIGAR "gpio write " PIN_MOTOR " 1" 
+// --- ADICIONADO PARA O RELÉ ---
+#include <wiringPi.h>
+#define RELAY_PIN 2  // wPi 2 = Pino Físico 7 na Zero 2W
+// ------------------------------
+
+#include "static_model.h"
 
 static int running = 0;
 static IedServer iedServer = NULL;
-static int ultimo_estado_motor = -1; 
 
 void sigint_handler(int signalId) { running = 0; }
 
-void hardware_atuar_motor(bool ligar) {
-    if (ligar) system(CMD_MOTOR_LIGAR);
-    else system(CMD_MOTOR_DESLIGAR);
-}
-
-/* --- VIGIA (Loop que atua no Hardware) --- */
-void verificar_comando_motor() {
-    IedServer_lockDataModel(iedServer);
-    MmsValue* mmsVal = IedServer_getAttributeValue(iedServer, IEDMODEL_B1EBK_MOTXSWI1_Pos_stVal);
-    int valor_atual = -1;
-    if (mmsVal != NULL) valor_atual = MmsValue_toInt32(mmsVal);
-    IedServer_unlockDataModel(iedServer);
-
-    if (valor_atual != -1 && valor_atual != ultimo_estado_motor) {
-        printf("\n===========================================\n");
-        printf(">>> [VIGIA] MUDANÇA DE ESTADO DETECTADA: %d\n", valor_atual);
-        
-        if (valor_atual == 2) { // 2 = FECHADO = ON
-            printf("    AÇÃO: LIGAR MOTOR (ON) \n");
-            hardware_atuar_motor(true);
-        } 
-        else if (valor_atual == 1) { // 1 = ABERTO = OFF
-            printf("    AÇÃO: DESLIGAR MOTOR (OFF) \n");
-            hardware_atuar_motor(false);
-        }
-        else {
-            printf("    AÇÃO: Estado Inválido (%d) - Nenhuma ação.\n", valor_atual);
-        }
-        printf("===========================================\n");
-        
-        ultimo_estado_motor = valor_atual;
+/* --- FUNÇÃO DE PISCAR (Sinal de Inicialização) --- */
+void sinalizar_partida() {
+    printf("[HW] Sinalizando partida (Blink)...\n");
+    for(int i=0; i<2; i++) {
+        // Liga
+        digitalWrite(RELAY_PIN, HIGH);
+        Thread_sleep(200);           
+        // Desliga
+        digitalWrite(RELAY_PIN, LOW); 
+        Thread_sleep(200);
     }
+    printf("[HW] Rele em espera (OFF).\n");
 }
 
-static bool controlBlockAccessHandler(void* parameter, ClientConnection connection, ACSIClass acsiClass, LogicalDevice* ld, LogicalNode* ln, const char* objectName, const char* subObjectName, IedServer_ControlBlockAccessType accessType) {
-    return true; 
-}
+/* Handler para o Select (SBO) */
+static CheckHandlerResult 
+checkHandler(ControlAction action, void* parameter, MmsValue* ctlVal, bool test, bool interlockCheck) 
+{
+    printf("[IEC-LOG] SELECT recebido para o motor. Autorizando...\n");
 
-/* * --- O PORTEIRO (CheckHandler) ---
- * Necessário para o protocolo SBO. Ele autoriza o comando.
- */
-static CheckHandlerResult checkHandler(ControlAction action, void* parameter, MmsValue* ctlVal, bool test, bool interlockCheck) {
-    printf("[CHECK] Recebido pedido de acesso (Select/Operate)... AUTORIZADO.\n");
-    return CONTROL_ACCEPTED; // Autoriza o cliente a prosseguir
-}
-
-/* * --- SECRETÁRIO (O TRADUTOR) ---
- * Recebe o comando do Elipse e converte para o formato certo.
- */
-static ControlHandlerResult controlHandlerForDbpos(ControlAction action, void* parameter, MmsValue* value, bool test) {
-    if (test) return CONTROL_RESULT_FAILED;
-
-    printf("\n[REDE] Pacote OPERATE recebido. Analisando...\n");
-
-    int novo_status = 0;
-
-    // 1. Verifica se o Elipse mandou Booleano (TRUE/FALSE)
-    if (MmsValue_getType(value) == MMS_BOOLEAN) {
-        bool comando = MmsValue_getBoolean(value);
-        printf("   > Tipo: BOOLEAN | Valor: %s\n", comando ? "TRUE" : "FALSE");
-        
-        // TRADUÇÃO: TRUE -> 2 (Ligar), FALSE -> 1 (Desligar)
-        if (comando == true) novo_status = 2;
-        else novo_status = 1;
-    }
-    // 2. Verifica se o Elipse mandou Inteiro Direto (1 ou 2)
-    else if (MmsValue_getType(value) == MMS_INTEGER) {
-        novo_status = MmsValue_toInt32(value);
-        printf("   > Tipo: INTEGER | Valor: %d\n", novo_status);
+    ClientConnection clientCon = ControlAction_getClientConnection(action);
+    
+    if (clientCon) {
+        printf("Control from client %s\n", ClientConnection_getPeerAddress(clientCon)); 
     }
     else {
-        printf("   > Tipo Desconhecido! Ignorando.\n");
-        return CONTROL_RESULT_FAILED;
+        printf("clientCon == NULL\n");
     }
 
-    // 3. Atualiza a memória com o valor TRADUZIDO (Inteiro)
-    uint64_t t = Hal_getTimeInMs();
-    IedServer_updateUTCTimeAttributeValue(iedServer, IEDMODEL_B1EBK_MOTXSWI1_Pos_t, t);
-    
-    // Cria um objeto inteiro temporário para salvar no Status
-    MmsValue* status_final = MmsValue_newIntegerFromInt32(novo_status);
-    IedServer_updateAttributeValue(iedServer, IEDMODEL_B1EBK_MOTXSWI1_Pos_stVal, status_final);
-    MmsValue_delete(status_final); // Limpa a memória temporária
+    if (ControlAction_isSelect(action))
+        printf("check handler called by select command!\n");
+    else
+        printf("check handler called by operate command!\n");
 
-    printf("   > Memória Atualizada para: %d\n", novo_status);
+    if (interlockCheck)
+        printf("with interlock check bit set!\n");
+
+    printf(" ctlNum: %i\n", ControlAction_getCtlNum(action));
+
+    if (parameter == IEDMODEL_B1EBK_MOTXSWI1_Pos) 
+        return CONTROL_ACCEPTED;
+
+    return CONTROL_OBJECT_UNDEFINED;
+} // <--- A chave de fechamento deve ficar AQUI
+
+/* Handler para o Operate */
+static ControlHandlerResult controlHandlerForBinaryOutput(ControlAction action, void* parameter, MmsValue* value, bool test) 
+{
+    // Adicionada a declaração do timestamp que faltava
+    uint64_t timestamp = Hal_getTimeInMs();
+
+    printf("control handler called\n");
+    printf("  ctlNum: %i\n", ControlAction_getCtlNum(action));
+
+    ClientConnection clientCon = ControlAction_getClientConnection(action);
+
+    if (clientCon) {
+        printf("Control from client %s\n", ClientConnection_getPeerAddress(clientCon));
+    }
+    else {
+        printf("clientCon == NULL!\n");
+    }
+
+    if (parameter == IEDMODEL_B1EBK_MOTXSWI1_Pos) {
+        
+        // Lógica do Relé
+        bool state = MmsValue_getBoolean(value);
+        
+        // 1 = HIGH, 0 = LOW
+        digitalWrite(RELAY_PIN, state ? HIGH : LOW); // digitalWrite(RELAY_PIN, state ? LOW : HIGH);
+        
+        printf(">>> COMANDO FÍSICO: Motor %s (Pino %d)\n", state ? "LIGADO" : "DESLIGADO", RELAY_PIN);
+
+        IedServer_updateUTCTimeAttributeValue(iedServer, IEDMODEL_B1EBK_MOTXSWI1_Pos_t, timestamp);
+        IedServer_updateAttributeValue(iedServer, IEDMODEL_B1EBK_MOTXSWI1_Pos_stVal, value);
+    }
+    else
+        return CONTROL_RESULT_FAILED;
+
     return CONTROL_RESULT_OK;
 }
 
-static void connectionHandler(IedServer self, ClientConnection connection, bool connected, void* parameter) {
-    if (connected) printf(">> [REDE] Cliente Conectado\n");
-    else printf("<< [REDE] Cliente Desconectado\n");
+static MmsDataAccessError
+writeAccessHandler (DataAttribute* dataAttribute, MmsValue* value, ClientConnection connection, void* parameter)
+{
+    ControlModel ctlModelVal = (ControlModel) MmsValue_toInt32(value);
+
+    /* we only allow status-only and direct-operate */
+    if ((ctlModelVal == CONTROL_MODEL_STATUS_ONLY) || (ctlModelVal == CONTROL_MODEL_DIRECT_NORMAL))
+    {
+        IedServer_updateCtlModel(iedServer, IEDMODEL_B1EBK_MOTXSWI1_Pos, ctlModelVal);
+
+        printf("IEDMODEL_B1EBK_MOTXSWI1_Pos to %i\n", ctlModelVal);
+
+        return DATA_ACCESS_ERROR_SUCCESS;
+    }
+    else {
+        return DATA_ACCESS_ERROR_OBJECT_VALUE_INVALID;
+    }
 }
 
-int main(int argc, char** argv) {
-    printf("--- SERVIDOR BIKE H2 (Versão Corrigida FINAL) ---\n");
-    char cmd[50]; sprintf(cmd, "gpio mode %s out", PIN_MOTOR); system(cmd);
-    
-    IedServerConfig config = IedServerConfig_create();
-    IedServerConfig_setFileServiceBasePath(config, "./vmd-filestore/");
-    IedServerConfig_enableDynamicDataSetService(config, true);
-    IedServerConfig_setReportBufferSize(config, 200000);
-
-    iedServer = IedServer_createWithConfig(&iedModel, NULL, config);
-    IedServerConfig_destroy(config);
-    IedServer_setServerIdentity(iedServer, "MoveUFF", "BikeH2", "1.0");
-
-    /* REGISTRO DOS HANDLERS */
-    
-    // 1. Handler de Operação (Executa a ação)
-    IedServer_setControlHandler(iedServer, IEDMODEL_B1EBK_MOTXSWI1_Pos, (ControlHandler) controlHandlerForDbpos, IEDMODEL_B1EBK_MOTXSWI1_Pos_stVal);
-    
-    // 2. Handler de Checagem (Autoriza a Seleção/Select)
-    IedServer_setPerformCheckHandler(iedServer, IEDMODEL_B1EBK_MOTXSWI1_Pos, checkHandler, IEDMODEL_B1EBK_MOTXSWI1_Pos_stVal);
-
-    IedServer_setConnectionIndicationHandler(iedServer, (IedConnectionIndicationHandler) connectionHandler, NULL);
-    IedServer_setControlBlockAccessHandler(iedServer, controlBlockAccessHandler, NULL);
-    IedServer_setWriteAccessPolicy(iedServer, IEC61850_FC_ALL, ACCESS_POLICY_ALLOW);
-
-    IedServer_start(iedServer, 102);
-    if (!IedServer_isRunning(iedServer)) { printf("Erro Porta 102 (Use sudo)\n"); exit(-1); }
-
-    running = 1; signal(SIGINT, sigint_handler);
-    
-    // Força atualização inicial para sincronização do estado do motor
-    IedServer_lockDataModel(iedServer);
-    MmsValue* initVal = IedServer_getAttributeValue(iedServer, IEDMODEL_B1EBK_MOTXSWI1_Pos_stVal);
-    if (initVal) ultimo_estado_motor = MmsValue_toInt32(initVal);
-    else ultimo_estado_motor = 0;
-    IedServer_unlockDataModel(iedServer);
-
-    printf("Servidor pronto. Aguardando comando...\n");
-    
-    while (running) {
-        verificar_comando_motor();
-        Thread_sleep(100);
+int
+main(int argc, char** argv)
+{
+    // --- SETUP DO RELÉ ---
+    if (wiringPiSetup() == -1) {
+        printf("ERRO: Falha ao inicializar o wiringPi! Tente executar como root\n");
+        exit(1);
     }
+    pinMode(RELAY_PIN, OUTPUT);
+    digitalWrite(RELAY_PIN, LOW); //digitalWrite(RELAY_PIN, HIGH); Inicia DESLIGADO
     
-    hardware_atuar_motor(false);
+    // Pisca 3x para teste de conexão
+    sinalizar_partida();
+
+    iedServer = IedServer_create(&iedModel);
+    int tcpPort = 102;
+
+    if (argc > 1) {
+        tcpPort = atoi(argv[1]);
+    }
+
+    // Configura o Handler de Operação
+    IedServer_setControlHandler(iedServer, IEDMODEL_B1EBK_MOTXSWI1_Pos,
+            (ControlHandler) controlHandlerForBinaryOutput,
+            IEDMODEL_B1EBK_MOTXSWI1_Pos);
+
+    // Configura o Handler de Check (Select) - OPCIONAL MAS RECOMENDADO
+    IedServer_setPerformCheckHandler(iedServer, IEDMODEL_B1EBK_MOTXSWI1_Pos, 
+            checkHandler, 
+            IEDMODEL_B1EBK_MOTXSWI1_Pos);
+
+    // Configura permissão de escrita no Control Model
+    IedServer_handleWriteAccess(iedServer, IEDMODEL_B1EBK_MOTXSWI1_Pos_ctlModel, writeAccessHandler, NULL);
+
+    IedServer_start(iedServer, tcpPort);
+
+    if (!IedServer_isRunning(iedServer)) {
+        printf("Starting server failed! Exit.\n");
+        IedServer_destroy(iedServer);
+        exit(-1);
+    }
+
+    running = 1;
+
+    signal(SIGINT, sigint_handler);
+
+    while (running) {
+        Thread_sleep(1);
+    }
+
     IedServer_stop(iedServer);
     IedServer_destroy(iedServer);
     return 0;

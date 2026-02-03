@@ -1,7 +1,7 @@
-# Nome do seu programa execut√°vel
+# Nome do seu programa execut·vel
 TARGET = server_example_basic_io
 
-# Nossos arquivos .c que ser√£o compilados
+# Nossos arquivos .c que ser„o compilados
 SRCS = server_example_basic_io.c static_model.c
 
 # Flags do Compilador (todos os caminhos -I para os headers)
@@ -21,22 +21,25 @@ CFLAGS = -g \
 -I../../src/r_session
 
 # Flags do Linker (caminhos -L para as bibliotecas .a)
-LDFLAGS = -L../../build/src -L../../build/hal
+# Adicionei -L/usr/local/lib para garantir que ele ache o wiringPi
+LDFLAGS = -L../../build/src -L../../build/hal -L/usr/local/lib
 
 # Bibliotecas a linkar (todas as flags -l)
-LDLIBS = -liec61850 -lhal -lpthread -lm -lsqlite3
+# ADICIONADO: -lwiringPi no final
+LDLIBS = -liec61850 -lhal -lpthread -lm -lsqlite3 -lwiringPi
 
 # --- Regras do Make ---
 
-# A regra padr√£o: "make" ou "make all" vai construir o nosso TARGET
+# A regra padr„o: "make" ou "make all" vai construir o nosso TARGET
 all: $(TARGET)
 
-# A regra de compila√ß√£o: como construir o TARGET
+# A regra de compilaÁ„o: como construir o TARGET
 $(TARGET): $(SRCS)
-	# O <TAB> no in√≠cio desta linha √© OBRIGAT√ìRIO!
-	gcc $(CFLAGS) -o $(TARGET) $(SRCS) $(LDFLAGS) -static $(LDLIBS)
+	# REMOVIDO: a flag -static foi retirada para permitir compatibilidade com wiringPi
+	# O <TAB> no inÌcio desta linha È OBRIGAT”RIO!
+	gcc $(CFLAGS) -o $(TARGET) $(SRCS) $(LDFLAGS) $(LDLIBS)
 
 # A regra de limpeza: "make clean"
 clean:
-	# O <TAB> no in√≠cio desta linha √© OBRIGAT√ìRIO!
+	# O <TAB> no inÌcio desta linha È OBRIGAT”RIO!
 	rm -f $(TARGET)
