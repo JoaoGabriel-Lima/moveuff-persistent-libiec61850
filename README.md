@@ -1,50 +1,50 @@
 # README moveuff-persistent-libiec61850
-# Pasta de origem: cd/moveuff-persistent-libiec61850
-# Pasta do usuário: cd ~
+Pasta de origem: cd/moveuff-persistent-libiec61850
+Pasta do usuário: cd ~
 
 1- 
-# Atualiza o sistema
+Atualiza o sistema
 `sudo apt update -y`
 
 1.1- 
-# Instala ferramentas essenciais (gcc, make, git) e o SQLite
+Instala ferramentas essenciais (gcc, make, git) e o SQLite
 `sudo apt install build-essential git cmake libsqlite3-dev -y`
 
 
 2- 
 cd ~
-# Clona o WiringOP (Orange PI)
+Clona o WiringOP (Orange PI)
 `git clone https://github.com/orangepi-xunlong/wiringOP.git`
 cd WiringOP
-# Compila e instala
+Compila e instala
 `./build`
 
 
 3- 
 cd ~ 
 
-# Baixa o repositório
+Baixa o repositório
 `git clone https://github.com/JoaoGabriel-Lima/moveuff-persistent-libiec61850.git`
 
-# Entra na pasta (Origem)
+Entra na pasta (Origem)
 `cd moveuff-persistent-libiec61850`
 
-# Limpa e Compila
+Limpa e Compila
 `make clean && make`
 
-# Instala a biblioteca
+Instala a biblioteca
 `sudo make install`
 
-# Atualiza o cache para o Linux encontrar a biblioteca nova
+Atualiza o cache para o Linux encontrar a biblioteca nova
 `sudo ldconfig`
 
 
 4- 
-# Vai para a pasta do exemplo
+Vai para a pasta do exemplo
 `cd server/server_bike_original_io`
 
-# Compila o seu servidor
+Compila o seu servidor
 `make clean && make`
 
-# Roda com permissão de administrador
+Roda com permissão de administrador
 `sudo ./server_example_basic_io`
