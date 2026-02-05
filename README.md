@@ -13,10 +13,15 @@ Instala ferramentas essenciais (gcc, make, git) e o SQLite
 
 2- 
 cd ~
+
 Clona o WiringOP (Orange PI)
+
 ```git clone https://github.com/orangepi-xunlong/wiringOP.git```
+
 cd WiringOP
+
 Compila e instala
+
 ```./build```
 
 
