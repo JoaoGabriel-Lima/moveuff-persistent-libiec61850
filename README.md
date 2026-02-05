@@ -7,22 +7,15 @@ Atualiza o sistema
 ```sudo apt update -y```
 
 1.1- 
-Instala ferramentas essenciais (gcc, make, git) e o SQLite
-```sudo apt install build-essential git cmake libsqlite3-dev -y```
+Instala ferramentas essenciais (gcc, make, git) e o SQLite ```sudo apt install build-essential git cmake libsqlite3-dev -y```
 
 
 2- 
 cd ~
 
-Clona o WiringOP (Orange PI)
-
-```git clone https://github.com/orangepi-xunlong/wiringOP.git```
-
-cd WiringOP
-
-Compila e instala
-
-```./build```
+Clona o WiringOP (Orange PI) ```git clone https://github.com/orangepi-xunlong/wiringOP.git```
+cd /WiringOP
+Compila e instala ```./build```
 
 
 3- 
