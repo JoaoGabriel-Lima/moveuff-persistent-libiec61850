@@ -1,11 +1,3 @@
-/*
- *  server_example_basic_io.c
- *
- *  - How to use simple control models
- *  - How to serve analog measurement data
- *  - Using the IedServerConfig object to configure stack features
- */
-
 #include "iec61850_server.h"
 #include "hal_thread.h"
 #include <signal.h>
