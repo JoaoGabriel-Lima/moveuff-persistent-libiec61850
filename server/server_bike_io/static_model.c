@@ -3192,21 +3192,6 @@ DataAttribute iedModel_B1EBK_TMVM1_MvmRteSv_sVC_offset = {
     0
 };
 
-
-
-IedModel iedModel = {
-    "MoveUFF_",
-    &iedModel_B1EBK,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    initializeValues
-};
-
 /* ==================================================================
  * MODELAGEM NÓ LÓGICO ZMOT1 
  * ==================================================================
@@ -4959,7 +4944,18 @@ DataAttribute iedModel_B1EBK_MOTXSWI1_NamPlt_lnNs = {
     0
 };
 
-
+IedModel iedModel = {
+    "MoveUFF_",
+    &iedModel_B1EBK,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    initializeValues
+};
 
 static void
 initializeValues()
@@ -5025,7 +5021,8 @@ initializeValues()
 
     /* =================================================================
      * MOTXSWI1 (Motor)
-     * ================================================================= */
+     * ================================================================= 
+     */
 
     if (iedModel_B1EBK_MOTXSWI1_Pos_ctlModel.mmsValue != NULL) {
         MmsValue_setInt32(iedModel_B1EBK_MOTXSWI1_Pos_ctlModel.mmsValue, 1);

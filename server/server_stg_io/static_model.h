@@ -1,10 +1,3 @@
-/*
- * static_model.h
- * Dispositivo: B1STG
- * Nós: LLN0, XSWI1, TTMP1, DBAT1
- * Status: 100% COMPLETO (Inclui TTMP1)
- */
-
 #ifndef STATIC_MODEL_H_
 #define STATIC_MODEL_H_
 
