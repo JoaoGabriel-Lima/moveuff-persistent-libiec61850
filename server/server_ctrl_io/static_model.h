@@ -1,12 +1,3 @@
-
-
- /*
-* static_model.h
-*
-* Modelo estático para o IED, baseado na lista de LNs fornecida.
-* LNs: LLN0, LPHD1, DEEV1, XSWI1, DBAT1, DESE1, LGOS1, LTIM1, LTMS1
-*/
-
  #ifndef STATIC_MODEL_H_
  #define STATIC_MODEL_H_
 
@@ -14,21 +5,21 @@
  #include "iec61850_model.h"
 
  extern IedModel iedModel;
- extern LogicalDevice iedModel_B1CTR;
+ extern LogicalDevice iedModel_B1CTR; //Dispositivo Lógico
 
  /* LNs */
  extern LogicalNode iedModel_B1CTR_LPHD1;
  extern LogicalNode iedModel_B1CTR_LLN0;
- //extern LogicalNode iedModel_B1CTR_DEEV1;
- //extern LogicalNode iedModel_B1CTR_XSWI1;
- //extern LogicalNode iedModel_B1CTR_DBAT1;
- //extern LogicalNode iedModel_B1CTR_DESE1;
  extern LogicalNode iedModel_B1CTR_LGOS1;
  extern LogicalNode iedModel_B1CTR_LTIM1;
  extern LogicalNode iedModel_B1CTR_LTMS1;
  extern LogicalNode iedModel_B1CTR_LTRK1;
 
- /* LPHD1 Data Objects and Attributes */
+/* =================================================================
+ * LPHD1
+ * =================================================================
+ */
+
  extern DataObject iedModel_B1CTR_LPHD1_NamPlt;
  extern DataAttribute iedModel_B1CTR_LPHD1_NamPlt_vendor;
  extern DataAttribute iedModel_B1CTR_LPHD1_NamPlt_swRev;
@@ -57,7 +48,12 @@
  extern DataAttribute iedModel_B1CTR_LPHD1_Sim_q;
  extern DataAttribute iedModel_B1CTR_LPHD1_Sim_t;
  extern DataAttribute iedModel_B1CTR_LPHD1_Sim_ctlModel;
- /* LLN0 Data Objects and Attributes */
+
+/* =================================================================
+ * LLN0
+ * =================================================================
+ */
+
 extern DataObject iedModel_B1CTR_LLN0_Mod;
 extern DataAttribute iedModel_B1CTR_LLN0_Mod_ctlVal; 
 extern DataAttribute iedModel_B1CTR_LLN0_Mod_stVal;
@@ -86,28 +82,25 @@ extern DataAttribute iedModel_B1CTR_LLN0_LEDRs_stVal;
 extern DataAttribute iedModel_B1CTR_LLN0_LEDRs_q;
 extern DataAttribute iedModel_B1CTR_LLN0_LEDRs_t;
 extern DataAttribute iedModel_B1CTR_LLN0_LEDRs_ctlModel;
-/* LTRK1 Data Objects and Attributes */
 
-/* Beh */
+/* =================================================================
+ * LTRK1
+ * =================================================================
+ */
+
 extern DataObject iedModel_B1CTR_LTRK1_Beh;
 extern DataAttribute iedModel_B1CTR_LTRK1_Beh_stVal;
 extern DataAttribute iedModel_B1CTR_LTRK1_Beh_q;
 extern DataAttribute iedModel_B1CTR_LTRK1_Beh_t;
-
-/* Health */
 extern DataObject iedModel_B1CTR_LTRK1_Health;
 extern DataAttribute iedModel_B1CTR_LTRK1_Health_stVal;
 extern DataAttribute iedModel_B1CTR_LTRK1_Health_q;
 extern DataAttribute iedModel_B1CTR_LTRK1_Health_t;
-
-/* GenTrk (Generic Tracking) */
 extern DataObject iedModel_B1CTR_LTRK1_GenTrk;
 extern DataAttribute iedModel_B1CTR_LTRK1_GenTrk_objRef;
 extern DataAttribute iedModel_B1CTR_LTRK1_GenTrk_serviceType;
 extern DataAttribute iedModel_B1CTR_LTRK1_GenTrk_errorCode;
 extern DataAttribute iedModel_B1CTR_LTRK1_GenTrk_t;
-
-/* GocbTrk (GOOSE Tracking) */
 extern DataObject iedModel_B1CTR_LTRK1_GocbTrk;
 extern DataAttribute iedModel_B1CTR_LTRK1_GocbTrk_objRef;
 extern DataAttribute iedModel_B1CTR_LTRK1_GocbTrk_serviceType;
@@ -120,7 +113,11 @@ extern DataAttribute iedModel_B1CTR_LTRK1_GocbTrk_confRev;
 extern DataAttribute iedModel_B1CTR_LTRK1_GocbTrk_ndsCom;
 extern DataAttribute iedModel_B1CTR_LTRK1_GocbTrk_dstAddress;
 
-/* LGOS1 Data Objects and Attributes */
+/* =================================================================
+ * LGOS1
+ * =================================================================
+ */
+
 extern DataObject iedModel_B1CTR_LGOS1_Mod;
 extern DataAttribute iedModel_B1CTR_LGOS1_Mod_stVal;
 extern DataAttribute iedModel_B1CTR_LGOS1_Mod_ctlVal;
@@ -162,6 +159,12 @@ extern DataObject iedModel_B1CTR_LGOS1_LastStNum;
 extern DataAttribute iedModel_B1CTR_LGOS1_LastStNum_stVal;
 extern DataAttribute iedModel_B1CTR_LGOS1_LastStNum_q;
 extern DataAttribute iedModel_B1CTR_LGOS1_LastStNum_t;
+
+/* =================================================================
+ * LTIM1
+ * =================================================================
+ */
+
 extern DataObject iedModel_B1CTR_LTIM1_Beh;
 extern DataAttribute iedModel_B1CTR_LTIM1_Beh_stVal;
 extern DataAttribute iedModel_B1CTR_LTIM1_Beh_q;
@@ -187,6 +190,10 @@ extern DataAttribute iedModel_B1CTR_LTMS1_TmSrcTyp_stVal;
 extern DataAttribute iedModel_B1CTR_LTMS1_TmSrcTyp_q;
 extern DataAttribute iedModel_B1CTR_LTMS1_TmSrcTyp_t;
 
+
+#define IEDMODEL_B1CTR (&iedModel_B1CTR)
+
+/* --- Defines LLN0 --- */
 #define IEDMODEL_B1CTR_LPHD1 (&iedModel_B1CTR_LPHD1)
 #define IEDMODEL_B1CTR_LPHD1_PhyNam (&iedModel_B1CTR_LPHD1_PhyNam)
 #define IEDMODEL_B1CTR_LPHD1_PhyNam_vendor (&iedModel_B1CTR_LPHD1_PhyNam_vendor)
@@ -217,7 +224,7 @@ extern DataAttribute iedModel_B1CTR_LTMS1_TmSrcTyp_t;
 #define IEDMODEL_B1CTR_LPHD1_NamPlt_swRev (&iedModel_B1CTR_LPHD1_NamPlt_swRev)
 #define IEDMODEL_B1CTR_LPHD1_NamPlt_lnNs (&iedModel_B1CTR_LPHD1_NamPlt_lnNs)
 
-#define IEDMODEL_B1CTR (&iedModel_B1CTR)
+/* --- Defines LLN0 --- */
 #define IEDMODEL_B1CTR_LLN0 (&iedModel_B1CTR_LLN0)
 #define IEDMODEL_B1CTR_LLN0_Mod (&iedModel_B1CTR_LLN0_Mod)
 #define IEDMODEL_B1CTR_LLN0_Mod_ctlVal (&iedModel_B1CTR_LLN0_Mod_ctlVal) /* ADICIONADO */
@@ -236,7 +243,7 @@ extern DataAttribute iedModel_B1CTR_LTMS1_TmSrcTyp_t;
 #define IEDMODEL_B1CTR_LLN0_NamPlt (&iedModel_B1CTR_LLN0_NamPlt)
 #define IEDMODEL_B1CTR_LLN0_NamPlt_vendor (&iedModel_B1CTR_LLN0_NamPlt_vendor)
 #define IEDMODEL_B1CTR_LLN0_NamPlt_swRev (&iedModel_B1CTR_LLN0_NamPlt_swRev)
-#define IEDMODEL__B1CTR_LLN0_NamPlt_configRev (&iedModel_B1CTR_LLN0_NamPlt_configRev) 
+#define IEDMODEL_B1CTR_LLN0_NamPlt_configRev (&iedModel_B1CTR_LLN0_NamPlt_configRev) 
 #define IEDMODEL_B1CTR_LLN0_NamPlt_lnNs (&iedModel_B1CTR_LLN0_NamPlt_lnNs)
 #define IEDMODEL_B1CTR_LLN0_Diag (&iedModel_B1CTR_LLN0_Diag)
 #define IEDMODEL_B1CTR_LLN0_Diag_stVal (&iedModel_B1CTR_LLN0_Diag_stVal)
@@ -248,7 +255,7 @@ extern DataAttribute iedModel_B1CTR_LTMS1_TmSrcTyp_t;
 #define IEDMODEL_B1CTR_LLN0_LEDRs_t (&iedModel_B1CTR_LLN0_LEDRs_t)
 #define IEDMODEL_B1CTR_LLN0_LEDRs_ctlModel (&iedModel_B1CTR_LLN0_LEDRs_ctlModel)
 
-//LGOS1
+/* --- Defines LGOS1 --- */
 #define IEDMODEL_B1CTR_LGOS1 (&iedModel_B1CTR_LGOS1)
 #define IEDMODEL_B1CTR_LGOS1_Beh (&iedModel_B1CTR_LGOS1_Beh)
 #define IEDMODEL_B1CTR_LGOS1_Beh_stVal (&iedModel_B1CTR_LGOS1_Beh_stVal)
@@ -285,6 +292,7 @@ extern DataAttribute iedModel_B1CTR_LTMS1_TmSrcTyp_t;
 #define IEDMODEL_B1CTR_LGOS1_LastStNum_q (&iedModel_B1CTR_LGOS1_LastStNum_q)
 #define IEDMODEL_B1CTR_LGOS1_LastStNum_t (&iedModel_B1CTR_LGOS1_LastStNum_t)
 
+/* --- Defines LTIM1 --- */
 #define IEDMODEL_B1CTR_LTIM1 (&iedModel_B1CTR_LTIM1)
 #define IEDMODEL_B1CTR_LTIM1_Beh (&iedModel_B1CTR_LTIM1_Beh)
 #define IEDMODEL_B1CTR_LTIM1_Beh_stVal (&iedModel_B1CTR_LTIM1_Beh_stVal)
@@ -299,6 +307,7 @@ extern DataAttribute iedModel_B1CTR_LTMS1_TmSrcTyp_t;
 #define IEDMODEL_B1CTR_LTIM1_TmDT_q (&iedModel_B1CTR_LTIM1_TmDT_q)
 #define IEDMODEL_B1CTR_LTIM1_TmDT_t (&iedModel_B1CTR_LTIM1_TmDT_t)
 
+/* --- Defines LTMS1 --- */
 #define IEDMODEL_B1CTR_LTMS1 (&iedModel_B1CTR_LTMS1)
 #define IEDMODEL_B1CTR_LTMS1_Beh (&iedModel_B1CTR_LTMS1_Beh)
 #define IEDMODEL_B1CTR_LTMS1_Beh_stVal (&iedModel_B1CTR_LTMS1_Beh_stVal)
@@ -313,23 +322,19 @@ extern DataAttribute iedModel_B1CTR_LTMS1_TmSrcTyp_t;
 #define IEDMODEL_B1CTR_LTMS1_TmSrcTyp_q (&iedModel_B1CTR_LTMS1_TmSrcTyp_q)
 #define IEDMODEL_B1CTR_LTMS1_TmSrcTyp_t (&iedModel_B1CTR_LTMS1_TmSrcTyp_t)
 #define IEDMODEL_B1CTR_LTRK1 (&iedModel_B1CTR_LTRK1)
-/* Beh */
 #define IEDMODEL_B1CTR_LTRK1_Beh (&iedModel_B1CTR_LTRK1_Beh)
 #define IEDMODEL_B1CTR_LTRK1_Beh_stVal (&iedModel_B1CTR_LTRK1_Beh_stVal)
 #define IEDMODEL_B1CTR_LTRK1_Beh_q (&iedModel_B1CTR_LTRK1_Beh_q)
 #define IEDMODEL_B1CTR_LTRK1_Beh_t (&iedModel_B1CTR_LTRK1_Beh_t)
-/* Health */
 #define IEDMODEL_B1CTR_LTRK1_Health (&iedModel_B1CTR_LTRK1_Health)
 #define IEDMODEL_B1CTR_LTRK1_Health_stVal (&iedModel_B1CTR_LTRK1_Health_stVal)
 #define IEDMODEL_B1CTR_LTRK1_Health_q (&iedModel_B1CTR_LTRK1_Health_q)
 #define IEDMODEL_B1CTR_LTRK1_Health_t (&iedModel_B1CTR_LTRK1_Health_t)
-/* GenTrk */
 #define IEDMODEL_B1CTR_LTRK1_GenTrk (&iedModel_B1CTR_LTRK1_GenTrk)
 #define IEDMODEL_B1CTR_LTRK1_GenTrk_objRef (&iedModel_B1CTR_LTRK1_GenTrk_objRef)
 #define IEDMODEL_B1CTR_LTRK1_GenTrk_serviceType (&iedModel_B1CTR_LTRK1_GenTrk_serviceType)
 #define IEDMODEL_B1CTR_LTRK1_GenTrk_errorCode (&iedModel_B1CTR_LTRK1_GenTrk_errorCode)
 #define IEDMODEL_B1CTR_LTRK1_GenTrk_t (&iedModel_B1CTR_LTRK1_GenTrk_t)
-/* GocbTrk */
 #define IEDMODEL_B1CTR_LTRK1_GocbTrk (&iedModel_B1CTR_LTRK1_GocbTrk)
 #define IEDMODEL_B1CTR_LTRK1_GocbTrk_objRef (&iedModel_B1CTR_LTRK1_GocbTrk_objRef)
 #define IEDMODEL_B1CTR_LTRK1_GocbTrk_serviceType (&iedModel_B1CTR_LTRK1_GocbTrk_serviceType)
@@ -342,4 +347,4 @@ extern DataAttribute iedModel_B1CTR_LTMS1_TmSrcTyp_t;
 #define IEDMODEL_B1CTR_LTRK1_GocbTrk_ndsCom (&iedModel_B1CTR_LTRK1_GocbTrk_ndsCom)
 #define IEDMODEL_B1CTR_LTRK1_GocbTrk_dstAddress (&iedModel_B1CTR_LTRK1_GocbTrk_dstAddress)
 
- #endif /* STATIC_MODEL_H_ */
+#endif /* STATIC_MODEL_H_ */

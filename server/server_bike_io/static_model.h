@@ -5,21 +5,25 @@
 #include "iec61850_model.h"
 
 extern IedModel iedModel;
-extern LogicalDevice iedModel_B1EBK;
+extern LogicalDevice iedModel_B1EBK; //Dispositivo Lógico
 
 /* LNs */
 extern LogicalNode iedModel_B1EBK_LLN0;
-//extern LogicalNode iedModel_B1EBK_LPHD1;
 extern LogicalNode iedModel_B1EBK_DEEV1;
 extern LogicalNode iedModel_B1EBK_ISAF1;
 extern LogicalNode iedModel_B1EBK_LANTXSWI1;
 extern LogicalNode iedModel_B1EBK_ALMXSWI1;
+extern LogicalNode iedModel_B1EBK_MOTXSWI1;
 extern LogicalNode iedModel_B1EBK_TMVM1;
 extern LogicalNode iedModel_B1EBK_ZMOT1;
 extern LogicalNode iedModel_B1EBK_MMXU1;
 extern LogicalNode iedModel_B1EBK_TLOC1;
 
-/* LLN0 Data Objects and Attributes */
+/* =================================================================
+ * LLN0
+ * =================================================================
+ */
+
 extern DataObject iedModel_B1EBK_LLN0_Mod;
 extern DataAttribute iedModel_B1EBK_LLN0_Mod_stVal;
 extern DataAttribute iedModel_B1EBK_LLN0_Mod_q;
@@ -386,33 +390,26 @@ extern DataObject iedModel_B1EBK_TLOC1_AutDis;
 extern DataAttribute iedModel_B1EBK_TLOC1_AutDis_stVal;
 extern DataAttribute iedModel_B1EBK_TLOC1_AutDis_q;
 extern DataAttribute iedModel_B1EBK_TLOC1_AutDis_t;
-extern LogicalNode iedModel_B1EBK_MOTXSWI1;
-/* SwTyp */
 extern DataObject iedModel_B1EBK_MOTXSWI1_SwTyp;
 extern DataAttribute iedModel_B1EBK_MOTXSWI1_SwTyp_stVal;
 extern DataAttribute iedModel_B1EBK_MOTXSWI1_SwTyp_q;
 extern DataAttribute iedModel_B1EBK_MOTXSWI1_SwTyp_t;
-/* Loc */
 extern DataObject iedModel_B1EBK_MOTXSWI1_Loc;
 extern DataAttribute iedModel_B1EBK_MOTXSWI1_Loc_stVal;
 extern DataAttribute iedModel_B1EBK_MOTXSWI1_Loc_q;
 extern DataAttribute iedModel_B1EBK_MOTXSWI1_Loc_t;
-/* OpCnt */
 extern DataObject iedModel_B1EBK_MOTXSWI1_OpCnt;
 extern DataAttribute iedModel_B1EBK_MOTXSWI1_OpCnt_stVal;
 extern DataAttribute iedModel_B1EBK_MOTXSWI1_OpCnt_q;
 extern DataAttribute iedModel_B1EBK_MOTXSWI1_OpCnt_t;
-/* Beh */
 extern DataObject iedModel_B1EBK_MOTXSWI1_Beh;
 extern DataAttribute iedModel_B1EBK_MOTXSWI1_Beh_stVal;
 extern DataAttribute iedModel_B1EBK_MOTXSWI1_Beh_q;
 extern DataAttribute iedModel_B1EBK_MOTXSWI1_Beh_t;
-/* Health */
 extern DataObject iedModel_B1EBK_MOTXSWI1_Health;
 extern DataAttribute iedModel_B1EBK_MOTXSWI1_Health_stVal;
 extern DataAttribute iedModel_B1EBK_MOTXSWI1_Health_q;
 extern DataAttribute iedModel_B1EBK_MOTXSWI1_Health_t;
-/* Pos (DPC) */
 extern DataObject iedModel_B1EBK_MOTXSWI1_Pos;
 extern DataAttribute iedModel_B1EBK_MOTXSWI1_Pos_Oper;
 extern DataAttribute iedModel_B1EBK_MOTXSWI1_Pos_Oper_ctlVal;
@@ -427,7 +424,6 @@ extern DataAttribute iedModel_B1EBK_MOTXSWI1_Pos_stVal;
 extern DataAttribute iedModel_B1EBK_MOTXSWI1_Pos_q;
 extern DataAttribute iedModel_B1EBK_MOTXSWI1_Pos_t;
 extern DataAttribute iedModel_B1EBK_MOTXSWI1_Pos_ctlModel;
-/* BlkOpn (DPC - Conforme solicitado) */
 extern DataObject iedModel_B1EBK_MOTXSWI1_BlkOpn;
 extern DataAttribute iedModel_B1EBK_MOTXSWI1_BlkOpn_Oper;
 extern DataAttribute iedModel_B1EBK_MOTXSWI1_BlkOpn_Oper_ctlVal;
@@ -442,7 +438,6 @@ extern DataAttribute iedModel_B1EBK_MOTXSWI1_BlkOpn_stVal;
 extern DataAttribute iedModel_B1EBK_MOTXSWI1_BlkOpn_q;
 extern DataAttribute iedModel_B1EBK_MOTXSWI1_BlkOpn_t;
 extern DataAttribute iedModel_B1EBK_MOTXSWI1_BlkOpn_ctlModel;
-/* BlkCls (SPC - Conforme solicitado) */
 extern DataObject iedModel_B1EBK_MOTXSWI1_BlkCls;
 extern DataAttribute iedModel_B1EBK_MOTXSWI1_BlkCls_Oper;
 extern DataAttribute iedModel_B1EBK_MOTXSWI1_BlkCls_Oper_ctlVal;
@@ -457,7 +452,6 @@ extern DataAttribute iedModel_B1EBK_MOTXSWI1_BlkCls_stVal;
 extern DataAttribute iedModel_B1EBK_MOTXSWI1_BlkCls_q;
 extern DataAttribute iedModel_B1EBK_MOTXSWI1_BlkCls_t;
 extern DataAttribute iedModel_B1EBK_MOTXSWI1_BlkCls_ctlModel;
-/* NamPlt */
 extern DataObject iedModel_B1EBK_MOTXSWI1_NamPlt;
 extern DataAttribute iedModel_B1EBK_MOTXSWI1_NamPlt_vendor;
 extern DataAttribute iedModel_B1EBK_MOTXSWI1_NamPlt_swRev;

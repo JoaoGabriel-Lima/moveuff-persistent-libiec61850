@@ -37,13 +37,13 @@ void sigint_handler(int signalId) { running = 0; }
 static MmsDataAccessError
 writeAccessHandler(DataAttribute* dataAttribute, MmsValue* value, ClientConnection connection, void* parameter)
 {
-    if (dataAttribute == IEDMODEL_B1BYD_STMP1_TripSet_setMag_f) {
+    if (dataAttribute == IEDMODEL_B1HYD_STMP1_TripSet_setMag_f) {
         float newVal = MmsValue_toFloat(value);
         printf("[WRITE] Cliente alterou TripSet de %.2f para %.2f\n", simul_tripSet, newVal);
         simul_tripSet = newVal;
         return DATA_ACCESS_ERROR_SUCCESS;
     }
-    else if (dataAttribute == IEDMODEL_B1BYD_KTNK1_VlmCap_setMag_f) {
+    else if (dataAttribute == IEDMODEL_B1HYD_KTNK1_VlmCap_setMag_f) {
         float newVal = MmsValue_toFloat(value);
         printf("[WRITE] Cliente alterou Capacidade do Tanque de %.2f para %.2f\n", simul_tankCapacity, newVal);
         simul_tankCapacity = newVal;
@@ -98,14 +98,14 @@ int main(int argc, char** argv)
     /* --- Configuração Inicial de Valores no Modelo --- */
     
     // Inicializa Setpoints com os valores da nossa simulação
-    IedServer_updateFloatAttributeValue(iedServer, IEDMODEL_B1BYD_STMP1_TripSet_setMag_f, simul_tripSet);
-    IedServer_updateFloatAttributeValue(iedServer, IEDMODEL_B1BYD_KTNK1_VlmCap_setMag_f, simul_tankCapacity);
+    IedServer_updateFloatAttributeValue(iedServer, IEDMODEL_B1HYD_STMP1_TripSet_setMag_f, simul_tripSet);
+    IedServer_updateFloatAttributeValue(iedServer, IEDMODEL_B1HYD_KTNK1_VlmCap_setMag_f, simul_tankCapacity);
 
     /* --- Registra Handlers de Escrita --- */
     // Permite que o cliente altere o Setpoint de Temperatura
-    IedServer_handleWriteAccess(iedServer, IEDMODEL_B1BYD_STMP1_TripSet_setMag_f, writeAccessHandler, NULL);
+    IedServer_handleWriteAccess(iedServer, IEDMODEL_B1HYD_STMP1_TripSet_setMag_f, writeAccessHandler, NULL);
     // Permite que o cliente altere a Capacidade do Tanque
-    IedServer_handleWriteAccess(iedServer, IEDMODEL_B1BYD_KTNK1_VlmCap_setMag_f, writeAccessHandler, NULL);
+    IedServer_handleWriteAccess(iedServer, IEDMODEL_B1HYD_KTNK1_VlmCap_setMag_f, writeAccessHandler, NULL);
 
     /* --- Inicia o Servidor --- */
     IedServer_start(iedServer, tcpPort);
@@ -131,22 +131,22 @@ int main(int argc, char** argv)
 
         // 2. Atualiza KTNK1 (Tanque)
         // Atualiza Nível (%)
-        IedServer_updateFloatAttributeValue(iedServer, IEDMODEL_B1BYD_KTNK1_LevPct_mag_f, simul_tankLevel);
-        IedServer_updateUTCTimeAttributeValue(iedServer, IEDMODEL_B1BYD_KTNK1_LevPct_t, timestamp);
+        IedServer_updateFloatAttributeValue(iedServer, IEDMODEL_B1HYD_KTNK1_LevPct_mag_f, simul_tankLevel);
+        IedServer_updateUTCTimeAttributeValue(iedServer, IEDMODEL_B1HYD_KTNK1_LevPct_t, timestamp);
         
         // Calcula Volume Baseado na Capacidade Atual (Vol = Cap * Nivel / 100)
         float currentVolume = (simul_tankCapacity * simul_tankLevel) / 100.0f;
-        IedServer_updateFloatAttributeValue(iedServer, IEDMODEL_B1BYD_KTNK1_Vlm_mag_f, currentVolume);
-        IedServer_updateUTCTimeAttributeValue(iedServer, IEDMODEL_B1BYD_KTNK1_Vlm_t, timestamp);
+        IedServer_updateFloatAttributeValue(iedServer, IEDMODEL_B1HYD_KTNK1_Vlm_mag_f, currentVolume);
+        IedServer_updateUTCTimeAttributeValue(iedServer, IEDMODEL_B1HYD_KTNK1_Vlm_t, timestamp);
 
         // 3. Atualiza STMP1 (Temperatura)
-        IedServer_updateFloatAttributeValue(iedServer, IEDMODEL_B1BYD_STMP1_Tmp_mag_f, simul_temp);
-        IedServer_updateUTCTimeAttributeValue(iedServer, IEDMODEL_B1BYD_STMP1_Tmp_t, timestamp);
+        IedServer_updateFloatAttributeValue(iedServer, IEDMODEL_B1HYD_STMP1_Tmp_mag_f, simul_temp);
+        IedServer_updateUTCTimeAttributeValue(iedServer, IEDMODEL_B1HYD_STMP1_Tmp_t, timestamp);
 
         // Atualiza Status de Trip (Alarme)
         // Nota: Trip geralmente é true quando há falha
-        IedServer_updateBooleanAttributeValue(iedServer, IEDMODEL_B1BYD_STMP1_Trip_stVal, simul_tripActive);
-        IedServer_updateUTCTimeAttributeValue(iedServer, IEDMODEL_B1BYD_STMP1_Trip_t, timestamp);
+        IedServer_updateBooleanAttributeValue(iedServer, IEDMODEL_B1HYD_STMP1_Trip_stVal, simul_tripActive);
+        IedServer_updateUTCTimeAttributeValue(iedServer, IEDMODEL_B1HYD_STMP1_Trip_t, timestamp);
 
         // Logs ocasionais para o console
         // Imprime a cada ~1 segundo (assumindo sleep de 100ms * 10)
