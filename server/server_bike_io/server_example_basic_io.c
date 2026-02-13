@@ -30,7 +30,7 @@ void sinalizar_partida() {
     for(int i=0; i<2; i++) {
         digitalWrite(RELAY_PIN, HIGH);
         Thread_sleep(50);           
-        digitalWrite(RELAY_PIN, LOW); 
+        digitalWrite(RELAY_PIN, LOW);
         Thread_sleep(50);
     }
 }
