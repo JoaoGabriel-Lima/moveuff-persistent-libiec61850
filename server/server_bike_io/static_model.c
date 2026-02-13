@@ -13,7 +13,7 @@ LogicalDevice iedModel_B1EBK = {
 };
 
 /* ================================================================
- * MODELAGEM NÓ LÓGICO LLN0
+ *  LLN0
  * ================================================================
  */
 
@@ -4956,6 +4956,9 @@ IedModel iedModel = {
     NULL,
     initializeValues
 };
+
+/*=================================  STATIC VOID  ===========================================*/
+
 
 static void
 initializeValues()
