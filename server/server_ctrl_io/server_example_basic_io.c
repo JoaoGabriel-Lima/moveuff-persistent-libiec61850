@@ -48,19 +48,14 @@ main(int argc, char** argv)
         tcpPort = atoi(argv[1]);
     }
 
-    // ---------------------------------------------------------
-    // 2. BLOQUEIO TOTAL DE STDOUT (O SEGREDO ESTÁ AQUI)
-    // Fazemos isso AGORA, antes de criar o servidor.
-    // ---------------------------------------------------------
+    // BLOQUEIO TOTAL DE STDOUT (Reports da biblioteca e logs comuns)
     int dev_null = open("/dev/null", O_WRONLY);
     if (dev_null != -1) {
         dup2(dev_null, STDOUT_FILENO); 
         // A partir daqui, printf comum morre. Use LOG_PRINT.
     }
 
-    // ---------------------------------------------------------
-    // 3. CRIAÇÃO DO SERVIDOR (Agora ele nasce "mudo" no stdout)
-    // ---------------------------------------------------------
+    // CRIAÇÃO DO SERVIDOR (Agora ele nasce "mudo" no stdout)
     iedServer = IedServer_create(&iedModel); 
 
     if (iedServer == NULL) {
@@ -69,21 +64,11 @@ main(int argc, char** argv)
         return 1;
     }
 
-    // ---------------------------------------------------------
-    // 4. CONFIGURAÇÃO DOS HANDLERS
-    // ---------------------------------------------------------
-    // Handler de conexão (Logs bonitos)
+    // CONFIGURAÇÃO DOS HANDLERS
+    // Handler de conexão (Logs bem feitos)
     IedServer_setConnectionIndicationHandler(iedServer, (IedConnectionIndicationHandler) connectionHandler, NULL);
 
-    /* NOTA: Como este é o modelo B1CTR (Controlador), não incluí o 
-       controlHandler do MOTOR (MOTXSWI) da Bike para evitar erros de compilação 
-       se o nó não existir neste modelo específico.
-       Se quiser controlar algo aqui (ex: LPHD1.Sim), adicione o handler correspondente.
-    */
-
-    // ---------------------------------------------------------
-    // 5. INICIAR O SERVIDOR
-    // ---------------------------------------------------------
+    // NICIAR O SERVIDOR
     IedServer_start(iedServer, tcpPort);
 
     if (!IedServer_isRunning(iedServer)) {
