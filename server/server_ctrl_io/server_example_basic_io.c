@@ -3,160 +3,115 @@
 #include <signal.h>
 #include <stdlib.h>
 #include <stdio.h>
-#include <math.h>
-
-// Importante: Certifique-se que o static_model.h contém os nós que você está usando
-#include "static_model.h" 
+#include <unistd.h> // Necessário para dup2
+#include <fcntl.h>  // Necessário para open
+#include "static_model.h"
 
 static int running = 0;
 static IedServer iedServer = NULL;
+static int activeConnections = 0;
 
-void sigint_handler(int signalId)
-{
-    running = 0;
-}
+void sigint_handler(int signalId) { running = 0; }
 
-/* * Handler de Controle (Comandos vindos do Elipse)
- * Exibe o ctlNum e o estado desejado de forma limpa.
+/* * MACRO PARA LOG PERSONALIZADO
+ * Redireciona tudo para stderr. O stdout será silenciado.
  */
-static ControlHandlerResult
-controlHandlerForBinaryOutput(ControlAction action, void* parameter, MmsValue* value, bool test)
-{
-    if (test) return CONTROL_RESULT_FAILED;
+#define LOG_PRINT(...) fprintf(stderr, __VA_ARGS__)
 
-    if (MmsValue_getType(value) == MMS_BOOLEAN) {
-        
-        bool comando = MmsValue_getBoolean(value);
-        
-        // Obtém o ctlNum (Número de controle/sequência do comando)
-        uint8_t ctlNum = ControlAction_getCtlNum(action);
-        
-        // Obtém quem enviou (opcional, mas ajuda na organização)
-        ClientConnection client = ControlAction_getClientConnection(action);
-        const char* clientIP = (client) ? ClientConnection_getPeerAddress(client) : "Desconhecido";
-
-        printf("--------------------------------------------------\n");
-        printf("[COMANDO] Recebido de: %s\n", clientIP);
-        printf("   >> Acao:     %s\n", comando ? "LIGAR (ON)" : "DESLIGAR (OFF)");
-        printf("   >> CtlNum:   %u\n", ctlNum); // Aqui está o contador que você pediu
-        printf("--------------------------------------------------\n");
-
-        // AQUI VOCÊ ADICIONA O CÓDIGO DO RASPBERRY PI (wiringPi, etc)
-        // if (comando) digitalWrite(PINO, HIGH); else digitalWrite(PINO, LOW);
-
-        return CONTROL_RESULT_OK;
-    }
-
-    return CONTROL_RESULT_FAILED;
-}
-
-/*
- * Handler de Conexão
- * Detecta quando o Elipse conecta ou desconecta.
- */
+/* Handler de Conexão (Mostra IP quando conecta/desconecta) */
 static void
 connectionHandler (IedServer self, ClientConnection connection, bool connected, void* parameter)
 {
     const char* clientIP = ClientConnection_getPeerAddress(connection);
-
+    
     if (connected) {
-        printf("\n==================================================\n");
-        printf("[SISTEMA] CLIENTE CONECTADO (ELIPSE/SCADA)\n");
-        printf("   >> IP do Cliente: %s\n", clientIP);
-        printf("==================================================\n\n");
+        activeConnections++;
+        if (activeConnections == 1) {
+            LOG_PRINT("\n==================================================\n");
+            LOG_PRINT("[SISTEMA] >>> ELIPSE/CLIENTE CONECTADO <<<\n");
+            LOG_PRINT("   >> IP: %s\n", clientIP);
+            LOG_PRINT("==================================================\n");
+        }
+    } else {
+        if (activeConnections > 0) activeConnections--;
+        if (activeConnections == 0) {
+            LOG_PRINT("\n[SISTEMA] Cliente Desconectado (%s)\n\n", clientIP);
+        }
     }
-    else {
-        printf("\n[SISTEMA] Cliente Desconectado (%s)\n\n", clientIP);
-    }
-}
-
-/*
- * Handler de Reports (RCB)
- * Limpo para mostrar apenas quando o report é ativado/desativado.
- */
-static void
-rcbEventHandler(void* parameter, ReportControlBlock* rcb, ClientConnection connection, IedServer_RCBEventType event, const char* parameterName, MmsDataAccessError serviceError)
-{
-    // Filtra apenas eventos de habilitação para não poluir o terminal
-    if (event == RCB_EVENT_ENABLE)
-    {
-        char* rptId = ReportControlBlock_getRptID(rcb);
-        printf("[REPORT] Relatorios Ativados pelo Elipse\n");
-        printf("   >> ID: %s\n", rptId);
-        free(rptId);
-    }
-    else if (event == RCB_EVENT_DISABLE) {
-        printf("[REPORT] Relatorios Desativados\n");
-    }
-    // Outros eventos (Set Parameter, etc) foram ocultados para limpeza
 }
 
 int
 main(int argc, char** argv)
 {
     int tcpPort = 102;
-
     if (argc > 1) {
         tcpPort = atoi(argv[1]);
     }
 
-    /* * CONFIGURAÇÃO DE LOG:
-     * Define para WARNING para esconder os logs internos "confusos" da libiec61850.
-     * Assim só aparece o que nós dermos printf ou erros graves.
-     */
-    printf("\n--- INICIANDO SERVIDOR IEC 61850 (Versao %s) ---\n", LibIEC61850_getVersionString());
-
-    IedServerConfig config = IedServerConfig_create();
-    IedServerConfig_setReportBufferSize(config, 200000);
-    IedServerConfig_setEdition(config, IEC_61850_EDITION_2);
-    IedServerConfig_setFileServiceBasePath(config, "./vmd-filestore/");
-    IedServerConfig_enableFileService(config, false);
-    IedServerConfig_enableDynamicDataSetService(config, true);
-    IedServerConfig_enableLogService(config, false);
-    IedServerConfig_setMaxMmsConnections(config, 2);
-
-    iedServer = IedServer_createWithConfig(&iedModel, NULL, config);
-    IedServerConfig_destroy(config);
-
-    IedServer_setServerIdentity(iedServer, "MZ", "basic io", "1.6.0");
-
-    /* * REGISTRO DO COMANDO:
-     * Descomentei e apontei para o LPHD1_Sim que estava no seu código original.
-     * IMPORTANTE: Se o seu botão no Elipse aponta para outro nó (ex: TNKXSWI1 ou MOTXSWI1),
-     * você DEVE mudar 'IEDMODEL_B1CTR_LPHD1_Sim' abaixo para o nó correto!
-     */
-
-    IedServer_setControlHandler(iedServer, IEDMODEL_B1CTR_LPHD1_Sim,
-            (ControlHandler) controlHandlerForBinaryOutput,
-            IEDMODEL_B1CTR_LPHD1_Sim_stVal);
-
-    IedServer_setConnectionIndicationHandler(iedServer, (IedConnectionIndicationHandler) connectionHandler, NULL);
-    IedServer_setRCBEventHandler(iedServer, rcbEventHandler, NULL);
-    IedServer_setWriteAccessPolicy(iedServer, IEC61850_FC_DC, ACCESS_POLICY_ALLOW);
-
-    IedServer_start(iedServer, tcpPort);
-
-    if (!IedServer_isRunning(iedServer))
-    {
-        printf("[ERRO] Falha ao iniciar servidor (verifique permissoes de root ou porta 102)!\n");
-        IedServer_destroy(iedServer);
-        exit(-1);
+    // ---------------------------------------------------------
+    // 2. BLOQUEIO TOTAL DE STDOUT (O SEGREDO ESTÁ AQUI)
+    // Fazemos isso AGORA, antes de criar o servidor.
+    // ---------------------------------------------------------
+    int dev_null = open("/dev/null", O_WRONLY);
+    if (dev_null != -1) {
+        dup2(dev_null, STDOUT_FILENO); 
+        // A partir daqui, printf comum morre. Use LOG_PRINT.
     }
 
-    printf("[STATUS] Servidor Rodando na porta %d.\n", tcpPort);
-    printf("[STATUS] Aguardando conexao do Elipse...\n\n");
+    // ---------------------------------------------------------
+    // 3. CRIAÇÃO DO SERVIDOR (Agora ele nasce "mudo" no stdout)
+    // ---------------------------------------------------------
+    iedServer = IedServer_create(&iedModel); 
 
+    if (iedServer == NULL) {
+        LOG_PRINT("Erro crítico: Falha ao criar IedServer (verifique static_model).\n");
+        if (dev_null != -1) close(dev_null);
+        return 1;
+    }
+
+    // ---------------------------------------------------------
+    // 4. CONFIGURAÇÃO DOS HANDLERS
+    // ---------------------------------------------------------
+    // Handler de conexão (Logs bonitos)
+    IedServer_setConnectionIndicationHandler(iedServer, (IedConnectionIndicationHandler) connectionHandler, NULL);
+
+    /* NOTA: Como este é o modelo B1CTR (Controlador), não incluí o 
+       controlHandler do MOTOR (MOTXSWI) da Bike para evitar erros de compilação 
+       se o nó não existir neste modelo específico.
+       Se quiser controlar algo aqui (ex: LPHD1.Sim), adicione o handler correspondente.
+    */
+
+    // ---------------------------------------------------------
+    // 5. INICIAR O SERVIDOR
+    // ---------------------------------------------------------
+    IedServer_start(iedServer, tcpPort);
+
+    if (!IedServer_isRunning(iedServer)) {
+        LOG_PRINT("ERRO: Falha ao iniciar o servidor na porta %d (sudo necessario?)\n", tcpPort);
+        IedServer_destroy(iedServer);
+        if (dev_null != -1) close(dev_null);
+        return 1;
+    }
+
+    // Logs de status aparecem via stderr
+    LOG_PRINT("\n--- SERVIDOR IEC 61850 (B1CTR - SUPRESSED LOGS) ---\n");
+    LOG_PRINT("[STATUS] Logs internos da libiec61850 ocultados.\n");
+    LOG_PRINT("[STATUS] Rodando na porta %d.\n", tcpPort);
+    LOG_PRINT("[STATUS] Aguardando conexao do Elipse...\n");
+
+    // Loop Principal
     running = 1;
     signal(SIGINT, sigint_handler);
 
-    while (running)
-    {
+    while (running) {
         Thread_sleep(100);
     }
 
-    printf("\n[SISTEMA] Parando servidor...\n");
+    // Encerramento
+    LOG_PRINT("\n[SISTEMA] Encerrando servidor...\n");
     IedServer_stop(iedServer);
     IedServer_destroy(iedServer);
-
+    if (dev_null != -1) close(dev_null);
+    
     return 0;
 }

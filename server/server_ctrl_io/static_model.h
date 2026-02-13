@@ -1,53 +1,54 @@
- #ifndef STATIC_MODEL_H_
- #define STATIC_MODEL_H_
+#ifndef STATIC_MODEL_H_
+#define STATIC_MODEL_H_
 
- #include <stdlib.h>
- #include "iec61850_model.h"
+#include <stdlib.h>
+#include "iec61850_model.h"
 
- extern IedModel iedModel;
- extern LogicalDevice iedModel_B1CTR; //Dispositivo Lógico
+extern IedModel iedModel;
+extern LogicalDevice iedModel_B1CTR; //Dispositivo Lógico
 
- /* LNs */
- extern LogicalNode iedModel_B1CTR_LPHD1;
- extern LogicalNode iedModel_B1CTR_LLN0;
- extern LogicalNode iedModel_B1CTR_LGOS1;
- extern LogicalNode iedModel_B1CTR_LTIM1;
- extern LogicalNode iedModel_B1CTR_LTMS1;
- extern LogicalNode iedModel_B1CTR_LTRK1;
+/* LNs */
+
+extern LogicalNode iedModel_B1CTR_LPHD1;
+extern LogicalNode iedModel_B1CTR_LLN0;
+extern LogicalNode iedModel_B1CTR_LGOS1;
+extern LogicalNode iedModel_B1CTR_LTIM1;
+extern LogicalNode iedModel_B1CTR_LTMS1;
+extern LogicalNode iedModel_B1CTR_LTRK1;
 
 /* =================================================================
  * LPHD1
  * =================================================================
  */
 
- extern DataObject iedModel_B1CTR_LPHD1_NamPlt;
- extern DataAttribute iedModel_B1CTR_LPHD1_NamPlt_vendor;
- extern DataAttribute iedModel_B1CTR_LPHD1_NamPlt_swRev;
- extern DataAttribute iedModel_B1CTR_LPHD1_NamPlt_lnNs;
- extern DataObject iedModel_B1CTR_LPHD1_PhyNam;
- extern DataAttribute iedModel_B1CTR_LPHD1_PhyNam_vendor;
- extern DataAttribute iedModel_B1CTR_LPHD1_PhyNam_model;
- extern DataObject iedModel_B1CTR_LPHD1_PhyHealth;
- extern DataAttribute iedModel_B1CTR_LPHD1_PhyHealth_stVal;
- extern DataAttribute iedModel_B1CTR_LPHD1_PhyHealth_q;
- extern DataAttribute iedModel_B1CTR_LPHD1_PhyHealth_t;
- extern DataObject iedModel_B1CTR_LPHD1_OutOv;
- extern DataAttribute iedModel_B1CTR_LPHD1_OutOv_stVal;
- extern DataAttribute iedModel_B1CTR_LPHD1_OutOv_q;
- extern DataAttribute iedModel_B1CTR_LPHD1_OutOv_t;
- extern DataObject iedModel_B1CTR_LPHD1_Proxy;
- extern DataAttribute iedModel_B1CTR_LPHD1_Proxy_stVal;
- extern DataAttribute iedModel_B1CTR_LPHD1_Proxy_q;
- extern DataAttribute iedModel_B1CTR_LPHD1_Proxy_t;
- extern DataObject iedModel_B1CTR_LPHD1_OpTmh;
- extern DataAttribute iedModel_B1CTR_LPHD1_OpTmh_stVal;
- extern DataAttribute iedModel_B1CTR_LPHD1_OpTmh_q;
- extern DataAttribute iedModel_B1CTR_LPHD1_OpTmh_t;
- extern DataObject iedModel_B1CTR_LPHD1_Sim; 
- extern DataAttribute iedModel_B1CTR_LPHD1_Sim_stVal;
- extern DataAttribute iedModel_B1CTR_LPHD1_Sim_q;
- extern DataAttribute iedModel_B1CTR_LPHD1_Sim_t;
- extern DataAttribute iedModel_B1CTR_LPHD1_Sim_ctlModel;
+extern DataObject iedModel_B1CTR_LPHD1_NamPlt;
+extern DataAttribute iedModel_B1CTR_LPHD1_NamPlt_vendor;
+extern DataAttribute iedModel_B1CTR_LPHD1_NamPlt_swRev;
+extern DataAttribute iedModel_B1CTR_LPHD1_NamPlt_lnNs;
+extern DataObject iedModel_B1CTR_LPHD1_PhyNam;
+extern DataAttribute iedModel_B1CTR_LPHD1_PhyNam_vendor;
+extern DataAttribute iedModel_B1CTR_LPHD1_PhyNam_model;
+extern DataObject iedModel_B1CTR_LPHD1_PhyHealth;
+extern DataAttribute iedModel_B1CTR_LPHD1_PhyHealth_stVal;
+extern DataAttribute iedModel_B1CTR_LPHD1_PhyHealth_q;
+extern DataAttribute iedModel_B1CTR_LPHD1_PhyHealth_t;
+extern DataObject iedModel_B1CTR_LPHD1_OutOv;
+extern DataAttribute iedModel_B1CTR_LPHD1_OutOv_stVal;
+extern DataAttribute iedModel_B1CTR_LPHD1_OutOv_q;
+extern DataAttribute iedModel_B1CTR_LPHD1_OutOv_t;
+extern DataObject iedModel_B1CTR_LPHD1_Proxy;
+extern DataAttribute iedModel_B1CTR_LPHD1_Proxy_stVal;
+extern DataAttribute iedModel_B1CTR_LPHD1_Proxy_q;
+extern DataAttribute iedModel_B1CTR_LPHD1_Proxy_t;
+extern DataObject iedModel_B1CTR_LPHD1_OpTmh;
+extern DataAttribute iedModel_B1CTR_LPHD1_OpTmh_stVal;
+extern DataAttribute iedModel_B1CTR_LPHD1_OpTmh_q;
+extern DataAttribute iedModel_B1CTR_LPHD1_OpTmh_t;
+extern DataObject iedModel_B1CTR_LPHD1_Sim;
+extern DataAttribute iedModel_B1CTR_LPHD1_Sim_stVal;
+extern DataAttribute iedModel_B1CTR_LPHD1_Sim_q;
+extern DataAttribute iedModel_B1CTR_LPHD1_Sim_t;
+extern DataAttribute iedModel_B1CTR_LPHD1_Sim_ctlModel;
 
 /* =================================================================
  * LLN0
@@ -55,7 +56,6 @@
  */
 
 extern DataObject iedModel_B1CTR_LLN0_Mod;
-extern DataAttribute iedModel_B1CTR_LLN0_Mod_ctlVal; 
 extern DataAttribute iedModel_B1CTR_LLN0_Mod_stVal;
 extern DataAttribute iedModel_B1CTR_LLN0_Mod_q;
 extern DataAttribute iedModel_B1CTR_LLN0_Mod_t;
@@ -71,8 +71,8 @@ extern DataAttribute iedModel_B1CTR_LLN0_Health_t;
 extern DataObject iedModel_B1CTR_LLN0_NamPlt;
 extern DataAttribute iedModel_B1CTR_LLN0_NamPlt_vendor;
 extern DataAttribute iedModel_B1CTR_LLN0_NamPlt_swRev;
-extern DataAttribute iedModel_B1CTR_LLN0_NamPlt_lnNs;
 extern DataAttribute iedModel_B1CTR_LLN0_NamPlt_configRev;
+extern DataAttribute iedModel_B1CTR_LLN0_NamPlt_lnNs;
 extern DataObject iedModel_B1CTR_LLN0_Diag;
 extern DataAttribute iedModel_B1CTR_LLN0_Diag_stVal;
 extern DataAttribute iedModel_B1CTR_LLN0_Diag_q;
@@ -84,46 +84,10 @@ extern DataAttribute iedModel_B1CTR_LLN0_LEDRs_t;
 extern DataAttribute iedModel_B1CTR_LLN0_LEDRs_ctlModel;
 
 /* =================================================================
- * LTRK1
- * =================================================================
- */
-
-extern DataObject iedModel_B1CTR_LTRK1_Beh;
-extern DataAttribute iedModel_B1CTR_LTRK1_Beh_stVal;
-extern DataAttribute iedModel_B1CTR_LTRK1_Beh_q;
-extern DataAttribute iedModel_B1CTR_LTRK1_Beh_t;
-extern DataObject iedModel_B1CTR_LTRK1_Health;
-extern DataAttribute iedModel_B1CTR_LTRK1_Health_stVal;
-extern DataAttribute iedModel_B1CTR_LTRK1_Health_q;
-extern DataAttribute iedModel_B1CTR_LTRK1_Health_t;
-extern DataObject iedModel_B1CTR_LTRK1_GenTrk;
-extern DataAttribute iedModel_B1CTR_LTRK1_GenTrk_objRef;
-extern DataAttribute iedModel_B1CTR_LTRK1_GenTrk_serviceType;
-extern DataAttribute iedModel_B1CTR_LTRK1_GenTrk_errorCode;
-extern DataAttribute iedModel_B1CTR_LTRK1_GenTrk_t;
-extern DataObject iedModel_B1CTR_LTRK1_GocbTrk;
-extern DataAttribute iedModel_B1CTR_LTRK1_GocbTrk_objRef;
-extern DataAttribute iedModel_B1CTR_LTRK1_GocbTrk_serviceType;
-extern DataAttribute iedModel_B1CTR_LTRK1_GocbTrk_errorCode;
-extern DataAttribute iedModel_B1CTR_LTRK1_GocbTrk_t;
-extern DataAttribute iedModel_B1CTR_LTRK1_GocbTrk_goEna;
-extern DataAttribute iedModel_B1CTR_LTRK1_GocbTrk_goID;
-extern DataAttribute iedModel_B1CTR_LTRK1_GocbTrk_datSet;
-extern DataAttribute iedModel_B1CTR_LTRK1_GocbTrk_confRev;
-extern DataAttribute iedModel_B1CTR_LTRK1_GocbTrk_ndsCom;
-extern DataAttribute iedModel_B1CTR_LTRK1_GocbTrk_dstAddress;
-
-/* =================================================================
  * LGOS1
  * =================================================================
  */
 
-extern DataObject iedModel_B1CTR_LGOS1_Mod;
-extern DataAttribute iedModel_B1CTR_LGOS1_Mod_stVal;
-extern DataAttribute iedModel_B1CTR_LGOS1_Mod_ctlVal;
-extern DataAttribute iedModel_B1CTR_LGOS1_Mod_q;
-extern DataAttribute iedModel_B1CTR_LGOS1_Mod_t;
-extern DataAttribute iedModel_B1CTR_LGOS1_Mod_ctlModel;
 extern DataObject iedModel_B1CTR_LGOS1_Beh;
 extern DataAttribute iedModel_B1CTR_LGOS1_Beh_stVal;
 extern DataAttribute iedModel_B1CTR_LGOS1_Beh_q;
@@ -134,7 +98,6 @@ extern DataAttribute iedModel_B1CTR_LGOS1_Health_q;
 extern DataAttribute iedModel_B1CTR_LGOS1_Health_t;
 extern DataObject iedModel_B1CTR_LGOS1_GoCBRef;
 extern DataAttribute iedModel_B1CTR_LGOS1_GoCBRef_setSrcRef;
-extern DataAttribute iedModel_B1CTR_LGOS1_St_t;
 extern DataObject iedModel_B1CTR_LGOS1_St;
 extern DataAttribute iedModel_B1CTR_LGOS1_St_stVal;
 extern DataAttribute iedModel_B1CTR_LGOS1_St_q;
@@ -161,7 +124,7 @@ extern DataAttribute iedModel_B1CTR_LGOS1_LastStNum_q;
 extern DataAttribute iedModel_B1CTR_LGOS1_LastStNum_t;
 
 /* =================================================================
- * LTIM1
+ * LTIM1 & LTMS1
  * =================================================================
  */
 
@@ -177,10 +140,6 @@ extern DataObject iedModel_B1CTR_LTIM1_TmDT;
 extern DataAttribute iedModel_B1CTR_LTIM1_TmDT_stVal;
 extern DataAttribute iedModel_B1CTR_LTIM1_TmDT_q;
 extern DataAttribute iedModel_B1CTR_LTIM1_TmDT_t;
-extern DataObject iedModel_B1CTR_LTMS1_Beh;
-extern DataAttribute iedModel_B1CTR_LTMS1_Beh_stVal;
-extern DataAttribute iedModel_B1CTR_LTMS1_Beh_q;
-extern DataAttribute iedModel_B1CTR_LTMS1_Beh_t;
 extern DataObject iedModel_B1CTR_LTMS1_TmSrc;
 extern DataAttribute iedModel_B1CTR_LTMS1_TmSrc_stVal;
 extern DataAttribute iedModel_B1CTR_LTMS1_TmSrc_q;
@@ -189,12 +148,84 @@ extern DataObject iedModel_B1CTR_LTMS1_TmSrcTyp;
 extern DataAttribute iedModel_B1CTR_LTMS1_TmSrcTyp_stVal;
 extern DataAttribute iedModel_B1CTR_LTMS1_TmSrcTyp_q;
 extern DataAttribute iedModel_B1CTR_LTMS1_TmSrcTyp_t;
+extern DataObject iedModel_B1CTR_LTMS1_Beh;
+extern DataAttribute iedModel_B1CTR_LTMS1_Beh_stVal;
+extern DataAttribute iedModel_B1CTR_LTMS1_Beh_q;
+extern DataAttribute iedModel_B1CTR_LTMS1_Beh_t;
+
+/* =================================================================
+ * LTRK1
+ * =================================================================
+ */
+
+extern DataObject iedModel_B1CTR_LTRK1_Beh;
+extern DataAttribute iedModel_B1CTR_LTRK1_Beh_stVal;
+extern DataAttribute iedModel_B1CTR_LTRK1_Beh_q;
+extern DataAttribute iedModel_B1CTR_LTRK1_Beh_t;
+extern DataObject iedModel_B1CTR_LTRK1_Health;
+extern DataAttribute iedModel_B1CTR_LTRK1_Health_stVal;
+extern DataAttribute iedModel_B1CTR_LTRK1_Health_q;
+extern DataAttribute iedModel_B1CTR_LTRK1_Health_t;
+extern DataObject iedModel_B1CTR_LTRK1_GenTrk;
+extern DataAttribute iedModel_B1CTR_LTRK1_GenTrk_objRef;
+extern DataAttribute iedModel_B1CTR_LTRK1_GenTrk_serviceType;
+extern DataAttribute iedModel_B1CTR_LTRK1_GenTrk_errorCode;
+extern DataAttribute iedModel_B1CTR_LTRK1_GenTrk_t;
+extern DataObject iedModel_B1CTR_LTRK1_UrcbTrk;
+extern DataAttribute iedModel_B1CTR_LTRK1_UrcbTrk_objRef;
+extern DataAttribute iedModel_B1CTR_LTRK1_UrcbTrk_serviceType;
+extern DataAttribute iedModel_B1CTR_LTRK1_UrcbTrk_errorCode;
+extern DataAttribute iedModel_B1CTR_LTRK1_UrcbTrk_t;
+extern DataAttribute iedModel_B1CTR_LTRK1_UrcbTrk_rptID;
+extern DataAttribute iedModel_B1CTR_LTRK1_UrcbTrk_rptEna;
+extern DataAttribute iedModel_B1CTR_LTRK1_UrcbTrk_resv;
+extern DataAttribute iedModel_B1CTR_LTRK1_UrcbTrk_datSet;
+extern DataAttribute iedModel_B1CTR_LTRK1_UrcbTrk_confRev;
+extern DataAttribute iedModel_B1CTR_LTRK1_UrcbTrk_optFlds;
+extern DataAttribute iedModel_B1CTR_LTRK1_UrcbTrk_bufTm;
+extern DataAttribute iedModel_B1CTR_LTRK1_UrcbTrk_sqNum;
+extern DataAttribute iedModel_B1CTR_LTRK1_UrcbTrk_trgOps;
+extern DataAttribute iedModel_B1CTR_LTRK1_UrcbTrk_intgPd;
+extern DataAttribute iedModel_B1CTR_LTRK1_UrcbTrk_gi;
+extern DataObject iedModel_B1CTR_LTRK1_BrcbTrk;
+extern DataAttribute iedModel_B1CTR_LTRK1_BrcbTrk_objRef;
+extern DataAttribute iedModel_B1CTR_LTRK1_BrcbTrk_serviceType;
+extern DataAttribute iedModel_B1CTR_LTRK1_BrcbTrk_errorCode;
+extern DataAttribute iedModel_B1CTR_LTRK1_BrcbTrk_t;
+extern DataAttribute iedModel_B1CTR_LTRK1_BrcbTrk_rptID;
+extern DataAttribute iedModel_B1CTR_LTRK1_BrcbTrk_rptEna;
+extern DataAttribute iedModel_B1CTR_LTRK1_BrcbTrk_datSet;
+extern DataAttribute iedModel_B1CTR_LTRK1_BrcbTrk_confRev;
+extern DataAttribute iedModel_B1CTR_LTRK1_BrcbTrk_optFlds;
+extern DataAttribute iedModel_B1CTR_LTRK1_BrcbTrk_bufTm;
+extern DataAttribute iedModel_B1CTR_LTRK1_BrcbTrk_sqNum;
+extern DataAttribute iedModel_B1CTR_LTRK1_BrcbTrk_trgOps;
+extern DataAttribute iedModel_B1CTR_LTRK1_BrcbTrk_intgPd;
+extern DataAttribute iedModel_B1CTR_LTRK1_BrcbTrk_gi;
+extern DataAttribute iedModel_B1CTR_LTRK1_BrcbTrk_purgeBuf;
+extern DataAttribute iedModel_B1CTR_LTRK1_BrcbTrk_entryID;
+extern DataAttribute iedModel_B1CTR_LTRK1_BrcbTrk_timeOfEntry;
+extern DataObject iedModel_B1CTR_LTRK1_GocbTrk;
+extern DataAttribute iedModel_B1CTR_LTRK1_GocbTrk_objRef;
+extern DataAttribute iedModel_B1CTR_LTRK1_GocbTrk_serviceType;
+extern DataAttribute iedModel_B1CTR_LTRK1_GocbTrk_errorCode;
+extern DataAttribute iedModel_B1CTR_LTRK1_GocbTrk_t;
+extern DataAttribute iedModel_B1CTR_LTRK1_GocbTrk_goEna;
+extern DataAttribute iedModel_B1CTR_LTRK1_GocbTrk_goID;
+extern DataAttribute iedModel_B1CTR_LTRK1_GocbTrk_datSet;
+extern DataAttribute iedModel_B1CTR_LTRK1_GocbTrk_confRev;
+extern DataAttribute iedModel_B1CTR_LTRK1_GocbTrk_ndsCom;
+extern DataAttribute iedModel_B1CTR_LTRK1_GocbTrk_dstAddress;
 
 
 #define IEDMODEL_B1CTR (&iedModel_B1CTR)
 
-/* --- Defines LLN0 --- */
+/* --- Defines LPHD1 --- */
 #define IEDMODEL_B1CTR_LPHD1 (&iedModel_B1CTR_LPHD1)
+#define IEDMODEL_B1CTR_LPHD1_NamPlt (&iedModel_B1CTR_LPHD1_NamPlt)
+#define IEDMODEL_B1CTR_LPHD1_NamPlt_vendor (&iedModel_B1CTR_LPHD1_NamPlt_vendor)
+#define IEDMODEL_B1CTR_LPHD1_NamPlt_swRev (&iedModel_B1CTR_LPHD1_NamPlt_swRev)
+#define IEDMODEL_B1CTR_LPHD1_NamPlt_lnNs (&iedModel_B1CTR_LPHD1_NamPlt_lnNs)
 #define IEDMODEL_B1CTR_LPHD1_PhyNam (&iedModel_B1CTR_LPHD1_PhyNam)
 #define IEDMODEL_B1CTR_LPHD1_PhyNam_vendor (&iedModel_B1CTR_LPHD1_PhyNam_vendor)
 #define IEDMODEL_B1CTR_LPHD1_PhyNam_model (&iedModel_B1CTR_LPHD1_PhyNam_model)
@@ -219,15 +250,10 @@ extern DataAttribute iedModel_B1CTR_LTMS1_TmSrcTyp_t;
 #define IEDMODEL_B1CTR_LPHD1_Sim_q (&iedModel_B1CTR_LPHD1_Sim_q)
 #define IEDMODEL_B1CTR_LPHD1_Sim_t (&iedModel_B1CTR_LPHD1_Sim_t)
 #define IEDMODEL_B1CTR_LPHD1_Sim_ctlModel (&iedModel_B1CTR_LPHD1_Sim_ctlModel)
-#define IEDMODEL_B1CTR_LPHD1_NamPlt (&iedModel_B1CTR_LPHD1_NamPlt)
-#define IEDMODEL_B1CTR_LPHD1_NamPlt_vendor (&iedModel_B1CTR_LPHD1_NamPlt_vendor)
-#define IEDMODEL_B1CTR_LPHD1_NamPlt_swRev (&iedModel_B1CTR_LPHD1_NamPlt_swRev)
-#define IEDMODEL_B1CTR_LPHD1_NamPlt_lnNs (&iedModel_B1CTR_LPHD1_NamPlt_lnNs)
 
 /* --- Defines LLN0 --- */
 #define IEDMODEL_B1CTR_LLN0 (&iedModel_B1CTR_LLN0)
 #define IEDMODEL_B1CTR_LLN0_Mod (&iedModel_B1CTR_LLN0_Mod)
-#define IEDMODEL_B1CTR_LLN0_Mod_ctlVal (&iedModel_B1CTR_LLN0_Mod_ctlVal) /* ADICIONADO */
 #define IEDMODEL_B1CTR_LLN0_Mod_stVal (&iedModel_B1CTR_LLN0_Mod_stVal)
 #define IEDMODEL_B1CTR_LLN0_Mod_q (&iedModel_B1CTR_LLN0_Mod_q)
 #define IEDMODEL_B1CTR_LLN0_Mod_t (&iedModel_B1CTR_LLN0_Mod_t)
@@ -243,7 +269,7 @@ extern DataAttribute iedModel_B1CTR_LTMS1_TmSrcTyp_t;
 #define IEDMODEL_B1CTR_LLN0_NamPlt (&iedModel_B1CTR_LLN0_NamPlt)
 #define IEDMODEL_B1CTR_LLN0_NamPlt_vendor (&iedModel_B1CTR_LLN0_NamPlt_vendor)
 #define IEDMODEL_B1CTR_LLN0_NamPlt_swRev (&iedModel_B1CTR_LLN0_NamPlt_swRev)
-#define IEDMODEL_B1CTR_LLN0_NamPlt_configRev (&iedModel_B1CTR_LLN0_NamPlt_configRev) 
+#define IEDMODEL_B1CTR_LLN0_NamPlt_configRev (&iedModel_B1CTR_LLN0_NamPlt_configRev)
 #define IEDMODEL_B1CTR_LLN0_NamPlt_lnNs (&iedModel_B1CTR_LLN0_NamPlt_lnNs)
 #define IEDMODEL_B1CTR_LLN0_Diag (&iedModel_B1CTR_LLN0_Diag)
 #define IEDMODEL_B1CTR_LLN0_Diag_stVal (&iedModel_B1CTR_LLN0_Diag_stVal)
@@ -309,10 +335,6 @@ extern DataAttribute iedModel_B1CTR_LTMS1_TmSrcTyp_t;
 
 /* --- Defines LTMS1 --- */
 #define IEDMODEL_B1CTR_LTMS1 (&iedModel_B1CTR_LTMS1)
-#define IEDMODEL_B1CTR_LTMS1_Beh (&iedModel_B1CTR_LTMS1_Beh)
-#define IEDMODEL_B1CTR_LTMS1_Beh_stVal (&iedModel_B1CTR_LTMS1_Beh_stVal)
-#define IEDMODEL_B1CTR_LTMS1_Beh_q (&iedModel_B1CTR_LTMS1_Beh_q)
-#define IEDMODEL_B1CTR_LTMS1_Beh_t (&iedModel_B1CTR_LTMS1_Beh_t)
 #define IEDMODEL_B1CTR_LTMS1_TmSrc (&iedModel_B1CTR_LTMS1_TmSrc)
 #define IEDMODEL_B1CTR_LTMS1_TmSrc_stVal (&iedModel_B1CTR_LTMS1_TmSrc_stVal)
 #define IEDMODEL_B1CTR_LTMS1_TmSrc_q (&iedModel_B1CTR_LTMS1_TmSrc_q)
@@ -321,6 +343,12 @@ extern DataAttribute iedModel_B1CTR_LTMS1_TmSrcTyp_t;
 #define IEDMODEL_B1CTR_LTMS1_TmSrcTyp_stVal (&iedModel_B1CTR_LTMS1_TmSrcTyp_stVal)
 #define IEDMODEL_B1CTR_LTMS1_TmSrcTyp_q (&iedModel_B1CTR_LTMS1_TmSrcTyp_q)
 #define IEDMODEL_B1CTR_LTMS1_TmSrcTyp_t (&iedModel_B1CTR_LTMS1_TmSrcTyp_t)
+#define IEDMODEL_B1CTR_LTMS1_Beh (&iedModel_B1CTR_LTMS1_Beh)
+#define IEDMODEL_B1CTR_LTMS1_Beh_stVal (&iedModel_B1CTR_LTMS1_Beh_stVal)
+#define IEDMODEL_B1CTR_LTMS1_Beh_q (&iedModel_B1CTR_LTMS1_Beh_q)
+#define IEDMODEL_B1CTR_LTMS1_Beh_t (&iedModel_B1CTR_LTMS1_Beh_t)
+
+/* --- Defines LTRK1 --- */
 #define IEDMODEL_B1CTR_LTRK1 (&iedModel_B1CTR_LTRK1)
 #define IEDMODEL_B1CTR_LTRK1_Beh (&iedModel_B1CTR_LTRK1_Beh)
 #define IEDMODEL_B1CTR_LTRK1_Beh_stVal (&iedModel_B1CTR_LTRK1_Beh_stVal)
@@ -335,6 +363,40 @@ extern DataAttribute iedModel_B1CTR_LTMS1_TmSrcTyp_t;
 #define IEDMODEL_B1CTR_LTRK1_GenTrk_serviceType (&iedModel_B1CTR_LTRK1_GenTrk_serviceType)
 #define IEDMODEL_B1CTR_LTRK1_GenTrk_errorCode (&iedModel_B1CTR_LTRK1_GenTrk_errorCode)
 #define IEDMODEL_B1CTR_LTRK1_GenTrk_t (&iedModel_B1CTR_LTRK1_GenTrk_t)
+#define IEDMODEL_B1CTR_LTRK1_UrcbTrk (&iedModel_B1CTR_LTRK1_UrcbTrk)
+#define IEDMODEL_B1CTR_LTRK1_UrcbTrk_objRef (&iedModel_B1CTR_LTRK1_UrcbTrk_objRef)
+#define IEDMODEL_B1CTR_LTRK1_UrcbTrk_serviceType (&iedModel_B1CTR_LTRK1_UrcbTrk_serviceType)
+#define IEDMODEL_B1CTR_LTRK1_UrcbTrk_errorCode (&iedModel_B1CTR_LTRK1_UrcbTrk_errorCode)
+#define IEDMODEL_B1CTR_LTRK1_UrcbTrk_t (&iedModel_B1CTR_LTRK1_UrcbTrk_t)
+#define IEDMODEL_B1CTR_LTRK1_UrcbTrk_rptID (&iedModel_B1CTR_LTRK1_UrcbTrk_rptID)
+#define IEDMODEL_B1CTR_LTRK1_UrcbTrk_rptEna (&iedModel_B1CTR_LTRK1_UrcbTrk_rptEna)
+#define IEDMODEL_B1CTR_LTRK1_UrcbTrk_resv (&iedModel_B1CTR_LTRK1_UrcbTrk_resv)
+#define IEDMODEL_B1CTR_LTRK1_UrcbTrk_datSet (&iedModel_B1CTR_LTRK1_UrcbTrk_datSet)
+#define IEDMODEL_B1CTR_LTRK1_UrcbTrk_confRev (&iedModel_B1CTR_LTRK1_UrcbTrk_confRev)
+#define IEDMODEL_B1CTR_LTRK1_UrcbTrk_optFlds (&iedModel_B1CTR_LTRK1_UrcbTrk_optFlds)
+#define IEDMODEL_B1CTR_LTRK1_UrcbTrk_bufTm (&iedModel_B1CTR_LTRK1_UrcbTrk_bufTm)
+#define IEDMODEL_B1CTR_LTRK1_UrcbTrk_sqNum (&iedModel_B1CTR_LTRK1_UrcbTrk_sqNum)
+#define IEDMODEL_B1CTR_LTRK1_UrcbTrk_trgOps (&iedModel_B1CTR_LTRK1_UrcbTrk_trgOps)
+#define IEDMODEL_B1CTR_LTRK1_UrcbTrk_intgPd (&iedModel_B1CTR_LTRK1_UrcbTrk_intgPd)
+#define IEDMODEL_B1CTR_LTRK1_UrcbTrk_gi (&iedModel_B1CTR_LTRK1_UrcbTrk_gi)
+#define IEDMODEL_B1CTR_LTRK1_BrcbTrk (&iedModel_B1CTR_LTRK1_BrcbTrk)
+#define IEDMODEL_B1CTR_LTRK1_BrcbTrk_objRef (&iedModel_B1CTR_LTRK1_BrcbTrk_objRef)
+#define IEDMODEL_B1CTR_LTRK1_BrcbTrk_serviceType (&iedModel_B1CTR_LTRK1_BrcbTrk_serviceType)
+#define IEDMODEL_B1CTR_LTRK1_BrcbTrk_errorCode (&iedModel_B1CTR_LTRK1_BrcbTrk_errorCode)
+#define IEDMODEL_B1CTR_LTRK1_BrcbTrk_t (&iedModel_B1CTR_LTRK1_BrcbTrk_t)
+#define IEDMODEL_B1CTR_LTRK1_BrcbTrk_rptID (&iedModel_B1CTR_LTRK1_BrcbTrk_rptID)
+#define IEDMODEL_B1CTR_LTRK1_BrcbTrk_rptEna (&iedModel_B1CTR_LTRK1_BrcbTrk_rptEna)
+#define IEDMODEL_B1CTR_LTRK1_BrcbTrk_datSet (&iedModel_B1CTR_LTRK1_BrcbTrk_datSet)
+#define IEDMODEL_B1CTR_LTRK1_BrcbTrk_confRev (&iedModel_B1CTR_LTRK1_BrcbTrk_confRev)
+#define IEDMODEL_B1CTR_LTRK1_BrcbTrk_optFlds (&iedModel_B1CTR_LTRK1_BrcbTrk_optFlds)
+#define IEDMODEL_B1CTR_LTRK1_BrcbTrk_bufTm (&iedModel_B1CTR_LTRK1_BrcbTrk_bufTm)
+#define IEDMODEL_B1CTR_LTRK1_BrcbTrk_sqNum (&iedModel_B1CTR_LTRK1_BrcbTrk_sqNum)
+#define IEDMODEL_B1CTR_LTRK1_BrcbTrk_trgOps (&iedModel_B1CTR_LTRK1_BrcbTrk_trgOps)
+#define IEDMODEL_B1CTR_LTRK1_BrcbTrk_intgPd (&iedModel_B1CTR_LTRK1_BrcbTrk_intgPd)
+#define IEDMODEL_B1CTR_LTRK1_BrcbTrk_gi (&iedModel_B1CTR_LTRK1_BrcbTrk_gi)
+#define IEDMODEL_B1CTR_LTRK1_BrcbTrk_purgeBuf (&iedModel_B1CTR_LTRK1_BrcbTrk_purgeBuf)
+#define IEDMODEL_B1CTR_LTRK1_BrcbTrk_entryID (&iedModel_B1CTR_LTRK1_BrcbTrk_entryID)
+#define IEDMODEL_B1CTR_LTRK1_BrcbTrk_timeOfEntry (&iedModel_B1CTR_LTRK1_BrcbTrk_timeOfEntry)
 #define IEDMODEL_B1CTR_LTRK1_GocbTrk (&iedModel_B1CTR_LTRK1_GocbTrk)
 #define IEDMODEL_B1CTR_LTRK1_GocbTrk_objRef (&iedModel_B1CTR_LTRK1_GocbTrk_objRef)
 #define IEDMODEL_B1CTR_LTRK1_GocbTrk_serviceType (&iedModel_B1CTR_LTRK1_GocbTrk_serviceType)

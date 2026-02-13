@@ -1,15 +1,27 @@
 #include "static_model.h"
+#include <stdio.h>
+#include "iec61850_server.h" 
 
 static void initializeValues();
+
+/* * ===================================================================================
+ * DISPOSITIVO LÓGICO: B1CTR (Controlador)
+ * ===================================================================================
+ */
 
 LogicalDevice iedModel_B1CTR = {
     LogicalDeviceModelType,
     "B1CTR",
     (ModelNode*) &iedModel, 
     NULL,
-    (ModelNode*) &iedModel_B1CTR_LPHD1,
+    (ModelNode*) &iedModel_B1CTR_LPHD1, /* Primeiro Nó Filho */
     NULL,
 };
+
+/* ================================================================
+ * LPHD1 (Informações Físicas)
+ * ================================================================
+ */
 
 LogicalNode iedModel_B1CTR_LPHD1 = {
     LogicalNodeModelType,
@@ -40,8 +52,6 @@ DataAttribute iedModel_B1CTR_LPHD1_NamPlt_vendor = {
     IEC61850_FC_DC,
     IEC61850_VISIBLE_STRING_255,
     0,
-    NULL,
-    0
 };
 
 DataAttribute iedModel_B1CTR_LPHD1_NamPlt_swRev = {
@@ -55,8 +65,6 @@ DataAttribute iedModel_B1CTR_LPHD1_NamPlt_swRev = {
     IEC61850_FC_DC,
     IEC61850_VISIBLE_STRING_255,
     0,
-    NULL,
-    0
 };
 
 DataAttribute iedModel_B1CTR_LPHD1_NamPlt_lnNs = {
@@ -70,10 +78,7 @@ DataAttribute iedModel_B1CTR_LPHD1_NamPlt_lnNs = {
     IEC61850_FC_EX,
     IEC61850_VISIBLE_STRING_255,
     0,
-    NULL,
-    0
 };
-
 
 DataObject iedModel_B1CTR_LPHD1_PhyNam = {
     DataObjectModelType,
@@ -96,27 +101,26 @@ DataAttribute iedModel_B1CTR_LPHD1_PhyNam_vendor = {
     IEC61850_FC_DC,
     IEC61850_VISIBLE_STRING_255,
     0,
-    NULL,
-    0
 };
 
 DataAttribute iedModel_B1CTR_LPHD1_PhyNam_model = {
-    DataAttributeModelType, "model",
+    DataAttributeModelType,
+    "model",
     (ModelNode*) &iedModel_B1CTR_LPHD1_PhyNam,
-    NULL, 
+    NULL,
     NULL,
     0,
     -1,
     IEC61850_FC_DC,
     IEC61850_VISIBLE_STRING_255,
-    0
+    0,
 };
 
 DataObject iedModel_B1CTR_LPHD1_PhyHealth = {
     DataObjectModelType,
     "PhyHealth",
     (ModelNode*) &iedModel_B1CTR_LPHD1,
-    (ModelNode*) &iedModel_B1CTR_LPHD1_Proxy,
+    (ModelNode*) &iedModel_B1CTR_LPHD1_OutOv,
     (ModelNode*) &iedModel_B1CTR_LPHD1_PhyHealth_stVal,
     0,
     -1
@@ -132,9 +136,7 @@ DataAttribute iedModel_B1CTR_LPHD1_PhyHealth_stVal = {
     -1,
     IEC61850_FC_ST,
     IEC61850_ENUMERATED,
-    0 + TRG_OPT_DATA_CHANGED,
-    NULL,
-    0
+    TRG_OPT_DATA_UPDATE,
 };
 
 DataAttribute iedModel_B1CTR_LPHD1_PhyHealth_q = {
@@ -147,9 +149,7 @@ DataAttribute iedModel_B1CTR_LPHD1_PhyHealth_q = {
     -1,
     IEC61850_FC_ST,
     IEC61850_QUALITY,
-    0 + TRG_OPT_QUALITY_CHANGED,
-    NULL,
-    0
+    TRG_OPT_QUALITY_CHANGED,
 };
 
 DataAttribute iedModel_B1CTR_LPHD1_PhyHealth_t = {
@@ -163,8 +163,6 @@ DataAttribute iedModel_B1CTR_LPHD1_PhyHealth_t = {
     IEC61850_FC_ST,
     IEC61850_TIMESTAMP,
     0,
-    NULL,
-    0
 };
 
 DataObject iedModel_B1CTR_LPHD1_OutOv = {
@@ -181,15 +179,13 @@ DataAttribute iedModel_B1CTR_LPHD1_OutOv_stVal = {
     DataAttributeModelType,
     "stVal",
     (ModelNode*) &iedModel_B1CTR_LPHD1_OutOv,
-    NULL,
+    (ModelNode*) &iedModel_B1CTR_LPHD1_OutOv_q,
     NULL,
     0,
     -1,
     IEC61850_FC_ST,
     IEC61850_BOOLEAN,
-    0 + TRG_OPT_DATA_CHANGED,
-    NULL,
-    0
+    TRG_OPT_DATA_CHANGED
 };
 
 DataAttribute iedModel_B1CTR_LPHD1_OutOv_q = {
@@ -202,9 +198,7 @@ DataAttribute iedModel_B1CTR_LPHD1_OutOv_q = {
     -1,
     IEC61850_FC_ST,
     IEC61850_QUALITY,
-    0 + TRG_OPT_QUALITY_CHANGED,
-    NULL,
-    0
+    TRG_OPT_QUALITY_CHANGED
 };
 
 DataAttribute iedModel_B1CTR_LPHD1_OutOv_t = {
@@ -218,8 +212,6 @@ DataAttribute iedModel_B1CTR_LPHD1_OutOv_t = {
     IEC61850_FC_ST,
     IEC61850_TIMESTAMP,
     0,
-    NULL,
-    0
 };
 
 DataObject iedModel_B1CTR_LPHD1_Proxy = {
@@ -236,15 +228,13 @@ DataAttribute iedModel_B1CTR_LPHD1_Proxy_stVal = {
     DataAttributeModelType,
     "stVal",
     (ModelNode*) &iedModel_B1CTR_LPHD1_Proxy,
-    NULL,
+    (ModelNode*) &iedModel_B1CTR_LPHD1_Proxy_q,
     NULL,
     0,
     -1,
     IEC61850_FC_ST,
     IEC61850_BOOLEAN,
-    0 + TRG_OPT_DATA_CHANGED,
-    NULL,
-    0
+    TRG_OPT_DATA_CHANGED
 };
 
 DataAttribute iedModel_B1CTR_LPHD1_Proxy_q = {
@@ -257,9 +247,7 @@ DataAttribute iedModel_B1CTR_LPHD1_Proxy_q = {
     -1,
     IEC61850_FC_ST,
     IEC61850_QUALITY,
-    0 + TRG_OPT_QUALITY_CHANGED,
-    NULL,
-    0
+    TRG_OPT_QUALITY_CHANGED
 };
 
 DataAttribute iedModel_B1CTR_LPHD1_Proxy_t = {
@@ -273,8 +261,6 @@ DataAttribute iedModel_B1CTR_LPHD1_Proxy_t = {
     IEC61850_FC_ST,
     IEC61850_TIMESTAMP,
     0,
-    NULL,
-    0
 };
 
 DataObject iedModel_B1CTR_LPHD1_OpTmh = {
@@ -291,15 +277,15 @@ DataAttribute iedModel_B1CTR_LPHD1_OpTmh_stVal = {
     DataAttributeModelType,
     "stVal",
     (ModelNode*) &iedModel_B1CTR_LPHD1_OpTmh,
-    NULL,
+    (ModelNode*) &iedModel_B1CTR_LPHD1_OpTmh_q,
     NULL,
     0,
     -1,
     IEC61850_FC_ST,
     IEC61850_INT32,
-    0 + TRG_OPT_DATA_CHANGED + TRG_OPT_DATA_UPDATE,
+    TRG_OPT_DATA_CHANGED | TRG_OPT_DATA_UPDATE,
     NULL,
-    0
+    0,
 };
 
 DataAttribute iedModel_B1CTR_LPHD1_OpTmh_q = {
@@ -312,9 +298,7 @@ DataAttribute iedModel_B1CTR_LPHD1_OpTmh_q = {
     -1,
     IEC61850_FC_ST,
     IEC61850_QUALITY,
-    0 + TRG_OPT_QUALITY_CHANGED,
-    NULL,
-    0
+    TRG_OPT_QUALITY_CHANGED
 };
 
 DataAttribute iedModel_B1CTR_LPHD1_OpTmh_t = {
@@ -328,24 +312,23 @@ DataAttribute iedModel_B1CTR_LPHD1_OpTmh_t = {
     IEC61850_FC_ST,
     IEC61850_TIMESTAMP,
     0,
-    NULL,
-    0
 };
 
-/* --- Data Object: Sim (CDC: SPC - Simulation Mode) --- */
 DataObject iedModel_B1CTR_LPHD1_Sim = {
-    DataObjectModelType, "Sim",
-    (ModelNode*) &iedModel_B1CTR_LPHD1, 
-    NULL, 
-    (ModelNode*) &iedModel_B1CTR_LPHD1_Sim_stVal, 
+    DataObjectModelType,
+    "Sim",
+    (ModelNode*) &iedModel_B1CTR_LPHD1,
+    NULL,
+    (ModelNode*) &iedModel_B1CTR_LPHD1_Sim_stVal,
     0,
     -1
 };
 
 DataAttribute iedModel_B1CTR_LPHD1_Sim_stVal = {
-    DataAttributeModelType, "stVal",
+    DataAttributeModelType,
+    "stVal",
     (ModelNode*) &iedModel_B1CTR_LPHD1_Sim,
-    (ModelNode*) &iedModel_B1CTR_LPHD1_Sim_q, 
+    (ModelNode*) &iedModel_B1CTR_LPHD1_Sim_q,
     NULL,
     0,
     -1,
@@ -355,9 +338,10 @@ DataAttribute iedModel_B1CTR_LPHD1_Sim_stVal = {
 };
 
 DataAttribute iedModel_B1CTR_LPHD1_Sim_q = {
-    DataAttributeModelType, "q",
+    DataAttributeModelType,
+    "q",
     (ModelNode*) &iedModel_B1CTR_LPHD1_Sim,
-    (ModelNode*) &iedModel_B1CTR_LPHD1_Sim_t,  
+    (ModelNode*) &iedModel_B1CTR_LPHD1_Sim_t,
     NULL,
     0,
     -1,
@@ -367,31 +351,33 @@ DataAttribute iedModel_B1CTR_LPHD1_Sim_q = {
 };
 
 DataAttribute iedModel_B1CTR_LPHD1_Sim_t = {
-    DataAttributeModelType, "t",
+    DataAttributeModelType,
+    "t",
     (ModelNode*) &iedModel_B1CTR_LPHD1_Sim,
-    (ModelNode*) &iedModel_B1CTR_LPHD1_Sim_ctlModel,  
+    (ModelNode*) &iedModel_B1CTR_LPHD1_Sim_ctlModel,
     NULL,
     0,
     -1,
     IEC61850_FC_ST,
     IEC61850_TIMESTAMP,
-    0
+    0,
 };
 
 DataAttribute iedModel_B1CTR_LPHD1_Sim_ctlModel = {
-    DataAttributeModelType, "ctlModel",
+    DataAttributeModelType,
+    "ctlModel",
     (ModelNode*) &iedModel_B1CTR_LPHD1_Sim,
-    NULL, 
+    NULL,
     NULL,
     0,
     -1,
     IEC61850_FC_CF,
     IEC61850_ENUMERATED,
-    0
+    TRG_OPT_DATA_CHANGED
 };
 
 /* ==================================================================
- * IMPLEMENTAÇÃO LLN0
+ * LLN0
  * ==================================================================
  */
 
@@ -400,79 +386,70 @@ LogicalNode iedModel_B1CTR_LLN0 = {
     "LLN0",
     (ModelNode*) &iedModel_B1CTR,
     (ModelNode*) &iedModel_B1CTR_LGOS1,
-    (ModelNode*) &iedModel_B1CTR_LLN0_Mod,
+    (ModelNode*) &iedModel_B1CTR_LLN0_NamPlt,
 };
 
-DataObject iedModel_B1CTR_LLN0_Mod = {
+DataObject iedModel_B1CTR_LLN0_NamPlt = {
     DataObjectModelType,
-    "Mod",
+    "NamPlt",
     (ModelNode*) &iedModel_B1CTR_LLN0,
     (ModelNode*) &iedModel_B1CTR_LLN0_Beh,
-    (ModelNode*) &iedModel_B1CTR_LLN0_Mod_stVal,
+    (ModelNode*) &iedModel_B1CTR_LLN0_NamPlt_vendor,
     0,
     -1
 };
 
-DataAttribute iedModel_B1CTR_LLN0_Mod_stVal = {
+DataAttribute iedModel_B1CTR_LLN0_NamPlt_vendor = {
     DataAttributeModelType,
-    "stVal",
-    (ModelNode*) &iedModel_B1CTR_LLN0_Mod,
-    (ModelNode*) &iedModel_B1CTR_LLN0_Mod_q,
+    "vendor",
+    (ModelNode*) &iedModel_B1CTR_LLN0_NamPlt,
+    (ModelNode*) &iedModel_B1CTR_LLN0_NamPlt_swRev,
     NULL,
     0,
     -1,
-    IEC61850_FC_ST,
-    IEC61850_ENUMERATED,
-    0 + TRG_OPT_DATA_CHANGED,
-    NULL,
-    0
+    IEC61850_FC_DC,
+    IEC61850_VISIBLE_STRING_255,
+    0,
 };
 
-DataAttribute iedModel_B1CTR_LLN0_Mod_q = {
+DataAttribute iedModel_B1CTR_LLN0_NamPlt_swRev = {
     DataAttributeModelType,
-    "q",
-    (ModelNode*) &iedModel_B1CTR_LLN0_Mod,
-    (ModelNode*) &iedModel_B1CTR_LLN0_Mod_t,
+    "swRev",
+    (ModelNode*) &iedModel_B1CTR_LLN0_NamPlt,
+    (ModelNode*) &iedModel_B1CTR_LLN0_NamPlt_configRev,
     NULL,
     0,
     -1,
-    IEC61850_FC_ST,
-    IEC61850_QUALITY,
-    0 + TRG_OPT_QUALITY_CHANGED,
-    NULL,
-    0
+    IEC61850_FC_DC,
+    IEC61850_VISIBLE_STRING_255,
+    0,
 };
 
-DataAttribute iedModel_B1CTR_LLN0_Mod_t = {
+DataAttribute iedModel_B1CTR_LLN0_NamPlt_configRev = {
     DataAttributeModelType,
-    "t",
-    (ModelNode*) &iedModel_B1CTR_LLN0_Mod,
-    (ModelNode*) &iedModel_B1CTR_LLN0_Mod_ctlModel,
+    "configRev",
+    (ModelNode*) &iedModel_B1CTR_LLN0_NamPlt,
+    (ModelNode*) &iedModel_B1CTR_LLN0_NamPlt_lnNs,
     NULL,
     0,
     -1,
-    IEC61850_FC_ST,
-    IEC61850_TIMESTAMP,
+    IEC61850_FC_DC,
+    IEC61850_VISIBLE_STRING_255,
     0,
-    NULL,
-    0
 };
 
-DataAttribute iedModel_B1CTR_LLN0_Mod_ctlModel = {
+DataAttribute iedModel_B1CTR_LLN0_NamPlt_lnNs = {
     DataAttributeModelType,
-    "ctlModel",
-    (ModelNode*) &iedModel_B1CTR_LLN0_Mod,
+    "lnNs",
+    (ModelNode*) &iedModel_B1CTR_LLN0_NamPlt,
     NULL,
     NULL,
     0,
     -1,
-    IEC61850_FC_CF,
-    IEC61850_ENUMERATED,
+    IEC61850_FC_EX,
+    IEC61850_VISIBLE_STRING_255,
     0,
-    NULL,
-    0
 };
-
 
 DataObject iedModel_B1CTR_LLN0_Beh = {
     DataObjectModelType,
@@ -494,9 +471,7 @@ DataAttribute iedModel_B1CTR_LLN0_Beh_stVal = {
     -1,
     IEC61850_FC_ST,
     IEC61850_ENUMERATED,
-    0 + TRG_OPT_DATA_CHANGED,
-    NULL,
-    0
+    TRG_OPT_DATA_CHANGED
 };
 
 DataAttribute iedModel_B1CTR_LLN0_Beh_q = {
@@ -509,9 +484,7 @@ DataAttribute iedModel_B1CTR_LLN0_Beh_q = {
     -1,
     IEC61850_FC_ST,
     IEC61850_QUALITY,
-    0 + TRG_OPT_QUALITY_CHANGED,
-    NULL,
-    0
+    TRG_OPT_QUALITY_CHANGED
 };
 
 DataAttribute iedModel_B1CTR_LLN0_Beh_t = {
@@ -525,16 +498,13 @@ DataAttribute iedModel_B1CTR_LLN0_Beh_t = {
     IEC61850_FC_ST,
     IEC61850_TIMESTAMP,
     0,
-    NULL,
-    0
 };
-
 
 DataObject iedModel_B1CTR_LLN0_Health = {
     DataObjectModelType,
     "Health",
     (ModelNode*) &iedModel_B1CTR_LLN0,
-    (ModelNode*) &iedModel_B1CTR_LLN0_NamPlt,
+    (ModelNode*) &iedModel_B1CTR_LLN0_Mod,
     (ModelNode*) &iedModel_B1CTR_LLN0_Health_stVal,
     0,
     -1
@@ -550,9 +520,7 @@ DataAttribute iedModel_B1CTR_LLN0_Health_stVal = {
     -1,
     IEC61850_FC_ST,
     IEC61850_ENUMERATED,
-    0 + TRG_OPT_DATA_CHANGED,
-    NULL,
-    0
+    TRG_OPT_DATA_CHANGED
 };
 
 DataAttribute iedModel_B1CTR_LLN0_Health_q = {
@@ -565,9 +533,7 @@ DataAttribute iedModel_B1CTR_LLN0_Health_q = {
     -1,
     IEC61850_FC_ST,
     IEC61850_QUALITY,
-    0 + TRG_OPT_QUALITY_CHANGED,
-    NULL,
-    0
+    TRG_OPT_QUALITY_CHANGED
 };
 
 DataAttribute iedModel_B1CTR_LLN0_Health_t = {
@@ -581,96 +547,85 @@ DataAttribute iedModel_B1CTR_LLN0_Health_t = {
     IEC61850_FC_ST,
     IEC61850_TIMESTAMP,
     0,
-    NULL,
-    0
 };
 
-DataObject iedModel_B1CTR_LLN0_NamPlt = {
+DataObject iedModel_B1CTR_LLN0_Mod = {
     DataObjectModelType,
-    "NamPlt",
+    "Mod",
     (ModelNode*) &iedModel_B1CTR_LLN0,
     (ModelNode*) &iedModel_B1CTR_LLN0_Diag,
-    (ModelNode*) &iedModel_B1CTR_LLN0_NamPlt_vendor,
+    (ModelNode*) &iedModel_B1CTR_LLN0_Mod_stVal,
     0,
     -1
 };
 
-DataAttribute iedModel_B1CTR_LLN0_NamPlt_vendor = {
+DataAttribute iedModel_B1CTR_LLN0_Mod_stVal = {
     DataAttributeModelType,
-    "vendor",
-    (ModelNode*) &iedModel_B1CTR_LLN0_NamPlt,
-    (ModelNode*) &iedModel_B1CTR_LLN0_NamPlt_swRev,
+    "stVal",
+    (ModelNode*) &iedModel_B1CTR_LLN0_Mod,
+    (ModelNode*) &iedModel_B1CTR_LLN0_Mod_q,
     NULL,
     0,
     -1,
-    IEC61850_FC_DC,
-    IEC61850_VISIBLE_STRING_255,
-    0,
-    NULL,
-    0
+    IEC61850_FC_ST,
+    IEC61850_ENUMERATED,
+    TRG_OPT_DATA_CHANGED
 };
 
-DataAttribute iedModel_B1CTR_LLN0_NamPlt_swRev = {
+DataAttribute iedModel_B1CTR_LLN0_Mod_q = {
     DataAttributeModelType,
-    "swRev",
-    (ModelNode*) &iedModel_B1CTR_LLN0_NamPlt,
-    (ModelNode*) &iedModel_B1CTR_LLN0_NamPlt_configRev,
+    "q",
+    (ModelNode*) &iedModel_B1CTR_LLN0_Mod,
+    (ModelNode*) &iedModel_B1CTR_LLN0_Mod_t,
     NULL,
     0,
     -1,
-    IEC61850_FC_DC,
-    IEC61850_VISIBLE_STRING_255,
-    0,
-    NULL,
-    0
+    IEC61850_FC_ST,
+    IEC61850_QUALITY,
+    TRG_OPT_QUALITY_CHANGED
 };
 
-
-DataAttribute iedModel_B1CTR_LLN0_NamPlt_configRev = {
+DataAttribute iedModel_B1CTR_LLN0_Mod_t = {
     DataAttributeModelType,
-    "configRev",
-    (ModelNode*) &iedModel_B1CTR_LLN0_NamPlt,
-    (ModelNode*) &iedModel_B1CTR_LLN0_NamPlt_lnNs,
+    "t",
+    (ModelNode*) &iedModel_B1CTR_LLN0_Mod,
+    (ModelNode*) &iedModel_B1CTR_LLN0_Mod_ctlModel,
     NULL,
     0,
     -1,
-    IEC61850_FC_DC,
-    IEC61850_VISIBLE_STRING_255,
+    IEC61850_FC_ST,
+    IEC61850_TIMESTAMP,
     0,
-    NULL,
-    0
 };
 
-DataAttribute iedModel_B1CTR_LLN0_NamPlt_lnNs = {
+DataAttribute iedModel_B1CTR_LLN0_Mod_ctlModel = {
     DataAttributeModelType,
-    "lnNs",
-    (ModelNode*) &iedModel_B1CTR_LLN0_NamPlt,
+    "ctlModel",
+    (ModelNode*) &iedModel_B1CTR_LLN0_Mod,
     NULL,
     NULL,
     0,
     -1,
-    IEC61850_FC_EX,
-    IEC61850_VISIBLE_STRING_255,
-    0,
-    NULL,
-    0
+    IEC61850_FC_CF,
+    IEC61850_ENUMERATED,
+    TRG_OPT_DATA_CHANGED
 };
 
-/* --- Data Object: Diag (CDC: SPC - LED Reset) --- */
 DataObject iedModel_B1CTR_LLN0_Diag = {
-    DataObjectModelType, "Diag",
+    DataObjectModelType,
+    "Diag",
     (ModelNode*) &iedModel_B1CTR_LLN0,
-    (ModelNode*) &iedModel_B1CTR_LLN0_Diag, 
-    (ModelNode*) &iedModel_B1CTR_LLN0_Diag_stVal, 
+    (ModelNode*) &iedModel_B1CTR_LLN0_LEDRs,
+    (ModelNode*) &iedModel_B1CTR_LLN0_Diag_stVal,
     0,
     -1
 };
-
 
 DataAttribute iedModel_B1CTR_LLN0_Diag_stVal = {
-    DataAttributeModelType, "stVal",
+    DataAttributeModelType,
+    "stVal",
     (ModelNode*) &iedModel_B1CTR_LLN0_Diag,
-    (ModelNode*) &iedModel_B1CTR_LLN0_Diag_q,  
+    (ModelNode*) &iedModel_B1CTR_LLN0_Diag_q,
     NULL,
     0,
     -1,
@@ -680,9 +635,10 @@ DataAttribute iedModel_B1CTR_LLN0_Diag_stVal = {
 };
 
 DataAttribute iedModel_B1CTR_LLN0_Diag_q = {
-    DataAttributeModelType, "q",
+    DataAttributeModelType,
+    "q",
     (ModelNode*) &iedModel_B1CTR_LLN0_Diag,
-    (ModelNode*) &iedModel_B1CTR_LLN0_Diag_t,  
+    (ModelNode*) &iedModel_B1CTR_LLN0_Diag_t,
     NULL,
     0,
     -1,
@@ -692,31 +648,33 @@ DataAttribute iedModel_B1CTR_LLN0_Diag_q = {
 };
 
 DataAttribute iedModel_B1CTR_LLN0_Diag_t = {
-    DataAttributeModelType, "t",
+    DataAttributeModelType,
+    "t",
     (ModelNode*) &iedModel_B1CTR_LLN0_Diag,
-    NULL,  
+    NULL,
     NULL,
     0,
     -1,
     IEC61850_FC_ST,
     IEC61850_TIMESTAMP,
-    0
+    0,
 };
 
-/* --- Data Object: LEDRs (CDC: SPC - LED Reset) --- */
 DataObject iedModel_B1CTR_LLN0_LEDRs = {
-    DataObjectModelType, "LEDRs",
+    DataObjectModelType,
+    "LEDRs",
     (ModelNode*) &iedModel_B1CTR_LLN0,
-    NULL, 
-    (ModelNode*) &iedModel_B1CTR_LLN0_LEDRs_stVal, 
+    NULL,
+    (ModelNode*) &iedModel_B1CTR_LLN0_LEDRs_stVal,
     0,
     -1
 };
 
 DataAttribute iedModel_B1CTR_LLN0_LEDRs_stVal = {
-    DataAttributeModelType, "stVal",
+    DataAttributeModelType,
+    "stVal",
     (ModelNode*) &iedModel_B1CTR_LLN0_LEDRs,
-    (ModelNode*) &iedModel_B1CTR_LLN0_LEDRs_q,  
+    (ModelNode*) &iedModel_B1CTR_LLN0_LEDRs_q,
     NULL,
     0,
     -1,
@@ -726,9 +684,10 @@ DataAttribute iedModel_B1CTR_LLN0_LEDRs_stVal = {
 };
 
 DataAttribute iedModel_B1CTR_LLN0_LEDRs_q = {
-    DataAttributeModelType, "q",
+    DataAttributeModelType,
+    "q",
     (ModelNode*) &iedModel_B1CTR_LLN0_LEDRs,
-    (ModelNode*) &iedModel_B1CTR_LLN0_LEDRs_t,  
+    (ModelNode*) &iedModel_B1CTR_LLN0_LEDRs_t,
     NULL,
     0,
     -1,
@@ -738,30 +697,43 @@ DataAttribute iedModel_B1CTR_LLN0_LEDRs_q = {
 };
 
 DataAttribute iedModel_B1CTR_LLN0_LEDRs_t = {
-    DataAttributeModelType, "t",
+    DataAttributeModelType,
+    "t",
     (ModelNode*) &iedModel_B1CTR_LLN0_LEDRs,
-    NULL,  
+    (ModelNode*) &iedModel_B1CTR_LLN0_LEDRs_ctlModel,
     NULL,
     0,
     -1,
     IEC61850_FC_ST,
     IEC61850_TIMESTAMP,
-    0
+    0,
 };
 
+DataAttribute iedModel_B1CTR_LLN0_LEDRs_ctlModel = {
+    DataAttributeModelType,
+    "ctlModel",
+    (ModelNode*) &iedModel_B1CTR_LLN0_LEDRs,
+    NULL,
+    NULL,
+    0,
+    -1,
+    IEC61850_FC_CF,
+    IEC61850_ENUMERATED,
+    0,
+};
 
 /*
  * ==================================================================
- * IMPLEMENTAÇÃO LGOS1
+ * LGOS1
  * ==================================================================
  */
 
 LogicalNode iedModel_B1CTR_LGOS1 = {
     LogicalNodeModelType,
     "LGOS1",
-    (ModelNode*) &iedModel_B1CTR,  
-    (ModelNode*) &iedModel_B1CTR_LTIM1, 
-    (ModelNode*) &iedModel_B1CTR_LGOS1_Beh 
+    (ModelNode*) &iedModel_B1CTR,
+    (ModelNode*) &iedModel_B1CTR_LTIM1,
+    (ModelNode*) &iedModel_B1CTR_LGOS1_Beh,
 };
 
 DataObject iedModel_B1CTR_LGOS1_Beh = {
@@ -784,9 +756,7 @@ DataAttribute iedModel_B1CTR_LGOS1_Beh_stVal = {
     -1,
     IEC61850_FC_ST,
     IEC61850_ENUMERATED,
-    0 + TRG_OPT_DATA_CHANGED,
-    NULL,
-    0
+    TRG_OPT_DATA_CHANGED
 };
 
 DataAttribute iedModel_B1CTR_LGOS1_Beh_q = {
@@ -799,9 +769,7 @@ DataAttribute iedModel_B1CTR_LGOS1_Beh_q = {
     -1,
     IEC61850_FC_ST,
     IEC61850_QUALITY,
-    0 + TRG_OPT_QUALITY_CHANGED,
-    NULL,
-    0
+    TRG_OPT_QUALITY_CHANGED
 };
 
 DataAttribute iedModel_B1CTR_LGOS1_Beh_t = {
@@ -815,8 +783,6 @@ DataAttribute iedModel_B1CTR_LGOS1_Beh_t = {
     IEC61850_FC_ST,
     IEC61850_TIMESTAMP,
     0,
-    NULL,
-    0
 };
 
 DataObject iedModel_B1CTR_LGOS1_Health = {
@@ -839,9 +805,7 @@ DataAttribute iedModel_B1CTR_LGOS1_Health_stVal = {
     -1,
     IEC61850_FC_ST,
     IEC61850_ENUMERATED,
-    0 + TRG_OPT_DATA_CHANGED,
-    NULL,
-    0
+    TRG_OPT_DATA_CHANGED
 };
 
 DataAttribute iedModel_B1CTR_LGOS1_Health_q = {
@@ -854,9 +818,7 @@ DataAttribute iedModel_B1CTR_LGOS1_Health_q = {
     -1,
     IEC61850_FC_ST,
     IEC61850_QUALITY,
-    0 + TRG_OPT_QUALITY_CHANGED,
-    NULL,
-    0
+    TRG_OPT_QUALITY_CHANGED
 };
 
 DataAttribute iedModel_B1CTR_LGOS1_Health_t = {
@@ -870,8 +832,6 @@ DataAttribute iedModel_B1CTR_LGOS1_Health_t = {
     IEC61850_FC_ST,
     IEC61850_TIMESTAMP,
     0,
-    NULL,
-    0
 };
 
 DataObject iedModel_B1CTR_LGOS1_GoCBRef = {
@@ -889,10 +849,11 @@ DataAttribute iedModel_B1CTR_LGOS1_GoCBRef_setSrcRef = {
     "setSrcRef",
     (ModelNode*) &iedModel_B1CTR_LGOS1_GoCBRef,
     NULL,
+    NULL,
     0,
     -1,
     IEC61850_FC_SP,
-    IEC61850_VISIBLE_STRING_255, 
+    IEC61850_VISIBLE_STRING_255,
     TRG_OPT_DATA_CHANGED
 };
 
@@ -916,9 +877,7 @@ DataAttribute iedModel_B1CTR_LGOS1_St_stVal = {
     -1,
     IEC61850_FC_ST,
     IEC61850_INT32,
-    TRG_OPT_DATA_CHANGED,
-    NULL,
-    0
+    TRG_OPT_DATA_CHANGED
 };
 
 DataAttribute iedModel_B1CTR_LGOS1_St_q = {
@@ -931,9 +890,7 @@ DataAttribute iedModel_B1CTR_LGOS1_St_q = {
     -1,
     IEC61850_FC_ST,
     IEC61850_QUALITY,
-    TRG_OPT_QUALITY_CHANGED,
-    NULL,
-    0
+    TRG_OPT_QUALITY_CHANGED
 };
 
 DataAttribute iedModel_B1CTR_LGOS1_St_t = {
@@ -947,8 +904,6 @@ DataAttribute iedModel_B1CTR_LGOS1_St_t = {
     IEC61850_FC_ST,
     IEC61850_TIMESTAMP,
     0,
-    NULL,
-    0
 };
 
 DataObject iedModel_B1CTR_LGOS1_NdsCom = {
@@ -971,9 +926,7 @@ DataAttribute iedModel_B1CTR_LGOS1_NdsCom_stVal = {
     -1,
     IEC61850_FC_ST,
     IEC61850_BOOLEAN,
-    TRG_OPT_DATA_CHANGED,
-    NULL,
-    0
+    TRG_OPT_DATA_CHANGED
 };
 
 DataAttribute iedModel_B1CTR_LGOS1_NdsCom_q = {
@@ -986,9 +939,7 @@ DataAttribute iedModel_B1CTR_LGOS1_NdsCom_q = {
     -1,
     IEC61850_FC_ST,
     IEC61850_QUALITY,
-    TRG_OPT_QUALITY_CHANGED,
-    NULL,
-    0
+    TRG_OPT_QUALITY_CHANGED
 };
 
 DataAttribute iedModel_B1CTR_LGOS1_NdsCom_t = {
@@ -1002,8 +953,6 @@ DataAttribute iedModel_B1CTR_LGOS1_NdsCom_t = {
     IEC61850_FC_ST,
     IEC61850_TIMESTAMP,
     0,
-    NULL,
-    0
 };
 
 DataObject iedModel_B1CTR_LGOS1_SimSt = {
@@ -1026,9 +975,7 @@ DataAttribute iedModel_B1CTR_LGOS1_SimSt_stVal = {
     -1,
     IEC61850_FC_ST,
     IEC61850_INT32,
-    TRG_OPT_DATA_CHANGED,
-    NULL,
-    0
+    TRG_OPT_DATA_CHANGED
 };
 
 DataAttribute iedModel_B1CTR_LGOS1_SimSt_q = {
@@ -1041,9 +988,7 @@ DataAttribute iedModel_B1CTR_LGOS1_SimSt_q = {
     -1,
     IEC61850_FC_ST,
     IEC61850_QUALITY,
-    TRG_OPT_QUALITY_CHANGED,
-    NULL,
-    0
+    TRG_OPT_QUALITY_CHANGED
 };
 
 DataAttribute iedModel_B1CTR_LGOS1_SimSt_t = {
@@ -1057,8 +1002,6 @@ DataAttribute iedModel_B1CTR_LGOS1_SimSt_t = {
     IEC61850_FC_ST,
     IEC61850_TIMESTAMP,
     0,
-    NULL,
-    0
 };
 
 DataObject iedModel_B1CTR_LGOS1_ConfRevNum = {
@@ -1081,9 +1024,7 @@ DataAttribute iedModel_B1CTR_LGOS1_ConfRevNum_stVal = {
     -1,
     IEC61850_FC_ST,
     IEC61850_INT32,
-    TRG_OPT_DATA_CHANGED,
-    NULL,
-    0
+    TRG_OPT_DATA_CHANGED
 };
 
 DataAttribute iedModel_B1CTR_LGOS1_ConfRevNum_q = {
@@ -1096,9 +1037,7 @@ DataAttribute iedModel_B1CTR_LGOS1_ConfRevNum_q = {
     -1,
     IEC61850_FC_ST,
     IEC61850_QUALITY,
-    TRG_OPT_QUALITY_CHANGED,
-    NULL,
-    0
+    TRG_OPT_QUALITY_CHANGED
 };
 
 DataAttribute iedModel_B1CTR_LGOS1_ConfRevNum_t = {
@@ -1112,8 +1051,6 @@ DataAttribute iedModel_B1CTR_LGOS1_ConfRevNum_t = {
     IEC61850_FC_ST,
     IEC61850_TIMESTAMP,
     0,
-    NULL,
-    0
 };
 
 DataObject iedModel_B1CTR_LGOS1_RxConfRevNum = {
@@ -1136,9 +1073,7 @@ DataAttribute iedModel_B1CTR_LGOS1_RxConfRevNum_stVal = {
     -1,
     IEC61850_FC_ST,
     IEC61850_INT32,
-    TRG_OPT_DATA_CHANGED,
-    NULL,
-    0
+    TRG_OPT_DATA_CHANGED
 };
 
 DataAttribute iedModel_B1CTR_LGOS1_RxConfRevNum_q = {
@@ -1151,9 +1086,7 @@ DataAttribute iedModel_B1CTR_LGOS1_RxConfRevNum_q = {
     -1,
     IEC61850_FC_ST,
     IEC61850_QUALITY,
-    TRG_OPT_QUALITY_CHANGED,
-    NULL,
-    0
+    TRG_OPT_QUALITY_CHANGED
 };
 
 DataAttribute iedModel_B1CTR_LGOS1_RxConfRevNum_t = {
@@ -1167,15 +1100,13 @@ DataAttribute iedModel_B1CTR_LGOS1_RxConfRevNum_t = {
     IEC61850_FC_ST,
     IEC61850_TIMESTAMP,
     0,
-    NULL,
-    0
 };
 
 DataObject iedModel_B1CTR_LGOS1_LastStNum = {
     DataObjectModelType,
     "LastStNum",
     (ModelNode*) &iedModel_B1CTR_LGOS1,
-    NULL, 
+    NULL,
     (ModelNode*) &iedModel_B1CTR_LGOS1_LastStNum_stVal,
     0,
     -1
@@ -1191,9 +1122,7 @@ DataAttribute iedModel_B1CTR_LGOS1_LastStNum_stVal = {
     -1,
     IEC61850_FC_ST,
     IEC61850_INT32,
-    TRG_OPT_DATA_CHANGED,
-    NULL,
-    0
+    TRG_OPT_DATA_CHANGED
 };
 
 DataAttribute iedModel_B1CTR_LGOS1_LastStNum_q = {
@@ -1206,9 +1135,7 @@ DataAttribute iedModel_B1CTR_LGOS1_LastStNum_q = {
     -1,
     IEC61850_FC_ST,
     IEC61850_QUALITY,
-    TRG_OPT_QUALITY_CHANGED,
-    NULL,
-    0
+    TRG_OPT_QUALITY_CHANGED
 };
 
 DataAttribute iedModel_B1CTR_LGOS1_LastStNum_t = {
@@ -1219,25 +1146,23 @@ DataAttribute iedModel_B1CTR_LGOS1_LastStNum_t = {
     NULL,
     0,
     -1,
-    IEC61850_FC_ST, //CONFIRMAR
+    IEC61850_FC_ST,
     IEC61850_TIMESTAMP,
     0,
-    NULL,
-    0
 };
 
 /*
  * ==================================================================
- * IMPLEMENTAÇÃO LTIM1 (Time)
+ * LTIM1 (Time)
  * ==================================================================
  */
 
 LogicalNode iedModel_B1CTR_LTIM1 = {
     LogicalNodeModelType,
     "LTIM1",
-    (ModelNode*) &iedModel_B1CTR, 
+    (ModelNode*) &iedModel_B1CTR,
     (ModelNode*) &iedModel_B1CTR_LTMS1,
-    (ModelNode*) &iedModel_B1CTR_LTIM1_Beh 
+    (ModelNode*) &iedModel_B1CTR_LTIM1_Beh,
 };
 
 DataObject iedModel_B1CTR_LTIM1_Beh = {
@@ -1260,9 +1185,7 @@ DataAttribute iedModel_B1CTR_LTIM1_Beh_stVal = {
     -1,
     IEC61850_FC_ST,
     IEC61850_ENUMERATED,
-    0 + TRG_OPT_DATA_CHANGED,
-    NULL,
-    0
+    TRG_OPT_DATA_CHANGED
 };
 
 DataAttribute iedModel_B1CTR_LTIM1_Beh_q = {
@@ -1275,9 +1198,7 @@ DataAttribute iedModel_B1CTR_LTIM1_Beh_q = {
     -1,
     IEC61850_FC_ST,
     IEC61850_QUALITY,
-    0 + TRG_OPT_QUALITY_CHANGED,
-    NULL,
-    0
+    TRG_OPT_QUALITY_CHANGED
 };
 
 DataAttribute iedModel_B1CTR_LTIM1_Beh_t = {
@@ -1291,8 +1212,6 @@ DataAttribute iedModel_B1CTR_LTIM1_Beh_t = {
     IEC61850_FC_ST,
     IEC61850_TIMESTAMP,
     0,
-    NULL,
-    0
 };
 
 DataObject iedModel_B1CTR_LTIM1_Health = {
@@ -1315,9 +1234,7 @@ DataAttribute iedModel_B1CTR_LTIM1_Health_stVal = {
     -1,
     IEC61850_FC_ST,
     IEC61850_ENUMERATED,
-    0 + TRG_OPT_DATA_CHANGED,
-    NULL,
-    0
+    TRG_OPT_DATA_CHANGED
 };
 
 DataAttribute iedModel_B1CTR_LTIM1_Health_q = {
@@ -1330,9 +1247,7 @@ DataAttribute iedModel_B1CTR_LTIM1_Health_q = {
     -1,
     IEC61850_FC_ST,
     IEC61850_QUALITY,
-    0 + TRG_OPT_QUALITY_CHANGED,
-    NULL,
-    0
+    TRG_OPT_QUALITY_CHANGED
 };
 
 DataAttribute iedModel_B1CTR_LTIM1_Health_t = {
@@ -1346,15 +1261,13 @@ DataAttribute iedModel_B1CTR_LTIM1_Health_t = {
     IEC61850_FC_ST,
     IEC61850_TIMESTAMP,
     0,
-    NULL,
-    0
 };
 
 DataObject iedModel_B1CTR_LTIM1_TmDT = {
     DataObjectModelType,
     "TmDT",
     (ModelNode*) &iedModel_B1CTR_LTIM1,
-    NULL,  
+    NULL,
     (ModelNode*) &iedModel_B1CTR_LTIM1_TmDT_stVal,
     0,
     -1
@@ -1369,10 +1282,8 @@ DataAttribute iedModel_B1CTR_LTIM1_TmDT_stVal = {
     0,
     -1,
     IEC61850_FC_ST,
-    IEC61850_BOOLEAN, 
-    0 + TRG_OPT_DATA_CHANGED,
-    NULL,
-    0
+    IEC61850_BOOLEAN,
+    TRG_OPT_DATA_CHANGED
 };
 
 DataAttribute iedModel_B1CTR_LTIM1_TmDT_q = {
@@ -1385,9 +1296,7 @@ DataAttribute iedModel_B1CTR_LTIM1_TmDT_q = {
     -1,
     IEC61850_FC_ST,
     IEC61850_QUALITY,
-    0 + TRG_OPT_QUALITY_CHANGED,
-    NULL,
-    0
+    TRG_OPT_QUALITY_CHANGED
 };
 
 DataAttribute iedModel_B1CTR_LTIM1_TmDT_t = {
@@ -1401,22 +1310,20 @@ DataAttribute iedModel_B1CTR_LTIM1_TmDT_t = {
     IEC61850_FC_ST,
     IEC61850_TIMESTAMP,
     0,
-    NULL,
-    0
 };
 
 /*
  * ==================================================================
- * IMPLEMENTAÇÃO LTMS1 (Time Supervision)
+ * LTMS1 (Time Supervision)
  * ==================================================================
 */
 
 LogicalNode iedModel_B1CTR_LTMS1 = {
     LogicalNodeModelType,
     "LTMS1",
-    (ModelNode*) &iedModel_B1CTR, 
+    (ModelNode*) &iedModel_B1CTR,
     (ModelNode*) &iedModel_B1CTR_LTRK1,
-    (ModelNode*) &iedModel_B1CTR_LTMS1_TmSrc, 
+    (ModelNode*) &iedModel_B1CTR_LTMS1_TmSrc,
 };
 
 DataObject iedModel_B1CTR_LTMS1_TmSrc = {
@@ -1439,9 +1346,7 @@ DataAttribute iedModel_B1CTR_LTMS1_TmSrc_stVal = {
     -1,
     IEC61850_FC_ST,
     IEC61850_VISIBLE_STRING_255,
-    0 + TRG_OPT_DATA_CHANGED,
-    NULL,
-    0
+    TRG_OPT_DATA_CHANGED
 };
 
 DataAttribute iedModel_B1CTR_LTMS1_TmSrc_q = {
@@ -1454,9 +1359,7 @@ DataAttribute iedModel_B1CTR_LTMS1_TmSrc_q = {
     -1,
     IEC61850_FC_ST,
     IEC61850_QUALITY,
-    0 + TRG_OPT_QUALITY_CHANGED,
-    NULL,
-    0
+    TRG_OPT_QUALITY_CHANGED
 };
 
 DataAttribute iedModel_B1CTR_LTMS1_TmSrc_t = {
@@ -1470,8 +1373,6 @@ DataAttribute iedModel_B1CTR_LTMS1_TmSrc_t = {
     IEC61850_FC_ST,
     IEC61850_TIMESTAMP,
     0,
-    NULL,
-    0
 };
 
 DataObject iedModel_B1CTR_LTMS1_TmSrcTyp = {
@@ -1494,9 +1395,7 @@ DataAttribute iedModel_B1CTR_LTMS1_TmSrcTyp_stVal = {
     -1,
     IEC61850_FC_ST,
     IEC61850_INT32,
-    0 + TRG_OPT_DATA_CHANGED,
-    NULL,
-    0
+    TRG_OPT_DATA_CHANGED
 };
 
 DataAttribute iedModel_B1CTR_LTMS1_TmSrcTyp_q = {
@@ -1509,9 +1408,7 @@ DataAttribute iedModel_B1CTR_LTMS1_TmSrcTyp_q = {
     -1,
     IEC61850_FC_ST,
     IEC61850_QUALITY,
-    0 + TRG_OPT_QUALITY_CHANGED,
-    NULL,
-    0
+    TRG_OPT_QUALITY_CHANGED
 };
 
 DataAttribute iedModel_B1CTR_LTMS1_TmSrcTyp_t = {
@@ -1525,15 +1422,13 @@ DataAttribute iedModel_B1CTR_LTMS1_TmSrcTyp_t = {
     IEC61850_FC_ST,
     IEC61850_TIMESTAMP,
     0,
-    NULL,
-    0
 };
 
 DataObject iedModel_B1CTR_LTMS1_Beh = {
     DataObjectModelType,
     "Beh",
     (ModelNode*) &iedModel_B1CTR_LTMS1,
-    NULL,  
+    NULL,
     (ModelNode*) &iedModel_B1CTR_LTMS1_Beh_stVal,
     0,
     -1
@@ -1549,9 +1444,7 @@ DataAttribute iedModel_B1CTR_LTMS1_Beh_stVal = {
     -1,
     IEC61850_FC_ST,
     IEC61850_ENUMERATED,
-    0 + TRG_OPT_DATA_CHANGED,
-    NULL,
-    0
+    TRG_OPT_DATA_CHANGED
 };
 
 DataAttribute iedModel_B1CTR_LTMS1_Beh_q = {
@@ -1564,9 +1457,7 @@ DataAttribute iedModel_B1CTR_LTMS1_Beh_q = {
     -1,
     IEC61850_FC_ST,
     IEC61850_QUALITY,
-    0 + TRG_OPT_QUALITY_CHANGED,
-    NULL,
-    0
+    TRG_OPT_QUALITY_CHANGED
 };
 
 DataAttribute iedModel_B1CTR_LTMS1_Beh_t = {
@@ -1580,12 +1471,10 @@ DataAttribute iedModel_B1CTR_LTMS1_Beh_t = {
     IEC61850_FC_ST,
     IEC61850_TIMESTAMP,
     0,
-    NULL,
-    0
 };
 
 /* ==================================================================
- * IMPLEMENTAÇÃO LTRK1 
+ * LTRK1
  * ==================================================================
  */
 
@@ -1598,7 +1487,8 @@ LogicalNode iedModel_B1CTR_LTRK1 = {
 };
 
 DataObject iedModel_B1CTR_LTRK1_Beh = {
-    DataObjectModelType, "Beh",
+    DataObjectModelType,
+    "Beh",
     (ModelNode*) &iedModel_B1CTR_LTRK1,
     (ModelNode*) &iedModel_B1CTR_LTRK1_Health,
     (ModelNode*) &iedModel_B1CTR_LTRK1_Beh_stVal,
@@ -1607,7 +1497,8 @@ DataObject iedModel_B1CTR_LTRK1_Beh = {
 };
 
 DataAttribute iedModel_B1CTR_LTRK1_Beh_stVal = {
-    DataAttributeModelType, "stVal",
+    DataAttributeModelType,
+    "stVal",
     (ModelNode*) &iedModel_B1CTR_LTRK1_Beh,
     (ModelNode*) &iedModel_B1CTR_LTRK1_Beh_q,
     NULL,
@@ -1619,7 +1510,8 @@ DataAttribute iedModel_B1CTR_LTRK1_Beh_stVal = {
 };
 
 DataAttribute iedModel_B1CTR_LTRK1_Beh_q = {
-    DataAttributeModelType, "q",
+    DataAttributeModelType,
+    "q",
     (ModelNode*) &iedModel_B1CTR_LTRK1_Beh,
     (ModelNode*) &iedModel_B1CTR_LTRK1_Beh_t,
     NULL,
@@ -1631,7 +1523,8 @@ DataAttribute iedModel_B1CTR_LTRK1_Beh_q = {
 };
 
 DataAttribute iedModel_B1CTR_LTRK1_Beh_t = {
-    DataAttributeModelType, "t",
+    DataAttributeModelType,
+    "t",
     (ModelNode*) &iedModel_B1CTR_LTRK1_Beh,
     NULL,
     NULL,
@@ -1639,11 +1532,12 @@ DataAttribute iedModel_B1CTR_LTRK1_Beh_t = {
     -1,
     IEC61850_FC_ST,
     IEC61850_TIMESTAMP,
-    0
+    0,
 };
 
 DataObject iedModel_B1CTR_LTRK1_Health = {
-    DataObjectModelType, "Health",
+    DataObjectModelType,
+    "Health",
     (ModelNode*) &iedModel_B1CTR_LTRK1,
     (ModelNode*) &iedModel_B1CTR_LTRK1_GenTrk,
     (ModelNode*) &iedModel_B1CTR_LTRK1_Health_stVal,
@@ -1652,7 +1546,8 @@ DataObject iedModel_B1CTR_LTRK1_Health = {
 };
 
 DataAttribute iedModel_B1CTR_LTRK1_Health_stVal = {
-    DataAttributeModelType, "stVal",
+    DataAttributeModelType,
+    "stVal",
     (ModelNode*) &iedModel_B1CTR_LTRK1_Health,
     (ModelNode*) &iedModel_B1CTR_LTRK1_Health_q,
     NULL,
@@ -1664,7 +1559,8 @@ DataAttribute iedModel_B1CTR_LTRK1_Health_stVal = {
 };
 
 DataAttribute iedModel_B1CTR_LTRK1_Health_q = {
-    DataAttributeModelType, "q",
+    DataAttributeModelType,
+    "q",
     (ModelNode*) &iedModel_B1CTR_LTRK1_Health,
     (ModelNode*) &iedModel_B1CTR_LTRK1_Health_t,
     NULL,
@@ -1676,7 +1572,8 @@ DataAttribute iedModel_B1CTR_LTRK1_Health_q = {
 };
 
 DataAttribute iedModel_B1CTR_LTRK1_Health_t = {
-    DataAttributeModelType, "t",
+    DataAttributeModelType,
+    "t",
     (ModelNode*) &iedModel_B1CTR_LTRK1_Health,
     NULL,
     NULL,
@@ -1684,21 +1581,22 @@ DataAttribute iedModel_B1CTR_LTRK1_Health_t = {
     -1,
     IEC61850_FC_ST,
     IEC61850_TIMESTAMP,
-    0
+    0,
 };
 
-/* --- Data Object: GenTrk (CDC: CST - Common Service Tracking) --- */
 DataObject iedModel_B1CTR_LTRK1_GenTrk = {
-    DataObjectModelType, "GenTrk",
+    DataObjectModelType,
+    "GenTrk",
     (ModelNode*) &iedModel_B1CTR_LTRK1,
-    (ModelNode*) &iedModel_B1CTR_LTRK1_GocbTrk,
+    (ModelNode*) &iedModel_B1CTR_LTRK1_UrcbTrk,
     (ModelNode*) &iedModel_B1CTR_LTRK1_GenTrk_objRef,
     0,
     -1
 };
 
 DataAttribute iedModel_B1CTR_LTRK1_GenTrk_objRef = {
-    DataAttributeModelType, "objRef",
+    DataAttributeModelType,
+    "objRef",
     (ModelNode*) &iedModel_B1CTR_LTRK1_GenTrk,
     (ModelNode*) &iedModel_B1CTR_LTRK1_GenTrk_serviceType,
     NULL,
@@ -1706,11 +1604,12 @@ DataAttribute iedModel_B1CTR_LTRK1_GenTrk_objRef = {
     -1,
     IEC61850_FC_SR,
     IEC61850_VISIBLE_STRING_255,
-    0 + TRG_OPT_DATA_UPDATE
+    TRG_OPT_DATA_UPDATE
 };
 
 DataAttribute iedModel_B1CTR_LTRK1_GenTrk_serviceType = {
-    DataAttributeModelType, "serviceType",
+    DataAttributeModelType,
+    "serviceType",
     (ModelNode*) &iedModel_B1CTR_LTRK1_GenTrk,
     (ModelNode*) &iedModel_B1CTR_LTRK1_GenTrk_errorCode,
     NULL,
@@ -1718,11 +1617,12 @@ DataAttribute iedModel_B1CTR_LTRK1_GenTrk_serviceType = {
     -1,
     IEC61850_FC_SR,
     IEC61850_ENUMERATED,
-    0
+    0,
 };
 
 DataAttribute iedModel_B1CTR_LTRK1_GenTrk_errorCode = {
-    DataAttributeModelType, "errorCode",
+    DataAttributeModelType,
+    "errorCode",
     (ModelNode*) &iedModel_B1CTR_LTRK1_GenTrk,
     (ModelNode*) &iedModel_B1CTR_LTRK1_GenTrk_t,
     NULL,
@@ -1730,11 +1630,12 @@ DataAttribute iedModel_B1CTR_LTRK1_GenTrk_errorCode = {
     -1,
     IEC61850_FC_SR,
     IEC61850_ENUMERATED,
-    0
+    0,
 };
 
 DataAttribute iedModel_B1CTR_LTRK1_GenTrk_t = {
-    DataAttributeModelType, "t",
+    DataAttributeModelType,
+    "t",
     (ModelNode*) &iedModel_B1CTR_LTRK1_GenTrk,
     NULL,
     NULL,
@@ -1742,21 +1643,380 @@ DataAttribute iedModel_B1CTR_LTRK1_GenTrk_t = {
     -1,
     IEC61850_FC_SR,
     IEC61850_TIMESTAMP,
-    0
+    0,
 };
 
-/* --- Data Object: CDC: GTS - GOOSE Tracking --- */
-DataObject iedModel_B1CTR_LTRK1_GocbTrk = {
-    DataObjectModelType, "GocbTrk",
+DataObject iedModel_B1CTR_LTRK1_UrcbTrk = {
+    DataObjectModelType,
+    "UrcbTrk",
     (ModelNode*) &iedModel_B1CTR_LTRK1,
-    NULL, 
+    (ModelNode*) &iedModel_B1CTR_LTRK1_BrcbTrk,
+    (ModelNode*) &iedModel_B1CTR_LTRK1_UrcbTrk_objRef,
+    0,
+    -1
+};
+
+DataAttribute iedModel_B1CTR_LTRK1_UrcbTrk_objRef = {
+    DataAttributeModelType,
+    "objRef",
+    (ModelNode*) &iedModel_B1CTR_LTRK1_UrcbTrk,
+    (ModelNode*) &iedModel_B1CTR_LTRK1_UrcbTrk_serviceType,
+    NULL,
+    0,
+    -1,
+    IEC61850_FC_SR,
+    IEC61850_VISIBLE_STRING_255,
+    TRG_OPT_DATA_UPDATE
+};
+
+DataAttribute iedModel_B1CTR_LTRK1_UrcbTrk_serviceType = {
+    DataAttributeModelType,
+    "serviceType",
+    (ModelNode*) &iedModel_B1CTR_LTRK1_UrcbTrk,
+    (ModelNode*) &iedModel_B1CTR_LTRK1_UrcbTrk_errorCode,
+    NULL,
+    0,
+    -1,
+    IEC61850_FC_SR,
+    IEC61850_ENUMERATED,
+    0,
+};
+
+DataAttribute iedModel_B1CTR_LTRK1_UrcbTrk_errorCode = {
+    DataAttributeModelType,
+    "errorCode",
+    (ModelNode*) &iedModel_B1CTR_LTRK1_UrcbTrk,
+    (ModelNode*) &iedModel_B1CTR_LTRK1_UrcbTrk_t,
+    NULL,
+    0,
+    -1,
+    IEC61850_FC_SR,
+    IEC61850_ENUMERATED,
+    0,
+};
+
+DataAttribute iedModel_B1CTR_LTRK1_UrcbTrk_t = {
+    DataAttributeModelType,
+    "t",
+    (ModelNode*) &iedModel_B1CTR_LTRK1_UrcbTrk,
+    (ModelNode*) &iedModel_B1CTR_LTRK1_UrcbTrk_rptID,
+    NULL,
+    0,
+    -1,
+    IEC61850_FC_SR,
+    IEC61850_TIMESTAMP,
+    0,
+};
+
+DataAttribute iedModel_B1CTR_LTRK1_UrcbTrk_rptID = {
+    DataAttributeModelType,
+    "rptID",
+    (ModelNode*) &iedModel_B1CTR_LTRK1_UrcbTrk,
+    (ModelNode*) &iedModel_B1CTR_LTRK1_UrcbTrk_rptEna,
+    NULL,
+    0,
+    -1,
+    IEC61850_FC_SR,
+    IEC61850_VISIBLE_STRING_129,
+    0,
+};
+
+DataAttribute iedModel_B1CTR_LTRK1_UrcbTrk_rptEna = {
+    DataAttributeModelType,
+    "rptEna",
+    (ModelNode*) &iedModel_B1CTR_LTRK1_UrcbTrk,
+    (ModelNode*) &iedModel_B1CTR_LTRK1_UrcbTrk_resv,
+    NULL,
+    0,
+    -1,
+    IEC61850_FC_SR,
+    IEC61850_BOOLEAN,
+    0,
+};
+
+DataAttribute iedModel_B1CTR_LTRK1_UrcbTrk_resv = {
+    DataAttributeModelType,
+    "resv",
+    (ModelNode*) &iedModel_B1CTR_LTRK1_UrcbTrk,
+    (ModelNode*) &iedModel_B1CTR_LTRK1_UrcbTrk_datSet,
+    NULL,
+    0,
+    -1,
+    IEC61850_FC_SR,
+    IEC61850_BOOLEAN,
+    0,
+};
+
+DataAttribute iedModel_B1CTR_LTRK1_UrcbTrk_datSet = {
+    DataAttributeModelType,
+    "datSet",
+    (ModelNode*) &iedModel_B1CTR_LTRK1_UrcbTrk,
+    (ModelNode*) &iedModel_B1CTR_LTRK1_UrcbTrk_confRev,
+    NULL,
+    0,
+    -1,
+    IEC61850_FC_SR,
+    IEC61850_VISIBLE_STRING_255,
+    0,
+};
+
+DataAttribute iedModel_B1CTR_LTRK1_UrcbTrk_confRev = {
+    DataAttributeModelType,
+    "confRev",
+    (ModelNode*) &iedModel_B1CTR_LTRK1_UrcbTrk,
+    (ModelNode*) &iedModel_B1CTR_LTRK1_UrcbTrk_bufTm,
+    NULL,
+    0,
+    -1,
+    IEC61850_FC_SR,
+    IEC61850_INT32U,
+    0,
+};
+
+DataAttribute iedModel_B1CTR_LTRK1_UrcbTrk_bufTm = {
+    DataAttributeModelType,
+    "bufTm",
+    (ModelNode*) &iedModel_B1CTR_LTRK1_UrcbTrk,
+    (ModelNode*) &iedModel_B1CTR_LTRK1_UrcbTrk_sqNum,
+    NULL,
+    0,
+    -1,
+    IEC61850_FC_SR,
+    IEC61850_INT32U,
+    0,
+};
+
+DataAttribute iedModel_B1CTR_LTRK1_UrcbTrk_sqNum = {
+    DataAttributeModelType,
+    "sqNum",
+    (ModelNode*) &iedModel_B1CTR_LTRK1_UrcbTrk,
+    (ModelNode*) &iedModel_B1CTR_LTRK1_UrcbTrk_intgPd,
+    NULL,
+    0,
+    -1,
+    IEC61850_FC_SR,
+    IEC61850_INT8U,
+    0,
+};
+
+DataAttribute iedModel_B1CTR_LTRK1_UrcbTrk_intgPd = {
+    DataAttributeModelType,
+    "intgPd",
+    (ModelNode*) &iedModel_B1CTR_LTRK1_UrcbTrk,
+    (ModelNode*) &iedModel_B1CTR_LTRK1_UrcbTrk_gi,
+    NULL,
+    0,
+    -1,
+    IEC61850_FC_SR,
+    IEC61850_INT32U,
+    0,
+};
+
+DataAttribute iedModel_B1CTR_LTRK1_UrcbTrk_gi = {
+    DataAttributeModelType,
+    "gi",
+    (ModelNode*) &iedModel_B1CTR_LTRK1_UrcbTrk,
+    NULL,
+    NULL,
+    0,
+    -1,
+    IEC61850_FC_SR,
+    IEC61850_BOOLEAN,
+    0,
+};
+
+DataObject iedModel_B1CTR_LTRK1_BrcbTrk = {
+    DataObjectModelType,
+    "BrcbTrk",
+    (ModelNode*) &iedModel_B1CTR_LTRK1,
+    (ModelNode*) &iedModel_B1CTR_LTRK1_GocbTrk,
+    (ModelNode*) &iedModel_B1CTR_LTRK1_BrcbTrk_objRef,
+    0,
+    -1
+};
+
+DataAttribute iedModel_B1CTR_LTRK1_BrcbTrk_objRef = {
+    DataAttributeModelType,
+    "objRef",
+    (ModelNode*) &iedModel_B1CTR_LTRK1_BrcbTrk,
+    (ModelNode*) &iedModel_B1CTR_LTRK1_BrcbTrk_serviceType,
+    NULL,
+    0,
+    -1,
+    IEC61850_FC_SR,
+    IEC61850_VISIBLE_STRING_255,
+    TRG_OPT_DATA_UPDATE
+};
+
+DataAttribute iedModel_B1CTR_LTRK1_BrcbTrk_serviceType = {
+    DataAttributeModelType,
+    "serviceType",
+    (ModelNode*) &iedModel_B1CTR_LTRK1_BrcbTrk,
+    (ModelNode*) &iedModel_B1CTR_LTRK1_BrcbTrk_errorCode,
+    NULL,
+    0,
+    -1,
+    IEC61850_FC_SR,
+    IEC61850_ENUMERATED,
+    0,
+};
+
+DataAttribute iedModel_B1CTR_LTRK1_BrcbTrk_errorCode = {
+    DataAttributeModelType,
+    "errorCode",
+    (ModelNode*) &iedModel_B1CTR_LTRK1_BrcbTrk,
+    (ModelNode*) &iedModel_B1CTR_LTRK1_BrcbTrk_t,
+    NULL,
+    0,
+    -1,
+    IEC61850_FC_SR,
+    IEC61850_ENUMERATED,
+    0,
+};
+
+DataAttribute iedModel_B1CTR_LTRK1_BrcbTrk_t = {
+    DataAttributeModelType,
+    "t",
+    (ModelNode*) &iedModel_B1CTR_LTRK1_BrcbTrk,
+    (ModelNode*) &iedModel_B1CTR_LTRK1_BrcbTrk_rptID,
+    NULL,
+    0,
+    -1,
+    IEC61850_FC_SR,
+    IEC61850_TIMESTAMP,
+    0,
+};
+
+DataAttribute iedModel_B1CTR_LTRK1_BrcbTrk_rptID = {
+    DataAttributeModelType,
+    "rptID",
+    (ModelNode*) &iedModel_B1CTR_LTRK1_BrcbTrk,
+    (ModelNode*) &iedModel_B1CTR_LTRK1_BrcbTrk_rptEna,
+    NULL,
+    0,
+    -1,
+    IEC61850_FC_SR,
+    IEC61850_VISIBLE_STRING_129,
+    0,
+};
+
+DataAttribute iedModel_B1CTR_LTRK1_BrcbTrk_rptEna = {
+    DataAttributeModelType,
+    "rptEna",
+    (ModelNode*) &iedModel_B1CTR_LTRK1_BrcbTrk,
+    (ModelNode*) &iedModel_B1CTR_LTRK1_BrcbTrk_datSet,
+    NULL,
+    0,
+    -1,
+    IEC61850_FC_SR,
+    IEC61850_BOOLEAN,
+    0,
+};
+
+DataAttribute iedModel_B1CTR_LTRK1_BrcbTrk_datSet = {
+    DataAttributeModelType,
+    "datSet",
+    (ModelNode*) &iedModel_B1CTR_LTRK1_BrcbTrk,
+    (ModelNode*) &iedModel_B1CTR_LTRK1_BrcbTrk_confRev,
+    NULL,
+    0,
+    -1,
+    IEC61850_FC_SR,
+    IEC61850_VISIBLE_STRING_255,
+    0,
+};
+
+DataAttribute iedModel_B1CTR_LTRK1_BrcbTrk_confRev = {
+    DataAttributeModelType,
+    "confRev",
+    (ModelNode*) &iedModel_B1CTR_LTRK1_BrcbTrk,
+    (ModelNode*) &iedModel_B1CTR_LTRK1_BrcbTrk_bufTm,
+    NULL,
+    0,
+    -1,
+    IEC61850_FC_SR,
+    IEC61850_INT32U,
+    0,
+};
+
+DataAttribute iedModel_B1CTR_LTRK1_BrcbTrk_bufTm = {
+    DataAttributeModelType,
+    "bufTm",
+    (ModelNode*) &iedModel_B1CTR_LTRK1_BrcbTrk,
+    (ModelNode*) &iedModel_B1CTR_LTRK1_BrcbTrk_sqNum,
+    NULL,
+    0,
+    -1,
+    IEC61850_FC_SR,
+    IEC61850_INT32U,
+    0,
+};
+
+DataAttribute iedModel_B1CTR_LTRK1_BrcbTrk_sqNum = {
+    DataAttributeModelType,
+    "sqNum",
+    (ModelNode*) &iedModel_B1CTR_LTRK1_BrcbTrk,
+    (ModelNode*) &iedModel_B1CTR_LTRK1_BrcbTrk_intgPd,
+    NULL,
+    0,
+    -1,
+    IEC61850_FC_SR,
+    IEC61850_INT16U,
+    0,
+};
+
+DataAttribute iedModel_B1CTR_LTRK1_BrcbTrk_intgPd = {
+    DataAttributeModelType,
+    "intgPd",
+    (ModelNode*) &iedModel_B1CTR_LTRK1_BrcbTrk,
+    (ModelNode*) &iedModel_B1CTR_LTRK1_BrcbTrk_gi,
+    NULL,
+    0,
+    -1,
+    IEC61850_FC_SR,
+    IEC61850_INT32U,
+    0,
+};
+
+DataAttribute iedModel_B1CTR_LTRK1_BrcbTrk_gi = {
+    DataAttributeModelType,
+    "gi",
+    (ModelNode*) &iedModel_B1CTR_LTRK1_BrcbTrk,
+    (ModelNode*) &iedModel_B1CTR_LTRK1_BrcbTrk_purgeBuf,
+    NULL,
+    0,
+    -1,
+    IEC61850_FC_SR,
+    IEC61850_BOOLEAN,
+    0,
+};
+
+DataAttribute iedModel_B1CTR_LTRK1_BrcbTrk_purgeBuf = {
+    DataAttributeModelType,
+    "purgeBuf",
+    (ModelNode*) &iedModel_B1CTR_LTRK1_BrcbTrk,
+    NULL,
+    NULL,
+    0,
+    -1,
+    IEC61850_FC_SR,
+    IEC61850_BOOLEAN,
+    0,
+};
+
+DataObject iedModel_B1CTR_LTRK1_GocbTrk = {
+    DataObjectModelType,
+    "GocbTrk",
+    (ModelNode*) &iedModel_B1CTR_LTRK1,
+    NULL,
     (ModelNode*) &iedModel_B1CTR_LTRK1_GocbTrk_objRef,
     0,
     -1
 };
 
 DataAttribute iedModel_B1CTR_LTRK1_GocbTrk_objRef = {
-    DataAttributeModelType, "objRef",
+    DataAttributeModelType,
+    "objRef",
     (ModelNode*) &iedModel_B1CTR_LTRK1_GocbTrk,
     (ModelNode*) &iedModel_B1CTR_LTRK1_GocbTrk_serviceType,
     NULL,
@@ -1764,11 +2024,12 @@ DataAttribute iedModel_B1CTR_LTRK1_GocbTrk_objRef = {
     -1,
     IEC61850_FC_SR,
     IEC61850_VISIBLE_STRING_129,
-    0 + TRG_OPT_DATA_UPDATE
+    TRG_OPT_DATA_UPDATE
 };
 
 DataAttribute iedModel_B1CTR_LTRK1_GocbTrk_serviceType = {
-    DataAttributeModelType, "serviceType",
+    DataAttributeModelType,
+    "serviceType",
     (ModelNode*) &iedModel_B1CTR_LTRK1_GocbTrk,
     (ModelNode*) &iedModel_B1CTR_LTRK1_GocbTrk_errorCode,
     NULL,
@@ -1776,11 +2037,12 @@ DataAttribute iedModel_B1CTR_LTRK1_GocbTrk_serviceType = {
     -1,
     IEC61850_FC_SR,
     IEC61850_ENUMERATED,
-    0
+    0,
 };
 
 DataAttribute iedModel_B1CTR_LTRK1_GocbTrk_errorCode = {
-    DataAttributeModelType, "errorCode",
+    DataAttributeModelType,
+    "errorCode",
     (ModelNode*) &iedModel_B1CTR_LTRK1_GocbTrk,
     (ModelNode*) &iedModel_B1CTR_LTRK1_GocbTrk_t,
     NULL,
@@ -1788,11 +2050,12 @@ DataAttribute iedModel_B1CTR_LTRK1_GocbTrk_errorCode = {
     -1,
     IEC61850_FC_SR,
     IEC61850_ENUMERATED,
-    0
+    0,
 };
 
 DataAttribute iedModel_B1CTR_LTRK1_GocbTrk_t = {
-    DataAttributeModelType, "t",
+    DataAttributeModelType,
+    "t",
     (ModelNode*) &iedModel_B1CTR_LTRK1_GocbTrk,
     (ModelNode*) &iedModel_B1CTR_LTRK1_GocbTrk_goEna,
     NULL,
@@ -1800,11 +2063,12 @@ DataAttribute iedModel_B1CTR_LTRK1_GocbTrk_t = {
     -1,
     IEC61850_FC_SR,
     IEC61850_TIMESTAMP,
-    0
+    0,
 };
 
 DataAttribute iedModel_B1CTR_LTRK1_GocbTrk_goEna = {
-    DataAttributeModelType, "goEna",
+    DataAttributeModelType,
+    "goEna",
     (ModelNode*) &iedModel_B1CTR_LTRK1_GocbTrk,
     (ModelNode*) &iedModel_B1CTR_LTRK1_GocbTrk_goID,
     NULL,
@@ -1812,11 +2076,12 @@ DataAttribute iedModel_B1CTR_LTRK1_GocbTrk_goEna = {
     -1,
     IEC61850_FC_SR,
     IEC61850_BOOLEAN,
-    0
+    0,
 };
 
 DataAttribute iedModel_B1CTR_LTRK1_GocbTrk_goID = {
-    DataAttributeModelType, "goID",
+    DataAttributeModelType,
+    "goID",
     (ModelNode*) &iedModel_B1CTR_LTRK1_GocbTrk,
     (ModelNode*) &iedModel_B1CTR_LTRK1_GocbTrk_datSet,
     NULL,
@@ -1824,11 +2089,12 @@ DataAttribute iedModel_B1CTR_LTRK1_GocbTrk_goID = {
     -1,
     IEC61850_FC_SR,
     IEC61850_VISIBLE_STRING_129,
-    0
+    0,
 };
 
 DataAttribute iedModel_B1CTR_LTRK1_GocbTrk_datSet = {
-    DataAttributeModelType, "datSet",
+    DataAttributeModelType,
+    "datSet",
     (ModelNode*) &iedModel_B1CTR_LTRK1_GocbTrk,
     (ModelNode*) &iedModel_B1CTR_LTRK1_GocbTrk_confRev,
     NULL,
@@ -1836,11 +2102,12 @@ DataAttribute iedModel_B1CTR_LTRK1_GocbTrk_datSet = {
     -1,
     IEC61850_FC_SR,
     IEC61850_VISIBLE_STRING_255,
-    0
+    0,
 };
 
 DataAttribute iedModel_B1CTR_LTRK1_GocbTrk_confRev = {
-    DataAttributeModelType, "confRev",
+    DataAttributeModelType,
+    "confRev",
     (ModelNode*) &iedModel_B1CTR_LTRK1_GocbTrk,
     (ModelNode*) &iedModel_B1CTR_LTRK1_GocbTrk_ndsCom,
     NULL,
@@ -1848,11 +2115,12 @@ DataAttribute iedModel_B1CTR_LTRK1_GocbTrk_confRev = {
     -1,
     IEC61850_FC_SR,
     IEC61850_INT32U,
-    0
+    0,
 };
 
 DataAttribute iedModel_B1CTR_LTRK1_GocbTrk_ndsCom = {
-    DataAttributeModelType, "ndsCom",
+    DataAttributeModelType,
+    "ndsCom",
     (ModelNode*) &iedModel_B1CTR_LTRK1_GocbTrk,
     (ModelNode*) &iedModel_B1CTR_LTRK1_GocbTrk_dstAddress,
     NULL,
@@ -1860,11 +2128,12 @@ DataAttribute iedModel_B1CTR_LTRK1_GocbTrk_ndsCom = {
     -1,
     IEC61850_FC_SR,
     IEC61850_BOOLEAN,
-    0
+    0,
 };
 
 DataAttribute iedModel_B1CTR_LTRK1_GocbTrk_dstAddress = {
-    DataAttributeModelType, "dstAddress",
+    DataAttributeModelType,
+    "dstAddress",
     (ModelNode*) &iedModel_B1CTR_LTRK1_GocbTrk,
     NULL,
     NULL,
@@ -1872,8 +2141,9 @@ DataAttribute iedModel_B1CTR_LTRK1_GocbTrk_dstAddress = {
     -1,
     IEC61850_FC_SR,
     IEC61850_OCTET_STRING_8,
-    0
+    0,
 };
+
 
 IedModel iedModel = {
     "MoveUFF_",
