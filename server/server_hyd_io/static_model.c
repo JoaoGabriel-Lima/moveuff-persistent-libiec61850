@@ -13,7 +13,7 @@ LogicalDevice iedModel_B1HYD = {
 };
 
 /* =================================================================
- * NÓ LÓGICO KTNK1 (Tanque)
+ * IMPLEMENTAÇÃO KTNK1 (Tanque)
  * =================================================================
  */
 
@@ -21,7 +21,7 @@ LogicalNode iedModel_B1HYD_KTNK1 = {
     LogicalNodeModelType,
     "KTNK1",
     (ModelNode*) &iedModel_B1HYD,
-    (ModelNode*) &iedModel_B1HYD_STMP1, // Aponta para o irmão STMP1
+    (ModelNode*) &iedModel_B1HYD_STMP1, 
     (ModelNode*) &iedModel_B1HYD_KTNK1_NamPlt,
 };
 
@@ -437,7 +437,7 @@ DataAttribute iedModel_B1HYD_KTNK1_TnkTyp_setVal = {
 };
 
 /* =================================================================
- * NÓ LÓGICO STMP1 (Temperatura)
+ * IMPLEMENTAÇÃO STMP1 (Temperatura)
  * =================================================================
  */
 
@@ -724,7 +724,7 @@ DataAttribute iedModel_B1HYD_STMP1_RteTripSet_sVC = {
 };
 
 /* =================================================================
- * NÓ LÓGICO KVLV1 (Valve Control)
+ * IMPLEMENTAÇÃO KVLV1 (Valve Control)
  * =================================================================
  */
 
@@ -1351,7 +1351,7 @@ DataAttribute iedModel_B1HYD_KVLV1_ClsLim_sVC = {
 };
 
 /* =================================================================
- * NÓ LÓGICO DFCL1 (Célula de Combustível)
+ * IMPLEMENTAÇÃO DFCL1 (Célula de Combustível)
  * =================================================================
  */
 
@@ -1733,7 +1733,7 @@ DataAttribute iedModel_B1HYD_DFCL1_Vlim_sVC = {
 };
 
 /* =================================================================
- * NÓ LÓGICO DSTK1 (Fuel Cell Stack)
+ * IMPLEMENTAÇÃO DSTK1 (Fuel Cell Stack)
  * =================================================================
  */
 
@@ -2747,7 +2747,7 @@ DataAttribute iedModel_B1HYD_DSTK1_InH2Pres_t = {
 };
 
 /* =================================================================
- * NÓ LÓGICO SPRS1 (Supervisão de Pressão)
+ * IMPLEMENTAÇÃO SPRS1 (Supervisão de Pressão)
  * =================================================================
  */
 
@@ -3044,7 +3044,7 @@ DataAttribute iedModel_B1HYD_SPRS1_AlmSet_maxVal_f = {
 };
 
 /* =================================================================
- * NÓ LÓGICO TPRS1 (Sensor de Pressão)
+ * IMPLEMENTAÇÃO TPRS1 (Sensor de Pressão)
  * =================================================================
  */
 
@@ -3302,7 +3302,7 @@ DataAttribute iedModel_B1HYD_TPRS1_PresSv_t = {
 };
 
 /* =================================================================
- * NÓ LÓGICO DFPM1 (Módulo de Processamento de Combustível)
+ * IMPLEMENTAÇÃO DFPM1 (Módulo de Processamento de Combustível)
  * =================================================================
  */
 
@@ -3475,8 +3475,13 @@ DataAttribute iedModel_B1HYD_DFPM1_ProcTyp_setVal = {
 };
 
 /* =================================================================
- * NÓ LÓGICO TNKXSWI1 (Chave do Tanque)
+ * IMPLEMENTAÇÃO TNKXSWI1 (Chave do Tanque)
  * =================================================================
+ */
+
+/* ==================================================================
+ * TNKXSWI1
+ * ==================================================================
  */
 
 LogicalNode iedModel_B1HYD_TNKXSWI1 = {
@@ -3484,63 +3489,148 @@ LogicalNode iedModel_B1HYD_TNKXSWI1 = {
     "TNKXSWI1",
     (ModelNode*) &iedModel_B1HYD,
     (ModelNode*) &iedModel_B1HYD_CELXSWI1,
-    (ModelNode*) &iedModel_B1HYD_TNKXSWI1_SwTyp,
+    (ModelNode*) &iedModel_B1HYD_TNKXSWI1_EEName,
 };
 
-DataObject iedModel_B1HYD_TNKXSWI1_SwTyp = {
+DataObject iedModel_B1HYD_TNKXSWI1_EEName = {
     DataObjectModelType,
-    "SwTyp",
+    "EEName",
     (ModelNode*) &iedModel_B1HYD_TNKXSWI1,
-    (ModelNode*) &iedModel_B1HYD_TNKXSWI1_Loc,
-    (ModelNode*) &iedModel_B1HYD_TNKXSWI1_SwTyp_stVal,
+    (ModelNode*) &iedModel_B1HYD_TNKXSWI1_NamPlt,
+    (ModelNode*) &iedModel_B1HYD_TNKXSWI1_EEName_vendor,
     0,
     -1
 };
 
-DataAttribute iedModel_B1HYD_TNKXSWI1_SwTyp_stVal = {
+DataAttribute iedModel_B1HYD_TNKXSWI1_EEName_vendor = {
+    DataAttributeModelType,
+    "vendor",
+    (ModelNode*) &iedModel_B1HYD_TNKXSWI1_EEName,
+    (ModelNode*) &iedModel_B1HYD_TNKXSWI1_EEName_model,
+    NULL,
+    0,
+    -1,
+    IEC61850_FC_DC,
+    IEC61850_VISIBLE_STRING_255,
+    0
+};
+
+DataAttribute iedModel_B1HYD_TNKXSWI1_EEName_model = {
+    DataAttributeModelType,
+    "model",
+    (ModelNode*) &iedModel_B1HYD_TNKXSWI1_EEName,
+    NULL,
+    NULL,
+    0,
+    -1,
+    IEC61850_FC_DC,
+    IEC61850_VISIBLE_STRING_255,
+    0
+};
+
+DataObject iedModel_B1HYD_TNKXSWI1_NamPlt = {
+    DataObjectModelType,
+    "NamPlt",
+    (ModelNode*) &iedModel_B1HYD_TNKXSWI1,
+    (ModelNode*) &iedModel_B1HYD_TNKXSWI1_SwOpCap,
+    (ModelNode*) &iedModel_B1HYD_TNKXSWI1_NamPlt_vendor,
+    0,
+    -1
+};
+
+DataAttribute iedModel_B1HYD_TNKXSWI1_NamPlt_vendor = {
+    DataAttributeModelType,
+    "vendor",
+    (ModelNode*) &iedModel_B1HYD_TNKXSWI1_NamPlt,
+    (ModelNode*) &iedModel_B1HYD_TNKXSWI1_NamPlt_swRev,
+    NULL,
+    0,
+    -1,
+    IEC61850_FC_DC,
+    IEC61850_VISIBLE_STRING_255,
+    0
+};
+
+DataAttribute iedModel_B1HYD_TNKXSWI1_NamPlt_swRev = {
+    DataAttributeModelType,
+    "swRev",
+    (ModelNode*) &iedModel_B1HYD_TNKXSWI1_NamPlt,
+    (ModelNode*) &iedModel_B1HYD_TNKXSWI1_NamPlt_lnNs,
+    NULL,
+    0,
+    -1,
+    IEC61850_FC_DC,
+    IEC61850_VISIBLE_STRING_255,
+    0
+};
+
+DataAttribute iedModel_B1HYD_TNKXSWI1_NamPlt_lnNs = {
+    DataAttributeModelType,
+    "lnNs",
+    (ModelNode*) &iedModel_B1HYD_TNKXSWI1_NamPlt,
+    NULL,
+    NULL,
+    0,
+    -1,
+    IEC61850_FC_EX,
+    IEC61850_VISIBLE_STRING_255,
+    0
+};
+
+DataObject iedModel_B1HYD_TNKXSWI1_SwOpCap = {
+    DataObjectModelType,
+    "SwOpCap",
+    (ModelNode*) &iedModel_B1HYD_TNKXSWI1,
+    (ModelNode*) &iedModel_B1HYD_TNKXSWI1_Loc,
+    (ModelNode*) &iedModel_B1HYD_TNKXSWI1_SwOpCap_stVal,
+    0,
+    -1
+};
+
+DataAttribute iedModel_B1HYD_TNKXSWI1_SwOpCap_stVal = {
     DataAttributeModelType,
     "stVal",
-    (ModelNode*) &iedModel_B1HYD_TNKXSWI1_SwTyp,
-    (ModelNode*) &iedModel_B1HYD_TNKXSWI1_SwTyp_q,
+    (ModelNode*) &iedModel_B1HYD_TNKXSWI1_SwOpCap,
+    (ModelNode*) &iedModel_B1HYD_TNKXSWI1_SwOpCap_q,
     NULL,
     0,
     -1,
     IEC61850_FC_ST,
     IEC61850_ENUMERATED,
-    TRG_OPT_DATA_CHANGED,
+    TRG_OPT_DATA_CHANGED
 };
 
-DataAttribute iedModel_B1HYD_TNKXSWI1_SwTyp_q = {
+DataAttribute iedModel_B1HYD_TNKXSWI1_SwOpCap_q = {
     DataAttributeModelType,
     "q",
-    (ModelNode*) &iedModel_B1HYD_TNKXSWI1_SwTyp,
-    (ModelNode*) &iedModel_B1HYD_TNKXSWI1_SwTyp_t,
+    (ModelNode*) &iedModel_B1HYD_TNKXSWI1_SwOpCap,
+    (ModelNode*) &iedModel_B1HYD_TNKXSWI1_SwOpCap_t,
     NULL,
     0,
     -1,
     IEC61850_FC_ST,
     IEC61850_QUALITY,
-    TRG_OPT_QUALITY_CHANGED,
+    TRG_OPT_QUALITY_CHANGED
 };
 
-DataAttribute iedModel_B1HYD_TNKXSWI1_SwTyp_t = {
+DataAttribute iedModel_B1HYD_TNKXSWI1_SwOpCap_t = {
     DataAttributeModelType,
     "t",
-    (ModelNode*) &iedModel_B1HYD_TNKXSWI1_SwTyp,
+    (ModelNode*) &iedModel_B1HYD_TNKXSWI1_SwOpCap,
     NULL,
     NULL,
     0,
     -1,
     IEC61850_FC_ST,
     IEC61850_TIMESTAMP,
-    0,
+    0
 };
 
 DataObject iedModel_B1HYD_TNKXSWI1_Loc = {
     DataObjectModelType,
     "Loc",
     (ModelNode*) &iedModel_B1HYD_TNKXSWI1,
-    (ModelNode*) &iedModel_B1HYD_TNKXSWI1_OpCnt,
+    (ModelNode*) &iedModel_B1HYD_TNKXSWI1_LocKey,
     (ModelNode*) &iedModel_B1HYD_TNKXSWI1_Loc_stVal,
     0,
     -1
@@ -3556,7 +3646,7 @@ DataAttribute iedModel_B1HYD_TNKXSWI1_Loc_stVal = {
     -1,
     IEC61850_FC_ST,
     IEC61850_BOOLEAN,
-    TRG_OPT_DATA_CHANGED,
+    TRG_OPT_DATA_CHANGED
 };
 
 DataAttribute iedModel_B1HYD_TNKXSWI1_Loc_q = {
@@ -3569,7 +3659,7 @@ DataAttribute iedModel_B1HYD_TNKXSWI1_Loc_q = {
     -1,
     IEC61850_FC_ST,
     IEC61850_QUALITY,
-    TRG_OPT_QUALITY_CHANGED,
+    TRG_OPT_QUALITY_CHANGED
 };
 
 DataAttribute iedModel_B1HYD_TNKXSWI1_Loc_t = {
@@ -3582,56 +3672,154 @@ DataAttribute iedModel_B1HYD_TNKXSWI1_Loc_t = {
     -1,
     IEC61850_FC_ST,
     IEC61850_TIMESTAMP,
-    0,
+    0
 };
 
-DataObject iedModel_B1HYD_TNKXSWI1_OpCnt = {
+DataObject iedModel_B1HYD_TNKXSWI1_LocKey = {
     DataObjectModelType,
-    "OpCnt",
+    "LocKey",
     (ModelNode*) &iedModel_B1HYD_TNKXSWI1,
-    (ModelNode*) &iedModel_B1HYD_TNKXSWI1_Beh,
-    (ModelNode*) &iedModel_B1HYD_TNKXSWI1_OpCnt_stVal,
+    (ModelNode*) &iedModel_B1HYD_TNKXSWI1_EEHealth,
+    (ModelNode*) &iedModel_B1HYD_TNKXSWI1_LocKey_stVal,
     0,
     -1
 };
 
-DataAttribute iedModel_B1HYD_TNKXSWI1_OpCnt_stVal = {
+DataAttribute iedModel_B1HYD_TNKXSWI1_LocKey_stVal = {
     DataAttributeModelType,
     "stVal",
-    (ModelNode*) &iedModel_B1HYD_TNKXSWI1_OpCnt,
-    (ModelNode*) &iedModel_B1HYD_TNKXSWI1_OpCnt_q,
+    (ModelNode*) &iedModel_B1HYD_TNKXSWI1_LocKey,
+    (ModelNode*) &iedModel_B1HYD_TNKXSWI1_LocKey_q,
     NULL,
     0,
     -1,
     IEC61850_FC_ST,
-    IEC61850_INT32,
-    TRG_OPT_DATA_CHANGED | TRG_OPT_DATA_UPDATE,
+    IEC61850_BOOLEAN,
+    TRG_OPT_DATA_CHANGED
 };
 
-DataAttribute iedModel_B1HYD_TNKXSWI1_OpCnt_q = {
+DataAttribute iedModel_B1HYD_TNKXSWI1_LocKey_q = {
     DataAttributeModelType,
     "q",
-    (ModelNode*) &iedModel_B1HYD_TNKXSWI1_OpCnt,
-    (ModelNode*) &iedModel_B1HYD_TNKXSWI1_OpCnt_t,
+    (ModelNode*) &iedModel_B1HYD_TNKXSWI1_LocKey,
+    (ModelNode*) &iedModel_B1HYD_TNKXSWI1_LocKey_t,
     NULL,
     0,
     -1,
     IEC61850_FC_ST,
     IEC61850_QUALITY,
-    TRG_OPT_QUALITY_CHANGED,
+    TRG_OPT_QUALITY_CHANGED
 };
 
-DataAttribute iedModel_B1HYD_TNKXSWI1_OpCnt_t = {
+DataAttribute iedModel_B1HYD_TNKXSWI1_LocKey_t = {
     DataAttributeModelType,
     "t",
-    (ModelNode*) &iedModel_B1HYD_TNKXSWI1_OpCnt,
+    (ModelNode*) &iedModel_B1HYD_TNKXSWI1_LocKey,
     NULL,
     NULL,
     0,
     -1,
     IEC61850_FC_ST,
     IEC61850_TIMESTAMP,
+    0
+};
+
+DataObject iedModel_B1HYD_TNKXSWI1_EEHealth = {
+    DataObjectModelType,
+    "EEHealth",
+    (ModelNode*) &iedModel_B1HYD_TNKXSWI1,
+    (ModelNode*) &iedModel_B1HYD_TNKXSWI1_Blk,
+    (ModelNode*) &iedModel_B1HYD_TNKXSWI1_EEHealth_stVal,
     0,
+    -1
+};
+
+DataAttribute iedModel_B1HYD_TNKXSWI1_EEHealth_stVal = {
+    DataAttributeModelType,
+    "stVal",
+    (ModelNode*) &iedModel_B1HYD_TNKXSWI1_EEHealth,
+    (ModelNode*) &iedModel_B1HYD_TNKXSWI1_EEHealth_q,
+    NULL,
+    0,
+    -1,
+    IEC61850_FC_ST,
+    IEC61850_ENUMERATED,
+    TRG_OPT_DATA_CHANGED
+};
+
+DataAttribute iedModel_B1HYD_TNKXSWI1_EEHealth_q = {
+    DataAttributeModelType,
+    "q",
+    (ModelNode*) &iedModel_B1HYD_TNKXSWI1_EEHealth,
+    (ModelNode*) &iedModel_B1HYD_TNKXSWI1_EEHealth_t,
+    NULL,
+    0,
+    -1,
+    IEC61850_FC_ST,
+    IEC61850_QUALITY,
+    TRG_OPT_QUALITY_CHANGED
+};
+
+DataAttribute iedModel_B1HYD_TNKXSWI1_EEHealth_t = {
+    DataAttributeModelType,
+    "t",
+    (ModelNode*) &iedModel_B1HYD_TNKXSWI1_EEHealth,
+    NULL,
+    NULL,
+    0,
+    -1,
+    IEC61850_FC_ST,
+    IEC61850_TIMESTAMP,
+    0
+};
+
+DataObject iedModel_B1HYD_TNKXSWI1_Blk = {
+    DataObjectModelType,
+    "Blk",
+    (ModelNode*) &iedModel_B1HYD_TNKXSWI1,
+    (ModelNode*) &iedModel_B1HYD_TNKXSWI1_Beh,
+    (ModelNode*) &iedModel_B1HYD_TNKXSWI1_Blk_stVal,
+    0,
+    -1
+};
+
+DataAttribute iedModel_B1HYD_TNKXSWI1_Blk_stVal = {
+    DataAttributeModelType,
+    "stVal",
+    (ModelNode*) &iedModel_B1HYD_TNKXSWI1_Blk,
+    (ModelNode*) &iedModel_B1HYD_TNKXSWI1_Blk_q,
+    NULL,
+    0,
+    -1,
+    IEC61850_FC_ST,
+    IEC61850_BOOLEAN,
+    TRG_OPT_DATA_CHANGED
+};
+
+DataAttribute iedModel_B1HYD_TNKXSWI1_Blk_q = {
+    DataAttributeModelType,
+    "q",
+    (ModelNode*) &iedModel_B1HYD_TNKXSWI1_Blk,
+    (ModelNode*) &iedModel_B1HYD_TNKXSWI1_Blk_t,
+    NULL,
+    0,
+    -1,
+    IEC61850_FC_ST,
+    IEC61850_QUALITY,
+    TRG_OPT_QUALITY_CHANGED
+};
+
+DataAttribute iedModel_B1HYD_TNKXSWI1_Blk_t = {
+    DataAttributeModelType,
+    "t",
+    (ModelNode*) &iedModel_B1HYD_TNKXSWI1_Blk,
+    NULL,
+    NULL,
+    0,
+    -1,
+    IEC61850_FC_ST,
+    IEC61850_TIMESTAMP,
+    0
 };
 
 DataObject iedModel_B1HYD_TNKXSWI1_Beh = {
@@ -3654,7 +3842,7 @@ DataAttribute iedModel_B1HYD_TNKXSWI1_Beh_stVal = {
     -1,
     IEC61850_FC_ST,
     IEC61850_ENUMERATED,
-    TRG_OPT_DATA_UPDATE,
+    TRG_OPT_DATA_CHANGED
 };
 
 DataAttribute iedModel_B1HYD_TNKXSWI1_Beh_q = {
@@ -3667,7 +3855,7 @@ DataAttribute iedModel_B1HYD_TNKXSWI1_Beh_q = {
     -1,
     IEC61850_FC_ST,
     IEC61850_QUALITY,
-    TRG_OPT_QUALITY_CHANGED,
+    TRG_OPT_QUALITY_CHANGED
 };
 
 DataAttribute iedModel_B1HYD_TNKXSWI1_Beh_t = {
@@ -3680,14 +3868,14 @@ DataAttribute iedModel_B1HYD_TNKXSWI1_Beh_t = {
     -1,
     IEC61850_FC_ST,
     IEC61850_TIMESTAMP,
-    0,
+    0
 };
 
 DataObject iedModel_B1HYD_TNKXSWI1_Health = {
     DataObjectModelType,
     "Health",
     (ModelNode*) &iedModel_B1HYD_TNKXSWI1,
-    (ModelNode*) &iedModel_B1HYD_TNKXSWI1_Pos,
+    (ModelNode*) &iedModel_B1HYD_TNKXSWI1_LocSta,
     (ModelNode*) &iedModel_B1HYD_TNKXSWI1_Health_stVal,
     0,
     -1
@@ -3703,7 +3891,7 @@ DataAttribute iedModel_B1HYD_TNKXSWI1_Health_stVal = {
     -1,
     IEC61850_FC_ST,
     IEC61850_ENUMERATED,
-    TRG_OPT_DATA_UPDATE,
+    TRG_OPT_DATA_CHANGED
 };
 
 DataAttribute iedModel_B1HYD_TNKXSWI1_Health_q = {
@@ -3716,7 +3904,7 @@ DataAttribute iedModel_B1HYD_TNKXSWI1_Health_q = {
     -1,
     IEC61850_FC_ST,
     IEC61850_QUALITY,
-    TRG_OPT_QUALITY_CHANGED,
+    TRG_OPT_QUALITY_CHANGED
 };
 
 DataAttribute iedModel_B1HYD_TNKXSWI1_Health_t = {
@@ -3729,7 +3917,186 @@ DataAttribute iedModel_B1HYD_TNKXSWI1_Health_t = {
     -1,
     IEC61850_FC_ST,
     IEC61850_TIMESTAMP,
+    0
+};
+
+DataObject iedModel_B1HYD_TNKXSWI1_LocSta = {
+    DataObjectModelType,
+    "LocSta",
+    (ModelNode*) &iedModel_B1HYD_TNKXSWI1,
+    (ModelNode*) &iedModel_B1HYD_TNKXSWI1_Pos,
+    (ModelNode*) &iedModel_B1HYD_TNKXSWI1_LocSta_Oper,
     0,
+    -1
+};
+
+DataAttribute iedModel_B1HYD_TNKXSWI1_LocSta_Oper = {
+    DataAttributeModelType,
+    "Oper",
+    (ModelNode*) &iedModel_B1HYD_TNKXSWI1_LocSta,
+    (ModelNode*) &iedModel_B1HYD_TNKXSWI1_LocSta_stVal,
+    (ModelNode*) &iedModel_B1HYD_TNKXSWI1_LocSta_Oper_ctlVal,
+    0,
+    -1,
+    IEC61850_FC_CO,
+    IEC61850_CONSTRUCTED,
+    0
+};
+
+DataAttribute iedModel_B1HYD_TNKXSWI1_LocSta_Oper_ctlVal = {
+    DataAttributeModelType,
+    "ctlVal",
+    (ModelNode*) &iedModel_B1HYD_TNKXSWI1_LocSta_Oper,
+    (ModelNode*) &iedModel_B1HYD_TNKXSWI1_LocSta_Oper_origin,
+    NULL,
+    0,
+    -1,
+    IEC61850_FC_CO,
+    IEC61850_BOOLEAN,
+    0
+};
+
+DataAttribute iedModel_B1HYD_TNKXSWI1_LocSta_Oper_origin = {
+    DataAttributeModelType,
+    "origin",
+    (ModelNode*) &iedModel_B1HYD_TNKXSWI1_LocSta_Oper,
+    (ModelNode*) &iedModel_B1HYD_TNKXSWI1_LocSta_Oper_ctlNum,
+    (ModelNode*) &iedModel_B1HYD_TNKXSWI1_LocSta_Oper_origin_orCat,
+    0,
+    -1,
+    IEC61850_FC_CO,
+    IEC61850_CONSTRUCTED,
+    0
+};
+
+DataAttribute iedModel_B1HYD_TNKXSWI1_LocSta_Oper_origin_orCat = {
+    DataAttributeModelType,
+    "orCat",
+    (ModelNode*) &iedModel_B1HYD_TNKXSWI1_LocSta_Oper_origin,
+    (ModelNode*) &iedModel_B1HYD_TNKXSWI1_LocSta_Oper_origin_orIdent,
+    NULL,
+    0,
+    -1,
+    IEC61850_FC_CO,
+    IEC61850_INT8,
+    0
+};
+
+DataAttribute iedModel_B1HYD_TNKXSWI1_LocSta_Oper_origin_orIdent = {
+    DataAttributeModelType,
+    "orIdent",
+    (ModelNode*) &iedModel_B1HYD_TNKXSWI1_LocSta_Oper_origin,
+    NULL,
+    NULL,
+    0,
+    -1,
+    IEC61850_FC_CO,
+    IEC61850_OCTET_STRING_64,
+    0
+};
+
+DataAttribute iedModel_B1HYD_TNKXSWI1_LocSta_Oper_ctlNum = {
+    DataAttributeModelType,
+    "ctlNum",
+    (ModelNode*) &iedModel_B1HYD_TNKXSWI1_LocSta_Oper,
+    (ModelNode*) &iedModel_B1HYD_TNKXSWI1_LocSta_Oper_T,
+    NULL,
+    0,
+    -1,
+    IEC61850_FC_CO,
+    IEC61850_INT8U,
+    0
+};
+
+DataAttribute iedModel_B1HYD_TNKXSWI1_LocSta_Oper_T = {
+    DataAttributeModelType,
+    "T",
+    (ModelNode*) &iedModel_B1HYD_TNKXSWI1_LocSta_Oper,
+    (ModelNode*) &iedModel_B1HYD_TNKXSWI1_LocSta_Oper_Test,
+    NULL,
+    0,
+    -1,
+    IEC61850_FC_CO,
+    IEC61850_TIMESTAMP,
+    0
+};
+
+DataAttribute iedModel_B1HYD_TNKXSWI1_LocSta_Oper_Test = {
+    DataAttributeModelType,
+    "Test",
+    (ModelNode*) &iedModel_B1HYD_TNKXSWI1_LocSta_Oper,
+    (ModelNode*) &iedModel_B1HYD_TNKXSWI1_LocSta_Oper_Check,
+    NULL,
+    0,
+    -1,
+    IEC61850_FC_CO,
+    IEC61850_BOOLEAN,
+    0
+};
+
+DataAttribute iedModel_B1HYD_TNKXSWI1_LocSta_Oper_Check = {
+    DataAttributeModelType,
+    "Check",
+    (ModelNode*) &iedModel_B1HYD_TNKXSWI1_LocSta_Oper,
+    NULL,
+    NULL,
+    0,
+    -1,
+    IEC61850_FC_CO,
+    IEC61850_CHECK,
+    0
+};
+
+DataAttribute iedModel_B1HYD_TNKXSWI1_LocSta_stVal = {
+    DataAttributeModelType,
+    "stVal",
+    (ModelNode*) &iedModel_B1HYD_TNKXSWI1_LocSta,
+    (ModelNode*) &iedModel_B1HYD_TNKXSWI1_LocSta_q,
+    NULL,
+    0,
+    -1,
+    IEC61850_FC_ST,
+    IEC61850_BOOLEAN,
+    TRG_OPT_DATA_CHANGED
+};
+
+DataAttribute iedModel_B1HYD_TNKXSWI1_LocSta_q = {
+    DataAttributeModelType,
+    "q",
+    (ModelNode*) &iedModel_B1HYD_TNKXSWI1_LocSta,
+    (ModelNode*) &iedModel_B1HYD_TNKXSWI1_LocSta_t,
+    NULL,
+    0,
+    -1,
+    IEC61850_FC_ST,
+    IEC61850_QUALITY,
+    TRG_OPT_QUALITY_CHANGED
+};
+
+DataAttribute iedModel_B1HYD_TNKXSWI1_LocSta_t = {
+    DataAttributeModelType,
+    "t",
+    (ModelNode*) &iedModel_B1HYD_TNKXSWI1_LocSta,
+    (ModelNode*) &iedModel_B1HYD_TNKXSWI1_LocSta_ctlModel,
+    NULL,
+    0,
+    -1,
+    IEC61850_FC_ST,
+    IEC61850_TIMESTAMP,
+    0
+};
+
+DataAttribute iedModel_B1HYD_TNKXSWI1_LocSta_ctlModel = {
+    DataAttributeModelType,
+    "ctlModel",
+    (ModelNode*) &iedModel_B1HYD_TNKXSWI1_LocSta,
+    NULL,
+    NULL,
+    0,
+    -1,
+    IEC61850_FC_CF,
+    IEC61850_ENUMERATED,
+    0
 };
 
 DataObject iedModel_B1HYD_TNKXSWI1_Pos = {
@@ -3737,71 +4104,22 @@ DataObject iedModel_B1HYD_TNKXSWI1_Pos = {
     "Pos",
     (ModelNode*) &iedModel_B1HYD_TNKXSWI1,
     (ModelNode*) &iedModel_B1HYD_TNKXSWI1_BlkOpn,
-    (ModelNode*) &iedModel_B1HYD_TNKXSWI1_Pos_stVal,
+    (ModelNode*) &iedModel_B1HYD_TNKXSWI1_Pos_Oper,
     0,
     -1
 };
 
-DataAttribute iedModel_B1HYD_TNKXSWI1_Pos_stVal = {
+DataAttribute iedModel_B1HYD_TNKXSWI1_Pos_Oper = {
     DataAttributeModelType,
-    "stVal",
-    (ModelNode*) &iedModel_B1HYD_TNKXSWI1_Pos,
-    (ModelNode*) &iedModel_B1HYD_TNKXSWI1_Pos_q,
-    NULL,
-    0,
-    -1,
-    IEC61850_FC_ST,
-    IEC61850_ENUMERATED,
-    TRG_OPT_DATA_CHANGED,
-};
-
-DataAttribute iedModel_B1HYD_TNKXSWI1_Pos_q = {
-    DataAttributeModelType,
-    "q",
-    (ModelNode*) &iedModel_B1HYD_TNKXSWI1_Pos,
-    (ModelNode*) &iedModel_B1HYD_TNKXSWI1_Pos_t,
-    NULL,
-    0,
-    -1,
-    IEC61850_FC_ST,
-    IEC61850_QUALITY,
-    TRG_OPT_QUALITY_CHANGED,
-};
-
-DataAttribute iedModel_B1HYD_TNKXSWI1_Pos_t = {
-    DataAttributeModelType,
-    "t",
-    (ModelNode*) &iedModel_B1HYD_TNKXSWI1_Pos,
-    (ModelNode*) &iedModel_B1HYD_TNKXSWI1_Pos_ctlModel,
-    NULL,
-    0,
-    -1,
-    IEC61850_FC_ST,
-    IEC61850_TIMESTAMP,
-    0,
-};
-
-DataAttribute iedModel_B1HYD_TNKXSWI1_Pos_ctlModel = {
-    DataAttributeModelType,
-    "ctlModel",
-    (ModelNode*) &iedModel_B1HYD_TNKXSWI1_Pos,
-    (ModelNode*) &iedModel_B1HYD_TNKXSWI1_Pos_Oper,
-    NULL,
-    0,
-    -1,
-    IEC61850_FC_CF,
-    IEC61850_ENUMERATED,
-    TRG_OPT_DATA_CHANGED,
-};
-
-DataObject iedModel_B1HYD_TNKXSWI1_Pos_Oper = {
-    DataObjectModelType,
     "Oper",
     (ModelNode*) &iedModel_B1HYD_TNKXSWI1_Pos,
-    NULL,
+    (ModelNode*) &iedModel_B1HYD_TNKXSWI1_Pos_stVal,
     (ModelNode*) &iedModel_B1HYD_TNKXSWI1_Pos_Oper_ctlVal,
     0,
-    -1
+    -1,
+    IEC61850_FC_CO,
+    IEC61850_CONSTRUCTED,
+    0
 };
 
 DataAttribute iedModel_B1HYD_TNKXSWI1_Pos_Oper_ctlVal = {
@@ -3813,8 +4131,8 @@ DataAttribute iedModel_B1HYD_TNKXSWI1_Pos_Oper_ctlVal = {
     0,
     -1,
     IEC61850_FC_CO,
-    IEC61850_ENUMERATED,
-    0,
+    IEC61850_BOOLEAN,
+    0
 };
 
 DataAttribute iedModel_B1HYD_TNKXSWI1_Pos_Oper_origin = {
@@ -3822,12 +4140,38 @@ DataAttribute iedModel_B1HYD_TNKXSWI1_Pos_Oper_origin = {
     "origin",
     (ModelNode*) &iedModel_B1HYD_TNKXSWI1_Pos_Oper,
     (ModelNode*) &iedModel_B1HYD_TNKXSWI1_Pos_Oper_ctlNum,
+    (ModelNode*) &iedModel_B1HYD_TNKXSWI1_Pos_Oper_origin_orCat,
+    0,
+    -1,
+    IEC61850_FC_CO,
+    IEC61850_CONSTRUCTED,
+    0
+};
+
+DataAttribute iedModel_B1HYD_TNKXSWI1_Pos_Oper_origin_orCat = {
+    DataAttributeModelType,
+    "orCat",
+    (ModelNode*) &iedModel_B1HYD_TNKXSWI1_Pos_Oper_origin,
+    (ModelNode*) &iedModel_B1HYD_TNKXSWI1_Pos_Oper_origin_orIdent,
+    NULL,
+    0,
+    -1,
+    IEC61850_FC_CO,
+    IEC61850_INT8,
+    0
+};
+
+DataAttribute iedModel_B1HYD_TNKXSWI1_Pos_Oper_origin_orIdent = {
+    DataAttributeModelType,
+    "orIdent",
+    (ModelNode*) &iedModel_B1HYD_TNKXSWI1_Pos_Oper_origin,
+    NULL,
     NULL,
     0,
     -1,
     IEC61850_FC_CO,
     IEC61850_OCTET_STRING_64,
-    0,
+    0
 };
 
 DataAttribute iedModel_B1HYD_TNKXSWI1_Pos_Oper_ctlNum = {
@@ -3840,20 +4184,98 @@ DataAttribute iedModel_B1HYD_TNKXSWI1_Pos_Oper_ctlNum = {
     -1,
     IEC61850_FC_CO,
     IEC61850_INT8U,
-    0,
+    0
 };
 
 DataAttribute iedModel_B1HYD_TNKXSWI1_Pos_Oper_T = {
     DataAttributeModelType,
     "T",
     (ModelNode*) &iedModel_B1HYD_TNKXSWI1_Pos_Oper,
-    NULL,
+    (ModelNode*) &iedModel_B1HYD_TNKXSWI1_Pos_Oper_Test,
     NULL,
     0,
     -1,
     IEC61850_FC_CO,
     IEC61850_TIMESTAMP,
+    0
+};
+
+DataAttribute iedModel_B1HYD_TNKXSWI1_Pos_Oper_Test = {
+    DataAttributeModelType,
+    "Test",
+    (ModelNode*) &iedModel_B1HYD_TNKXSWI1_Pos_Oper,
+    (ModelNode*) &iedModel_B1HYD_TNKXSWI1_Pos_Oper_Check,
+    NULL,
     0,
+    -1,
+    IEC61850_FC_CO,
+    IEC61850_BOOLEAN,
+    0
+};
+
+DataAttribute iedModel_B1HYD_TNKXSWI1_Pos_Oper_Check = {
+    DataAttributeModelType,
+    "Check",
+    (ModelNode*) &iedModel_B1HYD_TNKXSWI1_Pos_Oper,
+    NULL,
+    NULL,
+    0,
+    -1,
+    IEC61850_FC_CO,
+    IEC61850_CHECK,
+    0
+};
+
+DataAttribute iedModel_B1HYD_TNKXSWI1_Pos_stVal = {
+    DataAttributeModelType,
+    "stVal",
+    (ModelNode*) &iedModel_B1HYD_TNKXSWI1_Pos,
+    (ModelNode*) &iedModel_B1HYD_TNKXSWI1_Pos_q,
+    NULL,
+    0,
+    -1,
+    IEC61850_FC_ST,
+    IEC61850_CODEDENUM,
+    TRG_OPT_DATA_CHANGED
+};
+
+DataAttribute iedModel_B1HYD_TNKXSWI1_Pos_q = {
+    DataAttributeModelType,
+    "q",
+    (ModelNode*) &iedModel_B1HYD_TNKXSWI1_Pos,
+    (ModelNode*) &iedModel_B1HYD_TNKXSWI1_Pos_t,
+    NULL,
+    0,
+    -1,
+    IEC61850_FC_ST,
+    IEC61850_QUALITY,
+    TRG_OPT_QUALITY_CHANGED
+};
+
+DataAttribute iedModel_B1HYD_TNKXSWI1_Pos_t = {
+    DataAttributeModelType,
+    "t",
+    (ModelNode*) &iedModel_B1HYD_TNKXSWI1_Pos,
+    (ModelNode*) &iedModel_B1HYD_TNKXSWI1_Pos_ctlModel,
+    NULL,
+    0,
+    -1,
+    IEC61850_FC_ST,
+    IEC61850_TIMESTAMP,
+    0
+};
+
+DataAttribute iedModel_B1HYD_TNKXSWI1_Pos_ctlModel = {
+    DataAttributeModelType,
+    "ctlModel",
+    (ModelNode*) &iedModel_B1HYD_TNKXSWI1_Pos,
+    NULL,
+    NULL,
+    0,
+    -1,
+    IEC61850_FC_CF,
+    IEC61850_ENUMERATED,
+    0
 };
 
 DataObject iedModel_B1HYD_TNKXSWI1_BlkOpn = {
@@ -3861,71 +4283,22 @@ DataObject iedModel_B1HYD_TNKXSWI1_BlkOpn = {
     "BlkOpn",
     (ModelNode*) &iedModel_B1HYD_TNKXSWI1,
     (ModelNode*) &iedModel_B1HYD_TNKXSWI1_BlkCls,
-    (ModelNode*) &iedModel_B1HYD_TNKXSWI1_BlkOpn_stVal,
+    (ModelNode*) &iedModel_B1HYD_TNKXSWI1_BlkOpn_Oper,
     0,
     -1
 };
 
-DataAttribute iedModel_B1HYD_TNKXSWI1_BlkOpn_stVal = {
+DataAttribute iedModel_B1HYD_TNKXSWI1_BlkOpn_Oper = {
     DataAttributeModelType,
-    "stVal",
-    (ModelNode*) &iedModel_B1HYD_TNKXSWI1_BlkOpn,
-    (ModelNode*) &iedModel_B1HYD_TNKXSWI1_BlkOpn_q,
-    NULL,
-    0,
-    -1,
-    IEC61850_FC_ST,
-    IEC61850_ENUMERATED,
-    TRG_OPT_DATA_CHANGED,
-};
-
-DataAttribute iedModel_B1HYD_TNKXSWI1_BlkOpn_q = {
-    DataAttributeModelType,
-    "q",
-    (ModelNode*) &iedModel_B1HYD_TNKXSWI1_BlkOpn,
-    (ModelNode*) &iedModel_B1HYD_TNKXSWI1_BlkOpn_t,
-    NULL,
-    0,
-    -1,
-    IEC61850_FC_ST,
-    IEC61850_QUALITY,
-    TRG_OPT_QUALITY_CHANGED,
-};
-
-DataAttribute iedModel_B1HYD_TNKXSWI1_BlkOpn_t = {
-    DataAttributeModelType,
-    "t",
-    (ModelNode*) &iedModel_B1HYD_TNKXSWI1_BlkOpn,
-    (ModelNode*) &iedModel_B1HYD_TNKXSWI1_BlkOpn_ctlModel,
-    NULL,
-    0,
-    -1,
-    IEC61850_FC_ST,
-    IEC61850_TIMESTAMP,
-    0,
-};
-
-DataAttribute iedModel_B1HYD_TNKXSWI1_BlkOpn_ctlModel = {
-    DataAttributeModelType,
-    "ctlModel",
-    (ModelNode*) &iedModel_B1HYD_TNKXSWI1_BlkOpn,
-    (ModelNode*) &iedModel_B1HYD_TNKXSWI1_BlkOpn_Oper,
-    NULL,
-    0,
-    -1,
-    IEC61850_FC_CF,
-    IEC61850_ENUMERATED,
-    TRG_OPT_DATA_CHANGED,
-};
-
-DataObject iedModel_B1HYD_TNKXSWI1_BlkOpn_Oper = {
-    DataObjectModelType,
     "Oper",
     (ModelNode*) &iedModel_B1HYD_TNKXSWI1_BlkOpn,
-    NULL,
+    (ModelNode*) &iedModel_B1HYD_TNKXSWI1_BlkOpn_stVal,
     (ModelNode*) &iedModel_B1HYD_TNKXSWI1_BlkOpn_Oper_ctlVal,
     0,
-    -1
+    -1,
+    IEC61850_FC_CO,
+    IEC61850_CONSTRUCTED,
+    0
 };
 
 DataAttribute iedModel_B1HYD_TNKXSWI1_BlkOpn_Oper_ctlVal = {
@@ -3937,8 +4310,8 @@ DataAttribute iedModel_B1HYD_TNKXSWI1_BlkOpn_Oper_ctlVal = {
     0,
     -1,
     IEC61850_FC_CO,
-    IEC61850_ENUMERATED,
-    0,
+    IEC61850_BOOLEAN,
+    0
 };
 
 DataAttribute iedModel_B1HYD_TNKXSWI1_BlkOpn_Oper_origin = {
@@ -3946,12 +4319,38 @@ DataAttribute iedModel_B1HYD_TNKXSWI1_BlkOpn_Oper_origin = {
     "origin",
     (ModelNode*) &iedModel_B1HYD_TNKXSWI1_BlkOpn_Oper,
     (ModelNode*) &iedModel_B1HYD_TNKXSWI1_BlkOpn_Oper_ctlNum,
+    (ModelNode*) &iedModel_B1HYD_TNKXSWI1_BlkOpn_Oper_origin_orCat,
+    0,
+    -1,
+    IEC61850_FC_CO,
+    IEC61850_CONSTRUCTED,
+    0
+};
+
+DataAttribute iedModel_B1HYD_TNKXSWI1_BlkOpn_Oper_origin_orCat = {
+    DataAttributeModelType,
+    "orCat",
+    (ModelNode*) &iedModel_B1HYD_TNKXSWI1_BlkOpn_Oper_origin,
+    (ModelNode*) &iedModel_B1HYD_TNKXSWI1_BlkOpn_Oper_origin_orIdent,
+    NULL,
+    0,
+    -1,
+    IEC61850_FC_CO,
+    IEC61850_INT8,
+    0
+};
+
+DataAttribute iedModel_B1HYD_TNKXSWI1_BlkOpn_Oper_origin_orIdent = {
+    DataAttributeModelType,
+    "orIdent",
+    (ModelNode*) &iedModel_B1HYD_TNKXSWI1_BlkOpn_Oper_origin,
+    NULL,
     NULL,
     0,
     -1,
     IEC61850_FC_CO,
     IEC61850_OCTET_STRING_64,
-    0,
+    0
 };
 
 DataAttribute iedModel_B1HYD_TNKXSWI1_BlkOpn_Oper_ctlNum = {
@@ -3964,92 +4363,121 @@ DataAttribute iedModel_B1HYD_TNKXSWI1_BlkOpn_Oper_ctlNum = {
     -1,
     IEC61850_FC_CO,
     IEC61850_INT8U,
-    0,
+    0
 };
 
 DataAttribute iedModel_B1HYD_TNKXSWI1_BlkOpn_Oper_T = {
     DataAttributeModelType,
     "T",
     (ModelNode*) &iedModel_B1HYD_TNKXSWI1_BlkOpn_Oper,
-    NULL,
+    (ModelNode*) &iedModel_B1HYD_TNKXSWI1_BlkOpn_Oper_Test,
     NULL,
     0,
     -1,
     IEC61850_FC_CO,
     IEC61850_TIMESTAMP,
+    0
+};
+
+DataAttribute iedModel_B1HYD_TNKXSWI1_BlkOpn_Oper_Test = {
+    DataAttributeModelType,
+    "Test",
+    (ModelNode*) &iedModel_B1HYD_TNKXSWI1_BlkOpn_Oper,
+    (ModelNode*) &iedModel_B1HYD_TNKXSWI1_BlkOpn_Oper_Check,
+    NULL,
     0,
+    -1,
+    IEC61850_FC_CO,
+    IEC61850_BOOLEAN,
+    0
+};
+
+DataAttribute iedModel_B1HYD_TNKXSWI1_BlkOpn_Oper_Check = {
+    DataAttributeModelType,
+    "Check",
+    (ModelNode*) &iedModel_B1HYD_TNKXSWI1_BlkOpn_Oper,
+    NULL,
+    NULL,
+    0,
+    -1,
+    IEC61850_FC_CO,
+    IEC61850_CHECK,
+    0
+};
+
+DataAttribute iedModel_B1HYD_TNKXSWI1_BlkOpn_stVal = {
+    DataAttributeModelType,
+    "stVal",
+    (ModelNode*) &iedModel_B1HYD_TNKXSWI1_BlkOpn,
+    (ModelNode*) &iedModel_B1HYD_TNKXSWI1_BlkOpn_q,
+    NULL,
+    0,
+    -1,
+    IEC61850_FC_ST,
+    IEC61850_CODEDENUM, 
+    TRG_OPT_DATA_CHANGED
+};
+
+DataAttribute iedModel_B1HYD_TNKXSWI1_BlkOpn_q = {
+    DataAttributeModelType,
+    "q",
+    (ModelNode*) &iedModel_B1HYD_TNKXSWI1_BlkOpn,
+    (ModelNode*) &iedModel_B1HYD_TNKXSWI1_BlkOpn_t,
+    NULL,
+    0,
+    -1,
+    IEC61850_FC_ST,
+    IEC61850_QUALITY,
+    TRG_OPT_QUALITY_CHANGED
+};
+
+DataAttribute iedModel_B1HYD_TNKXSWI1_BlkOpn_t = {
+    DataAttributeModelType,
+    "t",
+    (ModelNode*) &iedModel_B1HYD_TNKXSWI1_BlkOpn,
+    (ModelNode*) &iedModel_B1HYD_TNKXSWI1_BlkOpn_ctlModel,
+    NULL,
+    0,
+    -1,
+    IEC61850_FC_ST,
+    IEC61850_TIMESTAMP,
+    0
+};
+
+DataAttribute iedModel_B1HYD_TNKXSWI1_BlkOpn_ctlModel = {
+    DataAttributeModelType,
+    "ctlModel",
+    (ModelNode*) &iedModel_B1HYD_TNKXSWI1_BlkOpn,
+    NULL,
+    NULL,
+    0,
+    -1,
+    IEC61850_FC_CF,
+    IEC61850_ENUMERATED,
+    0
 };
 
 DataObject iedModel_B1HYD_TNKXSWI1_BlkCls = {
     DataObjectModelType,
     "BlkCls",
     (ModelNode*) &iedModel_B1HYD_TNKXSWI1,
-    NULL,
-    (ModelNode*) &iedModel_B1HYD_TNKXSWI1_BlkCls_stVal,
+    (ModelNode*) &iedModel_B1HYD_TNKXSWI1_Mod,
+    (ModelNode*) &iedModel_B1HYD_TNKXSWI1_BlkCls_Oper,
     0,
     -1
 };
 
-DataAttribute iedModel_B1HYD_TNKXSWI1_BlkCls_stVal = {
+DataAttribute iedModel_B1HYD_TNKXSWI1_BlkCls_Oper = {
     DataAttributeModelType,
-    "stVal",
-    (ModelNode*) &iedModel_B1HYD_TNKXSWI1_BlkCls,
-    (ModelNode*) &iedModel_B1HYD_TNKXSWI1_BlkCls_q,
-    NULL,
-    0,
-    -1,
-    IEC61850_FC_ST,
-    IEC61850_BOOLEAN,
-    TRG_OPT_DATA_CHANGED,
-};
-
-DataAttribute iedModel_B1HYD_TNKXSWI1_BlkCls_q = {
-    DataAttributeModelType,
-    "q",
-    (ModelNode*) &iedModel_B1HYD_TNKXSWI1_BlkCls,
-    (ModelNode*) &iedModel_B1HYD_TNKXSWI1_BlkCls_t,
-    NULL,
-    0,
-    -1,
-    IEC61850_FC_ST,
-    IEC61850_QUALITY,
-    TRG_OPT_QUALITY_CHANGED,
-};
-
-DataAttribute iedModel_B1HYD_TNKXSWI1_BlkCls_t = {
-    DataAttributeModelType,
-    "t",
-    (ModelNode*) &iedModel_B1HYD_TNKXSWI1_BlkCls,
-    (ModelNode*) &iedModel_B1HYD_TNKXSWI1_BlkCls_ctlModel,
-    NULL,
-    0,
-    -1,
-    IEC61850_FC_ST,
-    IEC61850_TIMESTAMP,
-    0,
-};
-
-DataAttribute iedModel_B1HYD_TNKXSWI1_BlkCls_ctlModel = {
-    DataAttributeModelType,
-    "ctlModel",
-    (ModelNode*) &iedModel_B1HYD_TNKXSWI1_BlkCls,
-    (ModelNode*) &iedModel_B1HYD_TNKXSWI1_BlkCls_Oper,
-    NULL,
-    0,
-    -1,
-    IEC61850_FC_CF,
-    IEC61850_ENUMERATED,
-    TRG_OPT_DATA_CHANGED,
-};
-
-DataObject iedModel_B1HYD_TNKXSWI1_BlkCls_Oper = {
-    DataObjectModelType,
     "Oper",
     (ModelNode*) &iedModel_B1HYD_TNKXSWI1_BlkCls,
-    NULL,
+    (ModelNode*) &iedModel_B1HYD_TNKXSWI1_BlkCls_stVal,
     (ModelNode*) &iedModel_B1HYD_TNKXSWI1_BlkCls_Oper_ctlVal,
     0,
-    -1
+    -1,
+    IEC61850_FC_CO,
+    IEC61850_CONSTRUCTED,
+    0
 };
 
 DataAttribute iedModel_B1HYD_TNKXSWI1_BlkCls_Oper_ctlVal = {
@@ -4062,7 +4490,7 @@ DataAttribute iedModel_B1HYD_TNKXSWI1_BlkCls_Oper_ctlVal = {
     -1,
     IEC61850_FC_CO,
     IEC61850_BOOLEAN,
-    0,
+    0
 };
 
 DataAttribute iedModel_B1HYD_TNKXSWI1_BlkCls_Oper_origin = {
@@ -4070,12 +4498,38 @@ DataAttribute iedModel_B1HYD_TNKXSWI1_BlkCls_Oper_origin = {
     "origin",
     (ModelNode*) &iedModel_B1HYD_TNKXSWI1_BlkCls_Oper,
     (ModelNode*) &iedModel_B1HYD_TNKXSWI1_BlkCls_Oper_ctlNum,
+    (ModelNode*) &iedModel_B1HYD_TNKXSWI1_BlkCls_Oper_origin_orCat,
+    0,
+    -1,
+    IEC61850_FC_CO,
+    IEC61850_CONSTRUCTED,
+    0
+};
+
+DataAttribute iedModel_B1HYD_TNKXSWI1_BlkCls_Oper_origin_orCat = {
+    DataAttributeModelType,
+    "orCat",
+    (ModelNode*) &iedModel_B1HYD_TNKXSWI1_BlkCls_Oper_origin,
+    (ModelNode*) &iedModel_B1HYD_TNKXSWI1_BlkCls_Oper_origin_orIdent,
+    NULL,
+    0,
+    -1,
+    IEC61850_FC_CO,
+    IEC61850_INT8,
+    0
+};
+
+DataAttribute iedModel_B1HYD_TNKXSWI1_BlkCls_Oper_origin_orIdent = {
+    DataAttributeModelType,
+    "orIdent",
+    (ModelNode*) &iedModel_B1HYD_TNKXSWI1_BlkCls_Oper_origin,
+    NULL,
     NULL,
     0,
     -1,
     IEC61850_FC_CO,
     IEC61850_OCTET_STRING_64,
-    0,
+    0
 };
 
 DataAttribute iedModel_B1HYD_TNKXSWI1_BlkCls_Oper_ctlNum = {
@@ -4088,24 +4542,187 @@ DataAttribute iedModel_B1HYD_TNKXSWI1_BlkCls_Oper_ctlNum = {
     -1,
     IEC61850_FC_CO,
     IEC61850_INT8U,
-    0,
+    0
 };
 
 DataAttribute iedModel_B1HYD_TNKXSWI1_BlkCls_Oper_T = {
     DataAttributeModelType,
     "T",
     (ModelNode*) &iedModel_B1HYD_TNKXSWI1_BlkCls_Oper,
-    NULL,
+    (ModelNode*) &iedModel_B1HYD_TNKXSWI1_BlkCls_Oper_Test,
     NULL,
     0,
     -1,
     IEC61850_FC_CO,
     IEC61850_TIMESTAMP,
+    0
+};
+
+DataAttribute iedModel_B1HYD_TNKXSWI1_BlkCls_Oper_Test = {
+    DataAttributeModelType,
+    "Test",
+    (ModelNode*) &iedModel_B1HYD_TNKXSWI1_BlkCls_Oper,
+    (ModelNode*) &iedModel_B1HYD_TNKXSWI1_BlkCls_Oper_Check,
+    NULL,
     0,
+    -1,
+    IEC61850_FC_CO,
+    IEC61850_BOOLEAN,
+    0
+};
+
+DataAttribute iedModel_B1HYD_TNKXSWI1_BlkCls_Oper_Check = {
+    DataAttributeModelType,
+    "Check",
+    (ModelNode*) &iedModel_B1HYD_TNKXSWI1_BlkCls_Oper,
+    NULL,
+    NULL,
+    0,
+    -1,
+    IEC61850_FC_CO,
+    IEC61850_CHECK,
+    0
+};
+
+DataAttribute iedModel_B1HYD_TNKXSWI1_BlkCls_stVal = {
+    DataAttributeModelType,
+    "stVal",
+    (ModelNode*) &iedModel_B1HYD_TNKXSWI1_BlkCls,
+    (ModelNode*) &iedModel_B1HYD_TNKXSWI1_BlkCls_q,
+    NULL,
+    0,
+    -1,
+    IEC61850_FC_ST,
+    IEC61850_BOOLEAN, 
+    TRG_OPT_DATA_CHANGED
+};
+
+DataAttribute iedModel_B1HYD_TNKXSWI1_BlkCls_q = {
+    DataAttributeModelType,
+    "q",
+    (ModelNode*) &iedModel_B1HYD_TNKXSWI1_BlkCls,
+    (ModelNode*) &iedModel_B1HYD_TNKXSWI1_BlkCls_t,
+    NULL,
+    0,
+    -1,
+    IEC61850_FC_ST,
+    IEC61850_QUALITY,
+    TRG_OPT_QUALITY_CHANGED
+};
+
+DataAttribute iedModel_B1HYD_TNKXSWI1_BlkCls_t = {
+    DataAttributeModelType,
+    "t",
+    (ModelNode*) &iedModel_B1HYD_TNKXSWI1_BlkCls,
+    (ModelNode*) &iedModel_B1HYD_TNKXSWI1_BlkCls_ctlModel,
+    NULL,
+    0,
+    -1,
+    IEC61850_FC_ST,
+    IEC61850_TIMESTAMP,
+    0
+};
+
+DataAttribute iedModel_B1HYD_TNKXSWI1_BlkCls_ctlModel = {
+    DataAttributeModelType,
+    "ctlModel",
+    (ModelNode*) &iedModel_B1HYD_TNKXSWI1_BlkCls,
+    NULL,
+    NULL,
+    0,
+    -1,
+    IEC61850_FC_CF,
+    IEC61850_ENUMERATED,
+    0
+};
+
+DataObject iedModel_B1HYD_TNKXSWI1_Mod = {
+    DataObjectModelType,
+    "Mod",
+    (ModelNode*) &iedModel_B1HYD_TNKXSWI1,
+    (ModelNode*) &iedModel_B1HYD_TNKXSWI1_BlkRef,
+    (ModelNode*) &iedModel_B1HYD_TNKXSWI1_Mod_stVal,
+    0,
+    -1
+};
+
+DataAttribute iedModel_B1HYD_TNKXSWI1_Mod_stVal = {
+    DataAttributeModelType,
+    "stVal",
+    (ModelNode*) &iedModel_B1HYD_TNKXSWI1_Mod,
+    (ModelNode*) &iedModel_B1HYD_TNKXSWI1_Mod_q,
+    NULL,
+    0,
+    -1,
+    IEC61850_FC_ST,
+    IEC61850_ENUMERATED,
+    TRG_OPT_DATA_CHANGED
+};
+
+DataAttribute iedModel_B1HYD_TNKXSWI1_Mod_q = {
+    DataAttributeModelType,
+    "q",
+    (ModelNode*) &iedModel_B1HYD_TNKXSWI1_Mod,
+    (ModelNode*) &iedModel_B1HYD_TNKXSWI1_Mod_t,
+    NULL,
+    0,
+    -1,
+    IEC61850_FC_ST,
+    IEC61850_QUALITY,
+    TRG_OPT_QUALITY_CHANGED
+};
+
+DataAttribute iedModel_B1HYD_TNKXSWI1_Mod_t = {
+    DataAttributeModelType,
+    "t",
+    (ModelNode*) &iedModel_B1HYD_TNKXSWI1_Mod,
+    (ModelNode*) &iedModel_B1HYD_TNKXSWI1_Mod_ctlModel,
+    NULL,
+    0,
+    -1,
+    IEC61850_FC_ST,
+    IEC61850_TIMESTAMP,
+    0
+};
+
+DataAttribute iedModel_B1HYD_TNKXSWI1_Mod_ctlModel = {
+    DataAttributeModelType,
+    "ctlModel",
+    (ModelNode*) &iedModel_B1HYD_TNKXSWI1_Mod,
+    NULL,
+    NULL,
+    0,
+    -1,
+    IEC61850_FC_CF,
+    IEC61850_ENUMERATED,
+    0
+};
+
+DataObject iedModel_B1HYD_TNKXSWI1_BlkRef = {
+    DataObjectModelType,
+    "BlkRef",
+    (ModelNode*) &iedModel_B1HYD_TNKXSWI1,
+    NULL,
+    (ModelNode*) &iedModel_B1HYD_TNKXSWI1_BlkRef_setSrcRef,
+    0,
+    -1
+};
+
+DataAttribute iedModel_B1HYD_TNKXSWI1_BlkRef_setSrcRef = {
+    DataAttributeModelType,
+    "setSrcRef",
+    (ModelNode*) &iedModel_B1HYD_TNKXSWI1_BlkRef,
+    NULL,
+    NULL,
+    0,
+    -1,
+    IEC61850_FC_SP,
+    IEC61850_VISIBLE_STRING_255,
+    TRG_OPT_DATA_CHANGED
 };
 
 /* =================================================================
- * NÓ LÓGICO CELXSWI1 (Chave da Célula - Refeito)
+ * IMPLEMENTAÇÃO CELXSWI1 (Chave da Célula)
  * =================================================================
  */
 
@@ -4114,63 +4731,148 @@ LogicalNode iedModel_B1HYD_CELXSWI1 = {
     "CELXSWI1",
     (ModelNode*) &iedModel_B1HYD,
     NULL,
-    (ModelNode*) &iedModel_B1HYD_CELXSWI1_SwTyp,
+    (ModelNode*) &iedModel_B1HYD_CELXSWI1_EEName,
 };
 
-DataObject iedModel_B1HYD_CELXSWI1_SwTyp = {
+DataObject iedModel_B1HYD_CELXSWI1_EEName = {
     DataObjectModelType,
-    "SwTyp",
+    "EEName",
     (ModelNode*) &iedModel_B1HYD_CELXSWI1,
-    (ModelNode*) &iedModel_B1HYD_CELXSWI1_Loc,
-    (ModelNode*) &iedModel_B1HYD_CELXSWI1_SwTyp_stVal,
+    (ModelNode*) &iedModel_B1HYD_CELXSWI1_NamPlt,
+    (ModelNode*) &iedModel_B1HYD_CELXSWI1_EEName_vendor,
     0,
     -1
 };
 
-DataAttribute iedModel_B1HYD_CELXSWI1_SwTyp_stVal = {
+DataAttribute iedModel_B1HYD_CELXSWI1_EEName_vendor = {
+    DataAttributeModelType,
+    "vendor",
+    (ModelNode*) &iedModel_B1HYD_CELXSWI1_EEName,
+    (ModelNode*) &iedModel_B1HYD_CELXSWI1_EEName_model,
+    NULL,
+    0,
+    -1,
+    IEC61850_FC_DC,
+    IEC61850_VISIBLE_STRING_255,
+    0
+};
+
+DataAttribute iedModel_B1HYD_CELXSWI1_EEName_model = {
+    DataAttributeModelType,
+    "model",
+    (ModelNode*) &iedModel_B1HYD_CELXSWI1_EEName,
+    NULL,
+    NULL,
+    0,
+    -1,
+    IEC61850_FC_DC,
+    IEC61850_VISIBLE_STRING_255,
+    0
+};
+
+DataObject iedModel_B1HYD_CELXSWI1_NamPlt = {
+    DataObjectModelType,
+    "NamPlt",
+    (ModelNode*) &iedModel_B1HYD_CELXSWI1,
+    (ModelNode*) &iedModel_B1HYD_CELXSWI1_SwOpCap,
+    (ModelNode*) &iedModel_B1HYD_CELXSWI1_NamPlt_vendor,
+    0,
+    -1
+};
+
+DataAttribute iedModel_B1HYD_CELXSWI1_NamPlt_vendor = {
+    DataAttributeModelType,
+    "vendor",
+    (ModelNode*) &iedModel_B1HYD_CELXSWI1_NamPlt,
+    (ModelNode*) &iedModel_B1HYD_CELXSWI1_NamPlt_swRev,
+    NULL,
+    0,
+    -1,
+    IEC61850_FC_DC,
+    IEC61850_VISIBLE_STRING_255,
+    0
+};
+
+DataAttribute iedModel_B1HYD_CELXSWI1_NamPlt_swRev = {
+    DataAttributeModelType,
+    "swRev",
+    (ModelNode*) &iedModel_B1HYD_CELXSWI1_NamPlt,
+    (ModelNode*) &iedModel_B1HYD_CELXSWI1_NamPlt_lnNs,
+    NULL,
+    0,
+    -1,
+    IEC61850_FC_DC,
+    IEC61850_VISIBLE_STRING_255,
+    0
+};
+
+DataAttribute iedModel_B1HYD_CELXSWI1_NamPlt_lnNs = {
+    DataAttributeModelType,
+    "lnNs",
+    (ModelNode*) &iedModel_B1HYD_CELXSWI1_NamPlt,
+    NULL,
+    NULL,
+    0,
+    -1,
+    IEC61850_FC_EX,
+    IEC61850_VISIBLE_STRING_255,
+    0
+};
+
+DataObject iedModel_B1HYD_CELXSWI1_SwOpCap = {
+    DataObjectModelType,
+    "SwOpCap",
+    (ModelNode*) &iedModel_B1HYD_CELXSWI1,
+    (ModelNode*) &iedModel_B1HYD_CELXSWI1_Loc,
+    (ModelNode*) &iedModel_B1HYD_CELXSWI1_SwOpCap_stVal,
+    0,
+    -1
+};
+
+DataAttribute iedModel_B1HYD_CELXSWI1_SwOpCap_stVal = {
     DataAttributeModelType,
     "stVal",
-    (ModelNode*) &iedModel_B1HYD_CELXSWI1_SwTyp,
-    (ModelNode*) &iedModel_B1HYD_CELXSWI1_SwTyp_q,
+    (ModelNode*) &iedModel_B1HYD_CELXSWI1_SwOpCap,
+    (ModelNode*) &iedModel_B1HYD_CELXSWI1_SwOpCap_q,
     NULL,
     0,
     -1,
     IEC61850_FC_ST,
     IEC61850_ENUMERATED,
-    TRG_OPT_DATA_CHANGED,
+    TRG_OPT_DATA_CHANGED
 };
 
-DataAttribute iedModel_B1HYD_CELXSWI1_SwTyp_q = {
+DataAttribute iedModel_B1HYD_CELXSWI1_SwOpCap_q = {
     DataAttributeModelType,
     "q",
-    (ModelNode*) &iedModel_B1HYD_CELXSWI1_SwTyp,
-    (ModelNode*) &iedModel_B1HYD_CELXSWI1_SwTyp_t,
+    (ModelNode*) &iedModel_B1HYD_CELXSWI1_SwOpCap,
+    (ModelNode*) &iedModel_B1HYD_CELXSWI1_SwOpCap_t,
     NULL,
     0,
     -1,
     IEC61850_FC_ST,
     IEC61850_QUALITY,
-    TRG_OPT_QUALITY_CHANGED,
+    TRG_OPT_QUALITY_CHANGED
 };
 
-DataAttribute iedModel_B1HYD_CELXSWI1_SwTyp_t = {
+DataAttribute iedModel_B1HYD_CELXSWI1_SwOpCap_t = {
     DataAttributeModelType,
     "t",
-    (ModelNode*) &iedModel_B1HYD_CELXSWI1_SwTyp,
+    (ModelNode*) &iedModel_B1HYD_CELXSWI1_SwOpCap,
     NULL,
     NULL,
     0,
     -1,
     IEC61850_FC_ST,
     IEC61850_TIMESTAMP,
-    0,
+    0
 };
 
 DataObject iedModel_B1HYD_CELXSWI1_Loc = {
     DataObjectModelType,
     "Loc",
     (ModelNode*) &iedModel_B1HYD_CELXSWI1,
-    (ModelNode*) &iedModel_B1HYD_CELXSWI1_OpCnt,
+    (ModelNode*) &iedModel_B1HYD_CELXSWI1_LocKey,
     (ModelNode*) &iedModel_B1HYD_CELXSWI1_Loc_stVal,
     0,
     -1
@@ -4186,7 +4888,7 @@ DataAttribute iedModel_B1HYD_CELXSWI1_Loc_stVal = {
     -1,
     IEC61850_FC_ST,
     IEC61850_BOOLEAN,
-    TRG_OPT_DATA_CHANGED,
+    TRG_OPT_DATA_CHANGED
 };
 
 DataAttribute iedModel_B1HYD_CELXSWI1_Loc_q = {
@@ -4199,7 +4901,7 @@ DataAttribute iedModel_B1HYD_CELXSWI1_Loc_q = {
     -1,
     IEC61850_FC_ST,
     IEC61850_QUALITY,
-    TRG_OPT_QUALITY_CHANGED,
+    TRG_OPT_QUALITY_CHANGED
 };
 
 DataAttribute iedModel_B1HYD_CELXSWI1_Loc_t = {
@@ -4212,56 +4914,154 @@ DataAttribute iedModel_B1HYD_CELXSWI1_Loc_t = {
     -1,
     IEC61850_FC_ST,
     IEC61850_TIMESTAMP,
-    0,
+    0
 };
 
-DataObject iedModel_B1HYD_CELXSWI1_OpCnt = {
+DataObject iedModel_B1HYD_CELXSWI1_LocKey = {
     DataObjectModelType,
-    "OpCnt",
+    "LocKey",
     (ModelNode*) &iedModel_B1HYD_CELXSWI1,
-    (ModelNode*) &iedModel_B1HYD_CELXSWI1_Beh,
-    (ModelNode*) &iedModel_B1HYD_CELXSWI1_OpCnt_stVal,
+    (ModelNode*) &iedModel_B1HYD_CELXSWI1_EEHealth,
+    (ModelNode*) &iedModel_B1HYD_CELXSWI1_LocKey_stVal,
     0,
     -1
 };
 
-DataAttribute iedModel_B1HYD_CELXSWI1_OpCnt_stVal = {
+DataAttribute iedModel_B1HYD_CELXSWI1_LocKey_stVal = {
     DataAttributeModelType,
     "stVal",
-    (ModelNode*) &iedModel_B1HYD_CELXSWI1_OpCnt,
-    (ModelNode*) &iedModel_B1HYD_CELXSWI1_OpCnt_q,
+    (ModelNode*) &iedModel_B1HYD_CELXSWI1_LocKey,
+    (ModelNode*) &iedModel_B1HYD_CELXSWI1_LocKey_q,
     NULL,
     0,
     -1,
     IEC61850_FC_ST,
-    IEC61850_INT32,
-    TRG_OPT_DATA_CHANGED | TRG_OPT_DATA_UPDATE,
+    IEC61850_BOOLEAN,
+    TRG_OPT_DATA_CHANGED
 };
 
-DataAttribute iedModel_B1HYD_CELXSWI1_OpCnt_q = {
+DataAttribute iedModel_B1HYD_CELXSWI1_LocKey_q = {
     DataAttributeModelType,
     "q",
-    (ModelNode*) &iedModel_B1HYD_CELXSWI1_OpCnt,
-    (ModelNode*) &iedModel_B1HYD_CELXSWI1_OpCnt_t,
+    (ModelNode*) &iedModel_B1HYD_CELXSWI1_LocKey,
+    (ModelNode*) &iedModel_B1HYD_CELXSWI1_LocKey_t,
     NULL,
     0,
     -1,
     IEC61850_FC_ST,
     IEC61850_QUALITY,
-    TRG_OPT_QUALITY_CHANGED,
+    TRG_OPT_QUALITY_CHANGED
 };
 
-DataAttribute iedModel_B1HYD_CELXSWI1_OpCnt_t = {
+DataAttribute iedModel_B1HYD_CELXSWI1_LocKey_t = {
     DataAttributeModelType,
     "t",
-    (ModelNode*) &iedModel_B1HYD_CELXSWI1_OpCnt,
+    (ModelNode*) &iedModel_B1HYD_CELXSWI1_LocKey,
     NULL,
     NULL,
     0,
     -1,
     IEC61850_FC_ST,
     IEC61850_TIMESTAMP,
+    0
+};
+
+DataObject iedModel_B1HYD_CELXSWI1_EEHealth = {
+    DataObjectModelType,
+    "EEHealth",
+    (ModelNode*) &iedModel_B1HYD_CELXSWI1,
+    (ModelNode*) &iedModel_B1HYD_CELXSWI1_Blk,
+    (ModelNode*) &iedModel_B1HYD_CELXSWI1_EEHealth_stVal,
     0,
+    -1
+};
+
+DataAttribute iedModel_B1HYD_CELXSWI1_EEHealth_stVal = {
+    DataAttributeModelType,
+    "stVal",
+    (ModelNode*) &iedModel_B1HYD_CELXSWI1_EEHealth,
+    (ModelNode*) &iedModel_B1HYD_CELXSWI1_EEHealth_q,
+    NULL,
+    0,
+    -1,
+    IEC61850_FC_ST,
+    IEC61850_ENUMERATED,
+    TRG_OPT_DATA_CHANGED
+};
+
+DataAttribute iedModel_B1HYD_CELXSWI1_EEHealth_q = {
+    DataAttributeModelType,
+    "q",
+    (ModelNode*) &iedModel_B1HYD_CELXSWI1_EEHealth,
+    (ModelNode*) &iedModel_B1HYD_CELXSWI1_EEHealth_t,
+    NULL,
+    0,
+    -1,
+    IEC61850_FC_ST,
+    IEC61850_QUALITY,
+    TRG_OPT_QUALITY_CHANGED
+};
+
+DataAttribute iedModel_B1HYD_CELXSWI1_EEHealth_t = {
+    DataAttributeModelType,
+    "t",
+    (ModelNode*) &iedModel_B1HYD_CELXSWI1_EEHealth,
+    NULL,
+    NULL,
+    0,
+    -1,
+    IEC61850_FC_ST,
+    IEC61850_TIMESTAMP,
+    0
+};
+
+DataObject iedModel_B1HYD_CELXSWI1_Blk = {
+    DataObjectModelType,
+    "Blk",
+    (ModelNode*) &iedModel_B1HYD_CELXSWI1,
+    (ModelNode*) &iedModel_B1HYD_CELXSWI1_Beh,
+    (ModelNode*) &iedModel_B1HYD_CELXSWI1_Blk_stVal,
+    0,
+    -1
+};
+
+DataAttribute iedModel_B1HYD_CELXSWI1_Blk_stVal = {
+    DataAttributeModelType,
+    "stVal",
+    (ModelNode*) &iedModel_B1HYD_CELXSWI1_Blk,
+    (ModelNode*) &iedModel_B1HYD_CELXSWI1_Blk_q,
+    NULL,
+    0,
+    -1,
+    IEC61850_FC_ST,
+    IEC61850_BOOLEAN,
+    TRG_OPT_DATA_CHANGED
+};
+
+DataAttribute iedModel_B1HYD_CELXSWI1_Blk_q = {
+    DataAttributeModelType,
+    "q",
+    (ModelNode*) &iedModel_B1HYD_CELXSWI1_Blk,
+    (ModelNode*) &iedModel_B1HYD_CELXSWI1_Blk_t,
+    NULL,
+    0,
+    -1,
+    IEC61850_FC_ST,
+    IEC61850_QUALITY,
+    TRG_OPT_QUALITY_CHANGED
+};
+
+DataAttribute iedModel_B1HYD_CELXSWI1_Blk_t = {
+    DataAttributeModelType,
+    "t",
+    (ModelNode*) &iedModel_B1HYD_CELXSWI1_Blk,
+    NULL,
+    NULL,
+    0,
+    -1,
+    IEC61850_FC_ST,
+    IEC61850_TIMESTAMP,
+    0
 };
 
 DataObject iedModel_B1HYD_CELXSWI1_Beh = {
@@ -4284,7 +5084,7 @@ DataAttribute iedModel_B1HYD_CELXSWI1_Beh_stVal = {
     -1,
     IEC61850_FC_ST,
     IEC61850_ENUMERATED,
-    TRG_OPT_DATA_UPDATE,
+    TRG_OPT_DATA_CHANGED
 };
 
 DataAttribute iedModel_B1HYD_CELXSWI1_Beh_q = {
@@ -4297,7 +5097,7 @@ DataAttribute iedModel_B1HYD_CELXSWI1_Beh_q = {
     -1,
     IEC61850_FC_ST,
     IEC61850_QUALITY,
-    TRG_OPT_QUALITY_CHANGED,
+    TRG_OPT_QUALITY_CHANGED
 };
 
 DataAttribute iedModel_B1HYD_CELXSWI1_Beh_t = {
@@ -4310,14 +5110,14 @@ DataAttribute iedModel_B1HYD_CELXSWI1_Beh_t = {
     -1,
     IEC61850_FC_ST,
     IEC61850_TIMESTAMP,
-    0,
+    0
 };
 
 DataObject iedModel_B1HYD_CELXSWI1_Health = {
     DataObjectModelType,
     "Health",
     (ModelNode*) &iedModel_B1HYD_CELXSWI1,
-    (ModelNode*) &iedModel_B1HYD_CELXSWI1_Pos,
+    (ModelNode*) &iedModel_B1HYD_CELXSWI1_LocSta,
     (ModelNode*) &iedModel_B1HYD_CELXSWI1_Health_stVal,
     0,
     -1
@@ -4333,7 +5133,7 @@ DataAttribute iedModel_B1HYD_CELXSWI1_Health_stVal = {
     -1,
     IEC61850_FC_ST,
     IEC61850_ENUMERATED,
-    TRG_OPT_DATA_UPDATE,
+    TRG_OPT_DATA_CHANGED
 };
 
 DataAttribute iedModel_B1HYD_CELXSWI1_Health_q = {
@@ -4346,7 +5146,7 @@ DataAttribute iedModel_B1HYD_CELXSWI1_Health_q = {
     -1,
     IEC61850_FC_ST,
     IEC61850_QUALITY,
-    TRG_OPT_QUALITY_CHANGED,
+    TRG_OPT_QUALITY_CHANGED
 };
 
 DataAttribute iedModel_B1HYD_CELXSWI1_Health_t = {
@@ -4359,7 +5159,186 @@ DataAttribute iedModel_B1HYD_CELXSWI1_Health_t = {
     -1,
     IEC61850_FC_ST,
     IEC61850_TIMESTAMP,
+    0
+};
+
+DataObject iedModel_B1HYD_CELXSWI1_LocSta = {
+    DataObjectModelType,
+    "LocSta",
+    (ModelNode*) &iedModel_B1HYD_CELXSWI1,
+    (ModelNode*) &iedModel_B1HYD_CELXSWI1_Pos,
+    (ModelNode*) &iedModel_B1HYD_CELXSWI1_LocSta_Oper,
     0,
+    -1
+};
+
+DataAttribute iedModel_B1HYD_CELXSWI1_LocSta_Oper = {
+    DataAttributeModelType,
+    "Oper",
+    (ModelNode*) &iedModel_B1HYD_CELXSWI1_LocSta,
+    (ModelNode*) &iedModel_B1HYD_CELXSWI1_LocSta_stVal,
+    (ModelNode*) &iedModel_B1HYD_CELXSWI1_LocSta_Oper_ctlVal,
+    0,
+    -1,
+    IEC61850_FC_CO,
+    IEC61850_CONSTRUCTED,
+    0
+};
+
+DataAttribute iedModel_B1HYD_CELXSWI1_LocSta_Oper_ctlVal = {
+    DataAttributeModelType,
+    "ctlVal",
+    (ModelNode*) &iedModel_B1HYD_CELXSWI1_LocSta_Oper,
+    (ModelNode*) &iedModel_B1HYD_CELXSWI1_LocSta_Oper_origin,
+    NULL,
+    0,
+    -1,
+    IEC61850_FC_CO,
+    IEC61850_BOOLEAN,
+    0
+};
+
+DataAttribute iedModel_B1HYD_CELXSWI1_LocSta_Oper_origin = {
+    DataAttributeModelType,
+    "origin",
+    (ModelNode*) &iedModel_B1HYD_CELXSWI1_LocSta_Oper,
+    (ModelNode*) &iedModel_B1HYD_CELXSWI1_LocSta_Oper_ctlNum,
+    (ModelNode*) &iedModel_B1HYD_CELXSWI1_LocSta_Oper_origin_orCat,
+    0,
+    -1,
+    IEC61850_FC_CO,
+    IEC61850_CONSTRUCTED,
+    0
+};
+
+DataAttribute iedModel_B1HYD_CELXSWI1_LocSta_Oper_origin_orCat = {
+    DataAttributeModelType,
+    "orCat",
+    (ModelNode*) &iedModel_B1HYD_CELXSWI1_LocSta_Oper_origin,
+    (ModelNode*) &iedModel_B1HYD_CELXSWI1_LocSta_Oper_origin_orIdent,
+    NULL,
+    0,
+    -1,
+    IEC61850_FC_CO,
+    IEC61850_INT8,
+    0
+};
+
+DataAttribute iedModel_B1HYD_CELXSWI1_LocSta_Oper_origin_orIdent = {
+    DataAttributeModelType,
+    "orIdent",
+    (ModelNode*) &iedModel_B1HYD_CELXSWI1_LocSta_Oper_origin,
+    NULL,
+    NULL,
+    0,
+    -1,
+    IEC61850_FC_CO,
+    IEC61850_OCTET_STRING_64,
+    0
+};
+
+DataAttribute iedModel_B1HYD_CELXSWI1_LocSta_Oper_ctlNum = {
+    DataAttributeModelType,
+    "ctlNum",
+    (ModelNode*) &iedModel_B1HYD_CELXSWI1_LocSta_Oper,
+    (ModelNode*) &iedModel_B1HYD_CELXSWI1_LocSta_Oper_T,
+    NULL,
+    0,
+    -1,
+    IEC61850_FC_CO,
+    IEC61850_INT8U,
+    0
+};
+
+DataAttribute iedModel_B1HYD_CELXSWI1_LocSta_Oper_T = {
+    DataAttributeModelType,
+    "T",
+    (ModelNode*) &iedModel_B1HYD_CELXSWI1_LocSta_Oper,
+    (ModelNode*) &iedModel_B1HYD_CELXSWI1_LocSta_Oper_Test,
+    NULL,
+    0,
+    -1,
+    IEC61850_FC_CO,
+    IEC61850_TIMESTAMP,
+    0
+};
+
+DataAttribute iedModel_B1HYD_CELXSWI1_LocSta_Oper_Test = {
+    DataAttributeModelType,
+    "Test",
+    (ModelNode*) &iedModel_B1HYD_CELXSWI1_LocSta_Oper,
+    (ModelNode*) &iedModel_B1HYD_CELXSWI1_LocSta_Oper_Check,
+    NULL,
+    0,
+    -1,
+    IEC61850_FC_CO,
+    IEC61850_BOOLEAN,
+    0
+};
+
+DataAttribute iedModel_B1HYD_CELXSWI1_LocSta_Oper_Check = {
+    DataAttributeModelType,
+    "Check",
+    (ModelNode*) &iedModel_B1HYD_CELXSWI1_LocSta_Oper,
+    NULL,
+    NULL,
+    0,
+    -1,
+    IEC61850_FC_CO,
+    IEC61850_CHECK,
+    0
+};
+
+DataAttribute iedModel_B1HYD_CELXSWI1_LocSta_stVal = {
+    DataAttributeModelType,
+    "stVal",
+    (ModelNode*) &iedModel_B1HYD_CELXSWI1_LocSta,
+    (ModelNode*) &iedModel_B1HYD_CELXSWI1_LocSta_q,
+    NULL,
+    0,
+    -1,
+    IEC61850_FC_ST,
+    IEC61850_BOOLEAN,
+    TRG_OPT_DATA_CHANGED
+};
+
+DataAttribute iedModel_B1HYD_CELXSWI1_LocSta_q = {
+    DataAttributeModelType,
+    "q",
+    (ModelNode*) &iedModel_B1HYD_CELXSWI1_LocSta,
+    (ModelNode*) &iedModel_B1HYD_CELXSWI1_LocSta_t,
+    NULL,
+    0,
+    -1,
+    IEC61850_FC_ST,
+    IEC61850_QUALITY,
+    TRG_OPT_QUALITY_CHANGED
+};
+
+DataAttribute iedModel_B1HYD_CELXSWI1_LocSta_t = {
+    DataAttributeModelType,
+    "t",
+    (ModelNode*) &iedModel_B1HYD_CELXSWI1_LocSta,
+    (ModelNode*) &iedModel_B1HYD_CELXSWI1_LocSta_ctlModel,
+    NULL,
+    0,
+    -1,
+    IEC61850_FC_ST,
+    IEC61850_TIMESTAMP,
+    0
+};
+
+DataAttribute iedModel_B1HYD_CELXSWI1_LocSta_ctlModel = {
+    DataAttributeModelType,
+    "ctlModel",
+    (ModelNode*) &iedModel_B1HYD_CELXSWI1_LocSta,
+    NULL,
+    NULL,
+    0,
+    -1,
+    IEC61850_FC_CF,
+    IEC61850_ENUMERATED,
+    0
 };
 
 DataObject iedModel_B1HYD_CELXSWI1_Pos = {
@@ -4367,71 +5346,22 @@ DataObject iedModel_B1HYD_CELXSWI1_Pos = {
     "Pos",
     (ModelNode*) &iedModel_B1HYD_CELXSWI1,
     (ModelNode*) &iedModel_B1HYD_CELXSWI1_BlkOpn,
-    (ModelNode*) &iedModel_B1HYD_CELXSWI1_Pos_stVal,
+    (ModelNode*) &iedModel_B1HYD_CELXSWI1_Pos_Oper,
     0,
     -1
 };
 
-DataAttribute iedModel_B1HYD_CELXSWI1_Pos_stVal = {
+DataAttribute iedModel_B1HYD_CELXSWI1_Pos_Oper = {
     DataAttributeModelType,
-    "stVal",
-    (ModelNode*) &iedModel_B1HYD_CELXSWI1_Pos,
-    (ModelNode*) &iedModel_B1HYD_CELXSWI1_Pos_q,
-    NULL,
-    0,
-    -1,
-    IEC61850_FC_ST,
-    IEC61850_ENUMERATED,
-    TRG_OPT_DATA_CHANGED,
-};
-
-DataAttribute iedModel_B1HYD_CELXSWI1_Pos_q = {
-    DataAttributeModelType,
-    "q",
-    (ModelNode*) &iedModel_B1HYD_CELXSWI1_Pos,
-    (ModelNode*) &iedModel_B1HYD_CELXSWI1_Pos_t,
-    NULL,
-    0,
-    -1,
-    IEC61850_FC_ST,
-    IEC61850_QUALITY,
-    TRG_OPT_QUALITY_CHANGED,
-};
-
-DataAttribute iedModel_B1HYD_CELXSWI1_Pos_t = {
-    DataAttributeModelType,
-    "t",
-    (ModelNode*) &iedModel_B1HYD_CELXSWI1_Pos,
-    (ModelNode*) &iedModel_B1HYD_CELXSWI1_Pos_ctlModel,
-    NULL,
-    0,
-    -1,
-    IEC61850_FC_ST,
-    IEC61850_TIMESTAMP,
-    0,
-};
-
-DataAttribute iedModel_B1HYD_CELXSWI1_Pos_ctlModel = {
-    DataAttributeModelType,
-    "ctlModel",
-    (ModelNode*) &iedModel_B1HYD_CELXSWI1_Pos,
-    (ModelNode*) &iedModel_B1HYD_CELXSWI1_Pos_Oper,
-    NULL,
-    0,
-    -1,
-    IEC61850_FC_CF,
-    IEC61850_ENUMERATED,
-    TRG_OPT_DATA_CHANGED,
-};
-
-DataObject iedModel_B1HYD_CELXSWI1_Pos_Oper = {
-    DataObjectModelType,
     "Oper",
     (ModelNode*) &iedModel_B1HYD_CELXSWI1_Pos,
-    NULL,
+    (ModelNode*) &iedModel_B1HYD_CELXSWI1_Pos_stVal,
     (ModelNode*) &iedModel_B1HYD_CELXSWI1_Pos_Oper_ctlVal,
     0,
-    -1
+    -1,
+    IEC61850_FC_CO,
+    IEC61850_CONSTRUCTED,
+    0
 };
 
 DataAttribute iedModel_B1HYD_CELXSWI1_Pos_Oper_ctlVal = {
@@ -4443,8 +5373,8 @@ DataAttribute iedModel_B1HYD_CELXSWI1_Pos_Oper_ctlVal = {
     0,
     -1,
     IEC61850_FC_CO,
-    IEC61850_ENUMERATED,
-    0,
+    IEC61850_BOOLEAN,
+    0
 };
 
 DataAttribute iedModel_B1HYD_CELXSWI1_Pos_Oper_origin = {
@@ -4452,12 +5382,38 @@ DataAttribute iedModel_B1HYD_CELXSWI1_Pos_Oper_origin = {
     "origin",
     (ModelNode*) &iedModel_B1HYD_CELXSWI1_Pos_Oper,
     (ModelNode*) &iedModel_B1HYD_CELXSWI1_Pos_Oper_ctlNum,
+    (ModelNode*) &iedModel_B1HYD_CELXSWI1_Pos_Oper_origin_orCat,
+    0,
+    -1,
+    IEC61850_FC_CO,
+    IEC61850_CONSTRUCTED,
+    0
+};
+
+DataAttribute iedModel_B1HYD_CELXSWI1_Pos_Oper_origin_orCat = {
+    DataAttributeModelType,
+    "orCat",
+    (ModelNode*) &iedModel_B1HYD_CELXSWI1_Pos_Oper_origin,
+    (ModelNode*) &iedModel_B1HYD_CELXSWI1_Pos_Oper_origin_orIdent,
+    NULL,
+    0,
+    -1,
+    IEC61850_FC_CO,
+    IEC61850_INT8,
+    0
+};
+
+DataAttribute iedModel_B1HYD_CELXSWI1_Pos_Oper_origin_orIdent = {
+    DataAttributeModelType,
+    "orIdent",
+    (ModelNode*) &iedModel_B1HYD_CELXSWI1_Pos_Oper_origin,
+    NULL,
     NULL,
     0,
     -1,
     IEC61850_FC_CO,
     IEC61850_OCTET_STRING_64,
-    0,
+    0
 };
 
 DataAttribute iedModel_B1HYD_CELXSWI1_Pos_Oper_ctlNum = {
@@ -4470,20 +5426,98 @@ DataAttribute iedModel_B1HYD_CELXSWI1_Pos_Oper_ctlNum = {
     -1,
     IEC61850_FC_CO,
     IEC61850_INT8U,
-    0,
+    0
 };
 
 DataAttribute iedModel_B1HYD_CELXSWI1_Pos_Oper_T = {
     DataAttributeModelType,
     "T",
     (ModelNode*) &iedModel_B1HYD_CELXSWI1_Pos_Oper,
-    NULL,
+    (ModelNode*) &iedModel_B1HYD_CELXSWI1_Pos_Oper_Test,
     NULL,
     0,
     -1,
     IEC61850_FC_CO,
     IEC61850_TIMESTAMP,
+    0
+};
+
+DataAttribute iedModel_B1HYD_CELXSWI1_Pos_Oper_Test = {
+    DataAttributeModelType,
+    "Test",
+    (ModelNode*) &iedModel_B1HYD_CELXSWI1_Pos_Oper,
+    (ModelNode*) &iedModel_B1HYD_CELXSWI1_Pos_Oper_Check,
+    NULL,
     0,
+    -1,
+    IEC61850_FC_CO,
+    IEC61850_BOOLEAN,
+    0
+};
+
+DataAttribute iedModel_B1HYD_CELXSWI1_Pos_Oper_Check = {
+    DataAttributeModelType,
+    "Check",
+    (ModelNode*) &iedModel_B1HYD_CELXSWI1_Pos_Oper,
+    NULL,
+    NULL,
+    0,
+    -1,
+    IEC61850_FC_CO,
+    IEC61850_CHECK,
+    0
+};
+
+DataAttribute iedModel_B1HYD_CELXSWI1_Pos_stVal = {
+    DataAttributeModelType,
+    "stVal",
+    (ModelNode*) &iedModel_B1HYD_CELXSWI1_Pos,
+    (ModelNode*) &iedModel_B1HYD_CELXSWI1_Pos_q,
+    NULL,
+    0,
+    -1,
+    IEC61850_FC_ST,
+    IEC61850_CODEDENUM,
+    TRG_OPT_DATA_CHANGED
+};
+
+DataAttribute iedModel_B1HYD_CELXSWI1_Pos_q = {
+    DataAttributeModelType,
+    "q",
+    (ModelNode*) &iedModel_B1HYD_CELXSWI1_Pos,
+    (ModelNode*) &iedModel_B1HYD_CELXSWI1_Pos_t,
+    NULL,
+    0,
+    -1,
+    IEC61850_FC_ST,
+    IEC61850_QUALITY,
+    TRG_OPT_QUALITY_CHANGED
+};
+
+DataAttribute iedModel_B1HYD_CELXSWI1_Pos_t = {
+    DataAttributeModelType,
+    "t",
+    (ModelNode*) &iedModel_B1HYD_CELXSWI1_Pos,
+    (ModelNode*) &iedModel_B1HYD_CELXSWI1_Pos_ctlModel,
+    NULL,
+    0,
+    -1,
+    IEC61850_FC_ST,
+    IEC61850_TIMESTAMP,
+    0
+};
+
+DataAttribute iedModel_B1HYD_CELXSWI1_Pos_ctlModel = {
+    DataAttributeModelType,
+    "ctlModel",
+    (ModelNode*) &iedModel_B1HYD_CELXSWI1_Pos,
+    NULL,
+    NULL,
+    0,
+    -1,
+    IEC61850_FC_CF,
+    IEC61850_ENUMERATED,
+    0
 };
 
 DataObject iedModel_B1HYD_CELXSWI1_BlkOpn = {
@@ -4491,71 +5525,22 @@ DataObject iedModel_B1HYD_CELXSWI1_BlkOpn = {
     "BlkOpn",
     (ModelNode*) &iedModel_B1HYD_CELXSWI1,
     (ModelNode*) &iedModel_B1HYD_CELXSWI1_BlkCls,
-    (ModelNode*) &iedModel_B1HYD_CELXSWI1_BlkOpn_stVal,
+    (ModelNode*) &iedModel_B1HYD_CELXSWI1_BlkOpn_Oper,
     0,
     -1
 };
 
-DataAttribute iedModel_B1HYD_CELXSWI1_BlkOpn_stVal = {
+DataAttribute iedModel_B1HYD_CELXSWI1_BlkOpn_Oper = {
     DataAttributeModelType,
-    "stVal",
-    (ModelNode*) &iedModel_B1HYD_CELXSWI1_BlkOpn,
-    (ModelNode*) &iedModel_B1HYD_CELXSWI1_BlkOpn_q,
-    NULL,
-    0,
-    -1,
-    IEC61850_FC_ST,
-    IEC61850_ENUMERATED,
-    TRG_OPT_DATA_CHANGED,
-};
-
-DataAttribute iedModel_B1HYD_CELXSWI1_BlkOpn_q = {
-    DataAttributeModelType,
-    "q",
-    (ModelNode*) &iedModel_B1HYD_CELXSWI1_BlkOpn,
-    (ModelNode*) &iedModel_B1HYD_CELXSWI1_BlkOpn_t,
-    NULL,
-    0,
-    -1,
-    IEC61850_FC_ST,
-    IEC61850_QUALITY,
-    TRG_OPT_QUALITY_CHANGED,
-};
-
-DataAttribute iedModel_B1HYD_CELXSWI1_BlkOpn_t = {
-    DataAttributeModelType,
-    "t",
-    (ModelNode*) &iedModel_B1HYD_CELXSWI1_BlkOpn,
-    (ModelNode*) &iedModel_B1HYD_CELXSWI1_BlkOpn_ctlModel,
-    NULL,
-    0,
-    -1,
-    IEC61850_FC_ST,
-    IEC61850_TIMESTAMP,
-    0,
-};
-
-DataAttribute iedModel_B1HYD_CELXSWI1_BlkOpn_ctlModel = {
-    DataAttributeModelType,
-    "ctlModel",
-    (ModelNode*) &iedModel_B1HYD_CELXSWI1_BlkOpn,
-    (ModelNode*) &iedModel_B1HYD_CELXSWI1_BlkOpn_Oper,
-    NULL,
-    0,
-    -1,
-    IEC61850_FC_CF,
-    IEC61850_ENUMERATED,
-    TRG_OPT_DATA_CHANGED,
-};
-
-DataObject iedModel_B1HYD_CELXSWI1_BlkOpn_Oper = {
-    DataObjectModelType,
     "Oper",
     (ModelNode*) &iedModel_B1HYD_CELXSWI1_BlkOpn,
-    NULL,
+    (ModelNode*) &iedModel_B1HYD_CELXSWI1_BlkOpn_stVal,
     (ModelNode*) &iedModel_B1HYD_CELXSWI1_BlkOpn_Oper_ctlVal,
     0,
-    -1
+    -1,
+    IEC61850_FC_CO,
+    IEC61850_CONSTRUCTED,
+    0
 };
 
 DataAttribute iedModel_B1HYD_CELXSWI1_BlkOpn_Oper_ctlVal = {
@@ -4567,8 +5552,8 @@ DataAttribute iedModel_B1HYD_CELXSWI1_BlkOpn_Oper_ctlVal = {
     0,
     -1,
     IEC61850_FC_CO,
-    IEC61850_ENUMERATED,
-    0,
+    IEC61850_BOOLEAN,
+    0
 };
 
 DataAttribute iedModel_B1HYD_CELXSWI1_BlkOpn_Oper_origin = {
@@ -4576,12 +5561,38 @@ DataAttribute iedModel_B1HYD_CELXSWI1_BlkOpn_Oper_origin = {
     "origin",
     (ModelNode*) &iedModel_B1HYD_CELXSWI1_BlkOpn_Oper,
     (ModelNode*) &iedModel_B1HYD_CELXSWI1_BlkOpn_Oper_ctlNum,
+    (ModelNode*) &iedModel_B1HYD_CELXSWI1_BlkOpn_Oper_origin_orCat,
+    0,
+    -1,
+    IEC61850_FC_CO,
+    IEC61850_CONSTRUCTED,
+    0
+};
+
+DataAttribute iedModel_B1HYD_CELXSWI1_BlkOpn_Oper_origin_orCat = {
+    DataAttributeModelType,
+    "orCat",
+    (ModelNode*) &iedModel_B1HYD_CELXSWI1_BlkOpn_Oper_origin,
+    (ModelNode*) &iedModel_B1HYD_CELXSWI1_BlkOpn_Oper_origin_orIdent,
+    NULL,
+    0,
+    -1,
+    IEC61850_FC_CO,
+    IEC61850_INT8,
+    0
+};
+
+DataAttribute iedModel_B1HYD_CELXSWI1_BlkOpn_Oper_origin_orIdent = {
+    DataAttributeModelType,
+    "orIdent",
+    (ModelNode*) &iedModel_B1HYD_CELXSWI1_BlkOpn_Oper_origin,
+    NULL,
     NULL,
     0,
     -1,
     IEC61850_FC_CO,
     IEC61850_OCTET_STRING_64,
-    0,
+    0
 };
 
 DataAttribute iedModel_B1HYD_CELXSWI1_BlkOpn_Oper_ctlNum = {
@@ -4594,96 +5605,125 @@ DataAttribute iedModel_B1HYD_CELXSWI1_BlkOpn_Oper_ctlNum = {
     -1,
     IEC61850_FC_CO,
     IEC61850_INT8U,
-    0,
+    0
 };
 
 DataAttribute iedModel_B1HYD_CELXSWI1_BlkOpn_Oper_T = {
     DataAttributeModelType,
     "T",
     (ModelNode*) &iedModel_B1HYD_CELXSWI1_BlkOpn_Oper,
-    NULL,
+    (ModelNode*) &iedModel_B1HYD_CELXSWI1_BlkOpn_Oper_Test,
     NULL,
     0,
     -1,
     IEC61850_FC_CO,
     IEC61850_TIMESTAMP,
+    0
+};
+
+DataAttribute iedModel_B1HYD_CELXSWI1_BlkOpn_Oper_Test = {
+    DataAttributeModelType,
+    "Test",
+    (ModelNode*) &iedModel_B1HYD_CELXSWI1_BlkOpn_Oper,
+    (ModelNode*) &iedModel_B1HYD_CELXSWI1_BlkOpn_Oper_Check,
+    NULL,
     0,
+    -1,
+    IEC61850_FC_CO,
+    IEC61850_BOOLEAN,
+    0
+};
+
+DataAttribute iedModel_B1HYD_CELXSWI1_BlkOpn_Oper_Check = {
+    DataAttributeModelType,
+    "Check",
+    (ModelNode*) &iedModel_B1HYD_CELXSWI1_BlkOpn_Oper,
+    NULL,
+    NULL,
+    0,
+    -1,
+    IEC61850_FC_CO,
+    IEC61850_CHECK,
+    0
+};
+
+DataAttribute iedModel_B1HYD_CELXSWI1_BlkOpn_stVal = {
+    DataAttributeModelType,
+    "stVal",
+    (ModelNode*) &iedModel_B1HYD_CELXSWI1_BlkOpn,
+    (ModelNode*) &iedModel_B1HYD_CELXSWI1_BlkOpn_q,
+    NULL,
+    0,
+    -1,
+    IEC61850_FC_ST,
+    IEC61850_CODEDENUM, 
+    TRG_OPT_DATA_CHANGED
+};
+
+DataAttribute iedModel_B1HYD_CELXSWI1_BlkOpn_q = {
+    DataAttributeModelType,
+    "q",
+    (ModelNode*) &iedModel_B1HYD_CELXSWI1_BlkOpn,
+    (ModelNode*) &iedModel_B1HYD_CELXSWI1_BlkOpn_t,
+    NULL,
+    0,
+    -1,
+    IEC61850_FC_ST,
+    IEC61850_QUALITY,
+    TRG_OPT_QUALITY_CHANGED
+};
+
+DataAttribute iedModel_B1HYD_CELXSWI1_BlkOpn_t = {
+    DataAttributeModelType,
+    "t",
+    (ModelNode*) &iedModel_B1HYD_CELXSWI1_BlkOpn,
+    (ModelNode*) &iedModel_B1HYD_CELXSWI1_BlkOpn_ctlModel,
+    NULL,
+    0,
+    -1,
+    IEC61850_FC_ST,
+    IEC61850_TIMESTAMP,
+    0
+};
+
+DataAttribute iedModel_B1HYD_CELXSWI1_BlkOpn_ctlModel = {
+    DataAttributeModelType,
+    "ctlModel",
+    (ModelNode*) &iedModel_B1HYD_CELXSWI1_BlkOpn,
+    NULL,
+    NULL,
+    0,
+    -1,
+    IEC61850_FC_CF,
+    IEC61850_ENUMERATED,
+    0
 };
 
 DataObject iedModel_B1HYD_CELXSWI1_BlkCls = {
     DataObjectModelType,
     "BlkCls",
     (ModelNode*) &iedModel_B1HYD_CELXSWI1,
-    NULL,
-    (ModelNode*) &iedModel_B1HYD_CELXSWI1_BlkCls_stVal,
+    NULL,  
+    (ModelNode*) &iedModel_B1HYD_CELXSWI1_BlkCls_Oper,  
     0,
     -1
 };
 
-DataAttribute iedModel_B1HYD_CELXSWI1_BlkCls_stVal = {
-    DataAttributeModelType,
-    "stVal",
-    (ModelNode*) &iedModel_B1HYD_CELXSWI1_BlkCls,
-    (ModelNode*) &iedModel_B1HYD_CELXSWI1_BlkCls_q,
-    NULL,
-    0,
-    -1,
-    IEC61850_FC_ST,
-    IEC61850_BOOLEAN,
-    TRG_OPT_DATA_CHANGED,
-};
-
-DataAttribute iedModel_B1HYD_CELXSWI1_BlkCls_q = {
-    DataAttributeModelType,
-    "q",
-    (ModelNode*) &iedModel_B1HYD_CELXSWI1_BlkCls,
-    (ModelNode*) &iedModel_B1HYD_CELXSWI1_BlkCls_t,
-    NULL,
-    0,
-    -1,
-    IEC61850_FC_ST,
-    IEC61850_QUALITY,
-    TRG_OPT_QUALITY_CHANGED,
-};
-
-DataAttribute iedModel_B1HYD_CELXSWI1_BlkCls_t = {
-    DataAttributeModelType,
-    "t",
-    (ModelNode*) &iedModel_B1HYD_CELXSWI1_BlkCls,
-    (ModelNode*) &iedModel_B1HYD_CELXSWI1_BlkCls_ctlModel,
-    NULL,
-    0,
-    -1,
-    IEC61850_FC_ST,
-    IEC61850_TIMESTAMP,
-    0,
-};
-
-DataAttribute iedModel_B1HYD_CELXSWI1_BlkCls_ctlModel = {
-    DataAttributeModelType,
-    "ctlModel",
-    (ModelNode*) &iedModel_B1HYD_CELXSWI1_BlkCls,
-    (ModelNode*) &iedModel_B1HYD_CELXSWI1_BlkCls_Oper,
-    NULL,
-    0,
-    -1,
-    IEC61850_FC_CF,
-    IEC61850_ENUMERATED,
-    TRG_OPT_DATA_CHANGED,
-};
-
-DataObject iedModel_B1HYD_CELXSWI1_BlkCls_Oper = {
-    DataObjectModelType,
+DataAttribute iedModel_B1HYD_CELXSWI1_BlkCls_Oper = {
+    DataAttributeModelType, 
     "Oper",
     (ModelNode*) &iedModel_B1HYD_CELXSWI1_BlkCls,
-    NULL,
+    (ModelNode*) &iedModel_B1HYD_CELXSWI1_BlkCls_stVal,  
     (ModelNode*) &iedModel_B1HYD_CELXSWI1_BlkCls_Oper_ctlVal,
     0,
-    -1
+    -1,
+    IEC61850_FC_CO,
+    IEC61850_CONSTRUCTED,
+    0
 };
 
 DataAttribute iedModel_B1HYD_CELXSWI1_BlkCls_Oper_ctlVal = {
-    DataAttributeModelType,
+    DataAttributeModelType, 
     "ctlVal",
     (ModelNode*) &iedModel_B1HYD_CELXSWI1_BlkCls_Oper,
     (ModelNode*) &iedModel_B1HYD_CELXSWI1_BlkCls_Oper_origin,
@@ -4692,24 +5732,50 @@ DataAttribute iedModel_B1HYD_CELXSWI1_BlkCls_Oper_ctlVal = {
     -1,
     IEC61850_FC_CO,
     IEC61850_BOOLEAN,
-    0,
+    0
 };
 
 DataAttribute iedModel_B1HYD_CELXSWI1_BlkCls_Oper_origin = {
-    DataAttributeModelType,
+    DataAttributeModelType, 
     "origin",
     (ModelNode*) &iedModel_B1HYD_CELXSWI1_BlkCls_Oper,
     (ModelNode*) &iedModel_B1HYD_CELXSWI1_BlkCls_Oper_ctlNum,
+    (ModelNode*) &iedModel_B1HYD_CELXSWI1_BlkCls_Oper_origin_orCat,
+    0,
+    -1,
+    IEC61850_FC_CO,
+    IEC61850_CONSTRUCTED,
+    0
+};
+
+DataAttribute iedModel_B1HYD_CELXSWI1_BlkCls_Oper_origin_orCat = {
+    DataAttributeModelType, 
+    "orCat",
+    (ModelNode*) &iedModel_B1HYD_CELXSWI1_BlkCls_Oper_origin,
+    (ModelNode*) &iedModel_B1HYD_CELXSWI1_BlkCls_Oper_origin_orIdent,
+    NULL,
+    0,
+    -1,
+    IEC61850_FC_CO,
+    IEC61850_INT8,
+    0
+};
+
+DataAttribute iedModel_B1HYD_CELXSWI1_BlkCls_Oper_origin_orIdent = {
+    DataAttributeModelType, 
+    "orIdent",
+    (ModelNode*) &iedModel_B1HYD_CELXSWI1_BlkCls_Oper_origin,
+    NULL,
     NULL,
     0,
     -1,
     IEC61850_FC_CO,
     IEC61850_OCTET_STRING_64,
-    0,
+    0
 };
 
 DataAttribute iedModel_B1HYD_CELXSWI1_BlkCls_Oper_ctlNum = {
-    DataAttributeModelType,
+    DataAttributeModelType, 
     "ctlNum",
     (ModelNode*) &iedModel_B1HYD_CELXSWI1_BlkCls_Oper,
     (ModelNode*) &iedModel_B1HYD_CELXSWI1_BlkCls_Oper_T,
@@ -4718,22 +5784,184 @@ DataAttribute iedModel_B1HYD_CELXSWI1_BlkCls_Oper_ctlNum = {
     -1,
     IEC61850_FC_CO,
     IEC61850_INT8U,
-    0,
+    0
 };
 
 DataAttribute iedModel_B1HYD_CELXSWI1_BlkCls_Oper_T = {
-    DataAttributeModelType,
+    DataAttributeModelType, 
     "T",
+    (ModelNode*) &iedModel_B1HYD_CELXSWI1_BlkCls_Oper,
+    (ModelNode*) &iedModel_B1HYD_CELXSWI1_BlkCls_Oper_Test,
+    NULL,
+    0,
+    -1,
+    IEC61850_FC_CO,
+    IEC61850_TIMESTAMP,
+    0
+};
+
+DataAttribute iedModel_B1HYD_CELXSWI1_BlkCls_Oper_Test = {
+    DataAttributeModelType, 
+    "Test",
+    (ModelNode*) &iedModel_B1HYD_CELXSWI1_BlkCls_Oper,
+    (ModelNode*) &iedModel_B1HYD_CELXSWI1_BlkCls_Oper_Check,
+    NULL,
+    0,
+    -1,
+    IEC61850_FC_CO,
+    IEC61850_BOOLEAN,
+    0
+};
+
+DataAttribute iedModel_B1HYD_CELXSWI1_BlkCls_Oper_Check = {
+    DataAttributeModelType, 
+    "Check",
     (ModelNode*) &iedModel_B1HYD_CELXSWI1_BlkCls_Oper,
     NULL,
     NULL,
     0,
     -1,
     IEC61850_FC_CO,
-    IEC61850_TIMESTAMP,
-    0,
+    IEC61850_CHECK,
+    0
 };
 
+DataAttribute iedModel_B1HYD_CELXSWI1_BlkCls_stVal = {
+    DataAttributeModelType, 
+    "stVal",
+    (ModelNode*) &iedModel_B1HYD_CELXSWI1_BlkCls,
+    (ModelNode*) &iedModel_B1HYD_CELXSWI1_BlkCls_q,
+    NULL,
+    0,
+    -1,
+    IEC61850_FC_ST,
+    IEC61850_BOOLEAN,
+    TRG_OPT_DATA_CHANGED
+};
+
+DataAttribute iedModel_B1HYD_CELXSWI1_BlkCls_q = {
+    DataAttributeModelType, 
+    "q",
+    (ModelNode*) &iedModel_B1HYD_CELXSWI1_BlkCls,
+    (ModelNode*) &iedModel_B1HYD_CELXSWI1_BlkCls_t,
+    NULL,
+    0,
+    -1,
+    IEC61850_FC_ST,
+    IEC61850_QUALITY,
+    TRG_OPT_QUALITY_CHANGED
+};
+
+DataAttribute iedModel_B1HYD_CELXSWI1_BlkCls_t = {
+    DataAttributeModelType, 
+    "t",
+    (ModelNode*) &iedModel_B1HYD_CELXSWI1_BlkCls,
+    (ModelNode*) &iedModel_B1HYD_CELXSWI1_BlkCls_ctlModel,
+    NULL,
+    0,
+    -1,
+    IEC61850_FC_ST,
+    IEC61850_TIMESTAMP,
+    0
+};
+
+DataAttribute iedModel_B1HYD_CELXSWI1_BlkCls_ctlModel = {
+    DataAttributeModelType, 
+    "ctlModel",
+    (ModelNode*) &iedModel_B1HYD_CELXSWI1_BlkCls,
+    NULL,
+    NULL,
+    0,
+    -1,
+    IEC61850_FC_CF,
+    IEC61850_ENUMERATED,
+    0
+};
+
+DataObject iedModel_B1HYD_CELXSWI1_Mod = {
+    DataObjectModelType,
+    "Mod",
+    (ModelNode*) &iedModel_B1HYD_CELXSWI1,
+    (ModelNode*) &iedModel_B1HYD_CELXSWI1_BlkRef,
+    (ModelNode*) &iedModel_B1HYD_CELXSWI1_Mod_stVal,
+    0,
+    -1
+};
+
+DataAttribute iedModel_B1HYD_CELXSWI1_Mod_stVal = {
+    DataAttributeModelType,
+    "stVal",
+    (ModelNode*) &iedModel_B1HYD_CELXSWI1_Mod,
+    (ModelNode*) &iedModel_B1HYD_CELXSWI1_Mod_q,
+    NULL,
+    0,
+    -1,
+    IEC61850_FC_ST,
+    IEC61850_ENUMERATED,
+    TRG_OPT_DATA_CHANGED
+};
+
+DataAttribute iedModel_B1HYD_CELXSWI1_Mod_q = {
+    DataAttributeModelType,
+    "q",
+    (ModelNode*) &iedModel_B1HYD_CELXSWI1_Mod,
+    (ModelNode*) &iedModel_B1HYD_CELXSWI1_Mod_t,
+    NULL,
+    0,
+    -1,
+    IEC61850_FC_ST,
+    IEC61850_QUALITY,
+    TRG_OPT_QUALITY_CHANGED
+};
+
+DataAttribute iedModel_B1HYD_CELXSWI1_Mod_t = {
+    DataAttributeModelType,
+    "t",
+    (ModelNode*) &iedModel_B1HYD_CELXSWI1_Mod,
+    (ModelNode*) &iedModel_B1HYD_CELXSWI1_Mod_ctlModel,
+    NULL,
+    0,
+    -1,
+    IEC61850_FC_ST,
+    IEC61850_TIMESTAMP,
+    0
+};
+
+DataAttribute iedModel_B1HYD_CELXSWI1_Mod_ctlModel = {
+    DataAttributeModelType,
+    "ctlModel",
+    (ModelNode*) &iedModel_B1HYD_CELXSWI1_Mod,
+    NULL,
+    NULL,
+    0,
+    -1,
+    IEC61850_FC_CF,
+    IEC61850_ENUMERATED,
+    0
+};
+
+DataObject iedModel_B1HYD_CELXSWI1_BlkRef = {
+    DataObjectModelType,
+    "BlkRef",
+    (ModelNode*) &iedModel_B1HYD_CELXSWI1,
+    NULL,
+    (ModelNode*) &iedModel_B1HYD_CELXSWI1_BlkRef_setSrcRef,
+    0,
+    -1
+};
+
+DataAttribute iedModel_B1HYD_CELXSWI1_BlkRef_setSrcRef = {
+    DataAttributeModelType,
+    "setSrcRef",
+    (ModelNode*) &iedModel_B1HYD_CELXSWI1_BlkRef,
+    NULL,
+    NULL,
+    0,
+    -1,
+    IEC61850_FC_SP,
+    IEC61850_VISIBLE_STRING_255,
+    TRG_OPT_DATA_CHANGED
+};
 IedModel iedModel = {
     "MoveUFF_",
     &iedModel_B1HYD,
@@ -4747,8 +5975,61 @@ IedModel iedModel = {
     initializeValues
 };
 
+/*=================================  STATIC VOID  ===========================================*/
+
+
 static void
 initializeValues()
 {
+    printf("Inicializando Modelos de Controle (ctlModel = 1)...\n");
 
+    /* =================================================================
+     * TNKXSWI1 (Tanque da Chave)
+     * ================================================================= */
+   
+    //Seta um valor no SCADA
+    if (iedModel_B1HYD_TNKXSWI1_Pos_ctlModel.mmsValue != NULL) {
+        MmsValue_setInt32(iedModel_B1HYD_TNKXSWI1_Pos_ctlModel.mmsValue, 1);
+    } else {
+        iedModel_B1HYD_TNKXSWI1_Pos_ctlModel.mmsValue = MmsValue_newIntegerFromInt32(1);
+    }
+
+    //Bloqueia a entrada de novos valores
+    if (iedModel_B1HYD_TNKXSWI1_BlkOpn_ctlModel.mmsValue != NULL) {
+        MmsValue_setInt32(iedModel_B1HYD_TNKXSWI1_BlkOpn_ctlModel.mmsValue, 1);
+    } else {
+        iedModel_B1HYD_TNKXSWI1_BlkOpn_ctlModel.mmsValue = MmsValue_newIntegerFromInt32(1);
+    }
+
+    //Bloqueia a saída dos valores
+    if (iedModel_B1HYD_TNKXSWI1_BlkCls_ctlModel.mmsValue != NULL) {
+        MmsValue_setInt32(iedModel_B1HYD_TNKXSWI1_BlkCls_ctlModel.mmsValue, 1);
+    } else {
+        iedModel_B1HYD_TNKXSWI1_BlkCls_ctlModel.mmsValue = MmsValue_newIntegerFromInt32(1);
+    }
+
+    /* =================================================================
+     * CELXSWI1 (Chave da Célula)
+     * ================================================================= */
+   
+    //Seta um valor no SCADA
+    if (iedModel_B1HYD_CELXSWI1_Pos_ctlModel.mmsValue != NULL) {
+        MmsValue_setInt32(iedModel_B1HYD_CELXSWI1_Pos_ctlModel.mmsValue, 1);
+    } else {
+        iedModel_B1HYD_CELXSWI1_Pos_ctlModel.mmsValue = MmsValue_newIntegerFromInt32(1);
+    }
+
+    //Bloqueia a entrada de novos valores
+    if (iedModel_B1HYD_CELXSWI1_BlkOpn_ctlModel.mmsValue != NULL) {
+        MmsValue_setInt32(iedModel_B1HYD_CELXSWI1_BlkOpn_ctlModel.mmsValue, 1);
+    } else {
+        iedModel_B1HYD_CELXSWI1_BlkOpn_ctlModel.mmsValue = MmsValue_newIntegerFromInt32(1);
+    }
+
+    //Bloqueia a saída dos valores
+    if (iedModel_B1HYD_CELXSWI1_BlkCls_ctlModel.mmsValue != NULL) {
+        MmsValue_setInt32(iedModel_B1HYD_CELXSWI1_BlkCls_ctlModel.mmsValue, 1);
+    } else {
+        iedModel_B1HYD_CELXSWI1_BlkCls_ctlModel.mmsValue = MmsValue_newIntegerFromInt32(1);
+    }
 }

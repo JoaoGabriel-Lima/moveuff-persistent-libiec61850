@@ -8,7 +8,6 @@ extern IedModel iedModel;
 extern LogicalDevice iedModel_B1CTR; //Dispositivo Lógico
 
 /* LNs */
-
 extern LogicalNode iedModel_B1CTR_LPHD1;
 extern LogicalNode iedModel_B1CTR_LLN0;
 extern LogicalNode iedModel_B1CTR_LGOS1;

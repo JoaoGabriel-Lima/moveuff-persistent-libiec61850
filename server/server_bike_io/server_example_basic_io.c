@@ -3,14 +3,17 @@
 #include <signal.h>
 #include <stdlib.h>
 #include <stdio.h>
-#include <unistd.h>
-#include <fcntl.h>
-#include <wiringPi.h>
-#include "static_model.h"
+#include <unistd.h> // Para dup2
+#include <fcntl.h>  // Para open
 
-#define RELAY_PIN 2 
-/* Redireciona logs para stderr para evitar o bloqueio do stdout */
-#define LOG_PRINT(...) fprintf(stderr, __VA_ARGS__)
+// --- ADICIONADO PARA OS RELÉS ---
+#include <wiringPi.h>
+#define RELAY_LANT_PIN 2  // wPi 7 = Pino Físico (Lanterna)
+#define RELAY_MOT_PIN  3  // wPi 11 = Pino Físico (Motor)
+#define RELAY_ALM_PIN  4 // wPi 13 = Pino Físico (Alarme)
+// ------------------------------
+
+#include "static_model.h"
 
 static int running = 0;
 static IedServer iedServer = NULL;
@@ -18,17 +21,27 @@ static int activeConnections = 0;
 
 void sigint_handler(int signalId) { running = 0; }
 
-/* Sinalização visual de que o servidor subiu com sucesso */
+/* * MACRO PARA LOG PERSONALIZADO
+ * Redireciona nossos prints para stderr para fugir do bloqueio do stdout 
+ */
+#define LOG_PRINT(...) fprintf(stderr, __VA_ARGS__)
+
+/* --- FUNÇÃO DE PISCAR --- */
 void sinalizar_partida() {
+    // Blink rápido (100ms) simultâneo para indicar que a conexão está fidelizada e o servidor está pronto
     for(int i=0; i<2; i++) {
-        digitalWrite(RELAY_PIN, HIGH);
-        Thread_sleep(100);           
-        digitalWrite(RELAY_PIN, LOW);
+        digitalWrite(RELAY_LANT_PIN, HIGH);
+        digitalWrite(RELAY_MOT_PIN, HIGH);
+        digitalWrite(RELAY_ALM_PIN, HIGH);
+        Thread_sleep(100);          
+        digitalWrite(RELAY_LANT_PIN, LOW);
+        digitalWrite(RELAY_MOT_PIN, LOW);
+        digitalWrite(RELAY_ALM_PIN, LOW);
         Thread_sleep(100);
     }
 }
 
-/* Gerencia o status de conexões ativas (útil para debug no terminal) */
+/* Handler de Conexão */
 static void
 connectionHandler (IedServer self, ClientConnection connection, bool connected, void* parameter)
 {
@@ -50,46 +63,69 @@ connectionHandler (IedServer self, ClientConnection connection, bool connected, 
     }
 }
 
-/* Valida se o objeto de controle existe antes de operar */
+/* Handler para o Select (SBO) - Validando LANT, MOT e ALM */
 static CheckHandlerResult 
 checkHandler(ControlAction action, void* parameter, MmsValue* ctlVal, bool test, bool interlockCheck) 
-{
-    if (parameter == IEDMODEL_B1EBK_MOTXSWI1_Pos) 
+{ 
+    if (parameter == IEDMODEL_B1EBK_LANTXSWI1_Pos || 
+        parameter == IEDMODEL_B1EBK_MOTXSWI1_Pos || 
+        parameter == IEDMODEL_B1EBK_ALMXSWI1_Pos) 
         return CONTROL_ACCEPTED;
     return CONTROL_OBJECT_UNDEFINED;
 } 
 
-/* Handler principal: Executa o comando de hardware e atualiza o modelo IEC 61850 */
-static ControlHandlerResult 
-controlHandlerForBinaryOutput(ControlAction action, void* parameter, MmsValue* value, bool test) 
+/* Handler para o Operate - Atuando em LANT, MOT e ALM */
+static ControlHandlerResult controlHandlerForBinaryOutput(ControlAction action, void* parameter, MmsValue* value, bool test) 
 {
     uint64_t timestamp = Hal_getTimeInMs();
+    
     int ctlNum = ControlAction_getCtlNum(action);
     ClientConnection clientCon = ControlAction_getClientConnection(action);
     const char* clientIP = (clientCon) ? ClientConnection_getPeerAddress(clientCon) : "Desconhecido";
 
-    if (parameter == IEDMODEL_B1EBK_MOTXSWI1_Pos) {
-        bool state = MmsValue_getBoolean(value);
-        digitalWrite(RELAY_PIN, state ? HIGH : LOW); 
+    if (parameter == IEDMODEL_B1EBK_LANTXSWI1_Pos || 
+        parameter == IEDMODEL_B1EBK_MOTXSWI1_Pos || 
+        parameter == IEDMODEL_B1EBK_ALMXSWI1_Pos) {
         
+        bool state = MmsValue_getBoolean(value);
+        
+        // Usando LOG_PRINT (stderr) ao invés de printf
         LOG_PRINT("--------------------------------------------------\n");
         LOG_PRINT("[COMANDO] Recebido de: %s\n", clientIP);
-        LOG_PRINT("   >> Acao:     MOTOR %s (%d)\n", state ? "LIGADO" : "DESLIGADO", state ? 1 : 0);
-        LOG_PRINT("   >> CtlNum:   %d\n", ctlNum);
-        LOG_PRINT("   >> Hardware: Pino %d %s\n", RELAY_PIN, state ? "HIGH" : "LOW");
-        LOG_PRINT("--------------------------------------------------\n");
+        
+        if (parameter == IEDMODEL_B1EBK_LANTXSWI1_Pos) {
+            digitalWrite(RELAY_LANT_PIN, state ? HIGH : LOW); 
+            LOG_PRINT("   >> Acao:     LANTXSWI1 (Lanterna) %s (%d)\n", state ? "LIGADO/FECHADO" : "DESLIGADO/ABERTO", state ? 1 : 0);
+            LOG_PRINT("   >> Hardware: Pino %d %s\n", RELAY_LANT_PIN, state ? "HIGH" : "LOW");
+            IedServer_updateUTCTimeAttributeValue(iedServer, IEDMODEL_B1EBK_LANTXSWI1_Pos_t, timestamp);
+            IedServer_updateAttributeValue(iedServer, IEDMODEL_B1EBK_LANTXSWI1_Pos_stVal, value);
+        } 
+        else if (parameter == IEDMODEL_B1EBK_MOTXSWI1_Pos) {
+            digitalWrite(RELAY_MOT_PIN, state ? HIGH : LOW); 
+            LOG_PRINT("   >> Acao:     MOTXSWI1 (Motor) %s (%d)\n", state ? "LIGADO/FECHADO" : "DESLIGADO/ABERTO", state ? 1 : 0);
+            LOG_PRINT("   >> Hardware: Pino %d %s\n", RELAY_MOT_PIN, state ? "HIGH" : "LOW");
+            IedServer_updateUTCTimeAttributeValue(iedServer, IEDMODEL_B1EBK_MOTXSWI1_Pos_t, timestamp);
+            IedServer_updateAttributeValue(iedServer, IEDMODEL_B1EBK_MOTXSWI1_Pos_stVal, value);
+        }
+        else if (parameter == IEDMODEL_B1EBK_ALMXSWI1_Pos) {
+            digitalWrite(RELAY_ALM_PIN, state ? HIGH : LOW); 
+            LOG_PRINT("   >> Acao:     ALMXSWI1 (Alarme) %s (%d)\n", state ? "LIGADO/FECHADO" : "DESLIGADO/ABERTO", state ? 1 : 0);
+            LOG_PRINT("   >> Hardware: Pino %d %s\n", RELAY_ALM_PIN, state ? "HIGH" : "LOW");
+            IedServer_updateUTCTimeAttributeValue(iedServer, IEDMODEL_B1EBK_ALMXSWI1_Pos_t, timestamp);
+            IedServer_updateAttributeValue(iedServer, IEDMODEL_B1EBK_ALMXSWI1_Pos_stVal, value);
+        }
 
-        /* Atualiza stVal e o timestamp (t) no modelo para retorno ao supervisório */
-        IedServer_updateUTCTimeAttributeValue(iedServer, IEDMODEL_B1EBK_MOTXSWI1_Pos_t, timestamp);
-        IedServer_updateAttributeValue(iedServer, IEDMODEL_B1EBK_MOTXSWI1_Pos_stVal, value);
+        LOG_PRINT("   >> CtlNum:   %d\n", ctlNum);
+        LOG_PRINT("--------------------------------------------------\n");
     }
-    else
+    else {
         return CONTROL_RESULT_FAILED;
+    }
 
     return CONTROL_RESULT_OK;
 }
 
-/* Permite que o cliente (Elipse) altere o modelo de controle via rede */
+/* Handler de Escrita (para mudar o ctlModel se necessário) */
 static MmsDataAccessError
 writeAccessHandler (DataAttribute* dataAttribute, MmsValue* value, ClientConnection connection, void* parameter)
 {
@@ -97,7 +133,15 @@ writeAccessHandler (DataAttribute* dataAttribute, MmsValue* value, ClientConnect
 
     if ((ctlModelVal == CONTROL_MODEL_STATUS_ONLY) || (ctlModelVal == CONTROL_MODEL_DIRECT_NORMAL))
     {
-        IedServer_updateCtlModel(iedServer, IEDMODEL_B1EBK_MOTXSWI1_Pos, ctlModelVal);
+        if (dataAttribute == IEDMODEL_B1EBK_LANTXSWI1_Pos_ctlModel) {
+            IedServer_updateCtlModel(iedServer, IEDMODEL_B1EBK_LANTXSWI1_Pos, ctlModelVal);
+        } 
+        else if (dataAttribute == IEDMODEL_B1EBK_MOTXSWI1_Pos_ctlModel) {
+            IedServer_updateCtlModel(iedServer, IEDMODEL_B1EBK_MOTXSWI1_Pos, ctlModelVal);
+        }
+        else if (dataAttribute == IEDMODEL_B1EBK_ALMXSWI1_Pos_ctlModel) {
+            IedServer_updateCtlModel(iedServer, IEDMODEL_B1EBK_ALMXSWI1_Pos, ctlModelVal);
+        }
         return DATA_ACCESS_ERROR_SUCCESS;
     }
     else {
@@ -108,34 +152,53 @@ writeAccessHandler (DataAttribute* dataAttribute, MmsValue* value, ClientConnect
 int
 main(int argc, char** argv)
 {
-    /* Inicialização do hardware WiringPi */
-    if (wiringPiSetup() == -1) {
-        fprintf(stderr, "ERRO: Falha ao inicializar o wiringPi!\n");
+  // 1. SETUP HARDWARE (Usando a numeração Física da Placa)
+    if (wiringPiSetup() == -1) { 
+        fprintf(stderr, "ERRO: Falha ao inicializar o wiringPi! Tente executar como root\n");
         exit(1);
     }
-    pinMode(RELAY_PIN, OUTPUT);
-    digitalWrite(RELAY_PIN, LOW); 
+    pinMode(RELAY_LANT_PIN, OUTPUT); digitalWrite(RELAY_LANT_PIN, LOW); 
+    pinMode(RELAY_MOT_PIN, OUTPUT);  digitalWrite(RELAY_MOT_PIN, LOW); 
+    pinMode(RELAY_ALM_PIN, OUTPUT);  digitalWrite(RELAY_ALM_PIN, LOW); 
 
-    /* Desvia STDOUT para /dev/null para silenciar logs internos da biblioteca */
-    int dev_null = open("/dev/null", O_WRONLY);
-    dup2(dev_null, STDOUT_FILENO); 
+    // ---------------------------------------------------------
+    // BLOQUEIO TOTAL DE STDOUT (Logs que poluem o terminal)
+    // ---------------------------------------------------------
+     int dev_null = open("/dev/null", O_WRONLY);
+    // Redireciona stdout (printf comum) para o lixo
+     if (dev_null != -1) dup2(dev_null, STDOUT_FILENO); 
+    // NÃO restauramos o stdout. A biblioteca falará sozinha no vazio para sempre.
+    // ---------------------------------------------------------
 
     sinalizar_partida();
-
+    
     iedServer = IedServer_create(&iedModel);
     int tcpPort = 102;
     if (argc > 1) tcpPort = atoi(argv[1]);
 
-    /* Vinculação dos Handlers aos nós do modelo estático */
+    // Configura os Handlers para LANTXSWI1
+    IedServer_setControlHandler(iedServer, IEDMODEL_B1EBK_LANTXSWI1_Pos,
+            (ControlHandler) controlHandlerForBinaryOutput, IEDMODEL_B1EBK_LANTXSWI1_Pos);
+    IedServer_setPerformCheckHandler(iedServer, IEDMODEL_B1EBK_LANTXSWI1_Pos, 
+            checkHandler, IEDMODEL_B1EBK_LANTXSWI1_Pos);
+    IedServer_handleWriteAccess(iedServer, IEDMODEL_B1EBK_LANTXSWI1_Pos_ctlModel, writeAccessHandler, NULL);
+
+    // Configura os Handlers para MOTXSWI1
     IedServer_setControlHandler(iedServer, IEDMODEL_B1EBK_MOTXSWI1_Pos,
             (ControlHandler) controlHandlerForBinaryOutput, IEDMODEL_B1EBK_MOTXSWI1_Pos);
-
     IedServer_setPerformCheckHandler(iedServer, IEDMODEL_B1EBK_MOTXSWI1_Pos, 
             checkHandler, IEDMODEL_B1EBK_MOTXSWI1_Pos);
-    
-    IedServer_setConnectionIndicationHandler(iedServer, (IedConnectionIndicationHandler) connectionHandler, NULL);
-
     IedServer_handleWriteAccess(iedServer, IEDMODEL_B1EBK_MOTXSWI1_Pos_ctlModel, writeAccessHandler, NULL);
+
+    // Configura os Handlers para ALMXSWI1
+    IedServer_setControlHandler(iedServer, IEDMODEL_B1EBK_ALMXSWI1_Pos,
+            (ControlHandler) controlHandlerForBinaryOutput, IEDMODEL_B1EBK_ALMXSWI1_Pos);
+    IedServer_setPerformCheckHandler(iedServer, IEDMODEL_B1EBK_ALMXSWI1_Pos, 
+            checkHandler, IEDMODEL_B1EBK_ALMXSWI1_Pos);
+    IedServer_handleWriteAccess(iedServer, IEDMODEL_B1EBK_ALMXSWI1_Pos_ctlModel, writeAccessHandler, NULL);
+
+
+    IedServer_setConnectionIndicationHandler(iedServer, (IedConnectionIndicationHandler) connectionHandler, NULL);
 
     IedServer_start(iedServer, tcpPort);
 
@@ -145,8 +208,9 @@ main(int argc, char** argv)
         exit(-1);
     }
 
-    LOG_PRINT("\n--- SERVIDOR IEC 61850 (BIKE) ---\n");
-    LOG_PRINT("[STATUS] Hardware OK (Relé na Porta %d)\n", RELAY_PIN);
+    // Logs de status usando stderr para aparecerem na tela
+    LOG_PRINT("\n--- SERVIDOR IEC 61850 (BIKE - LANT/MOT/ALM) ---\n");
+    LOG_PRINT("[STATUS] Hardware OK (Lanterna: P%d | Motor: P%d | Alarme: P%d)\n", RELAY_LANT_PIN, RELAY_MOT_PIN, RELAY_ALM_PIN);
     LOG_PRINT("[STATUS] Rodando na porta %d.\n", tcpPort);
     LOG_PRINT("[STATUS] Aguardando conexao do Elipse...\n");
 
@@ -157,9 +221,10 @@ main(int argc, char** argv)
         Thread_sleep(100);
     }
 
-    /* Shutdown limpo do servidor e hardware */
     LOG_PRINT("\n[SISTEMA] Encerrando servidor...\n");
-    digitalWrite(RELAY_PIN, LOW);
+    digitalWrite(RELAY_LANT_PIN, LOW);
+    digitalWrite(RELAY_MOT_PIN, LOW);
+    digitalWrite(RELAY_ALM_PIN, LOW);
     IedServer_stop(iedServer);
     IedServer_destroy(iedServer);
     close(dev_null);

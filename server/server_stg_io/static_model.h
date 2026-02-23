@@ -1,6 +1,7 @@
 #ifndef STATIC_MODEL_H_
 #define STATIC_MODEL_H_
 
+#include <stdlib.h>
 #include "iec61850_model.h"
 
 extern IedModel iedModel;
@@ -57,6 +58,15 @@ extern DataAttribute iedModel_B1STG_XSWI1_Health_stVal;
 extern DataAttribute iedModel_B1STG_XSWI1_Health_q;
 extern DataAttribute iedModel_B1STG_XSWI1_Health_t;
 extern DataObject iedModel_B1STG_XSWI1_Pos;
+extern DataAttribute iedModel_B1STG_XSWI1_Pos_Oper;
+extern DataAttribute iedModel_B1STG_XSWI1_Pos_Oper_ctlVal;
+extern DataAttribute iedModel_B1STG_XSWI1_Pos_Oper_origin;
+extern DataAttribute iedModel_B1STG_XSWI1_Pos_Oper_origin_orCat;
+extern DataAttribute iedModel_B1STG_XSWI1_Pos_Oper_origin_orIdent;
+extern DataAttribute iedModel_B1STG_XSWI1_Pos_Oper_ctlNum;
+extern DataAttribute iedModel_B1STG_XSWI1_Pos_Oper_T;
+extern DataAttribute iedModel_B1STG_XSWI1_Pos_Oper_Test;
+extern DataAttribute iedModel_B1STG_XSWI1_Pos_Oper_Check;
 extern DataAttribute iedModel_B1STG_XSWI1_Pos_stVal;
 extern DataAttribute iedModel_B1STG_XSWI1_Pos_q;
 extern DataAttribute iedModel_B1STG_XSWI1_Pos_t;
@@ -89,9 +99,13 @@ extern DataAttribute iedModel_B1STG_XSWI1_BlkCls_stVal;
 extern DataAttribute iedModel_B1STG_XSWI1_BlkCls_q;
 extern DataAttribute iedModel_B1STG_XSWI1_BlkCls_t;
 extern DataAttribute iedModel_B1STG_XSWI1_BlkCls_ctlModel;
+extern DataObject iedModel_B1STG_XSWI1_NamPlt;
+extern DataAttribute iedModel_B1STG_XSWI1_NamPlt_vendor;
+extern DataAttribute iedModel_B1STG_XSWI1_NamPlt_swRev;
+extern DataAttribute iedModel_B1STG_XSWI1_NamPlt_lnNs;
 
 /* ==================================================================
- * TTMP1 (NOVO - Temperature)
+ * TTMP1 
  * ==================================================================
  */
 
@@ -126,8 +140,8 @@ extern DataAttribute iedModel_B1STG_TTMP1_TmpTgt_sVC_offset;
  */
 
 extern DataObject iedModel_B1STG_DBAT1_EEName;
-extern DataAttribute iedModel_B1STG_DBAT1_EEName_vendor; /* Novo */
-extern DataAttribute iedModel_B1STG_DBAT1_EEName_model;  /* Novo */
+extern DataAttribute iedModel_B1STG_DBAT1_EEName_vendor; 
+extern DataAttribute iedModel_B1STG_DBAT1_EEName_model;  
 extern DataObject iedModel_B1STG_DBAT1_ChaSt;
 extern DataAttribute iedModel_B1STG_DBAT1_ChaSt_stVal;
 extern DataAttribute iedModel_B1STG_DBAT1_ChaSt_q;
@@ -219,14 +233,9 @@ extern DataAttribute iedModel_B1STG_ZBAT1_VolChgRte_q;
 extern DataAttribute iedModel_B1STG_ZBAT1_VolChgRte_t;
 
 
-/* ==================================================================
- * DEFINES (#define)
- * ==================================================================
- */
-
 #define IEDMODEL_B1STG (&iedModel_B1STG)
 
-/* --- LLN0 --- */
+/* --- Defines LLN0 --- */
 #define IEDMODEL_B1STG_LLN0 (&iedModel_B1STG_LLN0)
 #define IEDMODEL_B1STG_LLN0_Beh_stVal (&iedModel_B1STG_LLN0_Beh_stVal)
 #define IEDMODEL_B1STG_LLN0_Health_stVal (&iedModel_B1STG_LLN0_Health_stVal)
@@ -255,6 +264,8 @@ extern DataAttribute iedModel_B1STG_ZBAT1_VolChgRte_t;
 #define IEDMODEL_B1STG_XSWI1_Health_q (&iedModel_B1STG_XSWI1_Health_q)
 #define IEDMODEL_B1STG_XSWI1_Health_t (&iedModel_B1STG_XSWI1_Health_t)
 #define IEDMODEL_B1STG_XSWI1_Pos (&iedModel_B1STG_XSWI1_Pos)
+#define IEDMODEL_B1STG_XSWI1_Pos_Oper (&iedModel_B1STG_XSWI1_Pos_Oper)
+#define IEDMODEL_B1STG_XSWI1_Pos_Oper_ctlVal (&iedModel_B1STG_XSWI1_Pos_Oper_ctlVal)
 #define IEDMODEL_B1STG_XSWI1_Pos_stVal (&iedModel_B1STG_XSWI1_Pos_stVal)
 #define IEDMODEL_B1STG_XSWI1_Pos_q (&iedModel_B1STG_XSWI1_Pos_q)
 #define IEDMODEL_B1STG_XSWI1_Pos_t (&iedModel_B1STG_XSWI1_Pos_t)
@@ -281,7 +292,6 @@ extern DataAttribute iedModel_B1STG_ZBAT1_VolChgRte_t;
 #define IEDMODEL_B1STG_TTMP1_Health_stVal (&iedModel_B1STG_TTMP1_Health_stVal)
 #define IEDMODEL_B1STG_TTMP1_TmpSv_instMag_f (&iedModel_B1STG_TTMP1_TmpSv_instMag_f)
 #define IEDMODEL_B1STG_TTMP1_TmpTgt_setMag_f (&iedModel_B1STG_TTMP1_TmpTgt_setMag_f)
-
 
 /* --- DBAT1 --- */
 #define IEDMODEL_B1STG_DBAT1 (&iedModel_B1STG_DBAT1)

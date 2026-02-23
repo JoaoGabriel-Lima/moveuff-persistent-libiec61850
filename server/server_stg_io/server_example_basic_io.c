@@ -1,258 +1,213 @@
-/*
- * server_example_basic_io.c
- *
- * (Versão adaptada para o dispositivo B1STG)
- * LNs: LLN0, XSWI1, DBAT1
- */
-
 #include "iec61850_server.h"
 #include "hal_thread.h"
 #include <signal.h>
 #include <stdlib.h>
 #include <stdio.h>
-#include <math.h>
+#include <unistd.h> // Para dup2
+#include <fcntl.h>  // Para open
 
-#include "static_model.h" /* Carrega o modelo B1STG */
+// --- ADICIONADO PARA O RELÉ ---
+#include <wiringPi.h>
+#define RELAY_PIN 8  // wPi 8 na Orange Pi Zero 2W pin fisico 15
+// ------------------------------
+
+#include "static_model.h"
 
 static int running = 0;
 static IedServer iedServer = NULL;
+static int activeConnections = 0;
 
-void
-sigint_handler(int signalId)
-{
-    running = 0;
-}
+void sigint_handler(int signalId) { running = 0; }
 
-/*
- * Handler para controlos booleanos (SPS) do B1STG
- * (BlkOpn e BlkCls do XSWI1)
+/* * MACRO PARA LOG PERSONALIZADO
+ * Redireciona nossos prints para stderr para fugir do bloqueio do stdout 
  */
-static ControlHandlerResult
-controlHandlerForBinaryOutput(ControlAction action, void* parameter, MmsValue* value, bool test)
-{
-    if (test)
-        return CONTROL_RESULT_FAILED;
+#define LOG_PRINT(...) fprintf(stderr, __VA_ARGS__)
 
-    if (MmsValue_getType(value) != MMS_BOOLEAN) {
-         printf("Control: Recebido tipo inválido para SPS (esperava boolean)\n");
-        return CONTROL_RESULT_FAILED;
+/* --- FUNÇÃO DE PISCAR --- */
+void sinalizar_partida() {
+    // Blink rápido (100ms) para indicar que a conexão está fidelizada e o servidor está pronto
+    for(int i=0; i<2; i++) {
+        digitalWrite(RELAY_PIN, HIGH);
+        Thread_sleep(100);          
+        digitalWrite(RELAY_PIN, LOW);
+        Thread_sleep(100);
     }
-
-    DataAttribute* dataAttribute = (DataAttribute*) parameter;
-    
-    char attrRef[130];
-    ModelNode_getObjectReference((ModelNode*) dataAttribute, attrRef);
-
-    printf("Control (B1STG): Recebido comando para %s, valor: %s\n",
-           attrRef,
-           MmsValue_getBoolean(value) ? "on (true)" : "off (false)");
-
-    uint64_t timeStamp = Hal_getTimeInMs();
-
-    /* Atualiza o valor no modelo */
-    IedServer_updateAttributeValue(iedServer, dataAttribute, value);
-    
-    /* Atualiza os timestamps correspondentes no B1STG */
-    if (parameter == IEDMODEL_B1STG_XSWI1_BlkOpn_stVal) {
-        IedServer_updateUTCTimeAttributeValue(iedServer, IEDMODEL_B1STG_XSWI1_BlkOpn_t, timeStamp);
-    }
-    else if (parameter == IEDMODEL_B1STG_XSWI1_BlkCls_stVal) {
-        IedServer_updateUTCTimeAttributeValue(iedServer, IEDMODEL_B1STG_XSWI1_BlkCls_t, timeStamp);
-    }
-    
-    return CONTROL_RESULT_OK;
 }
 
-/*
- * Handler para controlos DPC (Posição Dupla) do B1STG
- * (Pos do XSWI1)
- */
-static ControlHandlerResult
-controlHandlerForDbpos(ControlAction action, void* parameter, MmsValue* value, bool test)
-{
-    if (test)
-        return CONTROL_RESULT_FAILED;
-
-    if (MmsValue_getType(value) != MMS_INTEGER) {
-        printf("Control: Recebido tipo inválido para DPC (esperava integer)\n");
-        return CONTROL_RESULT_FAILED;
-    }
-
-    int32_t controlValue = MmsValue_toInt32(value);
-    DataAttribute* dataAttribute = (DataAttribute*) parameter;
-
-    char attrRef[130];
-    ModelNode_getObjectReference((ModelNode*) dataAttribute, attrRef);
-
-    printf("Control (B1STG): Recebido comando para %s, valor: %i\n", attrRef, controlValue);
-
-    if (controlValue != 1 && controlValue != 2) {
-        printf("Control: Valor inválido para DPC (apenas 1 ou 2 são permitidos)\n");
-        return CONTROL_RESULT_FAILED;
-    }
-
-    uint64_t timeStamp = Hal_getTimeInMs();
-
-    /* Atualizar o timestamp e o valor no modelo B1STG */
-    if (parameter == IEDMODEL_B1STG_XSWI1_Pos_stVal) {
-        IedServer_updateUTCTimeAttributeValue(iedServer, IEDMODEL_B1STG_XSWI1_Pos_t, timeStamp);
-        IedServer_updateAttributeValue(iedServer, IEDMODEL_B1STG_XSWI1_Pos_stVal, value);
-    }
-
-    return CONTROL_RESULT_OK;
-}
-
-
+/* Handler de Conexão */
 static void
 connectionHandler (IedServer self, ClientConnection connection, bool connected, void* parameter)
 {
-    if (connected)
-        printf("Connection opened\n");
-    else
-        printf("Connection closed\n");
+    const char* clientIP = ClientConnection_getPeerAddress(connection);
+    
+    if (connected) {
+        activeConnections++;
+        if (activeConnections == 1) {
+            LOG_PRINT("\n==================================================\n");
+            LOG_PRINT("[SISTEMA] >>> ELIPSE/CLIENTE CONECTADO <<<\n");
+            LOG_PRINT("   >> IP: %s\n", clientIP);
+            LOG_PRINT("==================================================\n");
+        }
+    } else {
+        if (activeConnections > 0) activeConnections--;
+        if (activeConnections == 0) {
+            LOG_PRINT("\n[SISTEMA] Cliente Desconectado (%s)\n\n", clientIP);
+        }
+    }
 }
 
-static void
-rcbEventHandler(void* parameter, ReportControlBlock* rcb, ClientConnection connection, IedServer_RCBEventType event, const char* parameterName, MmsDataAccessError serviceError)
+/* Handler para o Select (SBO) - Validando B1STG_XSWI1 */
+static CheckHandlerResult 
+checkHandler(ControlAction action, void* parameter, MmsValue* ctlVal, bool test, bool interlockCheck) 
 {
-    printf("RCB: %s event: %i\n", ReportControlBlock_getName(rcb), event);
-    if ((event == RCB_EVENT_SET_PARAMETER) || (event == RCB_EVENT_GET_PARAMETER)) {
-        printf("  param:  %s\n", parameterName);
-        printf("  result: %i\n", serviceError);
+    if (parameter == IEDMODEL_B1STG_XSWI1_Pos || 
+        parameter == IEDMODEL_B1STG_XSWI1_BlkOpn || 
+        parameter == IEDMODEL_B1STG_XSWI1_BlkCls) 
+        return CONTROL_ACCEPTED;
+        
+    return CONTROL_OBJECT_UNDEFINED;
+} 
+
+/* Handler principal: Executa o comando de hardware e atualiza o modelo IEC 61850 */
+static ControlHandlerResult 
+controlHandlerForBinaryOutput(ControlAction action, void* parameter, MmsValue* value, bool test) 
+{
+    uint64_t timestamp = Hal_getTimeInMs();
+    int ctlNum = ControlAction_getCtlNum(action);
+    ClientConnection clientCon = ControlAction_getClientConnection(action);
+    const char* clientIP = (clientCon) ? ClientConnection_getPeerAddress(clientCon) : "Desconhecido";
+
+    if (parameter == IEDMODEL_B1STG_XSWI1_Pos || 
+        parameter == IEDMODEL_B1STG_XSWI1_BlkOpn || 
+        parameter == IEDMODEL_B1STG_XSWI1_BlkCls) {
+            
+        bool state = MmsValue_getBoolean(value);
+        digitalWrite(RELAY_PIN, state ? HIGH : LOW); 
+        
+        LOG_PRINT("--------------------------------------------------\n");
+        LOG_PRINT("[COMANDO] Recebido de: %s\n", clientIP);
+        
+        if (parameter == IEDMODEL_B1STG_XSWI1_Pos) {
+            LOG_PRINT("   >> Acao:     XSWI1 Pos %s (%d)\n", state ? "LIGADO/FECHADO" : "DESLIGADO/ABERTO", state ? 1 : 0);
+            IedServer_updateUTCTimeAttributeValue(iedServer, IEDMODEL_B1STG_XSWI1_Pos_t, timestamp);
+            IedServer_updateAttributeValue(iedServer, IEDMODEL_B1STG_XSWI1_Pos_stVal, value);
+        } 
+        else if (parameter == IEDMODEL_B1STG_XSWI1_BlkOpn) {
+            LOG_PRINT("   >> Acao:     XSWI1 BlkOpn %s (%d)\n", state ? "LIGADO/ATIVO" : "DESLIGADO/INATIVO", state ? 1 : 0);
+            IedServer_updateUTCTimeAttributeValue(iedServer, IEDMODEL_B1STG_XSWI1_BlkOpn_t, timestamp);
+            IedServer_updateAttributeValue(iedServer, IEDMODEL_B1STG_XSWI1_BlkOpn_stVal, value);
+        }
+        else if (parameter == IEDMODEL_B1STG_XSWI1_BlkCls) {
+            LOG_PRINT("   >> Acao:     XSWI1 BlkCls %s (%d)\n", state ? "LIGADO/ATIVO" : "DESLIGADO/INATIVO", state ? 1 : 0);
+            IedServer_updateUTCTimeAttributeValue(iedServer, IEDMODEL_B1STG_XSWI1_BlkCls_t, timestamp);
+            IedServer_updateAttributeValue(iedServer, IEDMODEL_B1STG_XSWI1_BlkCls_stVal, value);
+        }
+
+        LOG_PRINT("   >> CtlNum:   %d\n", ctlNum);
+        LOG_PRINT("   >> Hardware: Pino %d %s\n", RELAY_PIN, state ? "HIGH" : "LOW");
+        LOG_PRINT("--------------------------------------------------\n");
     }
-    if (event == RCB_EVENT_ENABLE) {
-        char* rptId = ReportControlBlock_getRptID(rcb);
-        printf("    rptID:  %s\n", rptId);
-        char* dataSet = ReportControlBlock_getDataSet(rcb);
-        printf("    datSet: %s\n", dataSet);
-        free(rptId);
-        free(dataSet);
+    else {
+        return CONTROL_RESULT_FAILED;
+    }
+
+    return CONTROL_RESULT_OK;
+}
+
+/* Permite que o cliente (Elipse) altere o modelo de controle via rede */
+static MmsDataAccessError
+writeAccessHandler (DataAttribute* dataAttribute, MmsValue* value, ClientConnection connection, void* parameter)
+{
+    ControlModel ctlModelVal = (ControlModel) MmsValue_toInt32(value);
+
+    if ((ctlModelVal == CONTROL_MODEL_STATUS_ONLY) || (ctlModelVal == CONTROL_MODEL_DIRECT_NORMAL))
+    {
+        if (dataAttribute == IEDMODEL_B1STG_XSWI1_Pos_ctlModel)
+            IedServer_updateCtlModel(iedServer, IEDMODEL_B1STG_XSWI1_Pos, ctlModelVal);
+        else if (dataAttribute == IEDMODEL_B1STG_XSWI1_BlkOpn_ctlModel)
+            IedServer_updateCtlModel(iedServer, IEDMODEL_B1STG_XSWI1_BlkOpn, ctlModelVal);
+        else if (dataAttribute == IEDMODEL_B1STG_XSWI1_BlkCls_ctlModel)
+            IedServer_updateCtlModel(iedServer, IEDMODEL_B1STG_XSWI1_BlkCls, ctlModelVal);
+            
+        return DATA_ACCESS_ERROR_SUCCESS;
+    }
+    else {
+        return DATA_ACCESS_ERROR_OBJECT_VALUE_INVALID;
     }
 }
 
 int
 main(int argc, char** argv)
 {
-    int tcpPort = 102;
-
-    if (argc > 1) {
-        tcpPort = atoi(argv[1]);
+   // 1. SETUP HARDWARE (Usando a numeração Física da Placa)
+    if (wiringPiSetupPhys() == -1) { 
+        fprintf(stderr, "ERRO: Falha ao inicializar o wiringPi! Tente executar como root\n");
+        exit(1);
     }
+    pinMode(RELAY_PIN, OUTPUT);
+    digitalWrite(RELAY_PIN, LOW); 
 
-    printf("Using libIEC61850 version %s\n", LibIEC61850_getVersionString());
+    /* Desvia STDOUT para /dev/null para silenciar logs internos da biblioteca */
+    int dev_null = open("/dev/null", O_WRONLY);
+    if (dev_null != -1) dup2(dev_null, STDOUT_FILENO); 
 
-    IedServerConfig config = IedServerConfig_create();
-    IedServerConfig_setReportBufferSize(config, 200000);
-    IedServerConfig_setEdition(config, IEC_61850_EDITION_2);
-    IedServerConfig_setFileServiceBasePath(config, "./vmd-filestore/");
-    IedServerConfig_enableFileService(config, false);
-    IedServerConfig_enableDynamicDataSetService(config, true);
-    IedServerConfig_enableLogService(config, false);
-    IedServerConfig_setMaxMmsConnections(config, 2);
+    sinalizar_partida();
 
-    iedServer = IedServer_createWithConfig(&iedModel, NULL, config);
-    IedServerConfig_destroy(config);
+    iedServer = IedServer_create(&iedModel);
+    int tcpPort = 102;
+    if (argc > 1) tcpPort = atoi(argv[1]);
 
-    /* Identidade do Servidor B1STG */
-    IedServer_setServerIdentity(iedServer, "MoveUFF", "B1STG Server", "1.0.0");
-
-    /****************************************************************
-     * ATIVAÇÃO DOS CONTROLOS (B1STG - XSWI1)
-     ***************************************************************/
-
-    /* Controles Booleanos */
-    IedServer_setControlHandler(iedServer, IEDMODEL_B1STG_XSWI1_BlkOpn,
-            (ControlHandler) controlHandlerForBinaryOutput,
-            IEDMODEL_B1STG_XSWI1_BlkOpn_stVal);
-
-    IedServer_setControlHandler(iedServer, IEDMODEL_B1STG_XSWI1_BlkCls,
-            (ControlHandler) controlHandlerForBinaryOutput,
-            IEDMODEL_B1STG_XSWI1_BlkCls_stVal);
+    /* Vinculação dos Handlers aos nós do modelo estático (XSWI1) */
     
-    /* Controle de Posição (Dbpos) */
+    // Handlers para Pos
     IedServer_setControlHandler(iedServer, IEDMODEL_B1STG_XSWI1_Pos,
-            (ControlHandler) controlHandlerForDbpos,
-            IEDMODEL_B1STG_XSWI1_Pos_stVal);
+            (ControlHandler) controlHandlerForBinaryOutput, IEDMODEL_B1STG_XSWI1_Pos);
+    IedServer_setPerformCheckHandler(iedServer, IEDMODEL_B1STG_XSWI1_Pos, 
+            checkHandler, IEDMODEL_B1STG_XSWI1_Pos);
+    IedServer_handleWriteAccess(iedServer, IEDMODEL_B1STG_XSWI1_Pos_ctlModel, writeAccessHandler, NULL);
 
-    /****************************************************************
-     * FIM DA ATIVAÇÃO DE CONTROLOS
-     ***************************************************************/
+    // Handlers para BlkOpn
+    IedServer_setControlHandler(iedServer, IEDMODEL_B1STG_XSWI1_BlkOpn,
+            (ControlHandler) controlHandlerForBinaryOutput, IEDMODEL_B1STG_XSWI1_BlkOpn);
+    IedServer_setPerformCheckHandler(iedServer, IEDMODEL_B1STG_XSWI1_BlkOpn, 
+            checkHandler, IEDMODEL_B1STG_XSWI1_BlkOpn);
+    IedServer_handleWriteAccess(iedServer, IEDMODEL_B1STG_XSWI1_BlkOpn_ctlModel, writeAccessHandler, NULL);
 
-    IedServer_setConnectionIndicationHandler(iedServer, (IedConnectionIndicationHandler) connectionHandler, NULL);
-    IedServer_setRCBEventHandler(iedServer, rcbEventHandler, NULL);
-
-    /* Permissões de Escrita (Essenciais para Inicialização e Controle) */
-    IedServer_setWriteAccessPolicy(iedServer, IEC61850_FC_DC, ACCESS_POLICY_ALLOW);
-    IedServer_setWriteAccessPolicy(iedServer, IEC61850_FC_CO, ACCESS_POLICY_ALLOW); 
-    IedServer_setWriteAccessPolicy(iedServer, IEC61850_FC_SP, ACCESS_POLICY_ALLOW); /* Para Settings */
-    IedServer_setWriteAccessPolicy(iedServer, IEC61850_FC_CF, ACCESS_POLICY_ALLOW); /* Para Config */
+    // Handlers para BlkCls
+    IedServer_setControlHandler(iedServer, IEDMODEL_B1STG_XSWI1_BlkCls,
+            (ControlHandler) controlHandlerForBinaryOutput, IEDMODEL_B1STG_XSWI1_BlkCls);
+    IedServer_setPerformCheckHandler(iedServer, IEDMODEL_B1STG_XSWI1_BlkCls, 
+            checkHandler, IEDMODEL_B1STG_XSWI1_BlkCls);
+    IedServer_handleWriteAccess(iedServer, IEDMODEL_B1STG_XSWI1_BlkCls_ctlModel, writeAccessHandler, NULL);
     
+    IedServer_setConnectionIndicationHandler(iedServer, (IedConnectionIndicationHandler) connectionHandler, NULL);
+
     IedServer_start(iedServer, tcpPort);
 
-    if (!IedServer_isRunning(iedServer))
-    {
-        printf("Starting server failed (Exit.)\n");
+    if (!IedServer_isRunning(iedServer)) {
+        LOG_PRINT("Falha ao iniciar servidor!\n");
         IedServer_destroy(iedServer);
         exit(-1);
     }
 
-    /****************************************************************
-     * INICIALIZAÇÃO DE VALORES (B1STG)
-     ***************************************************************/
-    
-    printf("Servidor B1STG arrancou na porta %i. A inicializar valores...\n", tcpPort);
-
-    IedServer_lockDataModel(iedServer); 
-
-    /* --- LLN0 --- */
-    IedServer_updateInt32AttributeValue(iedServer, IEDMODEL_B1STG_LLN0_Beh_stVal, 1); // On
-    IedServer_updateInt32AttributeValue(iedServer, IEDMODEL_B1STG_LLN0_Health_stVal, 1); // Ok
-    
-    /* --- XSWI1 (Switch) --- */
-    IedServer_updateInt32AttributeValue(iedServer, IEDMODEL_B1STG_XSWI1_SwTyp_stVal, 1); // Load Break
-    IedServer_updateBooleanAttributeValue(iedServer, IEDMODEL_B1STG_XSWI1_Loc_stVal, false); // Remote
-    IedServer_updateInt32AttributeValue(iedServer, IEDMODEL_B1STG_XSWI1_OpCnt_stVal, 15); // Já operou 15 vezes
-    IedServer_updateInt32AttributeValue(iedServer, IEDMODEL_B1STG_XSWI1_Pos_stVal, 2); // ON (Fechado)
-    IedServer_updateBooleanAttributeValue(iedServer, IEDMODEL_B1STG_XSWI1_BlkOpn_stVal, false);
-    IedServer_updateBooleanAttributeValue(iedServer, IEDMODEL_B1STG_XSWI1_BlkCls_stVal, false);
-
-    /* --- DBAT1 (Bateria) --- */
-    /* Status */
-    IedServer_updateVisibleStringAttributeValue(iedServer, IEDMODEL_B1STG_DBAT1_EEName_vendor, "BikeFacil");
-    IedServer_updateVisibleStringAttributeValue(iedServer, IEDMODEL_B1STG_DBAT1_EEName_model, "BATERIA_B1STG_A");
-    IedServer_updateBooleanAttributeValue(iedServer, IEDMODEL_B1STG_DBAT1_ChaSt_stVal, true); // A carregar
-    IedServer_updateBooleanAttributeValue(iedServer, IEDMODEL_B1STG_DBAT1_DschSt_stVal, false);
-    IedServer_updateInt32AttributeValue(iedServer, IEDMODEL_B1STG_DBAT1_EEHealth_stVal, 1); // Ok
-    
-    /* Medições */
-    IedServer_updateFloatAttributeValue(iedServer, IEDMODEL_B1STG_DBAT1_Amp_mag_f, 12.5);
-    IedServer_updateFloatAttributeValue(iedServer, IEDMODEL_B1STG_DBAT1_Watt_mag_f, 600.0);
-    IedServer_updateFloatAttributeValue(iedServer, IEDMODEL_B1STG_DBAT1_AvlChaAhr_mag_f, 100.0);
-    IedServer_updateFloatAttributeValue(iedServer, IEDMODEL_B1STG_DBAT1_AvlDschAhr_mag_f, 50.0);
-
-    /* Settings (Configurações) */
-    IedServer_updateInt32AttributeValue(iedServer, IEDMODEL_B1STG_DBAT1_BatTyp_setVal, 1); // Ex: Li-Ion
-    IedServer_updateFloatAttributeValue(iedServer, IEDMODEL_B1STG_DBAT1_ChaAmpMax_setMag_f, 20.0);
-    IedServer_updateFloatAttributeValue(iedServer, IEDMODEL_B1STG_DBAT1_AhrRtg_setMag_f, 200.0);
-    IedServer_updateFloatAttributeValue(iedServer, IEDMODEL_B1STG_DBAT1_ChaVolMaxRtg_setMag_f, 48.0);
-
-    IedServer_unlockDataModel(iedServer); 
-    
-    printf("Valores do B1STG inicializados!\n");
-    /****************************************************************
-     * FIM DA INICIALIZAÇÃO
-     ***************************************************************/
+    LOG_PRINT("\n--- SERVIDOR IEC 61850 (B1STG) ---\n");
+    LOG_PRINT("[STATUS] Hardware OK (Relé na Porta %d)\n", RELAY_PIN);
+    LOG_PRINT("[STATUS] Rodando na porta %d.\n", tcpPort);
+    LOG_PRINT("[STATUS] Aguardando conexao do Elipse...\n");
 
     running = 1;
     signal(SIGINT, sigint_handler);
 
-    while (running)
-    {
+    while (running) {
         Thread_sleep(100);
     }
 
+    /* Shutdown limpo do servidor e hardware */
+    LOG_PRINT("\n[SISTEMA] Encerrando servidor...\n");
+    digitalWrite(RELAY_PIN, LOW);
     IedServer_stop(iedServer);
     IedServer_destroy(iedServer);
-
+    close(dev_null);
     return 0;
-} /* main() */
+}

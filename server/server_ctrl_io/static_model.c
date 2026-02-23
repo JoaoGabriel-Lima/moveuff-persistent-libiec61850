@@ -4,22 +4,17 @@
 
 static void initializeValues();
 
-/* * ===================================================================================
- * DISPOSITIVO LÓGICO: B1CTR (Controlador)
- * ===================================================================================
- */
-
 LogicalDevice iedModel_B1CTR = {
     LogicalDeviceModelType,
     "B1CTR",
     (ModelNode*) &iedModel, 
     NULL,
-    (ModelNode*) &iedModel_B1CTR_LPHD1, /* Primeiro Nó Filho */
+    (ModelNode*) &iedModel_B1CTR_LPHD1,
     NULL,
 };
 
 /* ================================================================
- * LPHD1 (Informações Físicas)
+ * IMPLEMENTAÇÃO LPHD1 (Informações Físicas)
  * ================================================================
  */
 
@@ -377,7 +372,7 @@ DataAttribute iedModel_B1CTR_LPHD1_Sim_ctlModel = {
 };
 
 /* ==================================================================
- * LLN0
+ * IMPLEMENTAÇÃO LLN0
  * ==================================================================
  */
 
@@ -724,7 +719,7 @@ DataAttribute iedModel_B1CTR_LLN0_LEDRs_ctlModel = {
 
 /*
  * ==================================================================
- * LGOS1
+ * IMPLEMENTAÇÃO LGOS1
  * ==================================================================
  */
 
@@ -1153,7 +1148,7 @@ DataAttribute iedModel_B1CTR_LGOS1_LastStNum_t = {
 
 /*
  * ==================================================================
- * LTIM1 (Time)
+ * IMPLEMENTAÇÃO LTIM1 (Time)
  * ==================================================================
  */
 
@@ -1314,7 +1309,7 @@ DataAttribute iedModel_B1CTR_LTIM1_TmDT_t = {
 
 /*
  * ==================================================================
- * LTMS1 (Time Supervision)
+ * IMPLEMENTAÇÃO LTMS1 (Time Supervision)
  * ==================================================================
 */
 
@@ -1474,7 +1469,7 @@ DataAttribute iedModel_B1CTR_LTMS1_Beh_t = {
 };
 
 /* ==================================================================
- * LTRK1
+ * IMPLEMENTAÇÃO LTRK1
  * ==================================================================
  */
 

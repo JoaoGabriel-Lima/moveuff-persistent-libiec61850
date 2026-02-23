@@ -3,259 +3,206 @@
 #include <signal.h>
 #include <stdlib.h>
 #include <stdio.h>
-#include <math.h>
+#include <unistd.h> // Para dup2
+#include <fcntl.h>  // Para open
 
-#include "static_model.h" /* Carrega o modelo B1HYD (A "BRABA") */
+// --- ADICIONADO PARA OS RELÉS ---
+#include <wiringPi.h>
+#define RELAY_CEL_PIN 5  // wPi 5 = Pino Físico (Célula)
+#define RELAY_TNK_PIN 7  // wPi 6 = Pino Físico (Tanque)
+// ------------------------------
+
+#include "static_model.h"
 
 static int running = 0;
 static IedServer iedServer = NULL;
+static int activeConnections = 0;
 
-void
-sigint_handler(int signalId)
-{
-    running = 0;
-}
+void sigint_handler(int signalId) { running = 0; }
 
-/*
- * Handler para controlos booleanos (SPS/SPC) do B1HYD
- * Usado para comandar a Válvula (KVLV1.Pos)
+/* * MACRO PARA LOG PERSONALIZADO
+ * Redireciona nossos prints para stderr para fugir do bloqueio do stdout 
  */
-static ControlHandlerResult
-controlHandlerForBinaryOutput(ControlAction action, void* parameter, MmsValue* value, bool test)
-{
-    if (test)
-        return CONTROL_RESULT_FAILED;
+#define LOG_PRINT(...) fprintf(stderr, __VA_ARGS__)
 
-    if (MmsValue_getType(value) != MMS_BOOLEAN) {
-         printf("Control: Recebido tipo invalido (esperava boolean)\n");
-        return CONTROL_RESULT_FAILED;
+/* --- FUNÇÃO DE PISCAR --- */
+void sinalizar_partida() {
+    // Blink rápido (100ms) simultâneo para indicar que a conexão está fidelizada e o servidor está pronto
+    for(int i=0; i<2; i++) {
+        digitalWrite(RELAY_CEL_PIN, HIGH);
+        digitalWrite(RELAY_TNK_PIN, HIGH);
+        Thread_sleep(100);          
+        digitalWrite(RELAY_CEL_PIN, LOW);
+        digitalWrite(RELAY_TNK_PIN, LOW);
+        Thread_sleep(100);
     }
-
-    DataAttribute* dataAttribute = (DataAttribute*) parameter;
-    
-    char attrRef[130];
-    ModelNode_getObjectReference((ModelNode*) dataAttribute, attrRef);
-
-    printf("Control (B1HYD): Recebido comando para %s, valor: %s\n",
-           attrRef,
-           MmsValue_getBoolean(value) ? "ABRIR (true)" : "FECHAR (false)");
-
-    uint64_t timeStamp = Hal_getTimeInMs();
-
-    /* Atualiza o valor no modelo */
-    IedServer_updateAttributeValue(iedServer, dataAttribute, value);
-    
-    /* Lógica Específica para a Válvula KVLV1 */
-    if (parameter == IEDMODEL_B1HYD_KVLV1_Pos_stVal) {
-        
-        /* Atualiza timestamp */
-        IedServer_updateUTCTimeAttributeValue(iedServer, IEDMODEL_B1HYD_KVLV1_Pos_t, timeStamp);
-        
-        /* Simula a resposta dos sensores de fim de curso (Feedback Loop) */
-        bool cmdOpen = MmsValue_getBoolean(value);
-        
-        if (cmdOpen) {
-            // Se mandou abrir: OpnPos=True, ClsPos=False
-            IedServer_updateBooleanAttributeValue(iedServer, IEDMODEL_B1HYD_KVLV1_OpnPos_stVal, true);
-            IedServer_updateBooleanAttributeValue(iedServer, IEDMODEL_B1HYD_KVLV1_ClsPos_stVal, false);
-            // Incrementa contador de operações
-            // (Na prática precisaria ler o valor atual e somar 1, aqui simplificado)
-        } else {
-            // Se mandou fechar: OpnPos=False, ClsPos=True
-            IedServer_updateBooleanAttributeValue(iedServer, IEDMODEL_B1HYD_KVLV1_OpnPos_stVal, false);
-            IedServer_updateBooleanAttributeValue(iedServer, IEDMODEL_B1HYD_KVLV1_ClsPos_stVal, true);
-        }
-    }
-    
-    return CONTROL_RESULT_OK;
 }
 
-/*
- * Handler para Setpoints Analógicos (APC) do B1HYD
- * Usado para definir o Setpoint de Abertura (KVLV1.PosSpt)
- */
-static ControlHandlerResult
-controlHandlerForAnalogueOutput(ControlAction action, void* parameter, MmsValue* value, bool test)
-{
-    if (test)
-        return CONTROL_RESULT_FAILED;
-
-    if (MmsValue_getType(value) != MMS_FLOAT) {
-        printf("Control: Recebido tipo invalido (esperava float)\n");
-        return CONTROL_RESULT_FAILED;
-    }
-
-    float setpointValue = MmsValue_toFloat(value);
-    DataAttribute* dataAttribute = (DataAttribute*) parameter;
-
-    char attrRef[130];
-    ModelNode_getObjectReference((ModelNode*) dataAttribute, attrRef);
-
-    printf("Control (B1HYD): Recebido Setpoint para %s, valor: %.2f\n", attrRef, setpointValue);
-
-    uint64_t timeStamp = Hal_getTimeInMs();
-
-    /* Atualiza o valor e timestamp */
-    IedServer_updateAttributeValue(iedServer, dataAttribute, value);
-    
-    // Atualiza timestamp do PosSpt
-    if (parameter == IEDMODEL_B1HYD_KVLV1_PosSpt_mxVal) { // Ou stVal dependendo do modelo exato
-         IedServer_updateUTCTimeAttributeValue(iedServer, IEDMODEL_B1HYD_KVLV1_PosSpt_t, timeStamp);
-    }
-
-    return CONTROL_RESULT_OK;
-}
-
-
+/* Handler de Conexão */
 static void
 connectionHandler (IedServer self, ClientConnection connection, bool connected, void* parameter)
 {
-    if (connected)
-        printf("Connection opened\n");
-    else
-        printf("Connection closed\n");
+    const char* clientIP = ClientConnection_getPeerAddress(connection);
+    
+    if (connected) {
+        activeConnections++;
+        if (activeConnections == 1) {
+            LOG_PRINT("\n==================================================\n");
+            LOG_PRINT("[SISTEMA] >>> ELIPSE/CLIENTE CONECTADO <<<\n");
+            LOG_PRINT("   >> IP: %s\n", clientIP);
+            LOG_PRINT("==================================================\n");
+        }
+    } else {
+        if (activeConnections > 0) activeConnections--;
+        if (activeConnections == 0) {
+            LOG_PRINT("\n[SISTEMA] Cliente Desconectado (%s)\n\n", clientIP);
+        }
+    }
 }
 
-static void
-rcbEventHandler(void* parameter, ReportControlBlock* rcb, ClientConnection connection, IedServer_RCBEventType event, const char* parameterName, MmsDataAccessError serviceError)
+/* Handler para o Select (SBO) - Validando CELXSWI1 e TNKXSWI1 */
+static CheckHandlerResult 
+checkHandler(ControlAction action, void* parameter, MmsValue* ctlVal, bool test, bool interlockCheck) 
+{ 
+    if (parameter == IEDMODEL_B1HYD_CELXSWI1_Pos || parameter == IEDMODEL_B1HYD_TNKXSWI1_Pos) 
+        return CONTROL_ACCEPTED;
+    return CONTROL_OBJECT_UNDEFINED;
+} 
+
+/* Handler para o Operate - Atuando em CELXSWI1 e TNKXSWI1 de forma independente */
+static ControlHandlerResult controlHandlerForBinaryOutput(ControlAction action, void* parameter, MmsValue* value, bool test) 
 {
-    printf("RCB: %s event: %i\n", ReportControlBlock_getName(rcb), event);
-    if ((event == RCB_EVENT_SET_PARAMETER) || (event == RCB_EVENT_GET_PARAMETER)) {
-        printf("  param:  %s\n", parameterName);
-        printf("  result: %i\n", serviceError);
+    uint64_t timestamp = Hal_getTimeInMs();
+    
+    int ctlNum = ControlAction_getCtlNum(action);
+    ClientConnection clientCon = ControlAction_getClientConnection(action);
+    const char* clientIP = (clientCon) ? ClientConnection_getPeerAddress(clientCon) : "Desconhecido";
+
+    if (parameter == IEDMODEL_B1HYD_CELXSWI1_Pos || parameter == IEDMODEL_B1HYD_TNKXSWI1_Pos) {
+        
+        bool state = MmsValue_getBoolean(value);
+        
+        // Usando LOG_PRINT (stderr) ao invés de printf
+        LOG_PRINT("--------------------------------------------------\n");
+        LOG_PRINT("[COMANDO] Recebido de: %s\n", clientIP);
+        
+        if (parameter == IEDMODEL_B1HYD_CELXSWI1_Pos) {
+            digitalWrite(RELAY_CEL_PIN, state ? HIGH : LOW); 
+            LOG_PRINT("   >> Acao:     CELXSWI1 (Célula) %s (%d)\n", state ? "LIGADO/FECHADO" : "DESLIGADO/ABERTO", state ? 1 : 0);
+            LOG_PRINT("   >> Hardware: Pino %d %s\n", RELAY_CEL_PIN, state ? "HIGH" : "LOW");
+            IedServer_updateUTCTimeAttributeValue(iedServer, IEDMODEL_B1HYD_CELXSWI1_Pos_t, timestamp);
+            IedServer_updateAttributeValue(iedServer, IEDMODEL_B1HYD_CELXSWI1_Pos_stVal, value);
+        } 
+        else if (parameter == IEDMODEL_B1HYD_TNKXSWI1_Pos) {
+            digitalWrite(RELAY_TNK_PIN, state ? HIGH : LOW); 
+            LOG_PRINT("   >> Acao:     TNKXSWI1 (Tanque) %s (%d)\n", state ? "LIGADO/FECHADO" : "DESLIGADO/ABERTO", state ? 1 : 0);
+            LOG_PRINT("   >> Hardware: Pino %d %s\n", RELAY_TNK_PIN, state ? "HIGH" : "LOW");
+            IedServer_updateUTCTimeAttributeValue(iedServer, IEDMODEL_B1HYD_TNKXSWI1_Pos_t, timestamp);
+            IedServer_updateAttributeValue(iedServer, IEDMODEL_B1HYD_TNKXSWI1_Pos_stVal, value);
+        }
+
+        LOG_PRINT("   >> CtlNum:   %d\n", ctlNum);
+        LOG_PRINT("--------------------------------------------------\n");
     }
-    if (event == RCB_EVENT_ENABLE) {
-        char* rptId = ReportControlBlock_getRptID(rcb);
-        printf("    rptID:  %s\n", rptId);
-        char* dataSet = ReportControlBlock_getDataSet(rcb);
-        printf("    datSet: %s\n", dataSet);
-        free(rptId);
-        free(dataSet);
+    else {
+        return CONTROL_RESULT_FAILED;
+    }
+
+    return CONTROL_RESULT_OK;
+}
+
+/* Handler de Escrita (para mudar o ctlModel se necessário) */
+static MmsDataAccessError
+writeAccessHandler (DataAttribute* dataAttribute, MmsValue* value, ClientConnection connection, void* parameter)
+{
+    ControlModel ctlModelVal = (ControlModel) MmsValue_toInt32(value);
+
+    if ((ctlModelVal == CONTROL_MODEL_STATUS_ONLY) || (ctlModelVal == CONTROL_MODEL_DIRECT_NORMAL))
+    {
+        if (dataAttribute == IEDMODEL_B1HYD_CELXSWI1_Pos_ctlModel) {
+            IedServer_updateCtlModel(iedServer, IEDMODEL_B1HYD_CELXSWI1_Pos, ctlModelVal);
+        } 
+        else if (dataAttribute == IEDMODEL_B1HYD_TNKXSWI1_Pos_ctlModel) {
+            IedServer_updateCtlModel(iedServer, IEDMODEL_B1HYD_TNKXSWI1_Pos, ctlModelVal);
+        }
+        return DATA_ACCESS_ERROR_SUCCESS;
+    }
+    else {
+        return DATA_ACCESS_ERROR_OBJECT_VALUE_INVALID;
     }
 }
 
 int
 main(int argc, char** argv)
 {
-    int tcpPort = 102;
-
-    if (argc > 1) {
-        tcpPort = atoi(argv[1]);
+    // 1. SETUP HARDWARE (2 PINOS INDEPENDENTES)
+    if (wiringPiSetup() == -1) {
+        fprintf(stderr, "ERRO: Falha ao inicializar o wiringPi! Tente executar como root (sudo)\n");
+        exit(1);
     }
+    pinMode(RELAY_CEL_PIN, OUTPUT);
+    digitalWrite(RELAY_CEL_PIN, LOW); 
+    
+    pinMode(RELAY_TNK_PIN, OUTPUT);
+    digitalWrite(RELAY_TNK_PIN, LOW); 
 
-    printf("Using libIEC61850 version %s\n", LibIEC61850_getVersionString());
+    // ---------------------------------------------------------
+    // BLOQUEIO TOTAL DE STDOUT (Logs que poluem o terminal)
+    // ---------------------------------------------------------
+    int dev_null = open("/dev/null", O_WRONLY);
+    // Redireciona stdout (printf comum) para o lixo
+    if (dev_null != -1) dup2(dev_null, STDOUT_FILENO); 
+    // NÃO restauramos o stdout. A biblioteca falará sozinha no vazio para sempre.
+    // ---------------------------------------------------------
 
-    IedServerConfig config = IedServerConfig_create();
-    IedServerConfig_setReportBufferSize(config, 200000);
-    IedServerConfig_setEdition(config, IEC_61850_EDITION_2);
-    IedServerConfig_setFileServiceBasePath(config, "./vmd-filestore/");
-    IedServerConfig_enableFileService(config, false);
-    IedServerConfig_enableDynamicDataSetService(config, true);
-    IedServerConfig_enableLogService(config, false);
-    IedServerConfig_setMaxMmsConnections(config, 2);
+    sinalizar_partida();
+    
+    iedServer = IedServer_create(&iedModel);
+    int tcpPort = 102;
+    if (argc > 1) tcpPort = atoi(argv[1]);
 
-    iedServer = IedServer_createWithConfig(&iedModel, NULL, config);
-    IedServerConfig_destroy(config);
+    // Configura os Handlers para CELXSWI1
+    IedServer_setControlHandler(iedServer, IEDMODEL_B1HYD_CELXSWI1_Pos,
+            (ControlHandler) controlHandlerForBinaryOutput, IEDMODEL_B1HYD_CELXSWI1_Pos);
+    IedServer_setPerformCheckHandler(iedServer, IEDMODEL_B1HYD_CELXSWI1_Pos, 
+            checkHandler, IEDMODEL_B1HYD_CELXSWI1_Pos);
+    IedServer_handleWriteAccess(iedServer, IEDMODEL_B1HYD_CELXSWI1_Pos_ctlModel, writeAccessHandler, NULL);
 
-    /* Identidade do Servidor B1HYD */
-    IedServer_setServerIdentity(iedServer, "MoveUFF", "B1HYD Server", "1.0.0");
-
-    /****************************************************************
-     * ATIVAÇÃO DOS CONTROLOS (B1HYD - KVLV1)
-     ***************************************************************/
-
-    /* Controle Booleano (Abrir/Fechar Válvula) */
-    /* Nota: Usamos o objeto de controle 'Pos' */
-    IedServer_setControlHandler(iedServer, IEDMODEL_B1HYD_KVLV1_Pos,
-            (ControlHandler) controlHandlerForBinaryOutput,
-            IEDMODEL_B1HYD_KVLV1_Pos_stVal);
-
-    /* Controle Analógico (Setpoint de Posição) */
-    IedServer_setControlHandler(iedServer, IEDMODEL_B1HYD_KVLV1_PosSpt,
-            (ControlHandler) controlHandlerForAnalogueOutput,
-            IEDMODEL_B1HYD_KVLV1_PosSpt_mxVal);
-
-    /****************************************************************
-     * FIM DA ATIVAÇÃO DE CONTROLOS
-     ***************************************************************/
+    // Configura os Handlers para TNKXSWI1
+    IedServer_setControlHandler(iedServer, IEDMODEL_B1HYD_TNKXSWI1_Pos,
+            (ControlHandler) controlHandlerForBinaryOutput, IEDMODEL_B1HYD_TNKXSWI1_Pos);
+    IedServer_setPerformCheckHandler(iedServer, IEDMODEL_B1HYD_TNKXSWI1_Pos, 
+            checkHandler, IEDMODEL_B1HYD_TNKXSWI1_Pos);
+    IedServer_handleWriteAccess(iedServer, IEDMODEL_B1HYD_TNKXSWI1_Pos_ctlModel, writeAccessHandler, NULL);
 
     IedServer_setConnectionIndicationHandler(iedServer, (IedConnectionIndicationHandler) connectionHandler, NULL);
-    IedServer_setRCBEventHandler(iedServer, rcbEventHandler, NULL);
 
-    /* Permissões de Escrita */
-    IedServer_setWriteAccessPolicy(iedServer, IEC61850_FC_DC, ACCESS_POLICY_ALLOW);
-    IedServer_setWriteAccessPolicy(iedServer, IEC61850_FC_CO, ACCESS_POLICY_ALLOW); 
-    IedServer_setWriteAccessPolicy(iedServer, IEC61850_FC_SP, ACCESS_POLICY_ALLOW);
-    IedServer_setWriteAccessPolicy(iedServer, IEC61850_FC_CF, ACCESS_POLICY_ALLOW);
-    
     IedServer_start(iedServer, tcpPort);
 
-    if (!IedServer_isRunning(iedServer))
-    {
-        printf("Starting server failed (Exit.)\n");
+    if (!IedServer_isRunning(iedServer)) {
+        LOG_PRINT("Falha ao iniciar servidor!\n");
         IedServer_destroy(iedServer);
         exit(-1);
     }
 
-    /****************************************************************
-     * INICIALIZAÇÃO DE VALORES (B1HYD)
-     ***************************************************************/
-    
-    printf("Servidor B1HYD arrancou na porta %i. A inicializar valores...\n", tcpPort);
-
-    IedServer_lockDataModel(iedServer); 
-    
-    /* --- KTNK1 (Tanque de Hidrogênio) --- */
-    IedServer_updateInt32AttributeValue(iedServer, IEDMODEL_B1HYD_KTNK1_EEHealth_stVal, 1); // Ok
-    IedServer_updateInt32AttributeValue(iedServer, IEDMODEL_B1HYD_KTNK1_Beh_stVal, 1); // On
-    IedServer_updateInt32AttributeValue(iedServer, IEDMODEL_B1HYD_KTNK1_OpTmh_stVal, 120); // 120 horas de operação
-    
-    // Medições (Nível e Volume)
-    IedServer_updateFloatAttributeValue(iedServer, IEDMODEL_B1HYD_KTNK1_LevPct_mag, 85.5f); // 85.5%
-    IedServer_updateFloatAttributeValue(iedServer, IEDMODEL_B1HYD_KTNK1_Vlm_mag, 150.0f);   // 150 Litros
-    
-    // Configurações (Capacidade e Tipo)
-    IedServer_updateFloatAttributeValue(iedServer, IEDMODEL_B1HYD_KTNK1_VlmCap_setMag, 200.0f); // Max 200L
-    IedServer_updateInt32AttributeValue(iedServer, IEDMODEL_B1HYD_KTNK1_TnkTyp_setVal, 1); // Tipo 1 (H2)
-
-    /* --- STMP1 (Temperatura) --- */
-    IedServer_updateBooleanAttributeValue(iedServer, IEDMODEL_B1HYD_STMP1_Trip_stVal, false); // Sem Trip
-    IedServer_updateFloatAttributeValue(iedServer, IEDMODEL_B1HYD_STMP1_Tmp_mag, 24.5f); // 24.5 Graus
-    
-    // Settings de Trip
-    IedServer_updateFloatAttributeValue(iedServer, IEDMODEL_B1HYD_STMP1_TripSet_setMag, 60.0f); // Tripa em 60 graus
-
-    /* --- KVLV1 (Válvula de Controle) --- */
-    // Status Inicial: Fechada
-    IedServer_updateBooleanAttributeValue(iedServer, IEDMODEL_B1HYD_KVLV1_ClsPos_stVal, true);
-    IedServer_updateBooleanAttributeValue(iedServer, IEDMODEL_B1HYD_KVLV1_OpnPos_stVal, false);
-    IedServer_updateBooleanAttributeValue(iedServer, IEDMODEL_B1HYD_KVLV1_Mvm_stVal, false); // Não está movendo
-    IedServer_updateBooleanAttributeValue(iedServer, IEDMODEL_B1HYD_KVLV1_Stuck_stVal, false); // Não está travada
-    
-    IedServer_updateInt32AttributeValue(iedServer, IEDMODEL_B1HYD_KVLV1_OpCnt_stVal, 10); // 10 Operações
-    IedServer_updateFloatAttributeValue(iedServer, IEDMODEL_B1HYD_KVLV1_PosVlv_mag, 0.0f); // 0% de abertura
-    
-    IedServer_unlockDataModel(iedServer); 
-    
-    printf("Valores do B1HYD inicializados com sucesso!\n");
-    /****************************************************************
-     * FIM DA INICIALIZAÇÃO
-     ***************************************************************/
+    // Logs de status usando stderr para aparecerem na tela
+    LOG_PRINT("\n--- SERVIDOR IEC 61850 (B1HYD) ---\n");
+    LOG_PRINT("[STATUS] Hardware OK (Célula: P%d | Tanque: P%d)\n", RELAY_CEL_PIN, RELAY_TNK_PIN);
+    LOG_PRINT("[STATUS] Rodando na porta %d.\n", tcpPort);
+    LOG_PRINT("[STATUS] Aguardando conexao do Elipse...\n");
 
     running = 1;
     signal(SIGINT, sigint_handler);
 
-    while (running)
-    {
-        /* Aqui você pode adicionar lógica de simulação:
-           Ex: Aumentar a temperatura aos poucos, 
-               ou diminuir o nível do tanque se a válvula estiver aberta. */
-        
+    while (running) {
         Thread_sleep(100);
     }
 
+    LOG_PRINT("\n[SISTEMA] Encerrando servidor...\n");
+    digitalWrite(RELAY_CEL_PIN, LOW);
+    digitalWrite(RELAY_TNK_PIN, LOW);
     IedServer_stop(iedServer);
     IedServer_destroy(iedServer);
-
+    close(dev_null);
     return 0;
-} /* main() */
+}
