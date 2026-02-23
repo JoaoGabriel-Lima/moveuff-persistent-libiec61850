@@ -3,15 +3,14 @@
 #include <signal.h>
 #include <stdlib.h>
 #include <stdio.h>
-#include <unistd.h> // Para dup2
-#include <fcntl.h>  // Para open
-
-// --- ADICIONADO PARA O RELÉ ---
+#include <unistd.h>
+#include <fcntl.h>
 #include <wiringPi.h>
-#define RELAY_PIN 2  // wPi 2 = Pino Físico 7/8 na Zero 2W
-// ------------------------------
-
 #include "static_model.h"
+
+#define RELAY_PIN 2 
+/* Redireciona logs para stderr para evitar o bloqueio do stdout */
+#define LOG_PRINT(...) fprintf(stderr, __VA_ARGS__)
 
 static int running = 0;
 static IedServer iedServer = NULL;
@@ -19,23 +18,17 @@ static int activeConnections = 0;
 
 void sigint_handler(int signalId) { running = 0; }
 
-/* * MACRO PARA LOG PERSONALIZADO
- * Redireciona nossos prints para stderr para fugir do bloqueio do stdout 
- */
-#define LOG_PRINT(...) fprintf(stderr, __VA_ARGS__)
-
-/* --- FUNÇÃO DE PISCAR --- */
+/* Sinalização visual de que o servidor subiu com sucesso */
 void sinalizar_partida() {
-    // Blink rápido (50ms) para indicar que a conexão está fiedelizada e o servidor está pronto
     for(int i=0; i<2; i++) {
         digitalWrite(RELAY_PIN, HIGH);
-        Thread_sleep(50);           
+        Thread_sleep(100);           
         digitalWrite(RELAY_PIN, LOW);
-        Thread_sleep(50);
+        Thread_sleep(100);
     }
 }
 
-/* Handler de Conexão */
+/* Gerencia o status de conexões ativas (útil para debug no terminal) */
 static void
 connectionHandler (IedServer self, ClientConnection connection, bool connected, void* parameter)
 {
@@ -57,7 +50,7 @@ connectionHandler (IedServer self, ClientConnection connection, bool connected, 
     }
 }
 
-/* Handler para o Select (SBO) */
+/* Valida se o objeto de controle existe antes de operar */
 static CheckHandlerResult 
 checkHandler(ControlAction action, void* parameter, MmsValue* ctlVal, bool test, bool interlockCheck) 
 {
@@ -66,21 +59,19 @@ checkHandler(ControlAction action, void* parameter, MmsValue* ctlVal, bool test,
     return CONTROL_OBJECT_UNDEFINED;
 } 
 
-/* Handler para o Operate */
-static ControlHandlerResult controlHandlerForBinaryOutput(ControlAction action, void* parameter, MmsValue* value, bool test) 
+/* Handler principal: Executa o comando de hardware e atualiza o modelo IEC 61850 */
+static ControlHandlerResult 
+controlHandlerForBinaryOutput(ControlAction action, void* parameter, MmsValue* value, bool test) 
 {
     uint64_t timestamp = Hal_getTimeInMs();
-    
     int ctlNum = ControlAction_getCtlNum(action);
     ClientConnection clientCon = ControlAction_getClientConnection(action);
     const char* clientIP = (clientCon) ? ClientConnection_getPeerAddress(clientCon) : "Desconhecido";
 
     if (parameter == IEDMODEL_B1EBK_MOTXSWI1_Pos) {
-        
         bool state = MmsValue_getBoolean(value);
         digitalWrite(RELAY_PIN, state ? HIGH : LOW); 
         
-        // Usando LOG_PRINT (stderr) ao invés de printf
         LOG_PRINT("--------------------------------------------------\n");
         LOG_PRINT("[COMANDO] Recebido de: %s\n", clientIP);
         LOG_PRINT("   >> Acao:     MOTOR %s (%d)\n", state ? "LIGADO" : "DESLIGADO", state ? 1 : 0);
@@ -88,6 +79,7 @@ static ControlHandlerResult controlHandlerForBinaryOutput(ControlAction action, 
         LOG_PRINT("   >> Hardware: Pino %d %s\n", RELAY_PIN, state ? "HIGH" : "LOW");
         LOG_PRINT("--------------------------------------------------\n");
 
+        /* Atualiza stVal e o timestamp (t) no modelo para retorno ao supervisório */
         IedServer_updateUTCTimeAttributeValue(iedServer, IEDMODEL_B1EBK_MOTXSWI1_Pos_t, timestamp);
         IedServer_updateAttributeValue(iedServer, IEDMODEL_B1EBK_MOTXSWI1_Pos_stVal, value);
     }
@@ -97,6 +89,7 @@ static ControlHandlerResult controlHandlerForBinaryOutput(ControlAction action, 
     return CONTROL_RESULT_OK;
 }
 
+/* Permite que o cliente (Elipse) altere o modelo de controle via rede */
 static MmsDataAccessError
 writeAccessHandler (DataAttribute* dataAttribute, MmsValue* value, ClientConnection connection, void* parameter)
 {
@@ -115,22 +108,17 @@ writeAccessHandler (DataAttribute* dataAttribute, MmsValue* value, ClientConnect
 int
 main(int argc, char** argv)
 {
-    // 1. SETUP HARDWARE
+    /* Inicialização do hardware WiringPi */
     if (wiringPiSetup() == -1) {
-        fprintf(stderr, "ERRO: Falha ao inicializar o wiringPi! Tente executar como root\n");
+        fprintf(stderr, "ERRO: Falha ao inicializar o wiringPi!\n");
         exit(1);
     }
     pinMode(RELAY_PIN, OUTPUT);
     digitalWrite(RELAY_PIN, LOW); 
 
-    // ---------------------------------------------------------
-    // BLOQUEIO TOTAL DE STDOUT (Logs que poluem o terminal)
-    // ---------------------------------------------------------
+    /* Desvia STDOUT para /dev/null para silenciar logs internos da biblioteca */
     int dev_null = open("/dev/null", O_WRONLY);
-    // Redireciona stdout (printf comum) para o lixo
     dup2(dev_null, STDOUT_FILENO); 
-    // NÃO restauramos o stdout. A biblioteca falará sozinha no vazio para sempre.
-    // ---------------------------------------------------------
 
     sinalizar_partida();
 
@@ -138,6 +126,7 @@ main(int argc, char** argv)
     int tcpPort = 102;
     if (argc > 1) tcpPort = atoi(argv[1]);
 
+    /* Vinculação dos Handlers aos nós do modelo estático */
     IedServer_setControlHandler(iedServer, IEDMODEL_B1EBK_MOTXSWI1_Pos,
             (ControlHandler) controlHandlerForBinaryOutput, IEDMODEL_B1EBK_MOTXSWI1_Pos);
 
@@ -151,13 +140,12 @@ main(int argc, char** argv)
     IedServer_start(iedServer, tcpPort);
 
     if (!IedServer_isRunning(iedServer)) {
-        LOG_PRINT("Falha ao iniciar servidor! (Use sudo?)\n");
+        LOG_PRINT("Falha ao iniciar servidor!\n");
         IedServer_destroy(iedServer);
         exit(-1);
     }
 
-    // Logs de status usando stderr para aparecerem na tela
-    LOG_PRINT("\n--- SERVIDOR IEC 61850 (BIKE IO) ---\n");
+    LOG_PRINT("\n--- SERVIDOR IEC 61850 (BIKE) ---\n");
     LOG_PRINT("[STATUS] Hardware OK (Relé na Porta %d)\n", RELAY_PIN);
     LOG_PRINT("[STATUS] Rodando na porta %d.\n", tcpPort);
     LOG_PRINT("[STATUS] Aguardando conexao do Elipse...\n");
@@ -169,6 +157,7 @@ main(int argc, char** argv)
         Thread_sleep(100);
     }
 
+    /* Shutdown limpo do servidor e hardware */
     LOG_PRINT("\n[SISTEMA] Encerrando servidor...\n");
     digitalWrite(RELAY_PIN, LOW);
     IedServer_stop(iedServer);

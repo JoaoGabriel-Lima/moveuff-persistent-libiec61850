@@ -3784,7 +3784,7 @@ DataObject iedModel_B1EBK_TLOC1_DistSess = {
     DataObjectModelType,
     "DistSess",
     (ModelNode*) &iedModel_B1EBK_TLOC1,
-    (ModelNode*) &iedModel_B1EBK_TLOC1_NavFal,  
+    (ModelNode*) &iedModel_B1EBK_TLOC1_NavFai,  
     (ModelNode*) &iedModel_B1EBK_TLOC1_DistSess_mag,
     0,
     -1
@@ -3842,21 +3842,21 @@ DataAttribute iedModel_B1EBK_TLOC1_DistSess_t = {
     0
 };
 
-DataObject iedModel_B1EBK_TLOC1_NavFal = {
+DataObject iedModel_B1EBK_TLOC1_NavFai = {
     DataObjectModelType,
-    "NavFal",
+    "NavFai",
     (ModelNode*) &iedModel_B1EBK_TLOC1,
     (ModelNode*) &iedModel_B1EBK_TLOC1_SatAvl,  
-    (ModelNode*) &iedModel_B1EBK_TLOC1_NavFal_stVal,
+    (ModelNode*) &iedModel_B1EBK_TLOC1_NavFai_stVal,
     0,
     -1
 };
 
-DataAttribute iedModel_B1EBK_TLOC1_NavFal_stVal = {
+DataAttribute iedModel_B1EBK_TLOC1_NavFai_stVal = {
     DataAttributeModelType,
     "stVal",
-    (ModelNode*) &iedModel_B1EBK_TLOC1_NavFal,
-    (ModelNode*) &iedModel_B1EBK_TLOC1_NavFal_q,
+    (ModelNode*) &iedModel_B1EBK_TLOC1_NavFai,
+    (ModelNode*) &iedModel_B1EBK_TLOC1_NavFai_q,
     NULL,
     0,
     -1,
@@ -3865,11 +3865,11 @@ DataAttribute iedModel_B1EBK_TLOC1_NavFal_stVal = {
     TRG_OPT_DATA_CHANGED
 };
 
-DataAttribute iedModel_B1EBK_TLOC1_NavFal_q = {
+DataAttribute iedModel_B1EBK_TLOC1_NavFai_q = {
     DataAttributeModelType,
     "q",
-    (ModelNode*) &iedModel_B1EBK_TLOC1_NavFal,
-    (ModelNode*) &iedModel_B1EBK_TLOC1_NavFal_t,
+    (ModelNode*) &iedModel_B1EBK_TLOC1_NavFai,
+    (ModelNode*) &iedModel_B1EBK_TLOC1_NavFai_t,
     NULL,
     0,
     -1,
@@ -3878,10 +3878,10 @@ DataAttribute iedModel_B1EBK_TLOC1_NavFal_q = {
     TRG_OPT_QUALITY_CHANGED
 };
 
-DataAttribute iedModel_B1EBK_TLOC1_NavFal_t = {
+DataAttribute iedModel_B1EBK_TLOC1_NavFai_t = {
     DataAttributeModelType,
     "t",
-    (ModelNode*) &iedModel_B1EBK_TLOC1_NavFal,
+    (ModelNode*) &iedModel_B1EBK_TLOC1_NavFai,
     NULL,
     NULL,
     0,
@@ -4003,7 +4003,7 @@ DataAttribute iedModel_B1EBK_TLOC1_LocDist_instMag = {
     DataAttributeModelType,
     "instMag",
     (ModelNode*) &iedModel_B1EBK_TLOC1_LocDist,
-    (ModelNode*) &iedModel_B1EBK_TLOC1_LocDist_q,
+    (ModelNode*) &iedModel_B1EBK_TLOC1_LocDist_mag,
     (ModelNode*) &iedModel_B1EBK_TLOC1_LocDist_instMag_f,
     0,
     -1,
@@ -4024,6 +4024,35 @@ DataAttribute iedModel_B1EBK_TLOC1_LocDist_instMag_f = {
     IEC61850_FLOAT32,
     0
 };
+
+
+DataAttribute iedModel_B1EBK_TLOC1_LocDist_mag = {
+    DataAttributeModelType,
+    "mag",
+    (ModelNode*) &iedModel_B1EBK_TLOC1_LocDist,
+    (ModelNode*) &iedModel_B1EBK_TLOC1_LocDist_q,
+    (ModelNode*) &iedModel_B1EBK_TLOC1_LocDist_mag_f,
+    0,
+    -1,
+    IEC61850_FC_MX,
+    IEC61850_CONSTRUCTED,
+    TRG_OPT_DATA_CHANGED
+};
+
+DataAttribute iedModel_B1EBK_TLOC1_LocDist_mag_f = {
+    DataAttributeModelType,
+    "f",
+    (ModelNode*) &iedModel_B1EBK_TLOC1_LocDist_mag,
+    NULL,
+    NULL,
+    0,
+    -1,
+    IEC61850_FC_MX,
+    IEC61850_FLOAT32,
+    0
+};
+
+
 
 DataAttribute iedModel_B1EBK_TLOC1_LocDist_q = {
     DataAttributeModelType,
@@ -4055,7 +4084,7 @@ DataObject iedModel_B1EBK_TLOC1_AutDis = {
     DataObjectModelType,
     "AutDis",
     (ModelNode*) &iedModel_B1EBK_TLOC1,
-    NULL,
+    (ModelNode*) &iedModel_B1EBK_TLOC1_GeoLoc,
     (ModelNode*) &iedModel_B1EBK_TLOC1_AutDis_stVal,
     0,
     -1
@@ -4091,6 +4120,81 @@ DataAttribute iedModel_B1EBK_TLOC1_AutDis_t = {
     DataAttributeModelType,
     "t",
     (ModelNode*) &iedModel_B1EBK_TLOC1_AutDis,
+    NULL,
+    NULL,
+    0,
+    -1,
+    IEC61850_FC_ST,
+    IEC61850_TIMESTAMP,
+    0
+};
+
+DataObject iedModel_B1EBK_TLOC1_GeoLoc = {
+    DataObjectModelType,
+    "GeoLoc",
+    (ModelNode*) &iedModel_B1EBK_TLOC1,
+    NULL,
+    (ModelNode*) &iedModel_B1EBK_TLOC1_GeoLoc_latitude,
+    0,
+    -1
+};
+
+DataAttribute iedModel_B1EBK_TLOC1_GeoLoc_latitude = {
+    DataAttributeModelType,
+    "latitude",
+    (ModelNode*) &iedModel_B1EBK_TLOC1_GeoLoc,
+    (ModelNode*) &iedModel_B1EBK_TLOC1_GeoLoc_longitude,
+    NULL,
+    0,
+    -1,
+    IEC61850_FC_ST,
+    IEC61850_FLOAT32,
+    TRG_OPT_DATA_CHANGED
+};
+
+DataAttribute iedModel_B1EBK_TLOC1_GeoLoc_longitude = {
+    DataAttributeModelType,
+    "longitude",
+    (ModelNode*) &iedModel_B1EBK_TLOC1_GeoLoc,
+    (ModelNode*) &iedModel_B1EBK_TLOC1_GeoLoc_general,
+    NULL,
+    0,
+    -1,
+    IEC61850_FC_ST,
+    IEC61850_FLOAT32,
+    TRG_OPT_DATA_CHANGED
+};
+
+DataAttribute iedModel_B1EBK_TLOC1_GeoLoc_general = {
+    DataAttributeModelType,
+    "general",
+    (ModelNode*) &iedModel_B1EBK_TLOC1_GeoLoc,
+    (ModelNode*) &iedModel_B1EBK_TLOC1_GeoLoc_q,
+    NULL,
+    0,
+    -1,
+    IEC61850_FC_ST,
+    IEC61850_BOOLEAN,
+    TRG_OPT_DATA_CHANGED
+};
+
+DataAttribute iedModel_B1EBK_TLOC1_GeoLoc_q = {
+    DataAttributeModelType,
+    "q",
+    (ModelNode*) &iedModel_B1EBK_TLOC1_GeoLoc,
+    (ModelNode*) &iedModel_B1EBK_TLOC1_GeoLoc_t,
+    NULL,
+    0,
+    -1,
+    IEC61850_FC_ST,
+    IEC61850_QUALITY,
+    TRG_OPT_QUALITY_CHANGED
+};
+
+DataAttribute iedModel_B1EBK_TLOC1_GeoLoc_t = {
+    DataAttributeModelType,
+    "t",
+    (ModelNode*) &iedModel_B1EBK_TLOC1_GeoLoc,
     NULL,
     NULL,
     0,

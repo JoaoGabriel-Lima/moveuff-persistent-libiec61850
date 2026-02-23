@@ -369,10 +369,10 @@ extern DataAttribute iedModel_B1EBK_TLOC1_DistSess_mag;
 extern DataAttribute iedModel_B1EBK_TLOC1_DistSess_mag_f;
 extern DataAttribute iedModel_B1EBK_TLOC1_DistSess_q;
 extern DataAttribute iedModel_B1EBK_TLOC1_DistSess_t;
-extern DataObject iedModel_B1EBK_TLOC1_NavFal;
-extern DataAttribute iedModel_B1EBK_TLOC1_NavFal_stVal;
-extern DataAttribute iedModel_B1EBK_TLOC1_NavFal_q;
-extern DataAttribute iedModel_B1EBK_TLOC1_NavFal_t;
+extern DataObject iedModel_B1EBK_TLOC1_NavFai;
+extern DataAttribute iedModel_B1EBK_TLOC1_NavFai_stVal;
+extern DataAttribute iedModel_B1EBK_TLOC1_NavFai_q;
+extern DataAttribute iedModel_B1EBK_TLOC1_NavFai_t;
 extern DataObject iedModel_B1EBK_TLOC1_SatAvl;
 extern DataAttribute iedModel_B1EBK_TLOC1_SatAvl_stVal;
 extern DataAttribute iedModel_B1EBK_TLOC1_SatAvl_q;
@@ -384,12 +384,20 @@ extern DataAttribute iedModel_B1EBK_TLOC1_LocPrec_t;
 extern DataObject iedModel_B1EBK_TLOC1_LocDist;
 extern DataAttribute iedModel_B1EBK_TLOC1_LocDist_instMag;
 extern DataAttribute iedModel_B1EBK_TLOC1_LocDist_instMag_f;
+extern DataAttribute iedModel_B1EBK_TLOC1_LocDist_mag;
+extern DataAttribute iedModel_B1EBK_TLOC1_LocDist_mag_f;
 extern DataAttribute iedModel_B1EBK_TLOC1_LocDist_q;
 extern DataAttribute iedModel_B1EBK_TLOC1_LocDist_t;
 extern DataObject iedModel_B1EBK_TLOC1_AutDis;
 extern DataAttribute iedModel_B1EBK_TLOC1_AutDis_stVal;
 extern DataAttribute iedModel_B1EBK_TLOC1_AutDis_q;
 extern DataAttribute iedModel_B1EBK_TLOC1_AutDis_t;
+extern DataObject iedModel_B1EBK_TLOC1_GeoLoc;
+extern DataAttribute iedModel_B1EBK_TLOC1_GeoLoc_latitude;
+extern DataAttribute iedModel_B1EBK_TLOC1_GeoLoc_longitude;
+extern DataAttribute iedModel_B1EBK_TLOC1_GeoLoc_general;
+extern DataAttribute iedModel_B1EBK_TLOC1_GeoLoc_q;
+extern DataAttribute iedModel_B1EBK_TLOC1_GeoLoc_t;
 extern DataObject iedModel_B1EBK_MOTXSWI1_SwTyp;
 extern DataAttribute iedModel_B1EBK_MOTXSWI1_SwTyp_stVal;
 extern DataAttribute iedModel_B1EBK_MOTXSWI1_SwTyp_q;
@@ -613,11 +621,7 @@ extern DataAttribute iedModel_B1EBK_MOTXSWI1_NamPlt_lnNs;
 #define IEDMODEL_B1EBK_ALMXSWI1_BlkCls_t (&iedModel_B1EBK_ALMXSWI1_BlkCls_t)
 #define IEDMODEL_B1EBK_ALMXSWI1_BlkCls_ctlModel (&iedModel_B1EBK_ALMXSWI1_BlkCls_ctlModel)
 
-/* ==================================================================
- * DEFINES - LANTXSWI1
- * ==================================================================
- */
-
+ /* --- Defines LANTXSWI1 --- */
 #define IEDMODEL_B1EBK_LANTXSWI1 (&iedModel_B1EBK_LANTXSWI1)
 #define IEDMODEL_B1EBK_LANTXSWI1_SwTyp (&iedModel_B1EBK_LANTXSWI1_SwTyp)
 #define IEDMODEL_B1EBK_LANTXSWI1_SwTyp_stVal (&iedModel_B1EBK_LANTXSWI1_SwTyp_stVal)
@@ -660,6 +664,22 @@ extern DataAttribute iedModel_B1EBK_MOTXSWI1_NamPlt_lnNs;
 #define IEDMODEL_B1EBK_LANTXSWI1_BlkCls_q (&iedModel_B1EBK_LANTXSWI1_BlkCls_q)
 #define IEDMODEL_B1EBK_LANTXSWI1_BlkCls_t (&iedModel_B1EBK_LANTXSWI1_BlkCls_t)
 #define IEDMODEL_B1EBK_LANTXSWI1_BlkCls_ctlModel (&iedModel_B1EBK_LANTXSWI1_BlkCls_ctlModel)
+
+ /* --- Defines LANTXSWI1 --- */
+#define IEDMODEL_B1EBK_MOTXSWI1 (&iedModel_B1EBK_MOTXSWI1)
+#define IEDMODEL_B1EBK_MOTXSWI1_SwTyp_stVal (&iedModel_B1EBK_MOTXSWI1_SwTyp_stVal)
+#define IEDMODEL_B1EBK_MOTXSWI1_Loc_stVal (&iedModel_B1EBK_MOTXSWI1_Loc_stVal)
+#define IEDMODEL_B1EBK_MOTXSWI1_OpCnt_stVal (&iedModel_B1EBK_MOTXSWI1_OpCnt_stVal)
+#define IEDMODEL_B1EBK_MOTXSWI1_Pos (&iedModel_B1EBK_MOTXSWI1_Pos)
+#define IEDMODEL_B1EBK_MOTXSWI1_Pos_stVal (&iedModel_B1EBK_MOTXSWI1_Pos_stVal)
+#define IEDMODEL_B1EBK_MOTXSWI1_Pos_t (&iedModel_B1EBK_MOTXSWI1_Pos_t)
+#define IEDMODEL_B1EBK_MOTXSWI1_Pos_ctlModel (&iedModel_B1EBK_MOTXSWI1_Pos_ctlModel)
+#define IEDMODEL_B1EBK_MOTXSWI1_BlkOpn (&iedModel_B1EBK_MOTXSWI1_BlkOpn)
+#define IEDMODEL_B1EBK_MOTXSWI1_BlkOpn_stVal (&iedModel_B1EBK_MOTXSWI1_BlkOpn_stVal)
+#define IEDMODEL_B1EBK_MOTXSWI1_BlkOpn_t (&iedModel_B1EBK_MOTXSWI1_BlkOpn_t)
+#define IEDMODEL_B1EBK_MOTXSWI1_BlkCls (&iedModel_B1EBK_MOTXSWI1_BlkCls)
+#define IEDMODEL_B1EBK_MOTXSWI1_BlkCls_stVal (&iedModel_B1EBK_MOTXSWI1_BlkCls_stVal)
+#define IEDMODEL_B1EBK_MOTXSWI1_BlkCls_t (&iedModel_B1EBK_MOTXSWI1_BlkCls_t)
 
 /* --- Defines TMVM1 --- */
 #define IEDMODEL_B1EBK_TMVM1 (&iedModel_B1EBK_TMVM1)
@@ -742,10 +762,10 @@ extern DataAttribute iedModel_B1EBK_MOTXSWI1_NamPlt_lnNs;
 #define IEDMODEL_B1EBK_TLOC1_DistSess_mag_f (&iedModel_B1EBK_TLOC1_DistSess_mag_f)
 #define IEDMODEL_B1EBK_TLOC1_DistSess_q (&iedModel_B1EBK_TLOC1_DistSess_q)
 #define IEDMODEL_B1EBK_TLOC1_DistSess_t (&iedModel_B1EBK_TLOC1_DistSess_t)
-#define IEDMODEL_B1EBK_TLOC1_NavFal (&iedModel_B1EBK_TLOC1_NavFal)
-#define IEDMODEL_B1EBK_TLOC1_NavFal_stVal (&iedModel_B1EBK_TLOC1_NavFal_stVal)
-#define IEDMODEL_B1EBK_TLOC1_NavFal_q (&iedModel_B1EBK_TLOC1_NavFal_q)
-#define IEDMODEL_B1EBK_TLOC1_NavFal_t (&iedModel_B1EBK_TLOC1_NavFal_t)
+#define IEDMODEL_B1EBK_TLOC1_NavFai (&iedModel_B1EBK_TLOC1_NavFai)
+#define IEDMODEL_B1EBK_TLOC1_NavFai_stVal (&iedModel_B1EBK_TLOC1_NavFai_stVal)
+#define IEDMODEL_B1EBK_TLOC1_NavFai_q (&iedModel_B1EBK_TLOC1_NavFai_q)
+#define IEDMODEL_B1EBK_TLOC1_NavFai_t (&iedModel_B1EBK_TLOC1_NavFai_t)
 #define IEDMODEL_B1EBK_TLOC1_SatAvl (&iedModel_B1EBK_TLOC1_SatAvl)
 #define IEDMODEL_B1EBK_TLOC1_SatAvl_stVal (&iedModel_B1EBK_TLOC1_SatAvl_stVal)
 #define IEDMODEL_B1EBK_TLOC1_SatAvl_q (&iedModel_B1EBK_TLOC1_SatAvl_q)
@@ -757,25 +777,19 @@ extern DataAttribute iedModel_B1EBK_MOTXSWI1_NamPlt_lnNs;
 #define IEDMODEL_B1EBK_TLOC1_LocDist (&iedModel_B1EBK_TLOC1_LocDist)
 #define IEDMODEL_B1EBK_TLOC1_LocDist_instMag (&iedModel_B1EBK_TLOC1_LocDist_instMag)
 #define IEDMODEL_B1EBK_TLOC1_LocDist_instMag_f (&iedModel_B1EBK_TLOC1_LocDist_instMag_f)
+#define IEDMODEL_B1EBK_TLOC1_LocDist_mag (&iedModel_B1EBK_TLOC1_LocDist_mag)
+#define IEDMODEL_B1EBK_TLOC1_LocDist_mag_f (&iedModel_B1EBK_TLOC1_LocDist_mag_f)
 #define IEDMODEL_B1EBK_TLOC1_LocDist_q (&iedModel_B1EBK_TLOC1_LocDist_q)
 #define IEDMODEL_B1EBK_TLOC1_LocDist_t (&iedModel_B1EBK_TLOC1_LocDist_t)
 #define IEDMODEL_B1EBK_TLOC1_AutDis (&iedModel_B1EBK_TLOC1_AutDis)
 #define IEDMODEL_B1EBK_TLOC1_AutDis_stVal (&iedModel_B1EBK_TLOC1_AutDis_stVal)
 #define IEDMODEL_B1EBK_TLOC1_AutDis_q (&iedModel_B1EBK_TLOC1_AutDis_q)
 #define IEDMODEL_B1EBK_TLOC1_AutDis_t (&iedModel_B1EBK_TLOC1_AutDis_t)
-#define IEDMODEL_B1EBK_MOTXSWI1 (&iedModel_B1EBK_MOTXSWI1)
-#define IEDMODEL_B1EBK_MOTXSWI1_SwTyp_stVal (&iedModel_B1EBK_MOTXSWI1_SwTyp_stVal)
-#define IEDMODEL_B1EBK_MOTXSWI1_Loc_stVal (&iedModel_B1EBK_MOTXSWI1_Loc_stVal)
-#define IEDMODEL_B1EBK_MOTXSWI1_OpCnt_stVal (&iedModel_B1EBK_MOTXSWI1_OpCnt_stVal)
-#define IEDMODEL_B1EBK_MOTXSWI1_Pos (&iedModel_B1EBK_MOTXSWI1_Pos)
-#define IEDMODEL_B1EBK_MOTXSWI1_Pos_stVal (&iedModel_B1EBK_MOTXSWI1_Pos_stVal)
-#define IEDMODEL_B1EBK_MOTXSWI1_Pos_t (&iedModel_B1EBK_MOTXSWI1_Pos_t)
-#define IEDMODEL_B1EBK_MOTXSWI1_Pos_ctlModel (&iedModel_B1EBK_MOTXSWI1_Pos_ctlModel)
-#define IEDMODEL_B1EBK_MOTXSWI1_BlkOpn (&iedModel_B1EBK_MOTXSWI1_BlkOpn)
-#define IEDMODEL_B1EBK_MOTXSWI1_BlkOpn_stVal (&iedModel_B1EBK_MOTXSWI1_BlkOpn_stVal)
-#define IEDMODEL_B1EBK_MOTXSWI1_BlkOpn_t (&iedModel_B1EBK_MOTXSWI1_BlkOpn_t)
-#define IEDMODEL_B1EBK_MOTXSWI1_BlkCls (&iedModel_B1EBK_MOTXSWI1_BlkCls)
-#define IEDMODEL_B1EBK_MOTXSWI1_BlkCls_stVal (&iedModel_B1EBK_MOTXSWI1_BlkCls_stVal)
-#define IEDMODEL_B1EBK_MOTXSWI1_BlkCls_t (&iedModel_B1EBK_MOTXSWI1_BlkCls_t)
+#define IEDMODEL_B1EBK_TLOC1_GeoLoc (&iedModel_B1EBK_TLOC1_GeoLoc)
+#define IEDMODEL_B1EBK_TLOC1_GeoLoc_latitude (&iedModel_B1EBK_TLOC1_GeoLoc_latitude)
+#define IEDMODEL_B1EBK_TLOC1_GeoLoc_longitude (&iedModel_B1EBK_TLOC1_GeoLoc_longitude)
+#define IEDMODEL_B1EBK_TLOC1_GeoLoc_general (&iedModel_B1EBK_TLOC1_GeoLoc_general)
+#define IEDMODEL_B1EBK_TLOC1_GeoLoc_q (&iedModel_B1EBK_TLOC1_GeoLoc_q)
+#define IEDMODEL_B1EBK_TLOC1_GeoLoc_t (&iedModel_B1EBK_TLOC1_GeoLoc_t)
 
 #endif /* STATIC_MODEL_H_ */
