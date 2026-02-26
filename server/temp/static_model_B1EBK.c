@@ -1,7 +1,9 @@
-#include "static_model.h"
+#include "static_model_unified.h"
 #include <stdio.h>              // Para o printf
 #include "iec61850_server.h"    // Para funções MmsValue
  
+#define iedModel iedModel_Geral
+
 static void initializeValues();
 
 LogicalDevice iedModel_B1EBK = {
@@ -1136,9 +1138,9 @@ DataAttribute iedModel_B1EBK_DEEV1_EnAmnt_sVC_offset = {
 LogicalNode iedModel_B1EBK_ISAF1 = {
     LogicalNodeModelType,
     "ISAF1",
-    (ModelNode*) &iedModel_B1EBK, //Pai
-    (ModelNode*) &iedModel_B1EBK_LANTXSWI1, //irmão
-    (ModelNode*) &iedModel_B1EBK_ISAF1_Alm //filho
+    (ModelNode*) &iedModel_B1EBK,
+    (ModelNode*) &iedModel_B1EBK_LANTXSWI1, 
+    (ModelNode*) &iedModel_B1EBK_ISAF1_Alm
 };
 
 DataObject iedModel_B1EBK_ISAF1_Alm = {
@@ -6326,7 +6328,7 @@ DataAttribute iedModel_B1EBK_MOTXSWI1_BlkRef_setSrcRef = {
     TRG_OPT_DATA_CHANGED
 };
 
-IedModel iedModel = {
+/* IedModel iedModel = {
     "MoveUFF_",
     &iedModel_B1EBK,
     NULL,
@@ -6337,7 +6339,7 @@ IedModel iedModel = {
     NULL,
     NULL,
     initializeValues
-};
+}; */
 
 /*=================================  STATIC VOID  ===========================================*/
 

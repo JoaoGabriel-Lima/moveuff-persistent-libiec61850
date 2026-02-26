@@ -1,6 +1,8 @@
-#include "static_model.h"
+#include "static_model_unified.h"
 #include <stdio.h>              
 #include "iec61850_server.h"  
+
+#define iedModel iedModel_Geral
 
 static void initializeValues();
 
@@ -25,6 +27,7 @@ LogicalNode iedModel_B1HYD_KTNK1 = {
     (ModelNode*) &iedModel_B1HYD_KTNK1_NamPlt,
 };
 
+// --- NamPlt ---
 DataObject iedModel_B1HYD_KTNK1_NamPlt = {
     DataObjectModelType,
     "NamPlt",
@@ -5962,7 +5965,7 @@ DataAttribute iedModel_B1HYD_CELXSWI1_BlkRef_setSrcRef = {
     TRG_OPT_DATA_CHANGED
 };
 
-IedModel iedModel = {
+/*IedModel iedModel = {
     "MoveUFF_",
     &iedModel_B1HYD,
     NULL,
@@ -5973,7 +5976,7 @@ IedModel iedModel = {
     NULL,
     NULL,
     initializeValues
-};
+}; */
 
 /*=================================  STATIC VOID  ===========================================*/
 

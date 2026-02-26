@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SCL xmlns="http://www.iec.ch/61850/2003/SCL">
+  <Header id="MoveUFF" nameStructure="IEDName" />
+  <IED name="MoveUFF_Geral">
+    <Services>
+      <GetDirectory /><GetDataObjectDefinition /><ReadWrite /><GetCBValues />
+      <ConfLNs fixPrefix="true" fixLnInst="true" />
+    </Services>
+    <AccessPoint name="AP1">
+      <Server>
+        <Authentication />
+
+        <LDevice inst="B1EBK">
+          <LN0 lnClass="LLN0" lnType="LLN01" inst="">
+            <DOI name="Mod" /> <DOI name="Beh" /> <DOI name="Health" /> <DOI name="NamPlt" /> <DOI name="Diag" /> <DOI name="LEDRs" />
+          </LN0>
+          <LN lnClass="DEEV" lnType="DEEV1_Typ" inst="1" prefix="">
+            <DOI name="EVNam" /> <DOI name="NamPlt" /> <DOI name="ConnTypSel" /> <DOI name="Beh" /> <DOI name="Health" /> <DOI name="Soc" /> <DOI name="EVId" /> <DOI name="DptTm" /> <DOI name="VMax" /> <DOI name="AMax" /> <DOI name="AMin" /> <DOI name="EnAmnt" />
+          </LN>
+          <LN lnClass="ISAF" lnType="ISAF1_Typ" inst="1" prefix="">
+            <DOI name="Alm" /> <DOI name="Beh" /> <DOI name="Health" />
+          </LN>
+          <LN lnClass="XSWI" lnType="XSWI1_Typ" inst="1" prefix="LANT">
+            <DOI name="EEName" /> <DOI name="NamPlt" /> <DOI name="SwOpCap" /> <DOI name="Loc" /> <DOI name="LocKey" /> <DOI name="EEHealth" /> <DOI name="Blk" /> <DOI name="Beh" /> <DOI name="Health" /> <DOI name="LocSta" /> <DOI name="Pos" /> <DOI name="BlkOpn" /> <DOI name="BlkCls" /> <DOI name="Mod" /> <DOI name="BlkRef" />
+          </LN>
+          <LN lnClass="XSWI" lnType="XSWI1_Typ" inst="1" prefix="ALM">
+            <DOI name="EEName" /> <DOI name="NamPlt" /> <DOI name="SwOpCap" /> <DOI name="Loc" /> <DOI name="LocKey" /> <DOI name="EEHealth" /> <DOI name="Blk" /> <DOI name="Beh" /> <DOI name="Health" /> <DOI name="LocSta" /> <DOI name="Pos" /> <DOI name="BlkOpn" /> <DOI name="BlkCls" /> <DOI name="Mod" /> <DOI name="BlkRef" />
+          </LN>
+          <LN lnClass="XSWI" lnType="XSWI1_Typ" inst="1" prefix="MOT">
+            <DOI name="EEName" /> <DOI name="NamPlt" /> <DOI name="SwOpCap" /> <DOI name="Loc" /> <DOI name="LocKey" /> <DOI name="EEHealth" /> <DOI name="Blk" /> <DOI name="Beh" /> <DOI name="Health" /> <DOI name="LocSta" /> <DOI name="Pos" /> <DOI name="BlkOpn" /> <DOI name="BlkCls" /> <DOI name="Mod" /> <DOI name="BlkRef" />
+          </LN>
+          <LN lnClass="TMVM" lnType="TMVM1_Typ" inst="1" prefix="">
+            <DOI name="EEHealth" /> <DOI name="Beh" /> <DOI name="Health" /> <DOI name="MvmRteSv" />
+          </LN>
+          <LN lnClass="ZMOT" lnType="ZMOT1_Typ" inst="1" prefix="">
+            <DOI name="EEName" /> <DOI name="RotThmSt" /> <DOI name="PresAlm" /> <DOI name="EEHealth" /> <DOI name="MotSt" /> <DOI name="NamPlt" />
+          </LN>
+          <LN lnClass="MMXU" lnType="MMXU1_Typ" inst="1" prefix="">
+            <DOI name="NamPlt" /> <DOI name="Beh" /> <DOI name="Health" /> <DOI name="TotW" />
+          </LN>
+          <LN lnClass="TLOC" lnType="TLOC1_Typ" inst="1" prefix="">
+            <DOI name="DistTot" /> <DOI name="DistSess" /> <DOI name="NavFai" /> <DOI name="SatAvl" /> <DOI name="LocPrec" /> <DOI name="LocDist" /> <DOI name="AutDis" /> <DOI name="GeoLoc" />
+          </LN>
+        </LDevice>
+
+        <LDevice inst="B1CTR">
+          <LN0 lnClass="LLN0" lnType="LLN01" inst="">
+            <DOI name="Mod" /> <DOI name="Beh" /> <DOI name="Health" /> <DOI name="NamPlt" /> <DOI name="Diag" /> <DOI name="LEDRs" />
+          </LN0>
+          <LN lnClass="LPHD" lnType="LPHD1_Typ" inst="1" prefix="">
+            <DOI name="NamPlt" /> <DOI name="PhyNam" /> <DOI name="PhyHealth" /> <DOI name="OutOv" /> <DOI name="Proxy" /> <DOI name="OpTmh" /> <DOI name="Sim" />
+          </LN>
+          <LN lnClass="LGOS" lnType="LGOS1_Typ" inst="1" prefix="">
+            <DOI name="Beh" /> <DOI name="Health" /> <DOI name="GoCBRef" /> <DOI name="St" /> <DOI name="NdsCom" /> <DOI name="SimSt" /> <DOI name="ConfRevNum" /> <DOI name="RxConfRevNum" /> <DOI name="LastStNum" />
+          </LN>
+          <LN lnClass="LTIM" lnType="LTIM1_Typ" inst="1" prefix="">
+            <DOI name="Beh" /> <DOI name="Health" /> <DOI name="TmDT" />
+          </LN>
+          <LN lnClass="LTMS" lnType="LTMS1_Typ" inst="1" prefix="">
+            <DOI name="TmSrc" /> <DOI name="TmSrcTyp" /> <DOI name="Beh" />
+          </LN>
+          <LN lnClass="LTRK" lnType="LTRK1_Typ" inst="1" prefix="">
+            <DOI name="Beh" /> <DOI name="Health" /> <DOI name="GenTrk" /> <DOI name="UrcbTrk" /> <DOI name="BrcbTrk" /> <DOI name="GocbTrk" />
+          </LN>
+        </LDevice>
+
+        <LDevice inst="B1HYD">
+          <LN0 lnClass="LLN0" lnType="LLN01" inst="" />
+          <LN lnClass="KTNK" lnType="KTNK1_Typ" inst="1" prefix="">
+            <DOI name="NamPlt" /> <DOI name="EEHealth" /> <DOI name="OpTmh" /> <DOI name="Beh" /> <DOI name="Health" /> <DOI name="LevPct" /> <DOI name="Vlm" /> <DOI name="VlmCap" /> <DOI name="TnkTyp" />
+          </LN>
+          <LN lnClass="STMP" lnType="STMP1_Typ" inst="1" prefix="">
+            <DOI name="Trip" /> <DOI name="RteTrip" /> <DOI name="Tmp" /> <DOI name="TmpRte" /> <DOI name="TripSet" /> <DOI name="RteTripSet" />
+          </LN>
+          <LN lnClass="KVLV" lnType="KVLV1_Typ" inst="1" prefix="">
+            <DOI name="OpCnt" /> <DOI name="ClsPos" /> <DOI name="OpnPos" /> <DOI name="Mvm" /> <DOI name="Stuck" /> <DOI name="PosVlv" /> <DOI name="PosSpt" /> <DOI name="Pos" /> <DOI name="OpnLim" /> <DOI name="ClsLim" />
+          </LN>
+          <LN lnClass="DFCL" lnType="DFCL1_Typ" inst="1" prefix="">
+            <DOI name="LifeEfcPct" /> <DOI name="MaintTms" /> <DOI name="EEHealth" /> <DOI name="WtrLev" /> <DOI name="OutH2Lev" /> <DOI name="Alim" /> <DOI name="Vlim" />
+          </LN>
+          <LN lnClass="DSTK" lnType="DSTK1_Typ" inst="1" prefix="">
+            <DOI name="NamPlt" /> <DOI name="StcSt" /> <DOI name="CelVTrCnt" /> <DOI name="StcLodTms" /> <DOI name="MaintTms" /> <DOI name="Beh" /> <DOI name="Health" /> <DOI name="StcEfcPct" /> <DOI name="OutDCV" /> <DOI name="OutDCA" /> <DOI name="InClTmp" /> <DOI name="OutClTmp" /> <DOI name="InH2Pres" />
+          </LN>
+          <LN lnClass="SPRS" lnType="SPRS1_Typ" inst="1" prefix="">
+            <DOI name="Alm" /> <DOI name="Trip" /> <DOI name="Beh" /> <DOI name="Health" /> <DOI name="AlmSet" />
+          </LN>
+          <LN lnClass="TPRS" lnType="TPRS1_Typ" inst="1" prefix="">
+            <DOI name="EEName" /> <DOI name="EEHealth" /> <DOI name="Beh" /> <DOI name="Health" /> <DOI name="PresSv" />
+          </LN>
+          <LN lnClass="DFPM" lnType="DFPM1_Typ" inst="1" prefix="">
+            <DOI name="FPMSt" /> <DOI name="CnvEfc" /> <DOI name="ProcTyp" />
+          </LN>
+          <LN lnClass="XSWI" lnType="XSWI1_Typ" inst="1" prefix="TNK">
+            <DOI name="EEName" /> <DOI name="NamPlt" /> <DOI name="SwOpCap" /> <DOI name="Loc" /> <DOI name="LocKey" /> <DOI name="EEHealth" /> <DOI name="Blk" /> <DOI name="Beh" /> <DOI name="Health" /> <DOI name="LocSta" /> <DOI name="Pos" /> <DOI name="BlkOpn" /> <DOI name="BlkCls" /> <DOI name="Mod" /> <DOI name="BlkRef" />
+          </LN>
+          <LN lnClass="XSWI" lnType="XSWI1_Typ" inst="1" prefix="CEL">
+            <DOI name="EEName" /> <DOI name="NamPlt" /> <DOI name="SwOpCap" /> <DOI name="Loc" /> <DOI name="LocKey" /> <DOI name="EEHealth" /> <DOI name="Blk" /> <DOI name="Beh" /> <DOI name="Health" /> <DOI name="LocSta" /> <DOI name="Pos" /> <DOI name="BlkOpn" /> <DOI name="BlkCls" /> <DOI name="Mod" /> <DOI name="BlkRef" />
+          </LN>
+        </LDevice>
+
+        <LDevice inst="B1STG">
+          <LN0 lnClass="LLN0" lnType="LLN01" inst="">
+            <DOI name="Beh" /> <DOI name="Health" /> <DOI name="NamPlt" />
+          </LN0>
+          <LN lnClass="XSWI" lnType="XSWI1_Typ" inst="1" prefix="">
+            <DOI name="SwTyp" /> <DOI name="Loc" /> <DOI name="OpCnt" /> <DOI name="Beh" /> <DOI name="Health" /> <DOI name="Pos" /> <DOI name="BlkOpn" /> <DOI name="BlkCls" /> <DOI name="NamPlt" />
+          </LN>
+          <LN lnClass="TTMP" lnType="TTMP1_Typ" inst="1" prefix="">
+            <DOI name="NamPlt" /> <DOI name="Beh" /> <DOI name="Health" /> <DOI name="TmpSv" /> <DOI name="TmpTgt" />
+          </LN>
+          <LN lnClass="DBAT" lnType="DBAT1_Typ" inst="1" prefix="">
+            <DOI name="EEName" /> <DOI name="ChaSt" /> <DOI name="DschSt" /> <DOI name="EEHealth" /> <DOI name="Amp" /> <DOI name="Watt" /> <DOI name="AvlChaAhr" /> <DOI name="AvlDschAhr" /> <DOI name="BatTyp" /> <DOI name="ChaAmpMax" /> <DOI name="AhrRtg" /> <DOI name="ChaVolMaxRtg" /> <DOI name="SocPro" />
+          </LN>
+          <LN lnClass="ZBAT" lnType="ZBAT1_Typ" inst="1" prefix="">
+            <DOI name="BatHi" /> <DOI name="BatLo" /> <DOI name="Beh" /> <DOI name="Health" /> <DOI name="VolChgRte" />
+          </LN>
+        </LDevice>
+      </Server>
+    </AccessPoint>
+  </IED>
+
+  <DataTypeTemplates>
+    <LNodeType id="LLN01" lnClass="LLN0"><DO name="Mod" type="ENC_Mod"/><DO name="Beh" type="ENS_Beh"/><DO name="Health" type="ENS_Health"/><DO name="NamPlt" type="LPL_NamPlt"/><DO name="Diag" type="SPS_Generic"/><DO name="LEDRs" type="SPS_Generic"/></LNodeType>
+    <LNodeType id="LPHD1_Typ" lnClass="LPHD"><DO name="NamPlt" type="LPL_NamPlt"/><DO name="PhyNam" type="DPL_Generic"/><DO name="PhyHealth" type="ENS_Health"/><DO name="OutOv" type="SPS_Generic"/><DO name="Proxy" type="SPS_Generic"/><DO name="OpTmh" type="INS_Generic"/><DO name="Sim" type="SPS_Generic"/></LNodeType>
+    
+    <LNodeType id="DEEV1_Typ" lnClass="DEEV"><DO name="EVNam" type="DPL_Generic"/><DO name="NamPlt" type="LPL_NamPlt"/><DO name="ConnTypSel" type="ENS_Generic"/><DO name="Beh" type="ENS_Beh"/><DO name="Health" type="ENS_Health"/><DO name="Soc" type="MV_Generic"/><DO name="EVId" type="VSS_Generic"/><DO name="DptTm" type="SPS_Generic"/><DO name="VMax" type="ASG_Generic"/><DO name="AMax" type="ASG_Generic"/><DO name="AMin" type="ASG_Generic"/><DO name="EnAmnt" type="ASG_Generic"/></LNodeType>
+    <LNodeType id="ISAF1_Typ" lnClass="ISAF"><DO name="Alm" type="SPS_Generic"/><DO name="Beh" type="ENS_Beh"/><DO name="Health" type="ENS_Health"/></LNodeType>
+    <LNodeType id="XSWI1_Typ" lnClass="XSWI"><DO name="EEName" type="DPL_Generic"/><DO name="NamPlt" type="LPL_NamPlt"/><DO name="SwOpCap" type="ENS_Generic"/><DO name="Loc" type="SPS_Generic"/><DO name="LocKey" type="SPS_Generic"/><DO name="EEHealth" type="ENS_Health"/><DO name="Blk" type="SPS_Generic"/><DO name="Beh" type="ENS_Beh"/><DO name="Health" type="ENS_Health"/><DO name="LocSta" type="SPC_Generic"/><DO name="Pos" type="DPC_Generic"/><DO name="BlkOpn" type="SPC_Generic"/><DO name="BlkCls" type="SPC_Generic"/><DO name="Mod" type="ENC_Mod"/><DO name="BlkRef" type="ORG_Generic"/><DO name="OpCnt" type="INS_Generic"/><DO name="SwTyp" type="ENS_Generic"/></LNodeType>
+    <LNodeType id="TMVM1_Typ" lnClass="TMVM"><DO name="EEHealth" type="ENS_Health"/><DO name="Beh" type="ENS_Beh"/><DO name="Health" type="ENS_Health"/><DO name="MvmRteSv" type="MV_Generic"/></LNodeType>
+    <LNodeType id="ZMOT1_Typ" lnClass="ZMOT"><DO name="EEName" type="DPL_Generic"/><DO name="RotThmSt" type="SPS_Generic"/><DO name="PresAlm" type="SPS_Generic"/><DO name="EEHealth" type="ENS_Health"/><DO name="MotSt" type="ENS_Generic"/><DO name="NamPlt" type="LPL_NamPlt"/></LNodeType>
+    <LNodeType id="MMXU1_Typ" lnClass="MMXU"><DO name="NamPlt" type="LPL_NamPlt"/><DO name="Beh" type="ENS_Beh"/><DO name="Health" type="ENS_Health"/><DO name="TotW" type="MV_Generic"/></LNodeType>
+    <LNodeType id="TLOC1_Typ" lnClass="TLOC"><DO name="DistTot" type="MV_Generic"/><DO name="DistSess" type="MV_Generic"/><DO name="NavFai" type="SPS_Generic"/><DO name="SatAvl" type="SPS_Generic"/><DO name="LocPrec" type="SPS_Generic"/><DO name="LocDist" type="MV_Generic"/><DO name="AutDis" type="SPS_Generic"/><DO name="GeoLoc" type="VSS_Generic"/></LNodeType>
+
+    <LNodeType id="LGOS1_Typ" lnClass="LGOS"><DO name="Beh" type="ENS_Beh"/><DO name="Health" type="ENS_Health"/><DO name="GoCBRef" type="ORG_Generic"/><DO name="St" type="SPS_Generic"/><DO name="NdsCom" type="SPS_Generic"/><DO name="SimSt" type="SPS_Generic"/><DO name="ConfRevNum" type="INS_Generic"/><DO name="RxConfRevNum" type="INS_Generic"/><DO name="LastStNum" type="INS_Generic"/></LNodeType>
+    <LNodeType id="LTIM1_Typ" lnClass="LTIM"><DO name="Beh" type="ENS_Beh"/><DO name="Health" type="ENS_Health"/><DO name="TmDT" type="SPS_Generic"/></LNodeType>
+    <LNodeType id="LTMS1_Typ" lnClass="LTMS"><DO name="TmSrc" type="ENS_Generic"/><DO name="TmSrcTyp" type="ENS_Generic"/><DO name="Beh" type="ENS_Beh"/></LNodeType>
+    <LNodeType id="LTRK1_Typ" lnClass="LTRK"><DO name="Beh" type="ENS_Beh"/><DO name="Health" type="ENS_Health"/><DO name="GenTrk" type="TRK_Generic"/><DO name="UrcbTrk" type="TRK_Generic"/><DO name="BrcbTrk" type="TRK_Generic"/><DO name="GocbTrk" type="TRK_Generic"/></LNodeType>
+
+    <LNodeType id="KTNK1_Typ" lnClass="KTNK"><DO name="NamPlt" type="LPL_NamPlt"/><DO name="EEHealth" type="ENS_Health"/><DO name="OpTmh" type="INS_Generic"/><DO name="Beh" type="ENS_Beh"/><DO name="Health" type="ENS_Health"/><DO name="LevPct" type="MV_Generic"/><DO name="Vlm" type="MV_Generic"/><DO name="VlmCap" type="ASG_Generic"/><DO name="TnkTyp" type="ENS_Generic"/></LNodeType>
+    <LNodeType id="STMP1_Typ" lnClass="STMP"><DO name="Trip" type="SPS_Generic"/><DO name="RteTrip" type="SPS_Generic"/><DO name="Tmp" type="MV_Generic"/><DO name="TmpRte" type="MV_Generic"/><DO name="TripSet" type="ASG_Generic"/><DO name="RteTripSet" type="ASG_Generic"/></LNodeType>
+    <LNodeType id="KVLV1_Typ" lnClass="KVLV"><DO name="OpCnt" type="INS_Generic"/><DO name="ClsPos" type="SPS_Generic"/><DO name="OpnPos" type="SPS_Generic"/><DO name="Mvm" type="SPS_Generic"/><DO name="Stuck" type="SPS_Generic"/><DO name="PosVlv" type="MV_Generic"/><DO name="PosSpt" type="DPC_Generic"/><DO name="Pos" type="DPC_Generic"/><DO name="OpnLim" type="ASG_Generic"/><DO name="ClsLim" type="ASG_Generic"/></LNodeType>
+    <LNodeType id="DFCL1_Typ" lnClass="DFCL"><DO name="LifeEfcPct" type="SPS_Generic"/><DO name="MaintTms" type="INS_Generic"/><DO name="EEHealth" type="ENS_Health"/><DO name="WtrLev" type="MV_Generic"/><DO name="OutH2Lev" type="MV_Generic"/><DO name="Alim" type="ASG_Generic"/><DO name="Vlim" type="ASG_Generic"/></LNodeType>
+    <LNodeType id="DSTK1_Typ" lnClass="DSTK"><DO name="NamPlt" type="LPL_NamPlt"/><DO name="StcSt" type="ENS_Generic"/><DO name="CelVTrCnt" type="INS_Generic"/><DO name="StcLodTms" type="INS_Generic"/><DO name="MaintTms" type="INS_Generic"/><DO name="Beh" type="ENS_Beh"/><DO name="Health" type="ENS_Health"/><DO name="StcEfcPct" type="MV_Generic"/><DO name="OutDCV" type="MV_Generic"/><DO name="OutDCA" type="MV_Generic"/><DO name="InClTmp" type="MV_Generic"/><DO name="OutClTmp" type="MV_Generic"/><DO name="InH2Pres" type="MV_Generic"/></LNodeType>
+    <LNodeType id="SPRS1_Typ" lnClass="SPRS"><DO name="Alm" type="SPS_Generic"/><DO name="Trip" type="SPS_Generic"/><DO name="Beh" type="ENS_Beh"/><DO name="Health" type="ENS_Health"/><DO name="AlmSet" type="ASG_Generic"/></LNodeType>
+    <LNodeType id="TPRS1_Typ" lnClass="TPRS"><DO name="EEName" type="DPL_Generic"/><DO name="EEHealth" type="ENS_Health"/><DO name="Beh" type="ENS_Beh"/><DO name="Health" type="ENS_Health"/><DO name="PresSv" type="MV_Generic"/></LNodeType>
+    <LNodeType id="DFPM1_Typ" lnClass="DFPM"><DO name="FPMSt" type="ENS_Generic"/><DO name="CnvEfc" type="MV_Generic"/><DO name="ProcTyp" type="ENS_Generic"/></LNodeType>
+
+    <LNodeType id="TTMP1_Typ" lnClass="TTMP"><DO name="NamPlt" type="LPL_NamPlt"/><DO name="Beh" type="ENS_Beh"/><DO name="Health" type="ENS_Health"/><DO name="TmpSv" type="MV_Generic"/><DO name="TmpTgt" type="ASG_Generic"/></LNodeType>
+    <LNodeType id="DBAT1_Typ" lnClass="DBAT"><DO name="EEName" type="DPL_Generic"/><DO name="ChaSt" type="ENS_Generic"/><DO name="DschSt" type="ENS_Generic"/><DO name="EEHealth" type="ENS_Health"/><DO name="Amp" type="MV_Generic"/><DO name="Watt" type="MV_Generic"/><DO name="AvlChaAhr" type="MV_Generic"/><DO name="AvlDschAhr" type="MV_Generic"/><DO name="BatTyp" type="ENS_Generic"/><DO name="ChaAmpMax" type="ASG_Generic"/><DO name="AhrRtg" type="ASG_Generic"/><DO name="ChaVolMaxRtg" type="ASG_Generic"/><DO name="SocPro" type="SPS_Generic"/></LNodeType>
+    <LNodeType id="ZBAT1_Typ" lnClass="ZBAT"><DO name="BatHi" type="SPS_Generic"/><DO name="BatLo" type="SPS_Generic"/><DO name="Beh" type="ENS_Beh"/><DO name="Health" type="ENS_Health"/><DO name="VolChgRte" type="MV_Generic"/></LNodeType>
+
+    <DOType id="ENC_Mod" cdc="ENC"><DA name="stVal" bType="Enum" type="Beh" fc="ST" dchg="true" /><DA name="q" bType="Quality" fc="ST" qchg="true" /><DA name="t" bType="Timestamp" fc="ST" /><DA name="ctlModel" type="CtlModels" bType="Enum" fc="CF" /></DOType>
+    <DOType id="ENS_Beh" cdc="ENS"><DA name="stVal" bType="Enum" type="Beh" fc="ST" dchg="true" /><DA name="q" bType="Quality" fc="ST" qchg="true" /><DA name="t" bType="Timestamp" fc="ST" /></DOType>
+    <DOType id="ENS_Health" cdc="ENS"><DA name="stVal" bType="Enum" type="HealthKind" fc="ST" dchg="true" /><DA name="q" bType="Quality" fc="ST" qchg="true" /><DA name="t" bType="Timestamp" fc="ST" /></DOType>
+    <DOType id="ENS_Generic" cdc="ENS"><DA name="stVal" bType="INT8U" fc="ST" dchg="true" /><DA name="q" bType="Quality" fc="ST" qchg="true" /><DA name="t" bType="Timestamp" fc="ST" /></DOType>
+    <DOType id="SPS_Generic" cdc="SPS"><DA name="stVal" bType="BOOLEAN" fc="ST" dchg="true" /><DA name="q" bType="Quality" fc="ST" qchg="true" /><DA name="t" bType="Timestamp" fc="ST" /><DA name="ctlModel" type="CtlModels" bType="Enum" fc="CF" /></DOType>
+    <DOType id="INS_Generic" cdc="INS"><DA name="stVal" bType="INT32" fc="ST" dchg="true" /><DA name="q" bType="Quality" fc="ST" qchg="true" /><DA name="t" bType="Timestamp" fc="ST" /></DOType>
+    <DOType id="MV_Generic" cdc="MV"><DA name="instMag" type="AnalogueValue_1" bType="Struct" fc="MX" /><DA name="mag" type="AnalogueValue_1" bType="Struct" fc="MX" dchg="true" /><DA name="q" bType="Quality" fc="MX" qchg="true" /><DA name="t" bType="Timestamp" fc="MX" /><DA name="units" type="Unit_1" bType="Struct" fc="CF" /><DA name="sVC" type="ScaledValueConfig_1" bType="Struct" fc="CF" /><DA name="db" bType="INT32U" fc="CF" /><DA name="subEna" bType="BOOLEAN" fc="SV" /><DA name="subMag" type="AnalogueValue_1" bType="Struct" fc="SV" /><DA name="subQ" bType="Quality" fc="SV" /><DA name="subID" bType="VisString64" fc="SV" /><DA name="blkEna" bType="BOOLEAN" fc="BL" /></DOType>
+    <DOType id="ASG_Generic" cdc="ASG"><DA name="setMag" type="AnalogueValue_1" bType="Struct" fc="SP" dchg="true" /><DA name="sVC" type="ScaledValueConfig_1" bType="Struct" fc="CF" /><DA name="minVal" type="AnalogueValue_1" bType="Struct" fc="CF" /><DA name="maxVal" type="AnalogueValue_1" bType="Struct" fc="CF" /></DOType>
+    <DOType id="SPC_Generic" cdc="SPC"><DA name="stVal" bType="BOOLEAN" fc="ST" dchg="true" /><DA name="q" bType="Quality" fc="ST" qchg="true" /><DA name="t" bType="Timestamp" fc="ST" /><DA name="ctlModel" type="CtlModels" bType="Enum" fc="CF" /><DA name="Oper" type="SPCOperate_1" bType="Struct" fc="CO" /></DOType>
+    <DOType id="DPC_Generic" cdc="DPC"><DA name="stVal" bType="Dbpos" type="Dbpos" fc="ST" dchg="true" /><DA name="q" bType="Quality" fc="ST" qchg="true" /><DA name="t" bType="Timestamp" fc="ST" /><DA name="ctlModel" type="CtlModels" bType="Enum" fc="CF" /><DA name="Oper" type="DPCOperate_1" bType="Struct" fc="CO" /></DOType>
+    <DOType id="LPL_NamPlt" cdc="LPL"><DA name="vendor" bType="VisString255" fc="DC" /><DA name="swRev" bType="VisString255" fc="DC" /><DA name="d" bType="VisString255" fc="DC" /><DA name="configRev" bType="VisString255" fc="DC" /><DA name="lnNs" bType="VisString255" fc="EX" /></DOType>
+    <DOType id="DPL_Generic" cdc="DPL"><DA name="vendor" bType="VisString255" fc="DC" /><DA name="model" bType="VisString255" fc="DC" /></DOType>
+    <DOType id="VSS_Generic" cdc="VSS"><DA name="setVal" bType="VisString255" fc="SP" /><DA name="latitude" bType="FLOAT32" fc="ST" /><DA name="longitude" bType="FLOAT32" fc="ST" /><DA name="general" bType="FLOAT32" fc="ST" /><DA name="q" bType="Quality" fc="ST" /><DA name="t" bType="Timestamp" fc="ST" /></DOType>
+    <DOType id="ORG_Generic" cdc="ORG"><DA name="setSrcRef" bType="ObjRef" fc="SP" /></DOType>
+    <DOType id="TRK_Generic" cdc="TRK"><DA name="objRef" bType="ObjRef" fc="ST" /><DA name="serviceType" bType="INT8U" fc="ST" /><DA name="errorCode" bType="INT8U" fc="ST" /><DA name="t" bType="Timestamp" fc="ST" /><DA name="rptID" bType="VisString64" fc="ST" /><DA name="rptEna" bType="BOOLEAN" fc="ST" /><DA name="resv" bType="BOOLEAN" fc="ST" /><DA name="datSet" bType="VisString64" fc="ST" /><DA name="confRev" bType="INT32U" fc="ST" /><DA name="optFlds" bType="OptFlds" fc="ST" /><DA name="bufTm" bType="INT32U" fc="ST" /><DA name="sqNum" bType="INT16U" fc="ST" /><DA name="trgOps" bType="TrgOps" fc="ST" /><DA name="intgPd" bType="INT32U" fc="ST" /><DA name="gi" bType="BOOLEAN" fc="ST" /><DA name="purgeBuf" bType="BOOLEAN" fc="ST" /><DA name="entryID" bType="Octet64" fc="ST" /><DA name="timeOfEntry" bType="Timestamp" fc="ST" /><DA name="goEna" bType="BOOLEAN" fc="ST" /><DA name="goID" bType="VisString64" fc="ST" /><DA name="ndsCom" bType="BOOLEAN" fc="ST" /><DA name="dstAddress" bType="Octet64" fc="ST" /></DOType>
+
+    <DAType id="AnalogueValue_1"><BDA name="f" bType="FLOAT32" /></DAType>
+    <DAType id="Originator_1"><BDA name="orCat" type="OrCat" bType="Enum" /><BDA name="orIdent" bType="Octet64" /></DAType>
+    <DAType id="SPCOperate_1"><BDA name="ctlVal" bType="BOOLEAN" /><BDA name="origin" type="Originator_1" bType="Struct" /><BDA name="ctlNum" bType="INT8U" /><BDA name="T" bType="Timestamp" /><BDA name="Test" bType="BOOLEAN" /><BDA name="Check" bType="Check" /></DAType>
+    <DAType id="DPCOperate_1"><BDA name="ctlVal" bType="Dbpos" type="Dbpos" /><BDA name="origin" type="Originator_1" bType="Struct" /><BDA name="ctlNum" bType="INT8U" /><BDA name="T" bType="Timestamp" /><BDA name="Test" bType="BOOLEAN" /><BDA name="Check" bType="Check" /></DAType>
+    <DAType id="Unit_1"><BDA name="SIUnit" bType="Enum" type="SIUnitKind" /><BDA name="multiplier" bType="Enum" type="MultiplierKind" /></DAType>
+    <DAType id="ScaledValueConfig_1"><BDA name="scaleFactor" bType="FLOAT32" /><BDA name="offset" bType="FLOAT32" /></DAType>
+
+    <EnumType id="Beh"><EnumVal ord="1">on</EnumVal><EnumVal ord="2">blocked</EnumVal><EnumVal ord="3">test</EnumVal><EnumVal ord="4">test/blocked</EnumVal><EnumVal ord="5">off</EnumVal></EnumType>
+    <EnumType id="HealthKind"><EnumVal ord="1">ok</EnumVal><EnumVal ord="2">warning</EnumVal><EnumVal ord="3">alarm</EnumVal></EnumType>
+    <EnumType id="CtlModels"><EnumVal ord="0">status-only</EnumVal><EnumVal ord="1">direct-with-normal-security</EnumVal><EnumVal ord="2">sbo-with-normal-security</EnumVal><EnumVal ord="3">direct-with-enhanced-security</EnumVal><EnumVal ord="4">sbo-with-enhanced-security</EnumVal></EnumType>
+    <EnumType id="OrCat"><EnumVal ord="0">not-supported</EnumVal><EnumVal ord="1">bay-control</EnumVal><EnumVal ord="2">station-control</EnumVal><EnumVal ord="3">remote-control</EnumVal><EnumVal ord="4">automatic-bay</EnumVal><EnumVal ord="5">automatic-station</EnumVal><EnumVal ord="6">automatic-remote</EnumVal><EnumVal ord="7">maintenance</EnumVal><EnumVal ord="8">process</EnumVal></EnumType>
+    <EnumType id="Dbpos"><EnumVal ord="0">intermediate</EnumVal><EnumVal ord="1">off</EnumVal><EnumVal ord="2">on</EnumVal><EnumVal ord="3">bad</EnumVal></EnumType>
+    <EnumType id="SIUnitKind"><EnumVal ord="1">V</EnumVal><EnumVal ord="2">A</EnumVal><EnumVal ord="3">W</EnumVal><EnumVal ord="4">Hz</EnumVal><EnumVal ord="5">°C</EnumVal></EnumType>
+    <EnumType id="MultiplierKind"><EnumVal ord="1">k</EnumVal><EnumVal ord="2">M</EnumVal><EnumVal ord="3">m</EnumVal></EnumType>
+  </DataTypeTemplates>
+
+  <Communication>
+    <SubNetwork name="Subnet1" type="8-MMS">
+      <Text>Barramento de Comunicacao MoveUFF</Text>
+      <ConnectedAP iedName="MoveUFF_Geral" apName="AP1">
+        <Address>
+          <PType type="IP">192.168.1.15</PType> <PType type="IP-SUBNET">255.255.255.0</PType>
+          <PType type="IP-GATEWAY">192.168.1.1</PType>
+          <PType type="OSI-AP-Title">1,3,9,999,1</PType>
+          <PType type="OSI-AE-Qualifier">12</PType>
+          <PType type="OSI-PSEL">00000001</PType>
+          <PType type="OSI-SSEL">0001</PType>
+          <PType type="OSI-TSEL">0001</PType>
+        </Address>
+      </ConnectedAP>
+    </SubNetwork>
+  </Communication>
+</SCL>
