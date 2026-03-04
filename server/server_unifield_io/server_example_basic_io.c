@@ -5,14 +5,16 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <fcntl.h> 
-
+#include <wiringSerial.h>
+#include <string.h>
 #include <wiringPi.h>
-#define RELAY_LANT_PIN 2  // wPi 2 = Pino Físico (Lanterna)
-#define RELAY_MOT_PIN  3  // wPi 3 = Pino Físico (Motor)
-#define RELAY_ALM_PIN  4  // wPi 4 = Pino Físico (Alarme)
-#define RELAY_CEL_PIN  5  // wPi 5 = Pino Físico (Célula Hidro)
-#define RELAY_TNK_PIN  6  // wPi 6 = Pino Físico (Tanque)
-#define RELAY_XSWI_PIN  7  // wPi 7 = Pino Físico (Trava da Bateria)
+
+#define RELAY_MOT_PIN  3  // wPi 3 = Pino Físico (Motor) - 8
+#define RELAY_ALM_PIN  4  // wPi 4 = Pino Físico (Alarme) - 10
+#define RELAY_CEL_PIN  5  // wPi 5 = Pino Físico (Célula Hidro) - 11
+#define RELAY_XSWI_PIN  7  // wPi 7 = Pino Físico (Trava da Bateria) - 13
+#define RELAY_TNK_PIN  8  // wPi 8 = Pino Físico (Tanque) - 15
+#define RELAY_LANT_PIN 13  // wPi 13 = Pino Físico (Lanterna) - 22
 
 #include "static_model.h"
 
@@ -92,9 +94,9 @@ static ControlHandlerResult controlHandlerForBinaryOutput(ControlAction action, 
         
 bool state = false;
 
-        // =================================================================
-        // Extrair o ctlVal de dentro da estrutura Oper
-        // =================================================================
+        
+        /* Extrair o ctlVal de dentro da estrutura Oper */
+       
         MmsValue* ctlVal = value;
         if (MmsValue_getType(value) == MMS_STRUCTURE) {
             // O ctlVal é sempre o primeiro elemento (índice 0) da struct Oper
@@ -181,6 +183,95 @@ static MmsDataAccessError writeAccessHandler(DataAttribute* dataAttribute, MmsVa
     return DATA_ACCESS_ERROR_OBJECT_VALUE_INVALID;
 }
 
+/* =================================================================
+ * TRADUTOR NMEA E THREAD DO GPS PARA TLOC1
+ * ================================================================= */
+
+// Função que converte as coordenadas cruas do GPS (Graus/Minutos) para Decimal (para o Elipse/Google Maps)
+float nmea_to_decimal(char* nmea_coord, char direction) {
+    if (strlen(nmea_coord) < 4) return 0.0;
+    
+    char* dot = strchr(nmea_coord, '.');
+    if (!dot) return 0.0;
+    
+    int deg_len = (dot - nmea_coord) - 2; 
+    char deg_str[4] = {0};
+    strncpy(deg_str, nmea_coord, deg_len);
+    float degrees = atof(deg_str);
+    float minutes = atof(nmea_coord + deg_len);
+    
+    float decimal = degrees + (minutes / 60.0);
+    if (direction == 'S' || direction == 'W') decimal = -decimal; // Sul e Oeste são negativos
+    
+    return decimal;
+}
+
+// Thread que fica rodando em paralelo sem travar o Servidor
+void* gps_thread(void* arg) {
+    int fd;
+    // ATENÇÃO: Mude para "/dev/ttyS1" ou outro se você ativou outra UART no orangepi-config
+    if ((fd = serialOpen("/dev/ttyS5", 9600)) < 0) {
+        LOG_PRINT("[AVISO] Falha ao abrir porta serial do GPS. GPS inativo.\n");
+        return NULL;
+    }
+
+    LOG_PRINT("[STATUS] GPS Conectado na Serial. Aguardando satelites...\n");
+    char buffer[256];
+    int pos = 0;
+
+    while (running) {
+        while (serialDataAvail(fd)) {
+            char c = serialGetchar(fd);
+            if (c == '\n' || c == '\r') {
+                if (pos > 0) {
+                    buffer[pos] = '\0';
+                    
+                    // Lemos a linha que contem as Coordenadas (GPRMC)
+                    if (strncmp(buffer, "$GPRMC", 6) == 0) {
+                        char* token = strtok(buffer, ",");
+                        int field = 0;
+                        char status = 'V';
+                        char lat_str[20] = {0}, ns = 0, lon_str[20] = {0}, ew = 0;
+
+                        while (token != NULL) {
+                            if (field == 2) status = token[0]; // A = Conectado, V = Sem Sinal
+                            else if (field == 3) strcpy(lat_str, token);
+                            else if (field == 4) ns = token[0];
+                            else if (field == 5) strcpy(lon_str, token);
+                            else if (field == 6) ew = token[0];
+                            token = strtok(NULL, ",");
+                            field++;
+                        }
+
+                        // Só atualiza o IEC 61850 se o GPS estiver fixado num satélite (Status 'A')
+                        if (status == 'A') { 
+                            float latitude = nmea_to_decimal(lat_str, ns);
+                            float longitude = nmea_to_decimal(lon_str, ew);
+                            uint64_t timestamp = Hal_getTimeInMs();
+                            
+                            // =========================================================
+                            // Atualizando o nó TLOC1 em tempo real!
+                            // =========================================================
+                            IedServer_updateFloatAttributeValue(iedServer, IEDMODEL_B1EBK_TLOC1_GeoLoc_latitude, latitude);
+                            IedServer_updateFloatAttributeValue(iedServer, IEDMODEL_B1EBK_TLOC1_GeoLoc_longitude, longitude);
+                            IedServer_updateUTCTimeAttributeValue(iedServer, IEDMODEL_B1EBK_TLOC1_GeoLoc_t, timestamp);
+                            
+                            // Imprime a cada atualização para você ver no terminal
+                            LOG_PRINT(" 📡 [TLOC1] GPS Atualizado -> Lat: %.6f | Lon: %.6f\n", latitude, longitude);
+                        }
+                    }
+                    pos = 0;
+                }
+            } else {
+                if (pos < 255) buffer[pos++] = c;
+            }
+        }
+        Thread_sleep(500); // Dorme meio segundo para não fritar a CPU da Orange Pi
+    }
+    serialClose(fd);
+    return NULL;
+}
+
 int main(int argc, char** argv) {
     if (wiringPiSetup() == -1) { 
         fprintf(stderr, "ERRO: Falha ao inicializar o wiringPi! Tente executar como root\n");
@@ -201,9 +292,14 @@ int main(int argc, char** argv) {
     iedServer = IedServer_create(&iedModel);
     int tcpPort = 102;
     if (argc > 1) tcpPort = atoi(argv[1]);
-    /* // ==============================================================
+
+// --- Ligar o GPS em Paralelo ---
+    Thread gpsThread = Thread_create((ThreadExecutionFunction)gps_thread, NULL, true);
+    Thread_start(gpsThread);
+
+    // ==============================================================
     // Forçando o ctlModel nativamente pelo C
-    // ============================================================== */
+    // ============================================================== 
     IedServer_updateCtlModel(iedServer, IEDMODEL_B1EBK_LANTXSWI1_Pos, CONTROL_MODEL_DIRECT_NORMAL);
     IedServer_updateCtlModel(iedServer, IEDMODEL_B1EBK_MOTXSWI1_Pos, CONTROL_MODEL_DIRECT_NORMAL);
     IedServer_updateCtlModel(iedServer, IEDMODEL_B1EBK_ALMXSWI1_Pos, CONTROL_MODEL_DIRECT_NORMAL);
@@ -246,8 +342,7 @@ int main(int argc, char** argv) {
     }
 
     LOG_PRINT("\n--- SERVIDOR IEC 61850 ---\n");
-    LOG_PRINT("[STATUS] Hardware OK (Lanterna: P%d | Motor: P%d | Alarme: P%d | Tanque: P%d | Trava: P%d)\n", RELAY_LANT_PIN, RELAY_MOT_PIN, RELAY_ALM_PIN, RELAY_CEL_PIN, RELAY_TNK_PIN, RELAY_XSWI_PIN);
-    LOG_PRINT("[STATUS] Rodando na porta %d.\n", tcpPort);
+    LOG_PRINT("[STATUS] Hardware OK (Lanterna: P%d | Motor: P%d | Alarme: P%d | Celula: P%d | Tanque: P%d | Trava: P%d)\n", RELAY_LANT_PIN, RELAY_MOT_PIN, RELAY_ALM_PIN, RELAY_CEL_PIN, RELAY_TNK_PIN, RELAY_XSWI_PIN);    LOG_PRINT("[STATUS] Rodando na porta %d.\n", tcpPort);
     LOG_PRINT("[STATUS] Aguardando conexao do Elipse...\n");
 
     running = 1;
