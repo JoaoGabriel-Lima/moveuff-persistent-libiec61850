@@ -1,3 +1,9 @@
+/*
+ * static_model.h
+ *
+ * automatically generated from moveuff_v2.icd
+ */
+
 #ifndef STATIC_MODEL_H_
 #define STATIC_MODEL_H_
 
@@ -2051,6 +2057,46 @@ extern DataObject    iedModel_B1STG_ZBAT1_Health;
 extern DataAttribute iedModel_B1STG_ZBAT1_Health_stVal;
 extern DataAttribute iedModel_B1STG_ZBAT1_Health_q;
 extern DataAttribute iedModel_B1STG_ZBAT1_Health_t;
+extern DataObject    iedModel_B1STG_ZBAT1_Vol;
+extern DataAttribute iedModel_B1STG_ZBAT1_Vol_instMag;
+extern DataAttribute iedModel_B1STG_ZBAT1_Vol_instMag_f;
+extern DataAttribute iedModel_B1STG_ZBAT1_Vol_mag;
+extern DataAttribute iedModel_B1STG_ZBAT1_Vol_mag_f;
+extern DataAttribute iedModel_B1STG_ZBAT1_Vol_q;
+extern DataAttribute iedModel_B1STG_ZBAT1_Vol_t;
+extern DataAttribute iedModel_B1STG_ZBAT1_Vol_units;
+extern DataAttribute iedModel_B1STG_ZBAT1_Vol_units_SIUnit;
+extern DataAttribute iedModel_B1STG_ZBAT1_Vol_units_multiplier;
+extern DataAttribute iedModel_B1STG_ZBAT1_Vol_sVC;
+extern DataAttribute iedModel_B1STG_ZBAT1_Vol_sVC_scaleFactor;
+extern DataAttribute iedModel_B1STG_ZBAT1_Vol_sVC_offset;
+extern DataAttribute iedModel_B1STG_ZBAT1_Vol_db;
+extern DataAttribute iedModel_B1STG_ZBAT1_Vol_subEna;
+extern DataAttribute iedModel_B1STG_ZBAT1_Vol_subMag;
+extern DataAttribute iedModel_B1STG_ZBAT1_Vol_subMag_f;
+extern DataAttribute iedModel_B1STG_ZBAT1_Vol_subQ;
+extern DataAttribute iedModel_B1STG_ZBAT1_Vol_subID;
+extern DataAttribute iedModel_B1STG_ZBAT1_Vol_blkEna;
+extern DataObject    iedModel_B1STG_ZBAT1_Amp;
+extern DataAttribute iedModel_B1STG_ZBAT1_Amp_instMag;
+extern DataAttribute iedModel_B1STG_ZBAT1_Amp_instMag_f;
+extern DataAttribute iedModel_B1STG_ZBAT1_Amp_mag;
+extern DataAttribute iedModel_B1STG_ZBAT1_Amp_mag_f;
+extern DataAttribute iedModel_B1STG_ZBAT1_Amp_q;
+extern DataAttribute iedModel_B1STG_ZBAT1_Amp_t;
+extern DataAttribute iedModel_B1STG_ZBAT1_Amp_units;
+extern DataAttribute iedModel_B1STG_ZBAT1_Amp_units_SIUnit;
+extern DataAttribute iedModel_B1STG_ZBAT1_Amp_units_multiplier;
+extern DataAttribute iedModel_B1STG_ZBAT1_Amp_sVC;
+extern DataAttribute iedModel_B1STG_ZBAT1_Amp_sVC_scaleFactor;
+extern DataAttribute iedModel_B1STG_ZBAT1_Amp_sVC_offset;
+extern DataAttribute iedModel_B1STG_ZBAT1_Amp_db;
+extern DataAttribute iedModel_B1STG_ZBAT1_Amp_subEna;
+extern DataAttribute iedModel_B1STG_ZBAT1_Amp_subMag;
+extern DataAttribute iedModel_B1STG_ZBAT1_Amp_subMag_f;
+extern DataAttribute iedModel_B1STG_ZBAT1_Amp_subQ;
+extern DataAttribute iedModel_B1STG_ZBAT1_Amp_subID;
+extern DataAttribute iedModel_B1STG_ZBAT1_Amp_blkEna;
 extern DataObject    iedModel_B1STG_ZBAT1_VolChgRte;
 extern DataAttribute iedModel_B1STG_ZBAT1_VolChgRte_instMag;
 extern DataAttribute iedModel_B1STG_ZBAT1_VolChgRte_instMag_f;
@@ -2733,7 +2779,6 @@ extern DataAttribute iedModel_B1STG_ZBAT1_VolChgRte_blkEna;
 #define IEDMODEL_B1EBK_TLOC1_GeoLoc_general (&iedModel_B1EBK_TLOC1_GeoLoc_general)
 #define IEDMODEL_B1EBK_TLOC1_GeoLoc_q (&iedModel_B1EBK_TLOC1_GeoLoc_q)
 #define IEDMODEL_B1EBK_TLOC1_GeoLoc_t (&iedModel_B1EBK_TLOC1_GeoLoc_t)
-
 #define IEDMODEL_B1CTR (&iedModel_B1CTR)
 #define IEDMODEL_B1CTR_LLN0 (&iedModel_B1CTR_LLN0)
 #define IEDMODEL_B1CTR_LLN0_Mod (&iedModel_B1CTR_LLN0_Mod)
@@ -2964,7 +3009,6 @@ extern DataAttribute iedModel_B1STG_ZBAT1_VolChgRte_blkEna;
 #define IEDMODEL_B1CTR_LTRK1_GocbTrk_goID (&iedModel_B1CTR_LTRK1_GocbTrk_goID)
 #define IEDMODEL_B1CTR_LTRK1_GocbTrk_ndsCom (&iedModel_B1CTR_LTRK1_GocbTrk_ndsCom)
 #define IEDMODEL_B1CTR_LTRK1_GocbTrk_dstAddress (&iedModel_B1CTR_LTRK1_GocbTrk_dstAddress)
-
 #define IEDMODEL_B1HYD (&iedModel_B1HYD)
 #define IEDMODEL_B1HYD_LLN0 (&iedModel_B1HYD_LLN0)
 #define IEDMODEL_B1HYD_LLN0_Mod (&iedModel_B1HYD_LLN0_Mod)
@@ -3780,7 +3824,6 @@ extern DataAttribute iedModel_B1STG_ZBAT1_VolChgRte_blkEna;
 #define IEDMODEL_B1HYD_CELXSWI1_SwTyp_stVal (&iedModel_B1HYD_CELXSWI1_SwTyp_stVal)
 #define IEDMODEL_B1HYD_CELXSWI1_SwTyp_q (&iedModel_B1HYD_CELXSWI1_SwTyp_q)
 #define IEDMODEL_B1HYD_CELXSWI1_SwTyp_t (&iedModel_B1HYD_CELXSWI1_SwTyp_t)
-
 #define IEDMODEL_B1STG (&iedModel_B1STG)
 #define IEDMODEL_B1STG_LLN0 (&iedModel_B1STG_LLN0)
 #define IEDMODEL_B1STG_LLN0_Mod (&iedModel_B1STG_LLN0_Mod)
@@ -4123,6 +4166,46 @@ extern DataAttribute iedModel_B1STG_ZBAT1_VolChgRte_blkEna;
 #define IEDMODEL_B1STG_ZBAT1_Health_stVal (&iedModel_B1STG_ZBAT1_Health_stVal)
 #define IEDMODEL_B1STG_ZBAT1_Health_q (&iedModel_B1STG_ZBAT1_Health_q)
 #define IEDMODEL_B1STG_ZBAT1_Health_t (&iedModel_B1STG_ZBAT1_Health_t)
+#define IEDMODEL_B1STG_ZBAT1_Vol (&iedModel_B1STG_ZBAT1_Vol)
+#define IEDMODEL_B1STG_ZBAT1_Vol_instMag (&iedModel_B1STG_ZBAT1_Vol_instMag)
+#define IEDMODEL_B1STG_ZBAT1_Vol_instMag_f (&iedModel_B1STG_ZBAT1_Vol_instMag_f)
+#define IEDMODEL_B1STG_ZBAT1_Vol_mag (&iedModel_B1STG_ZBAT1_Vol_mag)
+#define IEDMODEL_B1STG_ZBAT1_Vol_mag_f (&iedModel_B1STG_ZBAT1_Vol_mag_f)
+#define IEDMODEL_B1STG_ZBAT1_Vol_q (&iedModel_B1STG_ZBAT1_Vol_q)
+#define IEDMODEL_B1STG_ZBAT1_Vol_t (&iedModel_B1STG_ZBAT1_Vol_t)
+#define IEDMODEL_B1STG_ZBAT1_Vol_units (&iedModel_B1STG_ZBAT1_Vol_units)
+#define IEDMODEL_B1STG_ZBAT1_Vol_units_SIUnit (&iedModel_B1STG_ZBAT1_Vol_units_SIUnit)
+#define IEDMODEL_B1STG_ZBAT1_Vol_units_multiplier (&iedModel_B1STG_ZBAT1_Vol_units_multiplier)
+#define IEDMODEL_B1STG_ZBAT1_Vol_sVC (&iedModel_B1STG_ZBAT1_Vol_sVC)
+#define IEDMODEL_B1STG_ZBAT1_Vol_sVC_scaleFactor (&iedModel_B1STG_ZBAT1_Vol_sVC_scaleFactor)
+#define IEDMODEL_B1STG_ZBAT1_Vol_sVC_offset (&iedModel_B1STG_ZBAT1_Vol_sVC_offset)
+#define IEDMODEL_B1STG_ZBAT1_Vol_db (&iedModel_B1STG_ZBAT1_Vol_db)
+#define IEDMODEL_B1STG_ZBAT1_Vol_subEna (&iedModel_B1STG_ZBAT1_Vol_subEna)
+#define IEDMODEL_B1STG_ZBAT1_Vol_subMag (&iedModel_B1STG_ZBAT1_Vol_subMag)
+#define IEDMODEL_B1STG_ZBAT1_Vol_subMag_f (&iedModel_B1STG_ZBAT1_Vol_subMag_f)
+#define IEDMODEL_B1STG_ZBAT1_Vol_subQ (&iedModel_B1STG_ZBAT1_Vol_subQ)
+#define IEDMODEL_B1STG_ZBAT1_Vol_subID (&iedModel_B1STG_ZBAT1_Vol_subID)
+#define IEDMODEL_B1STG_ZBAT1_Vol_blkEna (&iedModel_B1STG_ZBAT1_Vol_blkEna)
+#define IEDMODEL_B1STG_ZBAT1_Amp (&iedModel_B1STG_ZBAT1_Amp)
+#define IEDMODEL_B1STG_ZBAT1_Amp_instMag (&iedModel_B1STG_ZBAT1_Amp_instMag)
+#define IEDMODEL_B1STG_ZBAT1_Amp_instMag_f (&iedModel_B1STG_ZBAT1_Amp_instMag_f)
+#define IEDMODEL_B1STG_ZBAT1_Amp_mag (&iedModel_B1STG_ZBAT1_Amp_mag)
+#define IEDMODEL_B1STG_ZBAT1_Amp_mag_f (&iedModel_B1STG_ZBAT1_Amp_mag_f)
+#define IEDMODEL_B1STG_ZBAT1_Amp_q (&iedModel_B1STG_ZBAT1_Amp_q)
+#define IEDMODEL_B1STG_ZBAT1_Amp_t (&iedModel_B1STG_ZBAT1_Amp_t)
+#define IEDMODEL_B1STG_ZBAT1_Amp_units (&iedModel_B1STG_ZBAT1_Amp_units)
+#define IEDMODEL_B1STG_ZBAT1_Amp_units_SIUnit (&iedModel_B1STG_ZBAT1_Amp_units_SIUnit)
+#define IEDMODEL_B1STG_ZBAT1_Amp_units_multiplier (&iedModel_B1STG_ZBAT1_Amp_units_multiplier)
+#define IEDMODEL_B1STG_ZBAT1_Amp_sVC (&iedModel_B1STG_ZBAT1_Amp_sVC)
+#define IEDMODEL_B1STG_ZBAT1_Amp_sVC_scaleFactor (&iedModel_B1STG_ZBAT1_Amp_sVC_scaleFactor)
+#define IEDMODEL_B1STG_ZBAT1_Amp_sVC_offset (&iedModel_B1STG_ZBAT1_Amp_sVC_offset)
+#define IEDMODEL_B1STG_ZBAT1_Amp_db (&iedModel_B1STG_ZBAT1_Amp_db)
+#define IEDMODEL_B1STG_ZBAT1_Amp_subEna (&iedModel_B1STG_ZBAT1_Amp_subEna)
+#define IEDMODEL_B1STG_ZBAT1_Amp_subMag (&iedModel_B1STG_ZBAT1_Amp_subMag)
+#define IEDMODEL_B1STG_ZBAT1_Amp_subMag_f (&iedModel_B1STG_ZBAT1_Amp_subMag_f)
+#define IEDMODEL_B1STG_ZBAT1_Amp_subQ (&iedModel_B1STG_ZBAT1_Amp_subQ)
+#define IEDMODEL_B1STG_ZBAT1_Amp_subID (&iedModel_B1STG_ZBAT1_Amp_subID)
+#define IEDMODEL_B1STG_ZBAT1_Amp_blkEna (&iedModel_B1STG_ZBAT1_Amp_blkEna)
 #define IEDMODEL_B1STG_ZBAT1_VolChgRte (&iedModel_B1STG_ZBAT1_VolChgRte)
 #define IEDMODEL_B1STG_ZBAT1_VolChgRte_instMag (&iedModel_B1STG_ZBAT1_VolChgRte_instMag)
 #define IEDMODEL_B1STG_ZBAT1_VolChgRte_instMag_f (&iedModel_B1STG_ZBAT1_VolChgRte_instMag_f)
@@ -4145,3 +4228,4 @@ extern DataAttribute iedModel_B1STG_ZBAT1_VolChgRte_blkEna;
 #define IEDMODEL_B1STG_ZBAT1_VolChgRte_blkEna (&iedModel_B1STG_ZBAT1_VolChgRte_blkEna)
 
 #endif /* STATIC_MODEL_H_ */
+

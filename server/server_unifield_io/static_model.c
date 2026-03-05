@@ -1,8 +1,14 @@
+/*
+ * static_model.c
+ *
+ * automatically generated from moveuff_v2.icd
+ */
 #include "static_model.h"
 #include <stdio.h>
-#include "iec61850_server.h"    // Para funções MmsValue
 
 static void initializeValues();
+
+
 
 LogicalDevice iedModel_B1EBK = {
     LogicalDeviceModelType,
@@ -10,6 +16,7 @@ LogicalDevice iedModel_B1EBK = {
     (ModelNode*) &iedModel,
     (ModelNode*) &iedModel_B1CTR,
     (ModelNode*) &iedModel_B1EBK_LLN0,
+    NULL
 };
 
 LogicalNode iedModel_B1EBK_LLN0 = {
@@ -974,14 +981,85 @@ DataAttribute iedModel_B1EBK_DEEV1_EVId_setVal = {
     DataAttributeModelType,
     "setVal",
     (ModelNode*) &iedModel_B1EBK_DEEV1_EVId,
-    NULL,
+    (ModelNode*) &iedModel_B1EBK_DEEV1_EVId_latitude,
     NULL,
     0,
     -1,
     IEC61850_FC_SP,
     IEC61850_VISIBLE_STRING_255,
-    0 + TRG_OPT_DATA_CHANGED
-};
+    0,
+    NULL,
+    0};
+
+DataAttribute iedModel_B1EBK_DEEV1_EVId_latitude = {
+    DataAttributeModelType,
+    "latitude",
+    (ModelNode*) &iedModel_B1EBK_DEEV1_EVId,
+    (ModelNode*) &iedModel_B1EBK_DEEV1_EVId_longitude,
+    NULL,
+    0,
+    -1,
+    IEC61850_FC_ST,
+    IEC61850_FLOAT32,
+    0,
+    NULL,
+    0};
+
+DataAttribute iedModel_B1EBK_DEEV1_EVId_longitude = {
+    DataAttributeModelType,
+    "longitude",
+    (ModelNode*) &iedModel_B1EBK_DEEV1_EVId,
+    (ModelNode*) &iedModel_B1EBK_DEEV1_EVId_general,
+    NULL,
+    0,
+    -1,
+    IEC61850_FC_ST,
+    IEC61850_FLOAT32,
+    0,
+    NULL,
+    0};
+
+DataAttribute iedModel_B1EBK_DEEV1_EVId_general = {
+    DataAttributeModelType,
+    "general",
+    (ModelNode*) &iedModel_B1EBK_DEEV1_EVId,
+    (ModelNode*) &iedModel_B1EBK_DEEV1_EVId_q,
+    NULL,
+    0,
+    -1,
+    IEC61850_FC_ST,
+    IEC61850_FLOAT32,
+    0,
+    NULL,
+    0};
+
+DataAttribute iedModel_B1EBK_DEEV1_EVId_q = {
+    DataAttributeModelType,
+    "q",
+    (ModelNode*) &iedModel_B1EBK_DEEV1_EVId,
+    (ModelNode*) &iedModel_B1EBK_DEEV1_EVId_t,
+    NULL,
+    0,
+    -1,
+    IEC61850_FC_ST,
+    IEC61850_QUALITY,
+    0,
+    NULL,
+    0};
+
+DataAttribute iedModel_B1EBK_DEEV1_EVId_t = {
+    DataAttributeModelType,
+    "t",
+    (ModelNode*) &iedModel_B1EBK_DEEV1_EVId,
+    NULL,
+    NULL,
+    0,
+    -1,
+    IEC61850_FC_ST,
+    IEC61850_TIMESTAMP,
+    0,
+    NULL,
+    0};
 
 DataObject iedModel_B1EBK_DEEV1_DptTm = {
     DataObjectModelType,
@@ -27235,7 +27313,7 @@ DataObject iedModel_B1STG_ZBAT1_Health = {
     DataObjectModelType,
     "Health",
     (ModelNode*) &iedModel_B1STG_ZBAT1,
-    (ModelNode*) &iedModel_B1STG_ZBAT1_VolChgRte,
+    (ModelNode*) &iedModel_B1STG_ZBAT1_Vol,
     (ModelNode*) &iedModel_B1STG_ZBAT1_Health_stVal,
     0,
     -1
@@ -27279,6 +27357,558 @@ DataAttribute iedModel_B1STG_ZBAT1_Health_t = {
     -1,
     IEC61850_FC_ST,
     IEC61850_TIMESTAMP,
+    0,
+    NULL,
+    0};
+
+DataObject iedModel_B1STG_ZBAT1_Vol = {
+    DataObjectModelType,
+    "Vol",
+    (ModelNode*) &iedModel_B1STG_ZBAT1,
+    (ModelNode*) &iedModel_B1STG_ZBAT1_Amp,
+    (ModelNode*) &iedModel_B1STG_ZBAT1_Vol_instMag,
+    0,
+    -1
+};
+
+DataAttribute iedModel_B1STG_ZBAT1_Vol_instMag = {
+    DataAttributeModelType,
+    "instMag",
+    (ModelNode*) &iedModel_B1STG_ZBAT1_Vol,
+    (ModelNode*) &iedModel_B1STG_ZBAT1_Vol_mag,
+    (ModelNode*) &iedModel_B1STG_ZBAT1_Vol_instMag_f,
+    0,
+    -1,
+    IEC61850_FC_MX,
+    IEC61850_CONSTRUCTED,
+    0,
+    NULL,
+    0};
+
+DataAttribute iedModel_B1STG_ZBAT1_Vol_instMag_f = {
+    DataAttributeModelType,
+    "f",
+    (ModelNode*) &iedModel_B1STG_ZBAT1_Vol_instMag,
+    NULL,
+    NULL,
+    0,
+    -1,
+    IEC61850_FC_MX,
+    IEC61850_FLOAT32,
+    0,
+    NULL,
+    0};
+
+DataAttribute iedModel_B1STG_ZBAT1_Vol_mag = {
+    DataAttributeModelType,
+    "mag",
+    (ModelNode*) &iedModel_B1STG_ZBAT1_Vol,
+    (ModelNode*) &iedModel_B1STG_ZBAT1_Vol_q,
+    (ModelNode*) &iedModel_B1STG_ZBAT1_Vol_mag_f,
+    0,
+    -1,
+    IEC61850_FC_MX,
+    IEC61850_CONSTRUCTED,
+    0 + TRG_OPT_DATA_CHANGED,
+    NULL,
+    0};
+
+DataAttribute iedModel_B1STG_ZBAT1_Vol_mag_f = {
+    DataAttributeModelType,
+    "f",
+    (ModelNode*) &iedModel_B1STG_ZBAT1_Vol_mag,
+    NULL,
+    NULL,
+    0,
+    -1,
+    IEC61850_FC_MX,
+    IEC61850_FLOAT32,
+    0 + TRG_OPT_DATA_CHANGED,
+    NULL,
+    0};
+
+DataAttribute iedModel_B1STG_ZBAT1_Vol_q = {
+    DataAttributeModelType,
+    "q",
+    (ModelNode*) &iedModel_B1STG_ZBAT1_Vol,
+    (ModelNode*) &iedModel_B1STG_ZBAT1_Vol_t,
+    NULL,
+    0,
+    -1,
+    IEC61850_FC_MX,
+    IEC61850_QUALITY,
+    0 + TRG_OPT_QUALITY_CHANGED,
+    NULL,
+    0};
+
+DataAttribute iedModel_B1STG_ZBAT1_Vol_t = {
+    DataAttributeModelType,
+    "t",
+    (ModelNode*) &iedModel_B1STG_ZBAT1_Vol,
+    (ModelNode*) &iedModel_B1STG_ZBAT1_Vol_units,
+    NULL,
+    0,
+    -1,
+    IEC61850_FC_MX,
+    IEC61850_TIMESTAMP,
+    0,
+    NULL,
+    0};
+
+DataAttribute iedModel_B1STG_ZBAT1_Vol_units = {
+    DataAttributeModelType,
+    "units",
+    (ModelNode*) &iedModel_B1STG_ZBAT1_Vol,
+    (ModelNode*) &iedModel_B1STG_ZBAT1_Vol_sVC,
+    (ModelNode*) &iedModel_B1STG_ZBAT1_Vol_units_SIUnit,
+    0,
+    -1,
+    IEC61850_FC_CF,
+    IEC61850_CONSTRUCTED,
+    0,
+    NULL,
+    0};
+
+DataAttribute iedModel_B1STG_ZBAT1_Vol_units_SIUnit = {
+    DataAttributeModelType,
+    "SIUnit",
+    (ModelNode*) &iedModel_B1STG_ZBAT1_Vol_units,
+    (ModelNode*) &iedModel_B1STG_ZBAT1_Vol_units_multiplier,
+    NULL,
+    0,
+    -1,
+    IEC61850_FC_CF,
+    IEC61850_ENUMERATED,
+    0,
+    NULL,
+    0};
+
+DataAttribute iedModel_B1STG_ZBAT1_Vol_units_multiplier = {
+    DataAttributeModelType,
+    "multiplier",
+    (ModelNode*) &iedModel_B1STG_ZBAT1_Vol_units,
+    NULL,
+    NULL,
+    0,
+    -1,
+    IEC61850_FC_CF,
+    IEC61850_ENUMERATED,
+    0,
+    NULL,
+    0};
+
+DataAttribute iedModel_B1STG_ZBAT1_Vol_sVC = {
+    DataAttributeModelType,
+    "sVC",
+    (ModelNode*) &iedModel_B1STG_ZBAT1_Vol,
+    (ModelNode*) &iedModel_B1STG_ZBAT1_Vol_db,
+    (ModelNode*) &iedModel_B1STG_ZBAT1_Vol_sVC_scaleFactor,
+    0,
+    -1,
+    IEC61850_FC_CF,
+    IEC61850_CONSTRUCTED,
+    0,
+    NULL,
+    0};
+
+DataAttribute iedModel_B1STG_ZBAT1_Vol_sVC_scaleFactor = {
+    DataAttributeModelType,
+    "scaleFactor",
+    (ModelNode*) &iedModel_B1STG_ZBAT1_Vol_sVC,
+    (ModelNode*) &iedModel_B1STG_ZBAT1_Vol_sVC_offset,
+    NULL,
+    0,
+    -1,
+    IEC61850_FC_CF,
+    IEC61850_FLOAT32,
+    0,
+    NULL,
+    0};
+
+DataAttribute iedModel_B1STG_ZBAT1_Vol_sVC_offset = {
+    DataAttributeModelType,
+    "offset",
+    (ModelNode*) &iedModel_B1STG_ZBAT1_Vol_sVC,
+    NULL,
+    NULL,
+    0,
+    -1,
+    IEC61850_FC_CF,
+    IEC61850_FLOAT32,
+    0,
+    NULL,
+    0};
+
+DataAttribute iedModel_B1STG_ZBAT1_Vol_db = {
+    DataAttributeModelType,
+    "db",
+    (ModelNode*) &iedModel_B1STG_ZBAT1_Vol,
+    (ModelNode*) &iedModel_B1STG_ZBAT1_Vol_subEna,
+    NULL,
+    0,
+    -1,
+    IEC61850_FC_CF,
+    IEC61850_INT32U,
+    0,
+    NULL,
+    0};
+
+DataAttribute iedModel_B1STG_ZBAT1_Vol_subEna = {
+    DataAttributeModelType,
+    "subEna",
+    (ModelNode*) &iedModel_B1STG_ZBAT1_Vol,
+    (ModelNode*) &iedModel_B1STG_ZBAT1_Vol_subMag,
+    NULL,
+    0,
+    -1,
+    IEC61850_FC_SV,
+    IEC61850_BOOLEAN,
+    0,
+    NULL,
+    0};
+
+DataAttribute iedModel_B1STG_ZBAT1_Vol_subMag = {
+    DataAttributeModelType,
+    "subMag",
+    (ModelNode*) &iedModel_B1STG_ZBAT1_Vol,
+    (ModelNode*) &iedModel_B1STG_ZBAT1_Vol_subQ,
+    (ModelNode*) &iedModel_B1STG_ZBAT1_Vol_subMag_f,
+    0,
+    -1,
+    IEC61850_FC_SV,
+    IEC61850_CONSTRUCTED,
+    0,
+    NULL,
+    0};
+
+DataAttribute iedModel_B1STG_ZBAT1_Vol_subMag_f = {
+    DataAttributeModelType,
+    "f",
+    (ModelNode*) &iedModel_B1STG_ZBAT1_Vol_subMag,
+    NULL,
+    NULL,
+    0,
+    -1,
+    IEC61850_FC_SV,
+    IEC61850_FLOAT32,
+    0,
+    NULL,
+    0};
+
+DataAttribute iedModel_B1STG_ZBAT1_Vol_subQ = {
+    DataAttributeModelType,
+    "subQ",
+    (ModelNode*) &iedModel_B1STG_ZBAT1_Vol,
+    (ModelNode*) &iedModel_B1STG_ZBAT1_Vol_subID,
+    NULL,
+    0,
+    -1,
+    IEC61850_FC_SV,
+    IEC61850_QUALITY,
+    0,
+    NULL,
+    0};
+
+DataAttribute iedModel_B1STG_ZBAT1_Vol_subID = {
+    DataAttributeModelType,
+    "subID",
+    (ModelNode*) &iedModel_B1STG_ZBAT1_Vol,
+    (ModelNode*) &iedModel_B1STG_ZBAT1_Vol_blkEna,
+    NULL,
+    0,
+    -1,
+    IEC61850_FC_SV,
+    IEC61850_VISIBLE_STRING_64,
+    0,
+    NULL,
+    0};
+
+DataAttribute iedModel_B1STG_ZBAT1_Vol_blkEna = {
+    DataAttributeModelType,
+    "blkEna",
+    (ModelNode*) &iedModel_B1STG_ZBAT1_Vol,
+    NULL,
+    NULL,
+    0,
+    -1,
+    IEC61850_FC_BL,
+    IEC61850_BOOLEAN,
+    0,
+    NULL,
+    0};
+
+DataObject iedModel_B1STG_ZBAT1_Amp = {
+    DataObjectModelType,
+    "Amp",
+    (ModelNode*) &iedModel_B1STG_ZBAT1,
+    (ModelNode*) &iedModel_B1STG_ZBAT1_VolChgRte,
+    (ModelNode*) &iedModel_B1STG_ZBAT1_Amp_instMag,
+    0,
+    -1
+};
+
+DataAttribute iedModel_B1STG_ZBAT1_Amp_instMag = {
+    DataAttributeModelType,
+    "instMag",
+    (ModelNode*) &iedModel_B1STG_ZBAT1_Amp,
+    (ModelNode*) &iedModel_B1STG_ZBAT1_Amp_mag,
+    (ModelNode*) &iedModel_B1STG_ZBAT1_Amp_instMag_f,
+    0,
+    -1,
+    IEC61850_FC_MX,
+    IEC61850_CONSTRUCTED,
+    0,
+    NULL,
+    0};
+
+DataAttribute iedModel_B1STG_ZBAT1_Amp_instMag_f = {
+    DataAttributeModelType,
+    "f",
+    (ModelNode*) &iedModel_B1STG_ZBAT1_Amp_instMag,
+    NULL,
+    NULL,
+    0,
+    -1,
+    IEC61850_FC_MX,
+    IEC61850_FLOAT32,
+    0,
+    NULL,
+    0};
+
+DataAttribute iedModel_B1STG_ZBAT1_Amp_mag = {
+    DataAttributeModelType,
+    "mag",
+    (ModelNode*) &iedModel_B1STG_ZBAT1_Amp,
+    (ModelNode*) &iedModel_B1STG_ZBAT1_Amp_q,
+    (ModelNode*) &iedModel_B1STG_ZBAT1_Amp_mag_f,
+    0,
+    -1,
+    IEC61850_FC_MX,
+    IEC61850_CONSTRUCTED,
+    0 + TRG_OPT_DATA_CHANGED,
+    NULL,
+    0};
+
+DataAttribute iedModel_B1STG_ZBAT1_Amp_mag_f = {
+    DataAttributeModelType,
+    "f",
+    (ModelNode*) &iedModel_B1STG_ZBAT1_Amp_mag,
+    NULL,
+    NULL,
+    0,
+    -1,
+    IEC61850_FC_MX,
+    IEC61850_FLOAT32,
+    0 + TRG_OPT_DATA_CHANGED,
+    NULL,
+    0};
+
+DataAttribute iedModel_B1STG_ZBAT1_Amp_q = {
+    DataAttributeModelType,
+    "q",
+    (ModelNode*) &iedModel_B1STG_ZBAT1_Amp,
+    (ModelNode*) &iedModel_B1STG_ZBAT1_Amp_t,
+    NULL,
+    0,
+    -1,
+    IEC61850_FC_MX,
+    IEC61850_QUALITY,
+    0 + TRG_OPT_QUALITY_CHANGED,
+    NULL,
+    0};
+
+DataAttribute iedModel_B1STG_ZBAT1_Amp_t = {
+    DataAttributeModelType,
+    "t",
+    (ModelNode*) &iedModel_B1STG_ZBAT1_Amp,
+    (ModelNode*) &iedModel_B1STG_ZBAT1_Amp_units,
+    NULL,
+    0,
+    -1,
+    IEC61850_FC_MX,
+    IEC61850_TIMESTAMP,
+    0,
+    NULL,
+    0};
+
+DataAttribute iedModel_B1STG_ZBAT1_Amp_units = {
+    DataAttributeModelType,
+    "units",
+    (ModelNode*) &iedModel_B1STG_ZBAT1_Amp,
+    (ModelNode*) &iedModel_B1STG_ZBAT1_Amp_sVC,
+    (ModelNode*) &iedModel_B1STG_ZBAT1_Amp_units_SIUnit,
+    0,
+    -1,
+    IEC61850_FC_CF,
+    IEC61850_CONSTRUCTED,
+    0,
+    NULL,
+    0};
+
+DataAttribute iedModel_B1STG_ZBAT1_Amp_units_SIUnit = {
+    DataAttributeModelType,
+    "SIUnit",
+    (ModelNode*) &iedModel_B1STG_ZBAT1_Amp_units,
+    (ModelNode*) &iedModel_B1STG_ZBAT1_Amp_units_multiplier,
+    NULL,
+    0,
+    -1,
+    IEC61850_FC_CF,
+    IEC61850_ENUMERATED,
+    0,
+    NULL,
+    0};
+
+DataAttribute iedModel_B1STG_ZBAT1_Amp_units_multiplier = {
+    DataAttributeModelType,
+    "multiplier",
+    (ModelNode*) &iedModel_B1STG_ZBAT1_Amp_units,
+    NULL,
+    NULL,
+    0,
+    -1,
+    IEC61850_FC_CF,
+    IEC61850_ENUMERATED,
+    0,
+    NULL,
+    0};
+
+DataAttribute iedModel_B1STG_ZBAT1_Amp_sVC = {
+    DataAttributeModelType,
+    "sVC",
+    (ModelNode*) &iedModel_B1STG_ZBAT1_Amp,
+    (ModelNode*) &iedModel_B1STG_ZBAT1_Amp_db,
+    (ModelNode*) &iedModel_B1STG_ZBAT1_Amp_sVC_scaleFactor,
+    0,
+    -1,
+    IEC61850_FC_CF,
+    IEC61850_CONSTRUCTED,
+    0,
+    NULL,
+    0};
+
+DataAttribute iedModel_B1STG_ZBAT1_Amp_sVC_scaleFactor = {
+    DataAttributeModelType,
+    "scaleFactor",
+    (ModelNode*) &iedModel_B1STG_ZBAT1_Amp_sVC,
+    (ModelNode*) &iedModel_B1STG_ZBAT1_Amp_sVC_offset,
+    NULL,
+    0,
+    -1,
+    IEC61850_FC_CF,
+    IEC61850_FLOAT32,
+    0,
+    NULL,
+    0};
+
+DataAttribute iedModel_B1STG_ZBAT1_Amp_sVC_offset = {
+    DataAttributeModelType,
+    "offset",
+    (ModelNode*) &iedModel_B1STG_ZBAT1_Amp_sVC,
+    NULL,
+    NULL,
+    0,
+    -1,
+    IEC61850_FC_CF,
+    IEC61850_FLOAT32,
+    0,
+    NULL,
+    0};
+
+DataAttribute iedModel_B1STG_ZBAT1_Amp_db = {
+    DataAttributeModelType,
+    "db",
+    (ModelNode*) &iedModel_B1STG_ZBAT1_Amp,
+    (ModelNode*) &iedModel_B1STG_ZBAT1_Amp_subEna,
+    NULL,
+    0,
+    -1,
+    IEC61850_FC_CF,
+    IEC61850_INT32U,
+    0,
+    NULL,
+    0};
+
+DataAttribute iedModel_B1STG_ZBAT1_Amp_subEna = {
+    DataAttributeModelType,
+    "subEna",
+    (ModelNode*) &iedModel_B1STG_ZBAT1_Amp,
+    (ModelNode*) &iedModel_B1STG_ZBAT1_Amp_subMag,
+    NULL,
+    0,
+    -1,
+    IEC61850_FC_SV,
+    IEC61850_BOOLEAN,
+    0,
+    NULL,
+    0};
+
+DataAttribute iedModel_B1STG_ZBAT1_Amp_subMag = {
+    DataAttributeModelType,
+    "subMag",
+    (ModelNode*) &iedModel_B1STG_ZBAT1_Amp,
+    (ModelNode*) &iedModel_B1STG_ZBAT1_Amp_subQ,
+    (ModelNode*) &iedModel_B1STG_ZBAT1_Amp_subMag_f,
+    0,
+    -1,
+    IEC61850_FC_SV,
+    IEC61850_CONSTRUCTED,
+    0,
+    NULL,
+    0};
+
+DataAttribute iedModel_B1STG_ZBAT1_Amp_subMag_f = {
+    DataAttributeModelType,
+    "f",
+    (ModelNode*) &iedModel_B1STG_ZBAT1_Amp_subMag,
+    NULL,
+    NULL,
+    0,
+    -1,
+    IEC61850_FC_SV,
+    IEC61850_FLOAT32,
+    0,
+    NULL,
+    0};
+
+DataAttribute iedModel_B1STG_ZBAT1_Amp_subQ = {
+    DataAttributeModelType,
+    "subQ",
+    (ModelNode*) &iedModel_B1STG_ZBAT1_Amp,
+    (ModelNode*) &iedModel_B1STG_ZBAT1_Amp_subID,
+    NULL,
+    0,
+    -1,
+    IEC61850_FC_SV,
+    IEC61850_QUALITY,
+    0,
+    NULL,
+    0};
+
+DataAttribute iedModel_B1STG_ZBAT1_Amp_subID = {
+    DataAttributeModelType,
+    "subID",
+    (ModelNode*) &iedModel_B1STG_ZBAT1_Amp,
+    (ModelNode*) &iedModel_B1STG_ZBAT1_Amp_blkEna,
+    NULL,
+    0,
+    -1,
+    IEC61850_FC_SV,
+    IEC61850_VISIBLE_STRING_64,
+    0,
+    NULL,
+    0};
+
+DataAttribute iedModel_B1STG_ZBAT1_Amp_blkEna = {
+    DataAttributeModelType,
+    "blkEna",
+    (ModelNode*) &iedModel_B1STG_ZBAT1_Amp,
+    NULL,
+    NULL,
+    0,
+    -1,
+    IEC61850_FC_BL,
+    IEC61850_BOOLEAN,
     0,
     NULL,
     0};
@@ -27560,7 +28190,7 @@ DataAttribute iedModel_B1STG_ZBAT1_VolChgRte_blkEna = {
     0};
 
 IedModel iedModel = {
-    "MoveUFF_",
+    "MoveUFF_Geral",
     &iedModel_B1EBK,
     NULL,
     NULL,

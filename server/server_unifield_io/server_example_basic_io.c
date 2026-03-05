@@ -8,6 +8,9 @@
 #include <wiringSerial.h>
 #include <string.h>
 #include <wiringPi.h>
+#include <sys/socket.h>
+#include <arpa/inet.h>
+#include <unistd.h>
 
 #define RELAY_MOT_PIN  3  // wPi 3 = Pino Físico (Motor) - 8
 #define RELAY_ALM_PIN  4  // wPi 4 = Pino Físico (Alarme) - 10
@@ -272,6 +275,87 @@ void* gps_thread(void* arg) {
     return NULL;
 }
 
+/* =================================================================
+ * LEITOR SOCKET TCP E THREAD DE SENSORES (BATERIA)
+ * ================================================================= 
+
+void* sensor_thread(void* arg) {
+    LOG_PRINT("[STATUS] Thread de Sensores iniciada (Socket 2025)...\n");
+
+    while (running) { // Loop principal para persistência
+        int sock = 0;
+        struct sockaddr_in serv_addr;
+        char buffer[2048] = {0};
+
+        // 1. Criar o Socket
+        if ((sock = socket(AF_INET, SOCK_STREAM, 0)) < 0) {
+            LOG_PRINT("[ERRO] Falha ao criar socket. Tentando em 5s...\n");
+            Thread_sleep(5000);
+            continue;
+        }
+
+        serv_addr.sin_family = AF_INET;
+        serv_addr.sin_port = htons(2025);
+
+        // 2. Definir o IP do Host (Troque pelo IP do seu PC simulador)
+        if (inet_pton(AF_INET, "192.168.2.120", &serv_addr.sin_addr) <= 0) {
+            LOG_PRINT("[ERRO] Endereço IP inválido. Verifique o código!\n");
+            close(sock);
+            Thread_sleep(5000);
+            continue;
+        }
+
+        // 3. Tentar conectar (Loop de tentativa de conexão)
+        LOG_PRINT("[CONEXÃO] Tentando conectar ao simulador no IP 192.168.2.120\n");
+        if (connect(sock, (struct sockaddr *)&serv_addr, sizeof(serv_addr)) < 0) {
+            close(sock);
+            Thread_sleep(3000); // Espera 3 segundos antes de tentar de novo
+            continue;
+        }
+
+        LOG_PRINT("✅ [SOCKET] Conectado! Recebendo dados em tempo real...\n");
+
+         //4. Loop de Leitura (Enquanto houver dados vindo do simulador)
+         while (running) {
+            int valread = read(sock, buffer, sizeof(buffer) - 1);
+            
+           if (valread <= 0) {
+               LOG_PRINT("⚠️ [SOCKET] Conexão perdida com o simulador. Reiniciando busca...\n");
+                break; // Sai do loop de leitura para reconectar no loop principal 
+        {
+            
+    
+            buffer[valread] = '\0'; // Garante que a string termine corretamente
+
+            float tensao = 0.0, corrente = 0.0, soc = 0.0;
+            char *ptr;
+
+            // Extração dos dados do JSON (Pesque os valores brutos)
+            ptr = strstr(buffer, "\"id\":\"Corrente_Bateria_Principal\"");
+            if (ptr && (ptr = strstr(ptr, "\"value\":"))) sscanf(ptr, "\"value\":%f", &corrente);
+
+            ptr = strstr(buffer, "\"id\":\"Tensao_Bateria_Principal\"");
+            if (ptr && (ptr = strstr(ptr, "\"value\":"))) sscanf(ptr, "\"value\":%f", &tensao);
+
+            ptr = strstr(buffer, "\"soc_percent\":");
+            if (ptr) sscanf(ptr, "\"soc_percent\":%f", &soc);
+
+            // Injeção nas variáveis do modelo IEC 61850 (ZBAT1 e DBAT1)
+            uint64_t ts = Hal_getTimeInMs();
+            IedServer_updateFloatAttributeValue(iedServer, IEDMODEL_B1STG_ZBAT1_Vol_mag_f, tensao);
+            IedServer_updateFloatAttributeValue(iedServer, IEDMODEL_B1STG_ZBAT1_Amp_mag_f, corrente);
+            IedServer_updateFloatAttributeValue(iedServer, IEDMODEL_B1STG_DBAT1_SocPro_stVal, soc);
+
+            LOG_PRINT(" 🔋 [DATA] V: %.2fV | I: %.2fA | SOC: %.2f%%\n", tensao, corrente, soc);
+            
+            memset(buffer, 0, sizeof(buffer)); // Limpa para a próxima mensagem
+        }
+
+        close(sock); // Fecha o socket antes de tentar a reconexão
+    }
+    return NULL;
+}*/
+
 int main(int argc, char** argv) {
     if (wiringPiSetup() == -1) { 
         fprintf(stderr, "ERRO: Falha ao inicializar o wiringPi! Tente executar como root\n");
@@ -292,10 +376,6 @@ int main(int argc, char** argv) {
     iedServer = IedServer_create(&iedModel);
     int tcpPort = 102;
     if (argc > 1) tcpPort = atoi(argv[1]);
-
-// --- Ligar o GPS em Paralelo ---
-    Thread gpsThread = Thread_create((ThreadExecutionFunction)gps_thread, NULL, true);
-    Thread_start(gpsThread);
 
     // ==============================================================
     // Forçando o ctlModel nativamente pelo C
@@ -347,6 +427,16 @@ int main(int argc, char** argv) {
 
     running = 1;
     signal(SIGINT, sigint_handler);
+
+    // ==============================================================
+    // ADICIONE ESTAS DUAS LINHAS AQUI PARA LIGAR OS SENSORES!
+    // ==============================================================
+    //Thread sensorThread = Thread_create((ThreadExecutionFunction)sensor_thread, NULL, true);
+    //Thread_start(sensorThread);
+
+    // --- Ligar o GPS em Paralelo ---
+    Thread gpsThread = Thread_create((ThreadExecutionFunction)gps_thread, NULL, true);
+    Thread_start(gpsThread);
 
     while (running) {
         Thread_sleep(100);

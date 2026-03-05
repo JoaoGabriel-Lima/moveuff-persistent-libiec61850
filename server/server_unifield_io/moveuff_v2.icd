@@ -112,7 +112,7 @@
             <DOI name="EEName" /> <DOI name="ChaSt" /> <DOI name="DschSt" /> <DOI name="EEHealth" /> <DOI name="Amp" /> <DOI name="Watt" /> <DOI name="AvlChaAhr" /> <DOI name="AvlDschAhr" /> <DOI name="BatTyp" /> <DOI name="ChaAmpMax" /> <DOI name="AhrRtg" /> <DOI name="ChaVolMaxRtg" /> <DOI name="SocPro" />
           </LN>
           <LN lnClass="ZBAT" lnType="ZBAT1_Typ" inst="1" prefix="">
-            <DOI name="BatHi" /> <DOI name="BatLo" /> <DOI name="Beh" /> <DOI name="Health" /> <DOI name="VolChgRte" />
+            <DOI name="BatHi" /> <DOI name="BatLo" /> <DOI name="Beh" /> <DOI name="Health" /> <DOI name="Vol" /> <DOI name="Amp" /> <DOI name="VolChgRte" />
           </LN>
         </LDevice>
       </Server>
@@ -147,8 +147,17 @@
 
     <LNodeType id="TTMP1_Typ" lnClass="TTMP"><DO name="NamPlt" type="LPL_NamPlt"/><DO name="Beh" type="ENS_Beh"/><DO name="Health" type="ENS_Health"/><DO name="TmpSv" type="MV_Generic"/><DO name="TmpTgt" type="ASG_Generic"/></LNodeType>
     <LNodeType id="DBAT1_Typ" lnClass="DBAT"><DO name="EEName" type="DPL_Generic"/><DO name="ChaSt" type="ENS_Generic"/><DO name="DschSt" type="ENS_Generic"/><DO name="EEHealth" type="ENS_Health"/><DO name="Amp" type="MV_Generic"/><DO name="Watt" type="MV_Generic"/><DO name="AvlChaAhr" type="MV_Generic"/><DO name="AvlDschAhr" type="MV_Generic"/><DO name="BatTyp" type="ENS_Generic"/><DO name="ChaAmpMax" type="ASG_Generic"/><DO name="AhrRtg" type="ASG_Generic"/><DO name="ChaVolMaxRtg" type="ASG_Generic"/><DO name="SocPro" type="SPS_Generic"/></LNodeType>
-    <LNodeType id="ZBAT1_Typ" lnClass="ZBAT"><DO name="BatHi" type="SPS_Generic"/><DO name="BatLo" type="SPS_Generic"/><DO name="Beh" type="ENS_Beh"/><DO name="Health" type="ENS_Health"/><DO name="VolChgRte" type="MV_Generic"/></LNodeType>
-
+    
+    <LNodeType id="ZBAT1_Typ" lnClass="ZBAT">
+      <DO name="BatHi" type="SPS_Generic"/>
+      <DO name="BatLo" type="SPS_Generic"/>
+      <DO name="Beh" type="ENS_Beh"/>
+      <DO name="Health" type="ENS_Health"/>
+      <DO name="Vol" type="MV_Generic"/>
+      <DO name="Amp" type="MV_Generic"/>
+      <DO name="VolChgRte" type="MV_Generic"/>
+    </LNodeType>
+   
     <DOType id="ENC_Mod" cdc="ENC"><DA name="stVal" bType="Enum" type="Beh" fc="ST" dchg="true" /><DA name="q" bType="Quality" fc="ST" qchg="true" /><DA name="t" bType="Timestamp" fc="ST" /><DA name="ctlModel" type="CtlModels" bType="Enum" fc="CF" /></DOType>
     <DOType id="ENS_Beh" cdc="ENS"><DA name="stVal" bType="Enum" type="Beh" fc="ST" dchg="true" /><DA name="q" bType="Quality" fc="ST" qchg="true" /><DA name="t" bType="Timestamp" fc="ST" /></DOType>
     <DOType id="ENS_Health" cdc="ENS"><DA name="stVal" bType="Enum" type="HealthKind" fc="ST" dchg="true" /><DA name="q" bType="Quality" fc="ST" qchg="true" /><DA name="t" bType="Timestamp" fc="ST" /></DOType>
