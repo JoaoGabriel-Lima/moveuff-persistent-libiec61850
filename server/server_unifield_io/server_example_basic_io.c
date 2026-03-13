@@ -11,12 +11,19 @@
 #include <sys/socket.h>
 #include <arpa/inet.h>
 
-#define RELAY_MOT_PIN  3  // wPi 3 = Pino Físico (Motor) - 8
-#define RELAY_ALM_PIN  4  // wPi 4 = Pino Físico (Alarme) - 10
-#define RELAY_CEL_PIN  5  // wPi 5 = Pino Físico (Célula Hidro) - 11
-#define RELAY_XSWI_PIN  7 // wPi 7 = Pino Físico (Trava da Bateria) - 13
-#define RELAY_TNK_PIN  8  // wPi 8 = Pino Físico (Tanque) - 15
-#define RELAY_LANT_PIN 13 // wPi 13 = Pino Físico (Lanterna) - 22
+// ==============================================================
+// MAPEAMENTO DE PINOS CORRIGIDO (LIVRANDO UART0 E UART5)
+// ==============================================================
+#define RELAY_MOT_PIN  6  // MUDOU: wPi 6 = Pino Físico 12 (Motor)
+#define RELAY_ALM_PIN  9  // MUDOU: wPi 9 = Pino Físico 16 (Alarme)
+#define RELAY_XSWI_PIN 10 // MUDOU: wPi 10 = Pino Físico 18 (Trava da Bateria)
+
+// Mantidos como estavam:
+#define RELAY_CEL_PIN  21 // wPi 21 = Pino Físico 31 (Célula)
+#define RELAY_TNK_PIN  8  // wPi 8  = Pino Físico 15 (Tanque)
+#define RELAY_LANT_PIN 13 // wPi 13 = Pino Físico 22 (Lanterna)
+// ==============================================================
+
 
 #include "static_model.h"
 
@@ -182,92 +189,101 @@ static MmsDataAccessError writeAccessHandler(DataAttribute* dataAttribute, MmsVa
     return DATA_ACCESS_ERROR_OBJECT_VALUE_INVALID;
 }
 
-/* =================================================================
- * TRADUTOR NMEA E THREAD DO GPS PARA TLOC1
- * ================================================================= */
-
-// Função que converte as coordenadas cruas do GPS (Graus/Minutos) para Decimal (para o Elipse/Google Maps)
-float nmea_to_decimal(char* nmea_coord, char direction) {
-    if (strlen(nmea_coord) < 4) return 0.0;
-    
-    char* dot = strchr(nmea_coord, '.');
-    if (!dot) return 0.0;
-    
-    int deg_len = (dot - nmea_coord) - 2; 
+// ================================================================
+// GPS — GY-GPS6MV2
+// ================================================================
+static float nmea_to_decimal(const char* nmea_coord, char direction) {
+    if (!nmea_coord || strlen(nmea_coord) < 4) return 0.0f;
+    const char* dot = strchr(nmea_coord, '.');
+    if (!dot) return 0.0f;
+    int deg_len = (int)(dot - nmea_coord) - 2;
+    if (deg_len <= 0 || deg_len > 3) return 0.0f;
     char deg_str[4] = {0};
     strncpy(deg_str, nmea_coord, deg_len);
-    float degrees = atof(deg_str);
+    float degrees = (float)atoi(deg_str);
     float minutes = atof(nmea_coord + deg_len);
-    
-    float decimal = degrees + (minutes / 60.0);
-    if (direction == 'S' || direction == 'W') decimal = -decimal; // Sul e Oeste são negativos
-    
+    float decimal = degrees + (minutes / 60.0f);
+    if (direction == 'S' || direction == 'W') decimal = -decimal;
     return decimal;
 }
 
-// Thread que fica rodando em paralelo sem travar o Servidor
+static int parse_gprmc(char* sentence, float* lat_out, float* lon_out) {
+    char* asterisk = strrchr(sentence, '*');
+    if (asterisk) {
+        uint8_t checksum = 0;
+        for (char* p = sentence + 1; p < asterisk; p++) checksum ^= (uint8_t)(*p);
+        uint8_t received = (uint8_t)strtol(asterisk + 1, NULL, 16);
+        if (checksum != received) return 0;
+        *asterisk = '\0';
+    }
+    char* token = strtok(sentence, ",");
+    int field = 0;
+    char status = 'V';
+    char lat_str[20] = {0}, lon_str[20] = {0}, ns = 0, ew = 0;
+    while (token != NULL) {
+        switch (field) {
+            case 2: status = token[0];             break;
+            case 3: strncpy(lat_str, token, 19);   break;
+            case 4: ns = token[0];                 break;
+            case 5: strncpy(lon_str, token, 19);   break;
+            case 6: ew = token[0];                 break;
+        }
+        token = strtok(NULL, ",");
+        field++;
+    }
+    if (status != 'A') return 0;
+    *lat_out = nmea_to_decimal(lat_str, ns);
+    *lon_out = nmea_to_decimal(lon_str, ew);
+    return 1;
+}
+
 void* gps_thread(void* arg) {
-    int fd;
-    // ATENÇÃO: Mude para "/dev/ttyS1" ou outro se você ativou outra UART no orangepi-config
-    if ((fd = serialOpen("/dev/ttyS5", 9600)) < 0) {
-        LOG_PRINT("[AVISO] Falha ao abrir porta serial do GPS. GPS inativo.\n");
+    int fd = serialOpen("/dev/ttyS5", 9600);
+    if (fd < 0) {
+        LOG_PRINT("[GPS] Falha ao abrir /dev/ttyS5\n");
         return NULL;
     }
-
-    LOG_PRINT("[STATUS] GPS Conectado na Serial. Aguardando satelites...\n");
+    LOG_PRINT("[GPS] Serial aberta. Aguardando fix de satelites...\n");
     char buffer[256];
-    int pos = 0;
+    int pos = 0, fix_count = 0;
 
     while (running) {
-        while (serialDataAvail(fd)) {
-            char c = serialGetchar(fd);
+        while (serialDataAvail(fd) > 0) {
+            char c = (char)serialGetchar(fd);
             if (c == '\n' || c == '\r') {
                 if (pos > 0) {
                     buffer[pos] = '\0';
-                    
-                    // Lemos a linha que contem as Coordenadas (GPRMC)
-                    if (strncmp(buffer, "$GPRMC", 6) == 0) {
-                        char* token = strtok(buffer, ",");
-                        int field = 0;
-                        char status = 'V';
-                        char lat_str[20] = {0}, ns = 0, lon_str[20] = {0}, ew = 0;
-
-                        while (token != NULL) {
-                            if (field == 2) status = token[0]; // A = Conectado, V = Sem Sinal
-                            else if (field == 3) strcpy(lat_str, token);
-                            else if (field == 4) ns = token[0];
-                            else if (field == 5) strcpy(lon_str, token);
-                            else if (field == 6) ew = token[0];
-                            token = strtok(NULL, ",");
-                            field++;
-                        }
-
-                        // Só atualiza o IEC 61850 se o GPS estiver fixado num satélite (Status 'A')
-                        if (status == 'A') { 
-                            float latitude = nmea_to_decimal(lat_str, ns);
-                            float longitude = nmea_to_decimal(lon_str, ew);
-                            uint64_t timestamp = Hal_getTimeInMs();
-                            
-                            // =========================================================
-                            // Atualizando o nó TLOC1 em tempo real!
-                            // =========================================================
-                            IedServer_updateFloatAttributeValue(iedServer, IEDMODEL_B1EBK_TLOC1_GeoLoc_latitude, latitude);
-                            IedServer_updateFloatAttributeValue(iedServer, IEDMODEL_B1EBK_TLOC1_GeoLoc_longitude, longitude);
-                            IedServer_updateUTCTimeAttributeValue(iedServer, IEDMODEL_B1EBK_TLOC1_GeoLoc_t, timestamp);
-                            
-                            // Imprime a cada atualização para você ver no terminal
-                            LOG_PRINT(" 📡 [TLOC1] GPS Atualizado -> Lat: %.6f | Lon: %.6f\n", latitude, longitude);
+                    if (strncmp(buffer, "$GPRMC", 6) == 0 ||
+                        strncmp(buffer, "$GNRMC", 6) == 0) {
+                        float lat = 0.0f, lon = 0.0f;
+                        if (parse_gprmc(buffer, &lat, &lon)) {
+                            uint64_t ts = Hal_getTimeInMs();
+                            IedServer_lockDataModel(iedServer);
+                            IedServer_updateFloatAttributeValue(iedServer, IEDMODEL_B1EBK_TLOC1_GeoLoc_latitude, lat);
+                            IedServer_updateFloatAttributeValue(iedServer, IEDMODEL_B1EBK_TLOC1_GeoLoc_longitude, lon);
+                            IedServer_updateUTCTimeAttributeValue(iedServer, IEDMODEL_B1EBK_TLOC1_GeoLoc_t, ts);
+                            IedServer_updateBooleanAttributeValue(iedServer, IEDMODEL_B1EBK_TLOC1_NavFai_stVal, false);
+                            IedServer_updateBooleanAttributeValue(iedServer, IEDMODEL_B1EBK_TLOC1_SatAvl_stVal, true);
+                            IedServer_unlockDataModel(iedServer);
+                            LOG_PRINT("[TLOC1] #%04d | Lat: %+.6f | Lon: %+.6f\n", ++fix_count, lat, lon);
+                        } else {
+                            IedServer_lockDataModel(iedServer);
+                            IedServer_updateBooleanAttributeValue(iedServer, IEDMODEL_B1EBK_TLOC1_NavFai_stVal, true);
+                            IedServer_updateBooleanAttributeValue(iedServer, IEDMODEL_B1EBK_TLOC1_SatAvl_stVal, false);
+                            IedServer_unlockDataModel(iedServer);
                         }
                     }
                     pos = 0;
                 }
             } else {
+                if (c == '$') pos = 0;
                 if (pos < 255) buffer[pos++] = c;
             }
         }
-        Thread_sleep(500); // Dorme meio segundo para não fritar a CPU da Orange Pi
+        Thread_sleep(100);
     }
     serialClose(fd);
+    LOG_PRINT("[GPS] Thread encerrada.\n");
     return NULL;
 }
 
@@ -293,7 +309,7 @@ void* sensor_thread(void* arg) {
         serv_addr.sin_port = htons(2025);
 
         // 2. Definir o IP do Host (Troque pelo IP do seu PC simulador)
-        if (inet_pton(AF_INET, "192.168.2.120", &serv_addr.sin_addr) <= 0) {
+        if (inet_pton(AF_INET, "192.168.2.129", &serv_addr.sin_addr) <= 0) {
             LOG_PRINT("[ERRO] Endereço IP inválido. Verifique o código!\n");
             close(sock);
             Thread_sleep(5000);
@@ -308,14 +324,14 @@ void* sensor_thread(void* arg) {
             continue;
         }
 
-        LOG_PRINT("✅ [SOCKET] Conectado! Recebendo dados em tempo real...\n");
+        LOG_PRINT(" [SOCKET] Conectado! Recebendo dados em tempo real...\n");
 
         // 4. Loop de Leitura (Enquanto houver dados vindo do simulador)
         while (running) {
             int valread = read(sock, buffer, sizeof(buffer) - 1);
             
             if (valread <= 0) {
-                LOG_PRINT("⚠️ [SOCKET] Conexão perdida com o simulador. Reiniciando busca...\n");
+                LOG_PRINT(" [SOCKET] Conexão perdida com o simulador. Reiniciando busca...\n");
                 break; // Sai do loop de leitura para reconectar no loop principal 
             }
             
@@ -340,7 +356,7 @@ void* sensor_thread(void* arg) {
             IedServer_updateFloatAttributeValue(iedServer, IEDMODEL_B1STG_ZBAT1_Amp_mag_f, corrente);
             IedServer_updateFloatAttributeValue(iedServer, IEDMODEL_B1STG_DBAT1_SocPro_stVal, soc);
 
-            LOG_PRINT(" 🔋 [DATA] V: %.2fV | I: %.2fA | SOC: %.2f%%\n", tensao, corrente, soc);
+            LOG_PRINT(" [DATA] V: %.2fV | I: %.2fA | SoC: %.2f%%\n", tensao, corrente, soc);
             
             memset(buffer, 0, sizeof(buffer)); // Limpa para a próxima mensagem
         }
@@ -415,6 +431,38 @@ int main(int argc, char** argv) {
         exit(-1);
     }
 
+    // =========================================================================
+    // INÍCIO DOS VALORES FIXOS (MOCK) PARA O ELIPSE SCADA LER
+    // =========================================================================
+    
+    // Pega o tempo atual da placa para o Elipse saber que o dado é "fresco"
+    uint64_t currentTm = Hal_getTimeInMs();
+
+    // 1. Temperatura (STMP1) - Ex: 35.5 °C
+    IedServer_updateFloatAttributeValue(iedServer, &iedModel_B1HYD_STMP1_Tmp_mag_f, 35.5f);
+    IedServer_updateUTCTimeAttributeValue(iedServer, &iedModel_B1HYD_STMP1_Tmp_t, currentTm);
+
+    // 2. Pressão H2 Entrada (DSTK1) - Ex: 2.1 bar
+    IedServer_updateFloatAttributeValue(iedServer, &iedModel_B1HYD_DSTK1_InH2Pres_mag_f, 2.1f);
+    IedServer_updateUTCTimeAttributeValue(iedServer, &iedModel_B1HYD_DSTK1_InH2Pres_t, currentTm);
+
+    // 3. Tensão DC de Saída (DSTK1) - Ex: 48.0 V
+    IedServer_updateFloatAttributeValue(iedServer, &iedModel_B1HYD_DSTK1_OutDCV_mag_f, 48.0f);
+    IedServer_updateUTCTimeAttributeValue(iedServer, &iedModel_B1HYD_DSTK1_OutDCV_t, currentTm);
+
+    // 4. Corrente DC de Saída (DSTK1) - Ex: 12.5 A
+    IedServer_updateFloatAttributeValue(iedServer, &iedModel_B1HYD_DSTK1_OutDCA_mag_f, 12.5f);
+    IedServer_updateUTCTimeAttributeValue(iedServer, &iedModel_B1HYD_DSTK1_OutDCA_t, currentTm);
+
+    // 5. Nível do Tanque (KTNK1) - Ex: 85.0 % 
+    // Obs: O LevPct usa instMag em vez de mag dependendo do Dataset
+    IedServer_updateFloatAttributeValue(iedServer, &iedModel_B1HYD_KTNK1_LevPct_instMag_f, 30.0f);
+    IedServer_updateUTCTimeAttributeValue(iedServer, &iedModel_B1HYD_KTNK1_LevPct_t, currentTm);
+
+    // =========================================================================
+    // FIM DOS VALORES FIXOS
+    // =========================================================================
+
     LOG_PRINT("\n--- SERVIDOR IEC 61850 ---\n");
     LOG_PRINT("[STATUS] Hardware OK (Lanterna: P%d | Motor: P%d | Alarme: P%d | Celula: P%d | Tanque: P%d | Trava: P%d)\n", RELAY_LANT_PIN, RELAY_MOT_PIN, RELAY_ALM_PIN, RELAY_CEL_PIN, RELAY_TNK_PIN, RELAY_XSWI_PIN);
     LOG_PRINT("[STATUS] Rodando na porta %d.\n", tcpPort);
@@ -424,7 +472,7 @@ int main(int argc, char** argv) {
     signal(SIGINT, sigint_handler);
 
     // ==============================================================
-    // ADICIONE ESTAS DUAS LINHAS AQUI PARA LIGAR OS SENSORES!
+    // INICIANDO AS THREADS EM PARALELO!
     // ==============================================================
     Thread sensorThread = Thread_create((ThreadExecutionFunction)sensor_thread, NULL, true);
     Thread_start(sensorThread);
