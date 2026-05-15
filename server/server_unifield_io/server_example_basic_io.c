@@ -334,6 +334,9 @@ static int register_with_gateway(int mmsPort) {
         return -1;
     }
 
+    LOG_PRINT("[REGISTRO] Tentando POST /api/v1/bikes/register em %s:%d (uuid=%s, mms=%s:%d).\n",
+              gatewayHost, gatewayPort, bikeUuid, bikeHost, mmsPort);
+
     int sock = socket(AF_INET, SOCK_STREAM, 0);
     if (sock < 0) {
         LOG_PRINT("[REGISTRO] Falha ao criar socket HTTP.\n");
@@ -475,7 +478,7 @@ int main(int argc, char** argv) {
     if (!IedServer_isRunning(iedServer)) { IedServer_destroy(iedServer); exit(-1); }
     register_with_gateway(tcpPort);
 
-    LOG_PRINT("\n--- SERVIDOR MoveUFF ATIVO (Bancada Virtual Completa) ---\n");
+    LOG_PRINT("\n--- SERVIDOR MoveUFF ATIVO (Bancada Virtual Completa) (VTeste Joãos) ---\n");
     running = 1;
 
     Thread simThread = Thread_create((ThreadExecutionFunction)sensor_thread, NULL, true);
