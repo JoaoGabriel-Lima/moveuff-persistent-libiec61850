@@ -3,6 +3,7 @@
 #include <signal.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <stdint.h>
 #include <unistd.h>
 #include <fcntl.h> 
 #include <wiringSerial.h>
@@ -333,7 +334,10 @@ void* sensor_thread(void* arg) {
             IedServer_updateQuality(iedServer, IEDMODEL_B1STG_ZBAT1_Amp_q, goodQuality);
             IedServer_updateUTCTimeAttributeValue(iedServer, IEDMODEL_B1STG_ZBAT1_Amp_t, ts);
             
-            IedServer_updateFloatAttributeValue(iedServer, IEDMODEL_B1STG_DBAT1_SocPro_stVal, soc); 
+            IedServer_updateFloatAttributeValue(iedServer, IEDMODEL_B1STG_DBAT1_SocPro_instMag_f, soc);
+            IedServer_updateFloatAttributeValue(iedServer, IEDMODEL_B1STG_DBAT1_SocPro_mag_f, soc);
+            IedServer_updateQuality(iedServer, IEDMODEL_B1STG_DBAT1_SocPro_q, goodQuality);
+            IedServer_updateUTCTimeAttributeValue(iedServer, IEDMODEL_B1STG_DBAT1_SocPro_t, ts);
 
             // --- Hidrogênio (Ponteiros diretos com Qualidade) ---
             IedServer_updateFloatAttributeValue(iedServer, &iedModel_B1HYD_DSTK1_InH2Pres_mag_f, pressao);
@@ -358,6 +362,111 @@ void* sensor_thread(void* arg) {
         close(sock); 
     }
     return NULL;
+}
+
+static const char* getenv_or_default(const char* name, const char* defaultValue) {
+    const char* value = getenv(name);
+    if (value == NULL || value[0] == '\0') return defaultValue;
+    return value;
+}
+
+static int register_with_gateway(int mmsPort) {
+    const char* bikeUuid = getenv("MOVEUFF_BIKE_UUID");
+    const char* gatewayHost = getenv_or_default("MOVEUFF_GATEWAY_HOST", "127.0.0.1");
+    const char* gatewayPortText = getenv_or_default("MOVEUFF_GATEWAY_PORT", "8000");
+    const char* bikeHost = getenv_or_default("MOVEUFF_BIKE_HOST", "127.0.0.1");
+    const char* token = getenv_or_default("MOVEUFF_REGISTRATION_TOKEN", "moveuff-dev-token");
+    int gatewayPort = atoi(gatewayPortText);
+
+    if (bikeUuid == NULL || bikeUuid[0] == '\0') {
+        LOG_PRINT("[REGISTRO] MOVEUFF_BIKE_UUID nao definido. Registro automatico ignorado.\n");
+        return -1;
+    }
+
+    if (gatewayPort <= 0 || gatewayPort > 65535) {
+        LOG_PRINT("[REGISTRO] MOVEUFF_GATEWAY_PORT invalido: %s\n", gatewayPortText);
+        return -1;
+    }
+
+    int sock = socket(AF_INET, SOCK_STREAM, 0);
+    if (sock < 0) {
+        LOG_PRINT("[REGISTRO] Falha ao criar socket HTTP.\n");
+        return -1;
+    }
+
+    struct sockaddr_in gatewayAddr;
+    memset(&gatewayAddr, 0, sizeof(gatewayAddr));
+    gatewayAddr.sin_family = AF_INET;
+    gatewayAddr.sin_port = htons((uint16_t) gatewayPort);
+
+    if (inet_pton(AF_INET, gatewayHost, &gatewayAddr.sin_addr) <= 0) {
+        LOG_PRINT("[REGISTRO] MOVEUFF_GATEWAY_HOST precisa ser IPv4 valido: %s\n", gatewayHost);
+        close(sock);
+        return -1;
+    }
+
+    if (connect(sock, (struct sockaddr*) &gatewayAddr, sizeof(gatewayAddr)) < 0) {
+        LOG_PRINT("[REGISTRO] Gateway indisponivel em %s:%d. Registro sera tentado no proximo start.\n", gatewayHost, gatewayPort);
+        close(sock);
+        return -1;
+    }
+
+    char body[768];
+    int bodyLen = snprintf(body, sizeof(body),
+        "{\"uuid\":\"%s\",\"host\":\"%s\",\"port\":%d,\"metadata\":{\"source\":\"server_unifield_io\"}}",
+        bikeUuid, bikeHost, mmsPort);
+
+    if (bodyLen <= 0 || bodyLen >= (int) sizeof(body)) {
+        LOG_PRINT("[REGISTRO] Payload de registro excedeu o limite.\n");
+        close(sock);
+        return -1;
+    }
+
+    char request[1400];
+    int requestLen = snprintf(request, sizeof(request),
+        "POST /api/v1/bikes/register HTTP/1.1\r\n"
+        "Host: %s:%d\r\n"
+        "Authorization: Bearer %s\r\n"
+        "Content-Type: application/json\r\n"
+        "Content-Length: %d\r\n"
+        "Connection: close\r\n"
+        "\r\n"
+        "%s",
+        gatewayHost, gatewayPort, token, bodyLen, body);
+
+    if (requestLen <= 0 || requestLen >= (int) sizeof(request)) {
+        LOG_PRINT("[REGISTRO] Requisicao HTTP excedeu o limite.\n");
+        close(sock);
+        return -1;
+    }
+
+    int sent = 0;
+    while (sent < requestLen) {
+        int written = (int) write(sock, request + sent, (size_t) (requestLen - sent));
+        if (written <= 0) {
+            LOG_PRINT("[REGISTRO] Falha ao enviar registro HTTP.\n");
+            close(sock);
+            return -1;
+        }
+        sent += written;
+    }
+
+    char response[256] = {0};
+    int received = (int) read(sock, response, sizeof(response) - 1);
+    close(sock);
+
+    if (received <= 0) {
+        LOG_PRINT("[REGISTRO] Gateway nao respondeu ao registro.\n");
+        return -1;
+    }
+
+    if (strstr(response, " 200 ") != NULL) {
+        LOG_PRINT("[REGISTRO] Bike %s registrada no gateway %s:%d como %s:%d.\n", bikeUuid, gatewayHost, gatewayPort, bikeHost, mmsPort);
+        return 0;
+    }
+
+    LOG_PRINT("[REGISTRO] Gateway recusou registro. Resposta: %.80s\n", response);
+    return -1;
 }
 
 int main(int argc, char** argv) {
@@ -433,6 +542,8 @@ int main(int argc, char** argv) {
     LOG_PRINT("[STATUS] Hardware OK (Lanterna: P%d | Motor: P%d | Alarme: P%d | Celula: P%d | Tanque: P%d | Trava: P%d)\n", RELAY_LANT_PIN, RELAY_MOT_PIN, RELAY_ALM_PIN, RELAY_CEL_PIN, RELAY_TNK_PIN, RELAY_XSWI_PIN);
     LOG_PRINT("[STATUS] Rodando na porta %d.\n", tcpPort);
     LOG_PRINT("[STATUS] Aguardando conexao do Elipse...\n");
+
+    register_with_gateway(tcpPort);
 
     running = 1;
 
