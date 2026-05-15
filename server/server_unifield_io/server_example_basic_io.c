@@ -6,7 +6,6 @@
 #include <stdint.h>
 #include <unistd.h>
 #include <fcntl.h> 
-#include <wiringSerial.h>
 #include <string.h>
 #include <wiringPi.h>
 #include <sys/socket.h>
@@ -73,6 +72,7 @@ checkHandler(ControlAction action, void* parameter, MmsValue* ctlVal, bool test,
 
 static ControlHandlerResult controlHandlerForBinaryOutput(ControlAction action, void* parameter, MmsValue* value, bool test) {
     uint64_t timestamp = Hal_getTimeInMs();
+
     if (parameter == IEDMODEL_B1EBK_LANTXSWI1_Pos || parameter == IEDMODEL_B1EBK_MOTXSWI1_Pos || 
         parameter == IEDMODEL_B1EBK_ALMXSWI1_Pos || parameter == IEDMODEL_B1HYD_CELXSWI1_Pos ||
         parameter == IEDMODEL_B1HYD_TNKXSWI1_Pos || parameter == IEDMODEL_B1STG_XSWI1_Pos ||
@@ -88,14 +88,40 @@ static ControlHandlerResult controlHandlerForBinaryOutput(ControlAction action, 
             else if (MmsValue_getType(ctlVal) == MMS_INTEGER) state = (MmsValue_toInt32(ctlVal) > 0);
         }
 
-        if (parameter == IEDMODEL_B1EBK_LANTXSWI1_Pos) digitalWrite(RELAY_LANT_PIN, state ? HIGH : LOW);
-        else if (parameter == IEDMODEL_B1EBK_MOTXSWI1_Pos) digitalWrite(RELAY_MOT_PIN, state ? HIGH : LOW);
-        else if (parameter == IEDMODEL_B1STG_XSWI1_Pos) digitalWrite(RELAY_XSWI_PIN, state ? HIGH : LOW);
-        // Descomente e ajuste a constante se possuir o pino físico real da válvula
-        // else if (parameter == IEDMODEL_B1HYD_KVLV1_Pos) digitalWrite(RELAY_VLV_PIN, state ? HIGH : LOW);
-
-        IedServer_updateAttributeValue(iedServer, (DataAttribute*)parameter, value);
-        IedServer_updateUTCTimeAttributeValue(iedServer, (DataAttribute*)parameter + 2, timestamp); 
+        if (parameter == IEDMODEL_B1EBK_LANTXSWI1_Pos) {
+            digitalWrite(RELAY_LANT_PIN, state ? HIGH : LOW);
+            IedServer_updateAttributeValue(iedServer, IEDMODEL_B1EBK_LANTXSWI1_Pos_stVal, value);
+            IedServer_updateUTCTimeAttributeValue(iedServer, IEDMODEL_B1EBK_LANTXSWI1_Pos_t, timestamp);
+        }
+        else if (parameter == IEDMODEL_B1EBK_MOTXSWI1_Pos) {
+            digitalWrite(RELAY_MOT_PIN, state ? HIGH : LOW);
+            IedServer_updateAttributeValue(iedServer, IEDMODEL_B1EBK_MOTXSWI1_Pos_stVal, value);
+            IedServer_updateUTCTimeAttributeValue(iedServer, IEDMODEL_B1EBK_MOTXSWI1_Pos_t, timestamp);
+        }
+        else if (parameter == IEDMODEL_B1EBK_ALMXSWI1_Pos) {
+            digitalWrite(RELAY_ALM_PIN, state ? HIGH : LOW);
+            IedServer_updateAttributeValue(iedServer, IEDMODEL_B1EBK_ALMXSWI1_Pos_stVal, value);
+            IedServer_updateUTCTimeAttributeValue(iedServer, IEDMODEL_B1EBK_ALMXSWI1_Pos_t, timestamp);
+        }
+        else if (parameter == IEDMODEL_B1HYD_CELXSWI1_Pos) {
+            digitalWrite(RELAY_CEL_PIN, state ? HIGH : LOW);
+            IedServer_updateAttributeValue(iedServer, IEDMODEL_B1HYD_CELXSWI1_Pos_stVal, value);
+            IedServer_updateUTCTimeAttributeValue(iedServer, IEDMODEL_B1HYD_CELXSWI1_Pos_t, timestamp);
+        }
+        else if (parameter == IEDMODEL_B1HYD_TNKXSWI1_Pos) {
+            digitalWrite(RELAY_TNK_PIN, state ? HIGH : LOW);
+            IedServer_updateAttributeValue(iedServer, IEDMODEL_B1HYD_TNKXSWI1_Pos_stVal, value);
+            IedServer_updateUTCTimeAttributeValue(iedServer, IEDMODEL_B1HYD_TNKXSWI1_Pos_t, timestamp);
+        }
+        else if (parameter == IEDMODEL_B1STG_XSWI1_Pos) {
+            digitalWrite(RELAY_XSWI_PIN, state ? HIGH : LOW);
+            IedServer_updateAttributeValue(iedServer, IEDMODEL_B1STG_XSWI1_Pos_stVal, value);
+            IedServer_updateUTCTimeAttributeValue(iedServer, IEDMODEL_B1STG_XSWI1_Pos_t, timestamp);
+        }
+        else if (parameter == IEDMODEL_B1HYD_KVLV1_Pos) {
+            IedServer_updateAttributeValue(iedServer, IEDMODEL_B1HYD_KVLV1_Pos_stVal, value);
+            IedServer_updateUTCTimeAttributeValue(iedServer, IEDMODEL_B1HYD_KVLV1_Pos_t, timestamp);
+        }
 
         return CONTROL_RESULT_OK;
     }
@@ -104,10 +130,18 @@ static ControlHandlerResult controlHandlerForBinaryOutput(ControlAction action, 
 
 static MmsDataAccessError writeAccessHandler(DataAttribute* dataAttribute, MmsValue* value, ClientConnection connection, void* parameter) {
     ControlModel ctlModelVal = (ControlModel) MmsValue_toInt32(value);
+
     if ((ctlModelVal == CONTROL_MODEL_STATUS_ONLY) || (ctlModelVal == CONTROL_MODEL_DIRECT_NORMAL)) {
-        IedServer_updateCtlModel(iedServer, (DataObject*)dataAttribute->parent, ctlModelVal);
+        if (dataAttribute == IEDMODEL_B1EBK_LANTXSWI1_Pos_ctlModel) IedServer_updateCtlModel(iedServer, IEDMODEL_B1EBK_LANTXSWI1_Pos, ctlModelVal);
+        else if (dataAttribute == IEDMODEL_B1EBK_MOTXSWI1_Pos_ctlModel) IedServer_updateCtlModel(iedServer, IEDMODEL_B1EBK_MOTXSWI1_Pos, ctlModelVal);
+        else if (dataAttribute == IEDMODEL_B1EBK_ALMXSWI1_Pos_ctlModel) IedServer_updateCtlModel(iedServer, IEDMODEL_B1EBK_ALMXSWI1_Pos, ctlModelVal);
+        else if (dataAttribute == IEDMODEL_B1HYD_CELXSWI1_Pos_ctlModel) IedServer_updateCtlModel(iedServer, IEDMODEL_B1HYD_CELXSWI1_Pos, ctlModelVal);
+        else if (dataAttribute == IEDMODEL_B1HYD_TNKXSWI1_Pos_ctlModel) IedServer_updateCtlModel(iedServer, IEDMODEL_B1HYD_TNKXSWI1_Pos, ctlModelVal);
+        else if (dataAttribute == IEDMODEL_B1STG_XSWI1_Pos_ctlModel) IedServer_updateCtlModel(iedServer, IEDMODEL_B1STG_XSWI1_Pos, ctlModelVal);
+        else if (dataAttribute == IEDMODEL_B1HYD_KVLV1_Pos_ctlModel) IedServer_updateCtlModel(iedServer, IEDMODEL_B1HYD_KVLV1_Pos, ctlModelVal);
         return DATA_ACCESS_ERROR_SUCCESS;
     }
+
     return DATA_ACCESS_ERROR_OBJECT_VALUE_INVALID;
 }
 
@@ -229,7 +263,8 @@ void* sensor_thread(void* arg) {
         IedServer_updateFloatAttributeValue(iedServer, IEDMODEL_B1STG_DBAT1_AvlChaAhr_mag_f, ah_cha_mag);
         IedServer_updateFloatAttributeValue(iedServer, IEDMODEL_B1STG_DBAT1_AvlDschAhr_mag_f, ah_dis_mag);
         IedServer_updateInt32AttributeValue(iedServer, IEDMODEL_B1STG_DBAT1_ChaSt_stVal, cha_st);
-        IedServer_updateFloatAttributeValue(iedServer, IEDMODEL_B1STG_DBAT1_SocPro_stVal, soc);
+        IedServer_updateFloatAttributeValue(iedServer, IEDMODEL_B1STG_DBAT1_SocPro_instMag_f, soc);
+        IedServer_updateFloatAttributeValue(iedServer, IEDMODEL_B1STG_DBAT1_SocPro_mag_f, soc);
 
         // --- Atualizando STMP1 ---
         IedServer_updateFloatAttributeValue(iedServer, IEDMODEL_B1HYD_STMP1_Tmp_mag_f, t_h2_mag);
@@ -399,17 +434,46 @@ int main(int argc, char** argv) {
     // Configurando modelos de controle
     IedServer_updateCtlModel(iedServer, IEDMODEL_B1EBK_LANTXSWI1_Pos, CONTROL_MODEL_DIRECT_NORMAL);
     IedServer_updateCtlModel(iedServer, IEDMODEL_B1EBK_MOTXSWI1_Pos, CONTROL_MODEL_DIRECT_NORMAL);
+    IedServer_updateCtlModel(iedServer, IEDMODEL_B1EBK_ALMXSWI1_Pos, CONTROL_MODEL_DIRECT_NORMAL);
+    IedServer_updateCtlModel(iedServer, IEDMODEL_B1HYD_CELXSWI1_Pos, CONTROL_MODEL_DIRECT_NORMAL);
+    IedServer_updateCtlModel(iedServer, IEDMODEL_B1HYD_TNKXSWI1_Pos, CONTROL_MODEL_DIRECT_NORMAL);
     IedServer_updateCtlModel(iedServer, IEDMODEL_B1HYD_KVLV1_Pos, CONTROL_MODEL_DIRECT_NORMAL);
     IedServer_updateCtlModel(iedServer, IEDMODEL_B1STG_XSWI1_Pos, CONTROL_MODEL_DIRECT_NORMAL);
 
     // Registrando Handlers
     IedServer_setControlHandler(iedServer, IEDMODEL_B1EBK_LANTXSWI1_Pos, (ControlHandler) controlHandlerForBinaryOutput, IEDMODEL_B1EBK_LANTXSWI1_Pos);
+    IedServer_setPerformCheckHandler(iedServer, IEDMODEL_B1EBK_LANTXSWI1_Pos, checkHandler, IEDMODEL_B1EBK_LANTXSWI1_Pos);
+    IedServer_handleWriteAccess(iedServer, IEDMODEL_B1EBK_LANTXSWI1_Pos_ctlModel, writeAccessHandler, NULL);
+
     IedServer_setControlHandler(iedServer, IEDMODEL_B1EBK_MOTXSWI1_Pos, (ControlHandler) controlHandlerForBinaryOutput, IEDMODEL_B1EBK_MOTXSWI1_Pos);
+    IedServer_setPerformCheckHandler(iedServer, IEDMODEL_B1EBK_MOTXSWI1_Pos, checkHandler, IEDMODEL_B1EBK_MOTXSWI1_Pos);
+    IedServer_handleWriteAccess(iedServer, IEDMODEL_B1EBK_MOTXSWI1_Pos_ctlModel, writeAccessHandler, NULL);
+
+    IedServer_setControlHandler(iedServer, IEDMODEL_B1EBK_ALMXSWI1_Pos, (ControlHandler) controlHandlerForBinaryOutput, IEDMODEL_B1EBK_ALMXSWI1_Pos);
+    IedServer_setPerformCheckHandler(iedServer, IEDMODEL_B1EBK_ALMXSWI1_Pos, checkHandler, IEDMODEL_B1EBK_ALMXSWI1_Pos);
+    IedServer_handleWriteAccess(iedServer, IEDMODEL_B1EBK_ALMXSWI1_Pos_ctlModel, writeAccessHandler, NULL);
+
+    IedServer_setControlHandler(iedServer, IEDMODEL_B1HYD_CELXSWI1_Pos, (ControlHandler) controlHandlerForBinaryOutput, IEDMODEL_B1HYD_CELXSWI1_Pos);
+    IedServer_setPerformCheckHandler(iedServer, IEDMODEL_B1HYD_CELXSWI1_Pos, checkHandler, IEDMODEL_B1HYD_CELXSWI1_Pos);
+    IedServer_handleWriteAccess(iedServer, IEDMODEL_B1HYD_CELXSWI1_Pos_ctlModel, writeAccessHandler, NULL);
+
+    IedServer_setControlHandler(iedServer, IEDMODEL_B1HYD_TNKXSWI1_Pos, (ControlHandler) controlHandlerForBinaryOutput, IEDMODEL_B1HYD_TNKXSWI1_Pos);
+    IedServer_setPerformCheckHandler(iedServer, IEDMODEL_B1HYD_TNKXSWI1_Pos, checkHandler, IEDMODEL_B1HYD_TNKXSWI1_Pos);
+    IedServer_handleWriteAccess(iedServer, IEDMODEL_B1HYD_TNKXSWI1_Pos_ctlModel, writeAccessHandler, NULL);
+
     IedServer_setControlHandler(iedServer, IEDMODEL_B1HYD_KVLV1_Pos, (ControlHandler) controlHandlerForBinaryOutput, IEDMODEL_B1HYD_KVLV1_Pos);
+    IedServer_setPerformCheckHandler(iedServer, IEDMODEL_B1HYD_KVLV1_Pos, checkHandler, IEDMODEL_B1HYD_KVLV1_Pos);
+    IedServer_handleWriteAccess(iedServer, IEDMODEL_B1HYD_KVLV1_Pos_ctlModel, writeAccessHandler, NULL);
+
     IedServer_setControlHandler(iedServer, IEDMODEL_B1STG_XSWI1_Pos, (ControlHandler) controlHandlerForBinaryOutput, IEDMODEL_B1STG_XSWI1_Pos);
+    IedServer_setPerformCheckHandler(iedServer, IEDMODEL_B1STG_XSWI1_Pos, checkHandler, IEDMODEL_B1STG_XSWI1_Pos);
+    IedServer_handleWriteAccess(iedServer, IEDMODEL_B1STG_XSWI1_Pos_ctlModel, writeAccessHandler, NULL);
+
+    IedServer_setConnectionIndicationHandler(iedServer, (IedConnectionIndicationHandler) connectionHandler, NULL);
 
     IedServer_start(iedServer, tcpPort);
     if (!IedServer_isRunning(iedServer)) { IedServer_destroy(iedServer); exit(-1); }
+    register_with_gateway(tcpPort);
 
     LOG_PRINT("\n--- SERVIDOR MoveUFF ATIVO (Bancada Virtual Completa) ---\n");
     running = 1;
