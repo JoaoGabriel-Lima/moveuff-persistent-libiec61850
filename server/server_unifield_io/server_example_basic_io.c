@@ -320,4 +320,4 @@ int main(int argc, char** argv) {
     IedServer_stop(iedServer);
     IedServer_destroy(iedServer);
     return 0;
-}
+}// Forçando commit da bancada estável MoveUFF
