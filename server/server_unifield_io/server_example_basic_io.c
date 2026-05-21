@@ -12,13 +12,14 @@
 #include <arpa/inet.h>
 #include <time.h>
 
-#define RELAY_MOT_PIN  24  // wPi 6 = Pino Físico 12 (Motor)
-#define RELAY_ALM_PIN  9   // wPi 9 = Pino Físico 16 (Alarme)
-#define RELAY_XSWI_PIN 10  // wPi 10 = Pino Físico 18 (Trava da Bateria)
+#define RELAY_MOT_PIN  7   // wPi 7 = Pino Físico 13 (Motor)
+#define RELAY_ALM_PIN  9   // wPi  = Pino Físico (Alarme)
+#define RELAY_XSWI_PIN 10  // wPi  = Pino Físico (Trava da Bateria)
 
-#define RELAY_CEL_PIN  21  // wPi 21 = Pino Físico 31 (Célula)
-#define RELAY_TNK_PIN  8   // wPi 8  = Pino Físico 15 (Tanque)
-#define RELAY_LANT_PIN 23  // wPi 13 = Pino Físico 22 (Lanterna)
+#define RELAY_CEL_PIN  21  // wPi  = Pino Físico (Célula)
+#define RELAY_TNK_PIN  8   // wPi   = Pino Físico (Tanque)
+#define RELAY_LANT_PIN 0   // wPi  = Pino Físico (Lanterna)
+#define RELAY_VLV_PIN 6    // wPi 4 = Pino Físico 10 (Válvula)
 
 #include "static_model.h"
 
@@ -35,10 +36,12 @@ void sinalizar_partida() {
         digitalWrite(RELAY_LANT_PIN, HIGH); digitalWrite(RELAY_MOT_PIN, HIGH);
         digitalWrite(RELAY_ALM_PIN, HIGH); digitalWrite(RELAY_CEL_PIN, HIGH);
         digitalWrite(RELAY_TNK_PIN, HIGH); digitalWrite(RELAY_XSWI_PIN, HIGH);
+        digitalWrite(RELAY_VLV_PIN, HIGH);
         Thread_sleep(100);          
         digitalWrite(RELAY_LANT_PIN, LOW); digitalWrite(RELAY_MOT_PIN, LOW);
         digitalWrite(RELAY_ALM_PIN, LOW); digitalWrite(RELAY_CEL_PIN, LOW);
         digitalWrite(RELAY_TNK_PIN, LOW); digitalWrite(RELAY_XSWI_PIN, LOW);
+        digitalWrite(RELAY_VLV_PIN, LOW);
         Thread_sleep(100);
     }
 }
@@ -91,7 +94,7 @@ static ControlHandlerResult controlHandlerForBinaryOutput(ControlAction action, 
         else if (parameter == IEDMODEL_B1EBK_MOTXSWI1_Pos) digitalWrite(RELAY_MOT_PIN, state ? HIGH : LOW);
         else if (parameter == IEDMODEL_B1STG_XSWI1_Pos) digitalWrite(RELAY_XSWI_PIN, state ? HIGH : LOW);
         // Descomente e ajuste a constante se possuir o pino físico real da válvula
-        // else if (parameter == IEDMODEL_B1HYD_KVLV1_Pos) digitalWrite(RELAY_VLV_PIN, state ? HIGH : LOW);
+        else if (parameter == IEDMODEL_B1HYD_KVLV1_Pos) digitalWrite(RELAY_VLV_PIN, state ? HIGH : LOW);
 
         IedServer_updateAttributeValue(iedServer, (DataAttribute*)parameter, value);
         IedServer_updateUTCTimeAttributeValue(iedServer, (DataAttribute*)parameter + 2, timestamp); 
@@ -279,6 +282,7 @@ int main(int argc, char** argv) {
     pinMode(RELAY_LANT_PIN, OUTPUT); pinMode(RELAY_MOT_PIN, OUTPUT); 
     pinMode(RELAY_ALM_PIN, OUTPUT); pinMode(RELAY_CEL_PIN, OUTPUT); 
     pinMode(RELAY_TNK_PIN, OUTPUT); pinMode(RELAY_XSWI_PIN, OUTPUT); 
+    pinMode(RELAY_VLV_PIN, OUTPUT);
 
     int dev_null = open("/dev/null", O_WRONLY);
     if (dev_null != -1) dup2(dev_null, STDOUT_FILENO); 
@@ -320,4 +324,4 @@ int main(int argc, char** argv) {
     IedServer_stop(iedServer);
     IedServer_destroy(iedServer);
     return 0;
-}// Forçando commit da bancada estável MoveUFF
+}
