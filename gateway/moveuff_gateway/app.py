@@ -5,6 +5,7 @@ from typing import Annotated
 from uuid import UUID
 
 from fastapi import Depends, FastAPI, Header, HTTPException, Query
+from fastapi.middleware.cors import CORSMiddleware
 
 from .config import Settings
 from .database import GatewayDatabase
@@ -36,6 +37,13 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         version="0.1.0",
         lifespan=lifespan,
         openapi_url="/docs/json",
+    )
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=list(active_settings.cors_origins),
+        allow_credentials=True,
+        allow_methods=["*"],
+        allow_headers=["*"],
     )
     app.state.database = database
     app.state.settings = active_settings

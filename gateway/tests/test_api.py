@@ -116,6 +116,24 @@ def test_openapi_json_is_exposed_for_frontend_integration(tmp_path: Path) -> Non
     assert "DbposCommandRequest" in body["components"]["schemas"]
 
 
+def test_cors_preflight_allows_frontend_origin(tmp_path: Path) -> None:
+    client = make_client(tmp_path)
+
+    response = client.options(
+        "/api/v1/bikes/register",
+        headers={
+            "Origin": "http://localhost:3000",
+            "Access-Control-Request-Method": "POST",
+            "Access-Control-Request-Headers": "authorization,content-type",
+        },
+    )
+
+    assert response.status_code == 200
+    assert response.headers["access-control-allow-origin"] == "http://localhost:3000"
+    assert "POST" in response.headers["access-control-allow-methods"]
+    assert "authorization" in response.headers["access-control-allow-headers"].lower()
+
+
 def test_dbpos_command_requires_token(tmp_path: Path) -> None:
     client = make_client(tmp_path)
     register(client)
