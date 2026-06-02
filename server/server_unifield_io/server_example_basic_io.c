@@ -12,6 +12,13 @@
 #include <arpa/inet.h>
 #include <time.h>
 
+#define GATEWAY_RECONNECT_SECONDS 10
+#define DEFAULT_GATEWAY_CONFIG "moveuff_gateway.conf"
+#define DEFAULT_GATEWAY_HOST "127.0.0.1"
+#define DEFAULT_GATEWAY_PORT 8000
+#define DEFAULT_BIKE_HOST "127.0.0.1"
+#define DEFAULT_REGISTRATION_TOKEN "moveuff-dev-token"
+
 #define RELAY_MOT_PIN  24  // wPi 6 = Pino Físico 12 (Motor)
 #define RELAY_ALM_PIN  9   // wPi 9 = Pino Físico 16 (Alarme)
 #define RELAY_XSWI_PIN 10  // wPi 10 = Pino Físico 18 (Trava da Bateria)
@@ -25,6 +32,20 @@
 static int running = 0;
 static IedServer iedServer = NULL;
 static int activeConnections = 0;
+
+typedef struct {
+    char bike_uuid[40];
+    char bike_host[256];
+    char gateway_host[256];
+    int gateway_port;
+    char registration_token[256];
+    char bike_label[128];
+} GatewayRegistrationConfig;
+
+typedef struct {
+    GatewayRegistrationConfig config;
+    int mms_port;
+} GatewayRegistrationTask;
 
 void sigint_handler(int signalId) { running = 0; }
 
@@ -310,32 +331,141 @@ void* sensor_thread(void* arg) {
     return NULL;
 }
 
-static const char* getenv_or_default(const char* name, const char* defaultValue) {
-    const char* value = getenv(name);
-    if (value == NULL || value[0] == '\0') return defaultValue;
+static void copy_string(char* destination, size_t size, const char* value) {
+    if (size == 0) return;
+    if (value == NULL) value = "";
+
+    strncpy(destination, value, size - 1);
+    destination[size - 1] = '\0';
+}
+
+static char* trim_whitespace(char* value) {
+    while (*value == ' ' || *value == '\t' || *value == '\r' || *value == '\n') value++;
+
+    char* end = value + strlen(value);
+    while (end > value && (end[-1] == ' ' || end[-1] == '\t' || end[-1] == '\r' || end[-1] == '\n')) {
+        end--;
+        *end = '\0';
+    }
+
     return value;
 }
 
-static int register_with_gateway(int mmsPort) {
-    const char* bikeUuid = getenv("MOVEUFF_BIKE_UUID");
-    const char* gatewayHost = getenv_or_default("MOVEUFF_GATEWAY_HOST", "127.0.0.1");
-    const char* gatewayPortText = getenv_or_default("MOVEUFF_GATEWAY_PORT", "8000");
-    const char* bikeHost = getenv_or_default("MOVEUFF_BIKE_HOST", "127.0.0.1");
-    const char* token = getenv_or_default("MOVEUFF_REGISTRATION_TOKEN", "moveuff-dev-token");
-    int gatewayPort = atoi(gatewayPortText);
+static void init_gateway_config(GatewayRegistrationConfig* config) {
+    memset(config, 0, sizeof(*config));
+    copy_string(config->bike_host, sizeof(config->bike_host), DEFAULT_BIKE_HOST);
+    copy_string(config->gateway_host, sizeof(config->gateway_host), DEFAULT_GATEWAY_HOST);
+    config->gateway_port = DEFAULT_GATEWAY_PORT;
+    copy_string(config->registration_token, sizeof(config->registration_token), DEFAULT_REGISTRATION_TOKEN);
+}
 
-    if (bikeUuid == NULL || bikeUuid[0] == '\0') {
-        LOG_PRINT("[REGISTRO] MOVEUFF_BIKE_UUID nao definido. Registro automatico ignorado.\n");
+static void apply_gateway_config_value(GatewayRegistrationConfig* config, const char* key, const char* value) {
+    if (strcmp(key, "BIKE_UUID") == 0) copy_string(config->bike_uuid, sizeof(config->bike_uuid), value);
+    else if (strcmp(key, "BIKE_HOST") == 0) copy_string(config->bike_host, sizeof(config->bike_host), value);
+    else if (strcmp(key, "GATEWAY_HOST") == 0) copy_string(config->gateway_host, sizeof(config->gateway_host), value);
+    else if (strcmp(key, "GATEWAY_PORT") == 0) config->gateway_port = atoi(value);
+    else if (strcmp(key, "REGISTRATION_TOKEN") == 0) copy_string(config->registration_token, sizeof(config->registration_token), value);
+    else if (strcmp(key, "BIKE_LABEL") == 0) copy_string(config->bike_label, sizeof(config->bike_label), value);
+}
+
+static void load_gateway_config_file(GatewayRegistrationConfig* config, const char* path) {
+    FILE* file = fopen(path, "r");
+    if (file == NULL) {
+        LOG_PRINT("[REGISTRO] Arquivo de configuracao %s nao encontrado; usando defaults/env.\n", path);
+        return;
+    }
+
+    char line[512];
+    while (fgets(line, sizeof(line), file) != NULL) {
+        char* parsed = trim_whitespace(line);
+
+        if (parsed[0] == '\0' || parsed[0] == '#') continue;
+
+        char* separator = strchr(parsed, '=');
+        if (separator == NULL) continue;
+
+        *separator = '\0';
+        char* key = trim_whitespace(parsed);
+        char* value = trim_whitespace(separator + 1);
+        apply_gateway_config_value(config, key, value);
+    }
+
+    fclose(file);
+}
+
+static void apply_env_override_string(char* destination, size_t size, const char* env_name) {
+    const char* value = getenv(env_name);
+    if (value != NULL && value[0] != '\0') copy_string(destination, size, value);
+}
+
+static void apply_gateway_env_overrides(GatewayRegistrationConfig* config) {
+    apply_env_override_string(config->bike_uuid, sizeof(config->bike_uuid), "MOVEUFF_BIKE_UUID");
+    apply_env_override_string(config->bike_host, sizeof(config->bike_host), "MOVEUFF_BIKE_HOST");
+    apply_env_override_string(config->gateway_host, sizeof(config->gateway_host), "MOVEUFF_GATEWAY_HOST");
+    apply_env_override_string(config->registration_token, sizeof(config->registration_token), "MOVEUFF_REGISTRATION_TOKEN");
+    apply_env_override_string(config->bike_label, sizeof(config->bike_label), "MOVEUFF_BIKE_LABEL");
+
+    const char* gateway_port = getenv("MOVEUFF_GATEWAY_PORT");
+    if (gateway_port != NULL && gateway_port[0] != '\0') config->gateway_port = atoi(gateway_port);
+}
+
+static GatewayRegistrationConfig load_gateway_config(const char* path) {
+    GatewayRegistrationConfig config;
+    init_gateway_config(&config);
+    load_gateway_config_file(&config, path);
+    apply_gateway_env_overrides(&config);
+    return config;
+}
+
+static void json_escape_string(const char* input, char* output, size_t size) {
+    size_t written = 0;
+
+    if (size == 0) return;
+
+    for (size_t i = 0; input[i] != '\0' && written + 1 < size; i++) {
+        char c = input[i];
+
+        if (c == '"' || c == '\\') {
+            if (written + 2 >= size) break;
+            output[written++] = '\\';
+            output[written++] = c;
+        }
+        else if (c == '\n') {
+            if (written + 2 >= size) break;
+            output[written++] = '\\';
+            output[written++] = 'n';
+        }
+        else if (c == '\r') {
+            if (written + 2 >= size) break;
+            output[written++] = '\\';
+            output[written++] = 'r';
+        }
+        else if (c == '\t') {
+            if (written + 2 >= size) break;
+            output[written++] = '\\';
+            output[written++] = 't';
+        }
+        else {
+            output[written++] = c;
+        }
+    }
+
+    output[written] = '\0';
+}
+
+static int register_with_gateway(const GatewayRegistrationConfig* config, int mmsPort) {
+    if (config->bike_uuid[0] == '\0') {
+        LOG_PRINT("[REGISTRO] BIKE_UUID nao definido. Configure %s ou MOVEUFF_BIKE_UUID.\n", DEFAULT_GATEWAY_CONFIG);
         return -1;
     }
 
-    if (gatewayPort <= 0 || gatewayPort > 65535) {
-        LOG_PRINT("[REGISTRO] MOVEUFF_GATEWAY_PORT invalido: %s\n", gatewayPortText);
+    if (config->gateway_port <= 0 || config->gateway_port > 65535) {
+        LOG_PRINT("[REGISTRO] GATEWAY_PORT invalido: %d\n", config->gateway_port);
         return -1;
     }
 
     LOG_PRINT("[REGISTRO] Tentando POST /api/v1/bikes/register em %s:%d (uuid=%s, mms=%s:%d).\n",
-              gatewayHost, gatewayPort, bikeUuid, bikeHost, mmsPort);
+              config->gateway_host, config->gateway_port, config->bike_uuid, config->bike_host, mmsPort);
 
     int sock = socket(AF_INET, SOCK_STREAM, 0);
     if (sock < 0) {
@@ -346,24 +476,36 @@ static int register_with_gateway(int mmsPort) {
     struct sockaddr_in gatewayAddr;
     memset(&gatewayAddr, 0, sizeof(gatewayAddr));
     gatewayAddr.sin_family = AF_INET;
-    gatewayAddr.sin_port = htons((uint16_t) gatewayPort);
+    gatewayAddr.sin_port = htons((uint16_t) config->gateway_port);
 
-    if (inet_pton(AF_INET, gatewayHost, &gatewayAddr.sin_addr) <= 0) {
-        LOG_PRINT("[REGISTRO] MOVEUFF_GATEWAY_HOST precisa ser IPv4 valido: %s\n", gatewayHost);
+    if (inet_pton(AF_INET, config->gateway_host, &gatewayAddr.sin_addr) <= 0) {
+        LOG_PRINT("[REGISTRO] GATEWAY_HOST precisa ser IPv4 valido: %s\n", config->gateway_host);
         close(sock);
         return -1;
     }
 
     if (connect(sock, (struct sockaddr*) &gatewayAddr, sizeof(gatewayAddr)) < 0) {
-        LOG_PRINT("[REGISTRO] Gateway indisponivel em %s:%d. Registro sera tentado no proximo start.\n", gatewayHost, gatewayPort);
+        LOG_PRINT("[REGISTRO] Gateway indisponivel em %s:%d. Nova tentativa em %ds.\n",
+                  config->gateway_host, config->gateway_port, GATEWAY_RECONNECT_SECONDS);
         close(sock);
         return -1;
     }
 
+    char escaped_label[256] = {0};
+    json_escape_string(config->bike_label, escaped_label, sizeof(escaped_label));
+
     char body[768];
-    int bodyLen = snprintf(body, sizeof(body),
-        "{\"uuid\":\"%s\",\"host\":\"%s\",\"port\":%d,\"metadata\":{\"source\":\"server_unifield_io\"}}",
-        bikeUuid, bikeHost, mmsPort);
+    int bodyLen;
+    if (config->bike_label[0] != '\0') {
+        bodyLen = snprintf(body, sizeof(body),
+            "{\"uuid\":\"%s\",\"host\":\"%s\",\"port\":%d,\"metadata\":{\"source\":\"server_unifield_io\",\"label\":\"%s\"}}",
+            config->bike_uuid, config->bike_host, mmsPort, escaped_label);
+    }
+    else {
+        bodyLen = snprintf(body, sizeof(body),
+            "{\"uuid\":\"%s\",\"host\":\"%s\",\"port\":%d,\"metadata\":{\"source\":\"server_unifield_io\"}}",
+            config->bike_uuid, config->bike_host, mmsPort);
+    }
 
     if (bodyLen <= 0 || bodyLen >= (int) sizeof(body)) {
         LOG_PRINT("[REGISTRO] Payload de registro excedeu o limite.\n");
@@ -381,7 +523,7 @@ static int register_with_gateway(int mmsPort) {
         "Connection: close\r\n"
         "\r\n"
         "%s",
-        gatewayHost, gatewayPort, token, bodyLen, body);
+        config->gateway_host, config->gateway_port, config->registration_token, bodyLen, body);
 
     if (requestLen <= 0 || requestLen >= (int) sizeof(request)) {
         LOG_PRINT("[REGISTRO] Requisicao HTTP excedeu o limite.\n");
@@ -410,7 +552,8 @@ static int register_with_gateway(int mmsPort) {
     }
 
     if (strstr(response, " 200 ") != NULL) {
-        LOG_PRINT("[REGISTRO] Bike %s registrada no gateway %s:%d como %s:%d.\n", bikeUuid, gatewayHost, gatewayPort, bikeHost, mmsPort);
+        LOG_PRINT("[REGISTRO] Bike %s registrada no gateway %s:%d como %s:%d.\n",
+                  config->bike_uuid, config->gateway_host, config->gateway_port, config->bike_host, mmsPort);
         return 0;
     }
 
@@ -418,7 +561,22 @@ static int register_with_gateway(int mmsPort) {
     return -1;
 }
 
+static void* gateway_registration_thread(void* arg) {
+    GatewayRegistrationTask* task = (GatewayRegistrationTask*) arg;
+
+    while (running) {
+        if (register_with_gateway(&task->config, task->mms_port) == 0) return NULL;
+
+        for (int i = 0; i < GATEWAY_RECONNECT_SECONDS && running; i++) Thread_sleep(1000);
+    }
+
+    return NULL;
+}
+
 int main(int argc, char** argv) {
+    signal(SIGINT, sigint_handler);
+    signal(SIGTERM, sigint_handler);
+
     if (wiringPiSetup() == -1) exit(1);
     pinMode(RELAY_LANT_PIN, OUTPUT); pinMode(RELAY_MOT_PIN, OUTPUT); 
     pinMode(RELAY_ALM_PIN, OUTPUT); pinMode(RELAY_CEL_PIN, OUTPUT); 
@@ -430,6 +588,10 @@ int main(int argc, char** argv) {
     sinalizar_partida();
     iedServer = IedServer_create(&iedModel);
     int tcpPort = (argc > 1) ? atoi(argv[1]) : 102;
+    const char* gatewayConfigPath = (argc > 2) ? argv[2] : DEFAULT_GATEWAY_CONFIG;
+    GatewayRegistrationTask registrationTask;
+    registrationTask.config = load_gateway_config(gatewayConfigPath);
+    registrationTask.mms_port = tcpPort;
 
     // LPHD1 Namespace Configuration
     IedServer_updateVisibleStringAttributeValue(iedServer, IEDMODEL_B1CTR_LPHD1_NamPlt_lnNs, "IEC 61850-7-4:2007");
@@ -476,10 +638,12 @@ int main(int argc, char** argv) {
 
     IedServer_start(iedServer, tcpPort);
     if (!IedServer_isRunning(iedServer)) { IedServer_destroy(iedServer); exit(-1); }
-    register_with_gateway(tcpPort);
 
     LOG_PRINT("\n--- SERVIDOR MoveUFF ATIVO (Bancada Virtual Completa) (VTeste Joãos) ---\n");
     running = 1;
+
+    Thread registrationThread = Thread_create((ThreadExecutionFunction)gateway_registration_thread, &registrationTask, true);
+    Thread_start(registrationThread);
 
     Thread simThread = Thread_create((ThreadExecutionFunction)sensor_thread, NULL, true);
     Thread_start(simThread);

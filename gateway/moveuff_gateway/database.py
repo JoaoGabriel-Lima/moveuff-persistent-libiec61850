@@ -62,6 +62,23 @@ class GatewayDatabase:
 
                 CREATE INDEX IF NOT EXISTS idx_bike_reports_bike_id
                     ON bike_reports (bike_uuid, id DESC);
+
+                CREATE TABLE IF NOT EXISTS bike_commands (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    bike_uuid TEXT NOT NULL REFERENCES bikes(uuid) ON DELETE CASCADE,
+                    command TEXT NOT NULL,
+                    target TEXT NOT NULL,
+                    object_reference TEXT NOT NULL,
+                    value INTEGER NOT NULL,
+                    status TEXT NOT NULL DEFAULT 'pending',
+                    error TEXT,
+                    created_at TEXT NOT NULL,
+                    updated_at TEXT NOT NULL,
+                    executed_at TEXT
+                );
+
+                CREATE INDEX IF NOT EXISTS idx_bike_commands_bike_status
+                    ON bike_commands (bike_uuid, status, id);
                 """
             )
 
@@ -174,6 +191,37 @@ class GatewayDatabase:
                 for row in rows
             ]
 
+    def create_command(
+        self,
+        bike_uuid: str,
+        command: str,
+        target: str,
+        object_reference: str,
+        value: int,
+    ) -> dict[str, Any]:
+        now = utc_now()
+        with self.connect() as con:
+            cursor = con.execute(
+                """
+                INSERT INTO bike_commands (
+                    bike_uuid, command, target, object_reference, value,
+                    status, created_at, updated_at
+                )
+                VALUES (?, ?, ?, ?, ?, 'pending', ?, ?)
+                """,
+                (bike_uuid, command, target, object_reference, value, now, now),
+            )
+            row = con.execute(
+                "SELECT * FROM bike_commands WHERE id = ?",
+                (int(cursor.lastrowid),),
+            ).fetchone()
+            return self._command_from_row(row)
+
+    def get_command(self, command_id: int) -> dict[str, Any] | None:
+        with self.connect() as con:
+            row = con.execute("SELECT * FROM bike_commands WHERE id = ?", (command_id,)).fetchone()
+            return self._command_from_row(row) if row else None
+
     @staticmethod
     def _bike_from_row(row: sqlite3.Row) -> dict[str, Any]:
         return {
@@ -187,3 +235,18 @@ class GatewayDatabase:
             "last_seen_at": row["last_seen_at"],
         }
 
+    @staticmethod
+    def _command_from_row(row: sqlite3.Row) -> dict[str, Any]:
+        return {
+            "id": row["id"],
+            "bike_uuid": row["bike_uuid"],
+            "command": row["command"],
+            "target": row["target"],
+            "object_reference": row["object_reference"],
+            "value": row["value"],
+            "status": row["status"],
+            "error": row["error"],
+            "created_at": row["created_at"],
+            "updated_at": row["updated_at"],
+            "executed_at": row["executed_at"],
+        }

@@ -96,3 +96,70 @@ def test_report_retention(tmp_path: Path) -> None:
     reports_response = client.get(f"/api/v1/bikes/{BIKE_UUID}/reports?limit=10")
     assert reports_response.status_code == 200
     assert [row["report"]["seq"] for row in reports_response.json()] == [4, 3, 2]
+
+
+def test_openapi_json_is_exposed_for_frontend_integration(tmp_path: Path) -> None:
+    client = make_client(tmp_path)
+
+    response = client.get("/docs/json")
+
+    assert response.status_code == 200
+    body = response.json()
+    assert body["openapi"].startswith("3.")
+    assert "/api/v1/bikes/register" in body["paths"]
+    assert "/api/v1/bikes" in body["paths"]
+    assert "/api/v1/bikes/{bike_uuid}" in body["paths"]
+    assert "/api/v1/bikes/{bike_uuid}/reports" in body["paths"]
+    assert "/api/v1/bikes/{bike_uuid}/commands/dbpos" in body["paths"]
+    assert "BikeRegisterRequest" in body["components"]["schemas"]
+    assert "BikeDetailResponse" in body["components"]["schemas"]
+    assert "DbposCommandRequest" in body["components"]["schemas"]
+
+
+def test_dbpos_command_requires_token(tmp_path: Path) -> None:
+    client = make_client(tmp_path)
+    register(client)
+
+    response = client.post(
+        f"/api/v1/bikes/{BIKE_UUID}/commands/dbpos",
+        json={"target": "battery_lock", "value": 40},
+    )
+
+    assert response.status_code == 401
+
+
+def test_dbpos_command_is_queued(tmp_path: Path) -> None:
+    client = make_client(tmp_path)
+    register(client)
+
+    response = client.post(
+        f"/api/v1/bikes/{BIKE_UUID}/commands/dbpos",
+        headers={"Authorization": "Bearer test-token"},
+        json={"target": "battery_lock", "value": 40},
+    )
+
+    assert response.status_code == 202
+    body = response.json()
+    assert body["bike_uuid"] == BIKE_UUID
+    assert body["command"] == "dbpos"
+    assert body["target"] == "battery_lock"
+    assert body["object_reference"] == "MoveUFF_GeralB1STG/XSWI1.Pos"
+    assert body["value"] == 40
+    assert body["status"] == "pending"
+
+    command_response = client.get(f"/api/v1/commands/{body['id']}")
+    assert command_response.status_code == 200
+    assert command_response.json()["id"] == body["id"]
+
+
+def test_dbpos_command_rejects_unsupported_value(tmp_path: Path) -> None:
+    client = make_client(tmp_path)
+    register(client)
+
+    response = client.post(
+        f"/api/v1/bikes/{BIKE_UUID}/commands/dbpos",
+        headers={"Authorization": "Bearer test-token"},
+        json={"target": "battery_lock", "value": 2},
+    )
+
+    assert response.status_code == 422

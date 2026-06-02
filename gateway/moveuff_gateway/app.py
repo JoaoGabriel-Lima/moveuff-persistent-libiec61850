@@ -8,8 +8,18 @@ from fastapi import Depends, FastAPI, Header, HTTPException, Query
 
 from .config import Settings
 from .database import GatewayDatabase
-from .models import BikeDetailResponse, BikeRegisterRequest, BikeResponse, ReportResponse
+from .models import BikeDetailResponse, BikeRegisterRequest, BikeResponse, CommandResponse, DbposCommandRequest, ReportResponse
 from .security import require_bearer_token
+
+
+DBPOS_COMMAND_TARGETS = {
+    "lantern": "MoveUFF_GeralB1EBK/LANTXSWI1.Pos",
+    "motor": "MoveUFF_GeralB1EBK/MOTXSWI1.Pos",
+    "alarm": "MoveUFF_GeralB1EBK/ALMXSWI1.Pos",
+    "hydrogen_cell": "MoveUFF_GeralB1HYD/CELXSWI1.Pos",
+    "hydrogen_tank": "MoveUFF_GeralB1HYD/TNKXSWI1.Pos",
+    "battery_lock": "MoveUFF_GeralB1STG/XSWI1.Pos",
+}
 
 
 def create_app(settings: Settings | None = None) -> FastAPI:
@@ -21,7 +31,12 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         database.initialize()
         yield
 
-    app = FastAPI(title="MoveUFF Bike Gateway", version="0.1.0", lifespan=lifespan)
+    app = FastAPI(
+        title="MoveUFF Bike Gateway",
+        version="0.1.0",
+        lifespan=lifespan,
+        openapi_url="/docs/json",
+    )
     app.state.database = database
     app.state.settings = active_settings
 
@@ -64,6 +79,30 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         if database.get_bike(str(bike_uuid)) is None:
             raise HTTPException(status_code=404, detail="Bike not found")
         return database.list_reports(str(bike_uuid), limit)
+
+    @app.post("/api/v1/bikes/{bike_uuid}/commands/dbpos", response_model=CommandResponse, status_code=202)
+    def enqueue_dbpos_command(
+        bike_uuid: UUID,
+        request: DbposCommandRequest,
+        _: None = Depends(require_registration_token),
+    ) -> dict:
+        if database.get_bike(str(bike_uuid)) is None:
+            raise HTTPException(status_code=404, detail="Bike not found")
+
+        return database.create_command(
+            str(bike_uuid),
+            "dbpos",
+            request.target,
+            DBPOS_COMMAND_TARGETS[request.target],
+            request.value,
+        )
+
+    @app.get("/api/v1/commands/{command_id}", response_model=CommandResponse)
+    def get_command(command_id: int) -> dict:
+        command = database.get_command(command_id)
+        if command is None:
+            raise HTTPException(status_code=404, detail="Command not found")
+        return command
 
     return app
 
