@@ -6,8 +6,33 @@
 #include <stdint.h>
 #include <unistd.h>
 #include <fcntl.h> 
+#if defined(__has_include)
+#if __has_include(<wiringSerial.h>)
+#include <wiringSerial.h>
+#else
+extern int serialOpen(const char* device, const int baud);
+extern void serialClose(const int fd);
+extern int serialDataAvail(const int fd);
+extern int serialGetchar(const int fd);
+#endif
+#else
+#include <wiringSerial.h>
+#endif
 #include <string.h>
+#if defined(__has_include)
+#if __has_include(<wiringPi.h>)
 #include <wiringPi.h>
+#else
+#define HIGH 1
+#define LOW 0
+#define OUTPUT 1
+extern int wiringPiSetup(void);
+extern void pinMode(int pin, int mode);
+extern void digitalWrite(int pin, int value);
+#endif
+#else
+#include <wiringPi.h>
+#endif
 #include <sys/socket.h>
 #include <arpa/inet.h>
 #include <time.h>
@@ -19,13 +44,13 @@
 #define DEFAULT_BIKE_HOST "127.0.0.1"
 #define DEFAULT_REGISTRATION_TOKEN "moveuff-dev-token"
 
-#define RELAY_MOT_PIN  24  // wPi 6 = Pino Físico 12 (Motor)
+#define RELAY_MOT_PIN  24  // wPi 24 = Pino Físico 12 (Motor)
 #define RELAY_ALM_PIN  9   // wPi 9 = Pino Físico 16 (Alarme)
 #define RELAY_XSWI_PIN 10  // wPi 10 = Pino Físico 18 (Trava da Bateria)
 
 #define RELAY_CEL_PIN  21  // wPi 21 = Pino Físico 31 (Célula)
 #define RELAY_TNK_PIN  8   // wPi 8  = Pino Físico 15 (Tanque)
-#define RELAY_LANT_PIN 23  // wPi 13 = Pino Físico 22 (Lanterna)
+#define RELAY_LANT_PIN 23  // wPi 23 = Pino Físico 22 (Lanterna)
 
 #include "static_model.h"
 
@@ -53,13 +78,13 @@ void sigint_handler(int signalId) { running = 0; }
 
 void sinalizar_partida() {
     for(int i=0; i<2; i++) {
-        digitalWrite(RELAY_LANT_PIN, HIGH); digitalWrite(RELAY_MOT_PIN, HIGH);
-        digitalWrite(RELAY_ALM_PIN, HIGH); digitalWrite(RELAY_CEL_PIN, HIGH);
-        digitalWrite(RELAY_TNK_PIN, HIGH); digitalWrite(RELAY_XSWI_PIN, HIGH);
-        Thread_sleep(100);          
         digitalWrite(RELAY_LANT_PIN, LOW); digitalWrite(RELAY_MOT_PIN, LOW);
         digitalWrite(RELAY_ALM_PIN, LOW); digitalWrite(RELAY_CEL_PIN, LOW);
         digitalWrite(RELAY_TNK_PIN, LOW); digitalWrite(RELAY_XSWI_PIN, LOW);
+        Thread_sleep(100);
+        digitalWrite(RELAY_LANT_PIN, HIGH); digitalWrite(RELAY_MOT_PIN, HIGH);
+        digitalWrite(RELAY_ALM_PIN, HIGH); digitalWrite(RELAY_CEL_PIN, HIGH);
+        digitalWrite(RELAY_TNK_PIN, HIGH); digitalWrite(RELAY_XSWI_PIN, HIGH);
         Thread_sleep(100);
     }
 }
@@ -93,59 +118,74 @@ checkHandler(ControlAction action, void* parameter, MmsValue* ctlVal, bool test,
 
 static ControlHandlerResult controlHandlerForBinaryOutput(ControlAction action, void* parameter, MmsValue* value, bool test) {
     uint64_t timestamp = Hal_getTimeInMs();
+    int ctlNum = ControlAction_getCtlNum(action);
+    ClientConnection clientCon = ControlAction_getClientConnection(action);
+    const char* clientIP = (clientCon) ? ClientConnection_getPeerAddress(clientCon) : "Desconhecido";
 
-    if (parameter == IEDMODEL_B1EBK_LANTXSWI1_Pos || parameter == IEDMODEL_B1EBK_MOTXSWI1_Pos || 
+    if (parameter == IEDMODEL_B1EBK_LANTXSWI1_Pos || parameter == IEDMODEL_B1EBK_MOTXSWI1_Pos ||
         parameter == IEDMODEL_B1EBK_ALMXSWI1_Pos || parameter == IEDMODEL_B1HYD_CELXSWI1_Pos ||
         parameter == IEDMODEL_B1HYD_TNKXSWI1_Pos || parameter == IEDMODEL_B1STG_XSWI1_Pos ||
         parameter == IEDMODEL_B1HYD_KVLV1_Pos)
     {
         bool state = false;
         MmsValue* ctlVal = value;
-        if (MmsValue_getType(value) == MMS_STRUCTURE) ctlVal = MmsValue_getElement(value, 0); 
+        if (MmsValue_getType(value) == MMS_STRUCTURE) ctlVal = MmsValue_getElement(value, 0);
 
         if (ctlVal != NULL) {
-            if (MmsValue_getType(ctlVal) == MMS_BIT_STRING) state = (MmsValue_getBitStringAsInteger(ctlVal) == 2); 
+            if (MmsValue_getType(ctlVal) == MMS_BIT_STRING) state = (MmsValue_getBitStringAsInteger(ctlVal) == 2);
             else if (MmsValue_getType(ctlVal) == MMS_BOOLEAN) state = MmsValue_getBoolean(ctlVal);
             else if (MmsValue_getType(ctlVal) == MMS_INTEGER) state = (MmsValue_toInt32(ctlVal) > 0);
         }
 
+        LOG_PRINT("--------------------------------------------------\n");
+        LOG_PRINT("[COMANDO] Recebido de: %s | ctlNum: %d\n", clientIP, ctlNum);
+
         if (parameter == IEDMODEL_B1EBK_LANTXSWI1_Pos) {
-            digitalWrite(RELAY_LANT_PIN, state ? HIGH : LOW);
+            digitalWrite(RELAY_LANT_PIN, state ? LOW : HIGH);
+            LOG_PRINT("   >> Acao:     LANTXSWI1 (Lanterna) %s\n", state ? "LIGADA" : "DESLIGADA");
             IedServer_updateAttributeValue(iedServer, IEDMODEL_B1EBK_LANTXSWI1_Pos_stVal, value);
             IedServer_updateUTCTimeAttributeValue(iedServer, IEDMODEL_B1EBK_LANTXSWI1_Pos_t, timestamp);
         }
         else if (parameter == IEDMODEL_B1EBK_MOTXSWI1_Pos) {
-            digitalWrite(RELAY_MOT_PIN, state ? HIGH : LOW);
+            digitalWrite(RELAY_MOT_PIN, state ? LOW : HIGH);
+            LOG_PRINT("   >> Acao:     MOTXSWI1 (Motor) %s\n", state ? "LIGADO" : "DESLIGADO");
             IedServer_updateAttributeValue(iedServer, IEDMODEL_B1EBK_MOTXSWI1_Pos_stVal, value);
             IedServer_updateUTCTimeAttributeValue(iedServer, IEDMODEL_B1EBK_MOTXSWI1_Pos_t, timestamp);
         }
         else if (parameter == IEDMODEL_B1EBK_ALMXSWI1_Pos) {
-            digitalWrite(RELAY_ALM_PIN, state ? HIGH : LOW);
+            digitalWrite(RELAY_ALM_PIN, state ? LOW : HIGH);
+            LOG_PRINT("   >> Acao:     ALMXSWI1 (Alarme) %s\n", state ? "LIGADO" : "DESLIGADO");
             IedServer_updateAttributeValue(iedServer, IEDMODEL_B1EBK_ALMXSWI1_Pos_stVal, value);
             IedServer_updateUTCTimeAttributeValue(iedServer, IEDMODEL_B1EBK_ALMXSWI1_Pos_t, timestamp);
         }
         else if (parameter == IEDMODEL_B1HYD_CELXSWI1_Pos) {
-            digitalWrite(RELAY_CEL_PIN, state ? HIGH : LOW);
+            digitalWrite(RELAY_CEL_PIN, state ? LOW : HIGH);
+            LOG_PRINT("   >> Acao:     CELXSWI1 (Celula) %s\n", state ? "LIGADA" : "DESLIGADA");
             IedServer_updateAttributeValue(iedServer, IEDMODEL_B1HYD_CELXSWI1_Pos_stVal, value);
             IedServer_updateUTCTimeAttributeValue(iedServer, IEDMODEL_B1HYD_CELXSWI1_Pos_t, timestamp);
         }
         else if (parameter == IEDMODEL_B1HYD_TNKXSWI1_Pos) {
-            digitalWrite(RELAY_TNK_PIN, state ? HIGH : LOW);
+            digitalWrite(RELAY_TNK_PIN, state ? LOW : HIGH);
+            LOG_PRINT("   >> Acao:     TNKXSWI1 (Tanque) %s\n", state ? "LIGADO" : "DESLIGADO");
             IedServer_updateAttributeValue(iedServer, IEDMODEL_B1HYD_TNKXSWI1_Pos_stVal, value);
             IedServer_updateUTCTimeAttributeValue(iedServer, IEDMODEL_B1HYD_TNKXSWI1_Pos_t, timestamp);
         }
         else if (parameter == IEDMODEL_B1STG_XSWI1_Pos) {
-            digitalWrite(RELAY_XSWI_PIN, state ? HIGH : LOW);
+            digitalWrite(RELAY_XSWI_PIN, state ? LOW : HIGH);
+            LOG_PRINT("   >> Acao:     XSWI1 (Trava) %s\n", state ? "LIGADA" : "DESLIGADA");
             IedServer_updateAttributeValue(iedServer, IEDMODEL_B1STG_XSWI1_Pos_stVal, value);
             IedServer_updateUTCTimeAttributeValue(iedServer, IEDMODEL_B1STG_XSWI1_Pos_t, timestamp);
         }
         else if (parameter == IEDMODEL_B1HYD_KVLV1_Pos) {
+            LOG_PRINT("   >> Acao:     KVLV1 (Valvula H2) %s\n", state ? "ABERTA" : "FECHADA");
             IedServer_updateAttributeValue(iedServer, IEDMODEL_B1HYD_KVLV1_Pos_stVal, value);
             IedServer_updateUTCTimeAttributeValue(iedServer, IEDMODEL_B1HYD_KVLV1_Pos_t, timestamp);
         }
 
+        LOG_PRINT("--------------------------------------------------\n");
         return CONTROL_RESULT_OK;
     }
+
     return CONTROL_RESULT_FAILED;
 }
 
@@ -166,168 +206,255 @@ static MmsDataAccessError writeAccessHandler(DataAttribute* dataAttribute, MmsVa
     return DATA_ACCESS_ERROR_OBJECT_VALUE_INVALID;
 }
 
-/* =================================================================
- * THREAD DE GPS SIMULADO (FIXO)
- * ================================================================= */
-void* gps_thread(void* arg) {
-    LOG_PRINT("[GPS] Iniciando Simulacao de GPS (Fixo: UFF Niteroi)\n");
-    while (running) {
-        uint64_t ts = Hal_getTimeInMs();
-        IedServer_lockDataModel(iedServer);
-        
-        IedServer_updateFloatAttributeValue(iedServer, IEDMODEL_B1EBK_TLOC1_GeoLoc_latitude, -22.906800f);
-        IedServer_updateFloatAttributeValue(iedServer, IEDMODEL_B1EBK_TLOC1_GeoLoc_longitude, -43.133200f);
-        IedServer_updateUTCTimeAttributeValue(iedServer, IEDMODEL_B1EBK_TLOC1_GeoLoc_t, ts);
-        
-        IedServer_updateBooleanAttributeValue(iedServer, IEDMODEL_B1EBK_TLOC1_NavFai_stVal, false);
-        IedServer_updateBooleanAttributeValue(iedServer, IEDMODEL_B1EBK_TLOC1_SatAvl_stVal, true);
-        
-        IedServer_unlockDataModel(iedServer);
-        Thread_sleep(5000);
+static float nmea_to_decimal(const char* nmea_coord, char direction) {
+    if (!nmea_coord || strlen(nmea_coord) < 4) return 0.0f;
+
+    const char* dot = strchr(nmea_coord, '.');
+    if (!dot) return 0.0f;
+
+    int deg_len = (int)(dot - nmea_coord) - 2;
+    if (deg_len <= 0 || deg_len > 3) return 0.0f;
+
+    char deg_str[4] = {0};
+    strncpy(deg_str, nmea_coord, deg_len);
+
+    float degrees = (float)atoi(deg_str);
+    float minutes = atof(nmea_coord + deg_len);
+    float decimal = degrees + (minutes / 60.0f);
+
+    if (direction == 'S' || direction == 'W') decimal = -decimal;
+    return decimal;
+}
+
+static int parse_gprmc(char* sentence, float* lat_out, float* lon_out) {
+    char* asterisk = strrchr(sentence, '*');
+    if (asterisk) {
+        uint8_t checksum = 0;
+        for (char* p = sentence + 1; p < asterisk; p++) checksum ^= (uint8_t)(*p);
+
+        uint8_t received = (uint8_t)strtol(asterisk + 1, NULL, 16);
+        if (checksum != received) return 0;
+
+        *asterisk = '\0';
     }
+
+    char* token = strtok(sentence, ",");
+    int field = 0;
+    char status = 'V';
+    char lat_str[20] = {0};
+    char lon_str[20] = {0};
+    char ns = 0;
+    char ew = 0;
+
+    while (token != NULL) {
+        switch (field) {
+            case 2: status = token[0]; break;
+            case 3: strncpy(lat_str, token, sizeof(lat_str) - 1); break;
+            case 4: ns = token[0]; break;
+            case 5: strncpy(lon_str, token, sizeof(lon_str) - 1); break;
+            case 6: ew = token[0]; break;
+        }
+
+        token = strtok(NULL, ",");
+        field++;
+    }
+
+    if (status != 'A') return 0;
+
+    *lat_out = nmea_to_decimal(lat_str, ns);
+    *lon_out = nmea_to_decimal(lon_str, ew);
+    return 1;
+}
+
+void* gps_thread(void* arg) {
+    int fd = serialOpen("/dev/ttyS5", 9600);
+    if (fd < 0) {
+        LOG_PRINT("[GPS] Falha ao abrir /dev/ttyS5\n");
+        return NULL;
+    }
+
+    LOG_PRINT("[GPS] Serial aberta. Aguardando fix de satelites...\n");
+
+    char buffer[256];
+    int pos = 0;
+    int fix_count = 0;
+
+    while (running) {
+        while (serialDataAvail(fd) > 0) {
+            char c = (char)serialGetchar(fd);
+
+            if (c == '\n' || c == '\r') {
+                if (pos > 0) {
+                    buffer[pos] = '\0';
+
+                    if (strncmp(buffer, "$GPRMC", 6) == 0 || strncmp(buffer, "$GNRMC", 6) == 0) {
+                        float lat = 0.0f;
+                        float lon = 0.0f;
+
+                        if (parse_gprmc(buffer, &lat, &lon)) {
+                            uint64_t ts = Hal_getTimeInMs();
+
+                            IedServer_lockDataModel(iedServer);
+                            IedServer_updateFloatAttributeValue(iedServer, IEDMODEL_B1EBK_TLOC1_GeoLoc_latitude, lat);
+                            IedServer_updateFloatAttributeValue(iedServer, IEDMODEL_B1EBK_TLOC1_GeoLoc_longitude, lon);
+                            IedServer_updateUTCTimeAttributeValue(iedServer, IEDMODEL_B1EBK_TLOC1_GeoLoc_t, ts);
+                            IedServer_updateBooleanAttributeValue(iedServer, IEDMODEL_B1EBK_TLOC1_NavFai_stVal, false);
+                            IedServer_updateBooleanAttributeValue(iedServer, IEDMODEL_B1EBK_TLOC1_SatAvl_stVal, true);
+                            IedServer_unlockDataModel(iedServer);
+
+                            LOG_PRINT("[TLOC1] #%04d | Lat: %+.6f | Lon: %+.6f\n", ++fix_count, lat, lon);
+                        }
+                        else {
+                            IedServer_lockDataModel(iedServer);
+                            IedServer_updateBooleanAttributeValue(iedServer, IEDMODEL_B1EBK_TLOC1_NavFai_stVal, true);
+                            IedServer_updateBooleanAttributeValue(iedServer, IEDMODEL_B1EBK_TLOC1_SatAvl_stVal, false);
+                            IedServer_unlockDataModel(iedServer);
+                        }
+                    }
+
+                    pos = 0;
+                }
+            }
+            else {
+                if (c == '$') pos = 0;
+                if (pos < (int)sizeof(buffer) - 1) buffer[pos++] = c;
+            }
+        }
+
+        Thread_sleep(100);
+    }
+
+    serialClose(fd);
+    LOG_PRINT("[GPS] Thread encerrada.\n");
     return NULL;
 }
 
-/* =================================================================
- * THREAD DE SIMULACAO GLOBAL (MEDIÇÕES E STATUS ABRUPTOS)
- * ================================================================= */
 void* sensor_thread(void* arg) {
-    LOG_PRINT("[STATUS] Simulacao Global de Sensores (MX/ST) Iniciada...\n");
-    srand(time(NULL));
+    struct sockaddr_in server_address;
+    char buffer[2048] = {0};
 
-    // Variáveis persistentes com controle de direção (1 para subir, -1 para descer)
-    float rpm_mag    = 150.0f; int rpm_dir = 1;
-    float t_bat_inst = 32.0f;  int t_bat_dir = 1;
-    float v_bat_mag  = 0.0f;   int v_bat_dir = 1; // Vai de 0 a 24
-    float i_bat_mag  = 0.0f;   int i_bat_dir = 1; // Vai de 0 a 5
-    float soc        = 0.0f;   int soc_dir = 1;   // Vai de 0 a 100
-    float t_h2_mag   = 45.0f;  int t_h2_dir = 1;
-    float v_rte_mag  = 0.0f;
-    float t_rte_mag  = 0.0f;
+    LOG_PRINT("[STATUS] Thread de Sensores iniciada (Modo CLIENTE TCP - Consumindo Instrumentacao)...\n");
 
     while (running) {
-        uint64_t ts = Hal_getTimeInMs();
-        float step;
-        
-        // --- LÓGICA DE VARIAÇÃO ABRUPTA TIPO "SENOIDE" (PULOS DE 3 A 5) ---
-        
-        // Tensão da Bateria (0 a 24V)
-        step = (float)((rand() % 3) + 3); 
-        v_bat_mag += step * v_bat_dir;
-        if (v_bat_mag >= 24.0f) { v_bat_mag = 24.0f; v_bat_dir = -1; } // Bateu no teto, desce
-        if (v_bat_mag <= 0.0f)  { v_bat_mag = 0.0f;  v_bat_dir = 1; }  // Bateu no chão, sobe
+        int sock_fd = socket(AF_INET, SOCK_STREAM, 0);
+        if (sock_fd < 0) {
+            LOG_PRINT("[ERRO] Falha ao criar socket cliente!\n");
+            Thread_sleep(2000);
+            continue;
+        }
 
-        // Corrente da Bateria (0 a 5A)
-        step = (float)((rand() % 3) + 3); 
-        i_bat_mag += step * i_bat_dir;
-        if (i_bat_mag >= 5.0f) { i_bat_mag = 5.0f; i_bat_dir = -1; }
-        if (i_bat_mag <= 0.0f) { i_bat_mag = 0.0f; i_bat_dir = 1; }
+        memset(&server_address, 0, sizeof(server_address));
+        server_address.sin_family = AF_INET;
+        server_address.sin_port = htons(2026);
+        server_address.sin_addr.s_addr = inet_addr("127.0.0.1");
 
-        // SOC (0 a 100%)
-        step = (float)((rand() % 3) + 3);
-        soc += step * soc_dir;
-        if (soc >= 100.0f) { soc = 100.0f; soc_dir = -1; }
-        if (soc <= 0.0f)   { soc = 0.0f;   soc_dir = 1; }
+        LOG_PRINT("[SOCKET] Tentando conectar ao fluxo da instrumentacao (127.0.0.1:2026)...\n");
 
-        // RPM (0 a 300)
-        step = (float)((rand() % 3) + 3);
-        rpm_mag += step * rpm_dir;
-        if (rpm_mag >= 300.0f) { rpm_mag = 300.0f; rpm_dir = -1; }
-        if (rpm_mag <= 0.0f)   { rpm_mag = 0.0f;   rpm_dir = 1; }
+        if (connect(sock_fd, (struct sockaddr *)&server_address, sizeof(server_address)) < 0) {
+            LOG_PRINT("[SOCKET] Servidor de instrumentacao offline. Retentando em 2 segundos...\n");
+            close(sock_fd);
+            Thread_sleep(2000);
+            continue;
+        }
 
-        // Temperaturas
-        step = (float)((rand() % 3) + 3);
-        t_bat_inst += step * t_bat_dir;
-        if (t_bat_inst >= 60.0f) { t_bat_inst = 60.0f; t_bat_dir = -1; }
-        if (t_bat_inst <= 10.0f) { t_bat_inst = 10.0f; t_bat_dir = 1; }
-        float t_bat_mag = t_bat_inst - 0.5f;
+        LOG_PRINT("[SOCKET] Conectado com sucesso! Consumindo telemetria da e-Bike...\n");
 
-        step = (float)((rand() % 3) + 3);
-        t_h2_mag += step * t_h2_dir;
-        if (t_h2_mag >= 80.0f) { t_h2_mag = 80.0f; t_h2_dir = -1; }
-        if (t_h2_mag <= 20.0f) { t_h2_mag = 20.0f; t_h2_dir = 1; }
+        while (running) {
+            memset(buffer, 0, sizeof(buffer));
+            int valread = read(sock_fd, buffer, sizeof(buffer) - 1);
 
-        // Rates
-        v_rte_mag = (float)((rand() % 3) + 3) * ((rand() % 2 == 0) ? 1.0f : -1.0f);
-        t_rte_mag = (float)((rand() % 3) + 3) * ((rand() % 2 == 0) ? 1.0f : -1.0f);
-        
-        // Cálculos Secundários
-        float watt_mag   = v_bat_mag * i_bat_mag;
-        float ah_cha_mag = 100.0f; 
-        float ah_dis_mag = 15.4f;
-        int cha_st       = (v_bat_dir == 1) ? 2 : 3; // 2=Charging se a tensão sobe, 3=Discharging se desce
+            if (valread <= 0) {
+                LOG_PRINT("[SOCKET] Conexao encerrada pelo servidor de instrumentacao. Reiniciando busca...\n");
+                break;
+            }
 
-        // Simulações Hidrogênio (Célula e Tanque)
-        float h2_out_dcv = v_bat_mag + 5.0f; // Célula entrega um pouco mais de tensão
-        float h2_out_dca = i_bat_mag + 2.0f;
-        float h2_in_cl_t = t_h2_mag - 10.0f;
-        float h2_in_pres = 2.0f + ((float)rand()/(float)RAND_MAX) * 1.5f;
-        float tank_vol   = soc * 0.2f; // Volume proporcional ao SOC para simular
+            buffer[valread] = '\0';
 
-        IedServer_lockDataModel(iedServer);
-        
-        // --- Atualizando TMVM1 ---
-        IedServer_updateFloatAttributeValue(iedServer, IEDMODEL_B1EBK_TMVM1_MvmRteSv_mag_f, rpm_mag);
+            if (strstr(buffer, "Bateria_Principal") == NULL && strstr(buffer, "Hidrogenio") == NULL) {
+                continue;
+            }
 
-        // --- Atualizando TTMP1 (Bateria) ---
-        IedServer_updateFloatAttributeValue(iedServer, IEDMODEL_B1STG_TTMP1_TmpSv_instMag_f, t_bat_inst);
-        IedServer_updateFloatAttributeValue(iedServer, IEDMODEL_B1STG_TTMP1_TmpSv_mag_f, t_bat_mag);
+            float tensao = 0.0f;
+            float corrente = 0.0f;
+            float soc = 0.0f;
+            float tensaohyd = 0.0f;
+            float pressao = 0.0f;
+            float correntehyd = 0.0f;
+            float nvl_hyd = 0.0f;
+            float tensao_aux = 0.0f;
+            char* ptr;
 
-        // --- Atualizando ZBAT1 ---
-        IedServer_updateFloatAttributeValue(iedServer, IEDMODEL_B1STG_ZBAT1_Vol_mag_f, v_bat_mag);
-        IedServer_updateFloatAttributeValue(iedServer, IEDMODEL_B1STG_ZBAT1_Amp_mag_f, i_bat_mag);
-        IedServer_updateFloatAttributeValue(iedServer, IEDMODEL_B1STG_ZBAT1_VolChgRte_mag_f, v_rte_mag);
+            ptr = strstr(buffer, "\"id\":\"Corrente_Bateria_Principal\"");
+            if (ptr && (ptr = strstr(ptr, "\"value\":"))) sscanf(ptr, "\"value\":%f", &corrente);
 
-        // --- Atualizando DBAT1 ---
-        IedServer_updateFloatAttributeValue(iedServer, IEDMODEL_B1STG_DBAT1_Amp_mag_f, i_bat_mag);
-        IedServer_updateFloatAttributeValue(iedServer, IEDMODEL_B1STG_DBAT1_Watt_mag_f, watt_mag);
-        IedServer_updateFloatAttributeValue(iedServer, IEDMODEL_B1STG_DBAT1_AvlChaAhr_mag_f, ah_cha_mag);
-        IedServer_updateFloatAttributeValue(iedServer, IEDMODEL_B1STG_DBAT1_AvlDschAhr_mag_f, ah_dis_mag);
-        IedServer_updateInt32AttributeValue(iedServer, IEDMODEL_B1STG_DBAT1_ChaSt_stVal, cha_st);
-        IedServer_updateFloatAttributeValue(iedServer, IEDMODEL_B1STG_DBAT1_SocPro_instMag_f, soc);
-        IedServer_updateFloatAttributeValue(iedServer, IEDMODEL_B1STG_DBAT1_SocPro_mag_f, soc);
+            ptr = strstr(buffer, "\"id\":\"Corrente_Celula_Hidrogenio\"");
+            if (ptr && (ptr = strstr(ptr, "\"value\":"))) sscanf(ptr, "\"value\":%f", &correntehyd);
 
-        // --- Atualizando STMP1 ---
-        IedServer_updateFloatAttributeValue(iedServer, IEDMODEL_B1HYD_STMP1_Tmp_mag_f, t_h2_mag);
-        IedServer_updateFloatAttributeValue(iedServer, IEDMODEL_B1HYD_STMP1_TmpRte_mag_f, t_rte_mag);
+            ptr = strstr(buffer, "\"id\":\"Tensao_Bateria_Principal\"");
+            if (ptr && (ptr = strstr(ptr, "\"value\":"))) sscanf(ptr, "\"value\":%f", &tensao);
 
-        // --- Atualizando MMXU1 ---
-        IedServer_updateFloatAttributeValue(iedServer, IEDMODEL_B1EBK_MMXU1_TotW_mag_f, watt_mag);
+            ptr = strstr(buffer, "\"id\":\"Tensao_Celula_Hidrogenio\"");
+            if (ptr && (ptr = strstr(ptr, "\"value\":"))) sscanf(ptr, "\"value\":%f", &tensaohyd);
 
-        // --- Atualizando DSTK1 (Célula de Hidrogênio) ---
-        IedServer_updateFloatAttributeValue(iedServer, IEDMODEL_B1HYD_DSTK1_OutDCV_mag_f, h2_out_dcv);
-        IedServer_updateFloatAttributeValue(iedServer, IEDMODEL_B1HYD_DSTK1_OutDCA_mag_f, h2_out_dca);
-        IedServer_updateFloatAttributeValue(iedServer, IEDMODEL_B1HYD_DSTK1_InClTmp_mag_f, h2_in_cl_t);
-        IedServer_updateFloatAttributeValue(iedServer, IEDMODEL_B1HYD_DSTK1_InH2Pres_mag_f, h2_in_pres);
+            ptr = strstr(buffer, "\"id\":\"Pressao_Cilindro_Hidrogenio\"");
+            if (ptr && (ptr = strstr(ptr, "\"value\":"))) sscanf(ptr, "\"value\":%f", &pressao);
 
-        // --- Atualizando KTNK1 (Tanque de Hidrogênio) ---
-        IedServer_updateFloatAttributeValue(iedServer, IEDMODEL_B1HYD_KTNK1_LevPct_mag_f, soc);
-        IedServer_updateFloatAttributeValue(iedServer, IEDMODEL_B1HYD_KTNK1_LevPct_subMag_f, soc);
-        IedServer_updateFloatAttributeValue(iedServer, IEDMODEL_B1HYD_KTNK1_Vlm_mag_f, tank_vol);
-        IedServer_updateFloatAttributeValue(iedServer, IEDMODEL_B1HYD_KTNK1_Vlm_subMag_f, tank_vol);
+            ptr = strstr(buffer, "\"id\":\"Nivel_Cilindro_Hidrogenio\"");
+            if (ptr && (ptr = strstr(ptr, "\"value\":"))) sscanf(ptr, "\"value\":%f", &nvl_hyd);
 
+            ptr = strstr(buffer, "\"id\":\"Tensao_Barramento_Auxiliar\"");
+            if (ptr && (ptr = strstr(ptr, "\"value\":"))) sscanf(ptr, "\"value\":%f", &tensao_aux);
 
-        // --- Timestamps Globais ---
-        IedServer_updateUTCTimeAttributeValue(iedServer, IEDMODEL_B1STG_ZBAT1_Vol_t, ts);
-        IedServer_updateUTCTimeAttributeValue(iedServer, IEDMODEL_B1HYD_STMP1_Tmp_t, ts);
-        IedServer_updateUTCTimeAttributeValue(iedServer, IEDMODEL_B1EBK_TMVM1_MvmRteSv_t, ts);
+            ptr = strstr(buffer, "\"id\":\"SoC_percent\"");
+            if (ptr && (ptr = strstr(ptr, "\"value\":"))) sscanf(ptr, "\"value\":%f", &soc);
 
-        IedServer_unlockDataModel(iedServer);
+            uint64_t ts = Hal_getTimeInMs();
+            uint16_t goodQuality = 0x0000;
 
+            IedServer_lockDataModel(iedServer);
 
-        // --- REPORTS SIMPLIFICADOS PELO TERMINAL ---
-        LOG_PRINT("\n[DADOS SIMULADOS]\n");
-        LOG_PRINT(" > TMVM1 (Motor):  Mag:%.1f RPM\n", rpm_mag);
-        LOG_PRINT(" > TTMP1 (BatTmp): Mag:%.1f C\n", t_bat_mag);
-        LOG_PRINT(" > ZBAT1 (BatFis): Mag Vol:%.2f V | Mag Amp:%.2f A\n", v_bat_mag, i_bat_mag);
-        LOG_PRINT(" > DBAT1 (BatPrc): Amp:%.2f A | Watt:%.1f W | AvlCha:%.1f Ah | AvlDsch:%.1f Ah | ChaSt:%d | SOC:%.1f%%\n", i_bat_mag, watt_mag, ah_cha_mag, ah_dis_mag, cha_st, soc);
-        LOG_PRINT(" > STMP1 (H2Tmp):  Mag Temp:%.1f C\n", t_h2_mag);
-        LOG_PRINT(" > MMXU1 (Med):    TotW Mag:%.1f W\n", watt_mag);
-        LOG_PRINT(" > DSTK1 (Celula): OutDCV:%.1f V | OutDCA:%.1f A | InClTmp:%.1f C | InH2Pres:%.2f bar\n", h2_out_dcv, h2_out_dca, h2_in_cl_t, h2_in_pres);
-        LOG_PRINT(" > KTNK1 (Tanque): LevPct:%.1f %% | Vlm:%.1f L\n", soc, tank_vol);
-        
-        Thread_sleep(2000); 
+            IedServer_updateFloatAttributeValue(iedServer, IEDMODEL_B1STG_ZBAT1_Vol_instMag_f, tensao);
+            IedServer_updateFloatAttributeValue(iedServer, IEDMODEL_B1STG_ZBAT1_Vol_mag_f, tensao);
+            IedServer_updateQuality(iedServer, IEDMODEL_B1STG_ZBAT1_Vol_q, goodQuality);
+            IedServer_updateUTCTimeAttributeValue(iedServer, IEDMODEL_B1STG_ZBAT1_Vol_t, ts);
+
+            IedServer_updateFloatAttributeValue(iedServer, IEDMODEL_B1STG_ZBAT1_Amp_instMag_f, corrente);
+            IedServer_updateFloatAttributeValue(iedServer, IEDMODEL_B1STG_ZBAT1_Amp_mag_f, corrente);
+            IedServer_updateQuality(iedServer, IEDMODEL_B1STG_ZBAT1_Amp_q, goodQuality);
+            IedServer_updateUTCTimeAttributeValue(iedServer, IEDMODEL_B1STG_ZBAT1_Amp_t, ts);
+
+            IedServer_updateFloatAttributeValue(iedServer, IEDMODEL_B1STG_DBAT1_SocPro_instMag_f, soc);
+            IedServer_updateFloatAttributeValue(iedServer, IEDMODEL_B1STG_DBAT1_SocPro_mag_f, soc);
+            IedServer_updateQuality(iedServer, IEDMODEL_B1STG_DBAT1_SocPro_q, goodQuality);
+            IedServer_updateUTCTimeAttributeValue(iedServer, IEDMODEL_B1STG_DBAT1_SocPro_t, ts);
+
+            IedServer_updateFloatAttributeValue(iedServer, IEDMODEL_B1HYD_DSTK1_InH2Pres_mag_f, pressao);
+            IedServer_updateQuality(iedServer, IEDMODEL_B1HYD_DSTK1_InH2Pres_q, goodQuality);
+            IedServer_updateUTCTimeAttributeValue(iedServer, IEDMODEL_B1HYD_DSTK1_InH2Pres_t, ts);
+
+            IedServer_updateFloatAttributeValue(iedServer, IEDMODEL_B1HYD_DSTK1_OutDCA_mag_f, correntehyd);
+            IedServer_updateQuality(iedServer, IEDMODEL_B1HYD_DSTK1_OutDCA_q, goodQuality);
+            IedServer_updateUTCTimeAttributeValue(iedServer, IEDMODEL_B1HYD_DSTK1_OutDCA_t, ts);
+
+            IedServer_updateFloatAttributeValue(iedServer, IEDMODEL_B1HYD_DSTK1_OutDCV_mag_f, tensaohyd);
+            IedServer_updateQuality(iedServer, IEDMODEL_B1HYD_DSTK1_OutDCV_q, goodQuality);
+            IedServer_updateUTCTimeAttributeValue(iedServer, IEDMODEL_B1HYD_DSTK1_OutDCV_t, ts);
+
+            IedServer_updateFloatAttributeValue(iedServer, IEDMODEL_B1HYD_KTNK1_LevPct_mag_f, nvl_hyd);
+            IedServer_updateFloatAttributeValue(iedServer, IEDMODEL_B1HYD_KTNK1_LevPct_subMag_f, nvl_hyd);
+            IedServer_updateQuality(iedServer, IEDMODEL_B1HYD_KTNK1_LevPct_q, goodQuality);
+            IedServer_updateUTCTimeAttributeValue(iedServer, IEDMODEL_B1HYD_KTNK1_LevPct_t, ts);
+
+            IedServer_unlockDataModel(iedServer);
+
+            LOG_PRINT("[DATA_CLIENT] Bat: (%.2fV | %.2fA | SoC: %.2f%%) || H2_Cel: %.2fV | %.2fA || H2_Pres: %.2f bar | H2_Nivel: %.2f%% || T_Aux: %.2fV\n",
+                      tensao, corrente, soc, tensaohyd, correntehyd, pressao, nvl_hyd, tensao_aux);
+        }
+
+        close(sock_fd);
+        Thread_sleep(1000);
     }
+
     return NULL;
 }
 
@@ -577,10 +704,17 @@ int main(int argc, char** argv) {
     signal(SIGINT, sigint_handler);
     signal(SIGTERM, sigint_handler);
 
-    if (wiringPiSetup() == -1) exit(1);
-    pinMode(RELAY_LANT_PIN, OUTPUT); pinMode(RELAY_MOT_PIN, OUTPUT); 
-    pinMode(RELAY_ALM_PIN, OUTPUT); pinMode(RELAY_CEL_PIN, OUTPUT); 
-    pinMode(RELAY_TNK_PIN, OUTPUT); pinMode(RELAY_XSWI_PIN, OUTPUT); 
+    if (wiringPiSetup() == -1) {
+        fprintf(stderr, "ERRO: Falha ao inicializar o wiringPi! Tente executar como root\n");
+        exit(1);
+    }
+
+    pinMode(RELAY_LANT_PIN, OUTPUT); digitalWrite(RELAY_LANT_PIN, HIGH);
+    pinMode(RELAY_MOT_PIN, OUTPUT);  digitalWrite(RELAY_MOT_PIN, HIGH);
+    pinMode(RELAY_ALM_PIN, OUTPUT);  digitalWrite(RELAY_ALM_PIN, HIGH);
+    pinMode(RELAY_CEL_PIN, OUTPUT);  digitalWrite(RELAY_CEL_PIN, HIGH);
+    pinMode(RELAY_TNK_PIN, OUTPUT);  digitalWrite(RELAY_TNK_PIN, HIGH);
+    pinMode(RELAY_XSWI_PIN, OUTPUT); digitalWrite(RELAY_XSWI_PIN, HIGH);
 
     int dev_null = open("/dev/null", O_WRONLY);
     if (dev_null != -1) dup2(dev_null, STDOUT_FILENO); 
@@ -636,24 +770,46 @@ int main(int argc, char** argv) {
 
     IedServer_setConnectionIndicationHandler(iedServer, (IedConnectionIndicationHandler) connectionHandler, NULL);
 
-    IedServer_start(iedServer, tcpPort);
-    if (!IedServer_isRunning(iedServer)) { IedServer_destroy(iedServer); exit(-1); }
+    IedServer_setGooseInterfaceId(iedServer, "lo");
 
-    LOG_PRINT("\n--- SERVIDOR MoveUFF ATIVO (Bancada Virtual Completa) (VTeste Joãos) ---\n");
+    IedServer_start(iedServer, tcpPort);
+    if (!IedServer_isRunning(iedServer)) {
+        LOG_PRINT("Falha ao iniciar servidor!\n");
+        IedServer_destroy(iedServer);
+        exit(-1);
+    }
+
+    LOG_PRINT("\n--- SERVIDOR IEC 61850 MoveUFF ---\n");
+    LOG_PRINT("[STATUS] Hardware OK (Lanterna: P%d | Motor: P%d | Alarme: P%d | Celula: P%d | Tanque: P%d | Trava: P%d)\n",
+              RELAY_LANT_PIN, RELAY_MOT_PIN, RELAY_ALM_PIN, RELAY_CEL_PIN, RELAY_TNK_PIN, RELAY_XSWI_PIN);
+    LOG_PRINT("[STATUS] Rodando na porta %d.\n", tcpPort);
+    LOG_PRINT("[STATUS] Aguardando conexao do Elipse...\n");
     running = 1;
 
     Thread registrationThread = Thread_create((ThreadExecutionFunction)gateway_registration_thread, &registrationTask, true);
     Thread_start(registrationThread);
 
-    Thread simThread = Thread_create((ThreadExecutionFunction)sensor_thread, NULL, true);
-    Thread_start(simThread);
+    Thread sensorThread = Thread_create((ThreadExecutionFunction)sensor_thread, NULL, true);
+    Thread_start(sensorThread);
 
-    Thread gpsSimThread = Thread_create((ThreadExecutionFunction)gps_thread, NULL, true);
-    Thread_start(gpsSimThread);
+    Thread gpsThread = Thread_create((ThreadExecutionFunction)gps_thread, NULL, true);
+    Thread_start(gpsThread);
 
     while (running) Thread_sleep(100);
 
+    LOG_PRINT("\n[SISTEMA] Encerrando servidor e desarmando reles...\n");
+
+    digitalWrite(RELAY_LANT_PIN, HIGH);
+    digitalWrite(RELAY_MOT_PIN, HIGH);
+    digitalWrite(RELAY_ALM_PIN, HIGH);
+    digitalWrite(RELAY_CEL_PIN, HIGH);
+    digitalWrite(RELAY_TNK_PIN, HIGH);
+    digitalWrite(RELAY_XSWI_PIN, HIGH);
+
+    Thread_sleep(500);
+
     IedServer_stop(iedServer);
     IedServer_destroy(iedServer);
+    close(dev_null);
     return 0;
 }
