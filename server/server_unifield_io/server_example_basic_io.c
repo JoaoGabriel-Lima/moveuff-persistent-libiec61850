@@ -44,13 +44,13 @@ extern void digitalWrite(int pin, int value);
 #define DEFAULT_BIKE_HOST "127.0.0.1"
 #define DEFAULT_REGISTRATION_TOKEN "moveuff-dev-token"
 
-#define RELAY_MOT_PIN  24  // wPi 24 = Pino Físico 12 (Motor)
+#define RELAY_MOT_PIN  23  // wPi 24 = Pino Físico 12 (Motor)
 #define RELAY_ALM_PIN  9   // wPi 9 = Pino Físico 16 (Alarme)
 #define RELAY_XSWI_PIN 10  // wPi 10 = Pino Físico 18 (Trava da Bateria)
 
 #define RELAY_CEL_PIN  21  // wPi 21 = Pino Físico 31 (Célula)
 #define RELAY_TNK_PIN  8   // wPi 8  = Pino Físico 15 (Tanque)
-#define RELAY_LANT_PIN 23  // wPi 23 = Pino Físico 22 (Lanterna)
+#define RELAY_LANT_PIN 24  // wPi 23 = Pino Físico 22 (Lanterna)
 
 #include "static_model.h"
 
@@ -272,58 +272,57 @@ void* gps_thread(void* arg) {
         LOG_PRINT("[GPS] Falha ao abrir /dev/ttyS5\n");
         return NULL;
     }
-
     LOG_PRINT("[GPS] Serial aberta. Aguardando fix de satelites...\n");
-
     char buffer[256];
-    int pos = 0;
-    int fix_count = 0;
+    int pos = 0, fix_count = 0;
 
     while (running) {
         while (serialDataAvail(fd) > 0) {
             char c = (char)serialGetchar(fd);
-
             if (c == '\n' || c == '\r') {
                 if (pos > 0) {
                     buffer[pos] = '\0';
-
-                    if (strncmp(buffer, "$GPRMC", 6) == 0 || strncmp(buffer, "$GNRMC", 6) == 0) {
-                        float lat = 0.0f;
-                        float lon = 0.0f;
-
+                    if (strncmp(buffer, "$GPRMC", 6) == 0 ||
+                        strncmp(buffer, "$GNRMC", 6) == 0) {
+                        float lat = 0.0f, lon = 0.0f;
                         if (parse_gprmc(buffer, &lat, &lon)) {
                             uint64_t ts = Hal_getTimeInMs();
+                            uint16_t goodQuality = 0x0000; // 0x0000 = Qualidade BOA/VALIDA no padrão IEC 61850
 
                             IedServer_lockDataModel(iedServer);
                             IedServer_updateFloatAttributeValue(iedServer, IEDMODEL_B1EBK_TLOC1_GeoLoc_latitude, lat);
                             IedServer_updateFloatAttributeValue(iedServer, IEDMODEL_B1EBK_TLOC1_GeoLoc_longitude, lon);
+                            
+                            // CORREÇÃO: Atualiza os atributos de qualidade para o SCADA validar os dados
+                            IedServer_updateQuality(iedServer, IEDMODEL_B1EBK_TLOC1_GeoLoc_q, goodQuality);
+                            IedServer_updateQuality(iedServer, IEDMODEL_B1EBK_TLOC1_NavFai_q, goodQuality);
+                            IedServer_updateQuality(iedServer, IEDMODEL_B1EBK_TLOC1_SatAvl_q, goodQuality);
+                            
                             IedServer_updateUTCTimeAttributeValue(iedServer, IEDMODEL_B1EBK_TLOC1_GeoLoc_t, ts);
                             IedServer_updateBooleanAttributeValue(iedServer, IEDMODEL_B1EBK_TLOC1_NavFai_stVal, false);
                             IedServer_updateBooleanAttributeValue(iedServer, IEDMODEL_B1EBK_TLOC1_SatAvl_stVal, true);
                             IedServer_unlockDataModel(iedServer);
-
+                            
                             LOG_PRINT("[TLOC1] #%04d | Lat: %+.6f | Lon: %+.6f\n", ++fix_count, lat, lon);
-                        }
-                        else {
+                        } else {
+                            uint16_t goodQuality = 0x0000;
                             IedServer_lockDataModel(iedServer);
                             IedServer_updateBooleanAttributeValue(iedServer, IEDMODEL_B1EBK_TLOC1_NavFai_stVal, true);
+                            IedServer_updateQuality(iedServer, IEDMODEL_B1EBK_TLOC1_NavFai_q, goodQuality);
                             IedServer_updateBooleanAttributeValue(iedServer, IEDMODEL_B1EBK_TLOC1_SatAvl_stVal, false);
+                            IedServer_updateQuality(iedServer, IEDMODEL_B1EBK_TLOC1_SatAvl_q, goodQuality);
                             IedServer_unlockDataModel(iedServer);
                         }
                     }
-
                     pos = 0;
                 }
-            }
-            else {
+            } else {
                 if (c == '$') pos = 0;
-                if (pos < (int)sizeof(buffer) - 1) buffer[pos++] = c;
+                if (pos < 255) buffer[pos++] = c;
             }
         }
-
         Thread_sleep(100);
     }
-
     serialClose(fd);
     LOG_PRINT("[GPS] Thread encerrada.\n");
     return NULL;
@@ -719,9 +718,10 @@ int main(int argc, char** argv) {
     int dev_null = open("/dev/null", O_WRONLY);
     if (dev_null != -1) dup2(dev_null, STDOUT_FILENO); 
 
-    sinalizar_partida();
+    // sinalizar_partida();
     iedServer = IedServer_create(&iedModel);
     int tcpPort = (argc > 1) ? atoi(argv[1]) : 102;
+
     const char* gatewayConfigPath = (argc > 2) ? argv[2] : DEFAULT_GATEWAY_CONFIG;
     GatewayRegistrationTask registrationTask;
     registrationTask.config = load_gateway_config(gatewayConfigPath);
