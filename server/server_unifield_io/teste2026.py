@@ -34,10 +34,10 @@ for ip in DESTINOS_IP:
         # CORREÇÃO: Cria um socket do zero para cada tentativa de IP
         sock_teste = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         sock_teste.settimeout(2.0)
-        
+
         print(f"[*] Tentando conectar ao servidor HUBMOB em: {ip}:{PORTA}...")
         sock_teste.connect((ip, PORTA))
-        
+
         print(f" [OK] Conectado com sucesso à interface: {ip}!")
         sock_final = sock_teste
         conectado = True

@@ -13,6 +13,29 @@
         <LDevice inst="B1EBK">
           <LN0 lnClass="LLN0" lnType="LLN01" inst="">
             <DOI name="Mod" /> <DOI name="Beh" /> <DOI name="Health" /> <DOI name="NamPlt" /> <DOI name="Diag" /> <DOI name="LEDRs" />
+            <DataSet name="BikeTelemetry" desc="MoveUFF bike telemetry">
+              <FCDA ldInst="B1STG" lnClass="ZBAT" fc="MX" lnInst="1" doName="Vol" daName="mag.f" />
+              <FCDA ldInst="B1STG" lnClass="ZBAT" fc="MX" lnInst="1" doName="Amp" daName="mag.f" />
+              <FCDA ldInst="B1STG" lnClass="DBAT" fc="MX" lnInst="1" doName="SocPro" daName="mag.f" />
+              <FCDA ldInst="B1HYD" lnClass="DSTK" fc="MX" lnInst="1" doName="InH2Pres" daName="mag.f" />
+              <FCDA ldInst="B1HYD" lnClass="DSTK" fc="MX" lnInst="1" doName="OutDCA" daName="mag.f" />
+              <FCDA ldInst="B1HYD" lnClass="DSTK" fc="MX" lnInst="1" doName="OutDCV" daName="mag.f" />
+              <FCDA ldInst="B1EBK" lnClass="TLOC" fc="ST" lnInst="1" doName="GeoLoc" daName="latitude" />
+              <FCDA ldInst="B1EBK" lnClass="TLOC" fc="ST" lnInst="1" doName="GeoLoc" daName="longitude" />
+              <FCDA ldInst="B1EBK" lnClass="TLOC" fc="ST" lnInst="1" doName="NavFai" daName="stVal" />
+              <FCDA ldInst="B1EBK" lnClass="TLOC" fc="ST" lnInst="1" doName="SatAvl" daName="stVal" />
+              <FCDA ldInst="B1EBK" prefix="LANT" lnClass="XSWI" fc="ST" lnInst="1" doName="Pos" daName="stVal" />
+              <FCDA ldInst="B1EBK" prefix="MOT" lnClass="XSWI" fc="ST" lnInst="1" doName="Pos" daName="stVal" />
+              <FCDA ldInst="B1EBK" prefix="ALM" lnClass="XSWI" fc="ST" lnInst="1" doName="Pos" daName="stVal" />
+              <FCDA ldInst="B1HYD" prefix="CEL" lnClass="XSWI" fc="ST" lnInst="1" doName="Pos" daName="stVal" />
+              <FCDA ldInst="B1HYD" prefix="TNK" lnClass="XSWI" fc="ST" lnInst="1" doName="Pos" daName="stVal" />
+              <FCDA ldInst="B1STG" lnClass="XSWI" fc="ST" lnInst="1" doName="Pos" daName="stVal" />
+            </DataSet>
+            <ReportControl name="BikeTelemetryRCB" desc="MoveUFF bike telemetry reports" confRev="1" datSet="BikeTelemetry" rptID="BikeTelemetry" buffered="false" intgPd="1000" bufTime="50">
+              <TrgOps dchg="true" qchg="true" period="true" />
+              <OptFields seqNum="true" timeStamp="true" dataSet="true" reasonCode="true" configRef="true" />
+              <RptEnabled max="1" />
+            </ReportControl>
           </LN0>
           <LN lnClass="DEEV" lnType="DEEV1_Typ" inst="1" prefix="">
             <DOI name="EVNam" /> <DOI name="NamPlt" /> <DOI name="ConnTypSel" /> <DOI name="Beh" /> <DOI name="Health" /> <DOI name="Soc" /> <DOI name="EVId" /> <DOI name="DptTm" /> <DOI name="VMax" /> <DOI name="AMax" /> <DOI name="AMin" /> <DOI name="EnAmnt" />
@@ -146,7 +169,7 @@
     <LNodeType id="DFPM1_Typ" lnClass="DFPM"><DO name="FPMSt" type="ENS_Generic"/><DO name="CnvEfc" type="MV_Generic"/><DO name="ProcTyp" type="ENS_Generic"/></LNodeType>
 
     <LNodeType id="TTMP1_Typ" lnClass="TTMP"><DO name="NamPlt" type="LPL_NamPlt"/><DO name="Beh" type="ENS_Beh"/><DO name="Health" type="ENS_Health"/><DO name="TmpSv" type="MV_Generic"/><DO name="TmpTgt" type="ASG_Generic"/></LNodeType>
-    <LNodeType id="DBAT1_Typ" lnClass="DBAT"><DO name="EEName" type="DPL_Generic"/><DO name="ChaSt" type="ENS_Generic"/><DO name="DschSt" type="ENS_Generic"/><DO name="EEHealth" type="ENS_Health"/><DO name="Amp" type="MV_Generic"/><DO name="Watt" type="MV_Generic"/><DO name="AvlChaAhr" type="MV_Generic"/><DO name="AvlDschAhr" type="MV_Generic"/><DO name="BatTyp" type="ENS_Generic"/><DO name="ChaAmpMax" type="ASG_Generic"/><DO name="AhrRtg" type="ASG_Generic"/><DO name="ChaVolMaxRtg" type="ASG_Generic"/><DO name="SocPro" type="SPS_Generic"/></LNodeType>
+    <LNodeType id="DBAT1_Typ" lnClass="DBAT"><DO name="EEName" type="DPL_Generic"/><DO name="ChaSt" type="ENS_Generic"/><DO name="DschSt" type="ENS_Generic"/><DO name="EEHealth" type="ENS_Health"/><DO name="Amp" type="MV_Generic"/><DO name="Watt" type="MV_Generic"/><DO name="AvlChaAhr" type="MV_Generic"/><DO name="AvlDschAhr" type="MV_Generic"/><DO name="BatTyp" type="ENS_Generic"/><DO name="ChaAmpMax" type="ASG_Generic"/><DO name="AhrRtg" type="ASG_Generic"/><DO name="ChaVolMaxRtg" type="ASG_Generic"/><DO name="SocPro" type="MV_Generic"/></LNodeType>
     
     <LNodeType id="ZBAT1_Typ" lnClass="ZBAT">
       <DO name="BatHi" type="SPS_Generic"/>

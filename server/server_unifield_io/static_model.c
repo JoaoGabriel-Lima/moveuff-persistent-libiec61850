@@ -4,11 +4,196 @@
  * automatically generated from moveuff_v2.icd
  */
 #include "static_model.h"
-#include <stdio.h>
 
 static void initializeValues();
 
+extern DataSet iedModelds_B1EBK_LLN0_BikeTelemetry;
 
+
+extern DataSetEntry iedModelds_B1EBK_LLN0_BikeTelemetry_fcda0;
+extern DataSetEntry iedModelds_B1EBK_LLN0_BikeTelemetry_fcda1;
+extern DataSetEntry iedModelds_B1EBK_LLN0_BikeTelemetry_fcda2;
+extern DataSetEntry iedModelds_B1EBK_LLN0_BikeTelemetry_fcda3;
+extern DataSetEntry iedModelds_B1EBK_LLN0_BikeTelemetry_fcda4;
+extern DataSetEntry iedModelds_B1EBK_LLN0_BikeTelemetry_fcda5;
+extern DataSetEntry iedModelds_B1EBK_LLN0_BikeTelemetry_fcda6;
+extern DataSetEntry iedModelds_B1EBK_LLN0_BikeTelemetry_fcda7;
+extern DataSetEntry iedModelds_B1EBK_LLN0_BikeTelemetry_fcda8;
+extern DataSetEntry iedModelds_B1EBK_LLN0_BikeTelemetry_fcda9;
+extern DataSetEntry iedModelds_B1EBK_LLN0_BikeTelemetry_fcda10;
+extern DataSetEntry iedModelds_B1EBK_LLN0_BikeTelemetry_fcda11;
+extern DataSetEntry iedModelds_B1EBK_LLN0_BikeTelemetry_fcda12;
+extern DataSetEntry iedModelds_B1EBK_LLN0_BikeTelemetry_fcda13;
+extern DataSetEntry iedModelds_B1EBK_LLN0_BikeTelemetry_fcda14;
+extern DataSetEntry iedModelds_B1EBK_LLN0_BikeTelemetry_fcda15;
+
+DataSetEntry iedModelds_B1EBK_LLN0_BikeTelemetry_fcda0 = {
+  "B1STG",
+  false,
+  "ZBAT1$MX$Vol$mag$f", 
+  -1,
+  NULL,
+  NULL,
+  &iedModelds_B1EBK_LLN0_BikeTelemetry_fcda1
+};
+
+DataSetEntry iedModelds_B1EBK_LLN0_BikeTelemetry_fcda1 = {
+  "B1STG",
+  false,
+  "ZBAT1$MX$Amp$mag$f", 
+  -1,
+  NULL,
+  NULL,
+  &iedModelds_B1EBK_LLN0_BikeTelemetry_fcda2
+};
+
+DataSetEntry iedModelds_B1EBK_LLN0_BikeTelemetry_fcda2 = {
+  "B1STG",
+  false,
+  "DBAT1$MX$SocPro$mag$f", 
+  -1,
+  NULL,
+  NULL,
+  &iedModelds_B1EBK_LLN0_BikeTelemetry_fcda3
+};
+
+DataSetEntry iedModelds_B1EBK_LLN0_BikeTelemetry_fcda3 = {
+  "B1HYD",
+  false,
+  "DSTK1$MX$InH2Pres$mag$f", 
+  -1,
+  NULL,
+  NULL,
+  &iedModelds_B1EBK_LLN0_BikeTelemetry_fcda4
+};
+
+DataSetEntry iedModelds_B1EBK_LLN0_BikeTelemetry_fcda4 = {
+  "B1HYD",
+  false,
+  "DSTK1$MX$OutDCA$mag$f", 
+  -1,
+  NULL,
+  NULL,
+  &iedModelds_B1EBK_LLN0_BikeTelemetry_fcda5
+};
+
+DataSetEntry iedModelds_B1EBK_LLN0_BikeTelemetry_fcda5 = {
+  "B1HYD",
+  false,
+  "DSTK1$MX$OutDCV$mag$f", 
+  -1,
+  NULL,
+  NULL,
+  &iedModelds_B1EBK_LLN0_BikeTelemetry_fcda6
+};
+
+DataSetEntry iedModelds_B1EBK_LLN0_BikeTelemetry_fcda6 = {
+  "B1EBK",
+  false,
+  "TLOC1$ST$GeoLoc$latitude", 
+  -1,
+  NULL,
+  NULL,
+  &iedModelds_B1EBK_LLN0_BikeTelemetry_fcda7
+};
+
+DataSetEntry iedModelds_B1EBK_LLN0_BikeTelemetry_fcda7 = {
+  "B1EBK",
+  false,
+  "TLOC1$ST$GeoLoc$longitude", 
+  -1,
+  NULL,
+  NULL,
+  &iedModelds_B1EBK_LLN0_BikeTelemetry_fcda8
+};
+
+DataSetEntry iedModelds_B1EBK_LLN0_BikeTelemetry_fcda8 = {
+  "B1EBK",
+  false,
+  "TLOC1$ST$NavFai$stVal", 
+  -1,
+  NULL,
+  NULL,
+  &iedModelds_B1EBK_LLN0_BikeTelemetry_fcda9
+};
+
+DataSetEntry iedModelds_B1EBK_LLN0_BikeTelemetry_fcda9 = {
+  "B1EBK",
+  false,
+  "TLOC1$ST$SatAvl$stVal", 
+  -1,
+  NULL,
+  NULL,
+  &iedModelds_B1EBK_LLN0_BikeTelemetry_fcda10
+};
+
+DataSetEntry iedModelds_B1EBK_LLN0_BikeTelemetry_fcda10 = {
+  "B1EBK",
+  false,
+  "LANTXSWI1$ST$Pos$stVal", 
+  -1,
+  NULL,
+  NULL,
+  &iedModelds_B1EBK_LLN0_BikeTelemetry_fcda11
+};
+
+DataSetEntry iedModelds_B1EBK_LLN0_BikeTelemetry_fcda11 = {
+  "B1EBK",
+  false,
+  "MOTXSWI1$ST$Pos$stVal", 
+  -1,
+  NULL,
+  NULL,
+  &iedModelds_B1EBK_LLN0_BikeTelemetry_fcda12
+};
+
+DataSetEntry iedModelds_B1EBK_LLN0_BikeTelemetry_fcda12 = {
+  "B1EBK",
+  false,
+  "ALMXSWI1$ST$Pos$stVal", 
+  -1,
+  NULL,
+  NULL,
+  &iedModelds_B1EBK_LLN0_BikeTelemetry_fcda13
+};
+
+DataSetEntry iedModelds_B1EBK_LLN0_BikeTelemetry_fcda13 = {
+  "B1HYD",
+  false,
+  "CELXSWI1$ST$Pos$stVal", 
+  -1,
+  NULL,
+  NULL,
+  &iedModelds_B1EBK_LLN0_BikeTelemetry_fcda14
+};
+
+DataSetEntry iedModelds_B1EBK_LLN0_BikeTelemetry_fcda14 = {
+  "B1HYD",
+  false,
+  "TNKXSWI1$ST$Pos$stVal", 
+  -1,
+  NULL,
+  NULL,
+  &iedModelds_B1EBK_LLN0_BikeTelemetry_fcda15
+};
+
+DataSetEntry iedModelds_B1EBK_LLN0_BikeTelemetry_fcda15 = {
+  "B1STG",
+  false,
+  "XSWI1$ST$Pos$stVal", 
+  -1,
+  NULL,
+  NULL,
+  NULL
+};
+
+DataSet iedModelds_B1EBK_LLN0_BikeTelemetry = {
+  "B1EBK",
+  "LLN0$BikeTelemetry",
+  16,
+  &iedModelds_B1EBK_LLN0_BikeTelemetry_fcda0,
+  NULL
+};
 
 LogicalDevice iedModel_B1EBK = {
     LogicalDeviceModelType,
@@ -27056,21 +27241,63 @@ DataObject iedModel_B1STG_DBAT1_SocPro = {
     "SocPro",
     (ModelNode*) &iedModel_B1STG_DBAT1,
     NULL,
-    (ModelNode*) &iedModel_B1STG_DBAT1_SocPro_stVal,
+    (ModelNode*) &iedModel_B1STG_DBAT1_SocPro_instMag,
     0,
     -1
 };
 
-DataAttribute iedModel_B1STG_DBAT1_SocPro_stVal = {
+DataAttribute iedModel_B1STG_DBAT1_SocPro_instMag = {
     DataAttributeModelType,
-    "stVal",
+    "instMag",
     (ModelNode*) &iedModel_B1STG_DBAT1_SocPro,
-    (ModelNode*) &iedModel_B1STG_DBAT1_SocPro_q,
+    (ModelNode*) &iedModel_B1STG_DBAT1_SocPro_mag,
+    (ModelNode*) &iedModel_B1STG_DBAT1_SocPro_instMag_f,
+    0,
+    -1,
+    IEC61850_FC_MX,
+    IEC61850_CONSTRUCTED,
+    0,
+    NULL,
+    0};
+
+DataAttribute iedModel_B1STG_DBAT1_SocPro_instMag_f = {
+    DataAttributeModelType,
+    "f",
+    (ModelNode*) &iedModel_B1STG_DBAT1_SocPro_instMag,
+    NULL,
     NULL,
     0,
     -1,
-    IEC61850_FC_ST,
-    IEC61850_BOOLEAN,
+    IEC61850_FC_MX,
+    IEC61850_FLOAT32,
+    0,
+    NULL,
+    0};
+
+DataAttribute iedModel_B1STG_DBAT1_SocPro_mag = {
+    DataAttributeModelType,
+    "mag",
+    (ModelNode*) &iedModel_B1STG_DBAT1_SocPro,
+    (ModelNode*) &iedModel_B1STG_DBAT1_SocPro_q,
+    (ModelNode*) &iedModel_B1STG_DBAT1_SocPro_mag_f,
+    0,
+    -1,
+    IEC61850_FC_MX,
+    IEC61850_CONSTRUCTED,
+    0 + TRG_OPT_DATA_CHANGED,
+    NULL,
+    0};
+
+DataAttribute iedModel_B1STG_DBAT1_SocPro_mag_f = {
+    DataAttributeModelType,
+    "f",
+    (ModelNode*) &iedModel_B1STG_DBAT1_SocPro_mag,
+    NULL,
+    NULL,
+    0,
+    -1,
+    IEC61850_FC_MX,
+    IEC61850_FLOAT32,
     0 + TRG_OPT_DATA_CHANGED,
     NULL,
     0};
@@ -27083,7 +27310,7 @@ DataAttribute iedModel_B1STG_DBAT1_SocPro_q = {
     NULL,
     0,
     -1,
-    IEC61850_FC_ST,
+    IEC61850_FC_MX,
     IEC61850_QUALITY,
     0 + TRG_OPT_QUALITY_CHANGED,
     NULL,
@@ -27093,26 +27320,194 @@ DataAttribute iedModel_B1STG_DBAT1_SocPro_t = {
     DataAttributeModelType,
     "t",
     (ModelNode*) &iedModel_B1STG_DBAT1_SocPro,
-    (ModelNode*) &iedModel_B1STG_DBAT1_SocPro_ctlModel,
+    (ModelNode*) &iedModel_B1STG_DBAT1_SocPro_units,
     NULL,
     0,
     -1,
-    IEC61850_FC_ST,
+    IEC61850_FC_MX,
     IEC61850_TIMESTAMP,
     0,
     NULL,
     0};
 
-DataAttribute iedModel_B1STG_DBAT1_SocPro_ctlModel = {
+DataAttribute iedModel_B1STG_DBAT1_SocPro_units = {
     DataAttributeModelType,
-    "ctlModel",
+    "units",
     (ModelNode*) &iedModel_B1STG_DBAT1_SocPro,
+    (ModelNode*) &iedModel_B1STG_DBAT1_SocPro_sVC,
+    (ModelNode*) &iedModel_B1STG_DBAT1_SocPro_units_SIUnit,
+    0,
+    -1,
+    IEC61850_FC_CF,
+    IEC61850_CONSTRUCTED,
+    0,
+    NULL,
+    0};
+
+DataAttribute iedModel_B1STG_DBAT1_SocPro_units_SIUnit = {
+    DataAttributeModelType,
+    "SIUnit",
+    (ModelNode*) &iedModel_B1STG_DBAT1_SocPro_units,
+    (ModelNode*) &iedModel_B1STG_DBAT1_SocPro_units_multiplier,
+    NULL,
+    0,
+    -1,
+    IEC61850_FC_CF,
+    IEC61850_ENUMERATED,
+    0,
+    NULL,
+    0};
+
+DataAttribute iedModel_B1STG_DBAT1_SocPro_units_multiplier = {
+    DataAttributeModelType,
+    "multiplier",
+    (ModelNode*) &iedModel_B1STG_DBAT1_SocPro_units,
     NULL,
     NULL,
     0,
     -1,
     IEC61850_FC_CF,
     IEC61850_ENUMERATED,
+    0,
+    NULL,
+    0};
+
+DataAttribute iedModel_B1STG_DBAT1_SocPro_sVC = {
+    DataAttributeModelType,
+    "sVC",
+    (ModelNode*) &iedModel_B1STG_DBAT1_SocPro,
+    (ModelNode*) &iedModel_B1STG_DBAT1_SocPro_db,
+    (ModelNode*) &iedModel_B1STG_DBAT1_SocPro_sVC_scaleFactor,
+    0,
+    -1,
+    IEC61850_FC_CF,
+    IEC61850_CONSTRUCTED,
+    0,
+    NULL,
+    0};
+
+DataAttribute iedModel_B1STG_DBAT1_SocPro_sVC_scaleFactor = {
+    DataAttributeModelType,
+    "scaleFactor",
+    (ModelNode*) &iedModel_B1STG_DBAT1_SocPro_sVC,
+    (ModelNode*) &iedModel_B1STG_DBAT1_SocPro_sVC_offset,
+    NULL,
+    0,
+    -1,
+    IEC61850_FC_CF,
+    IEC61850_FLOAT32,
+    0,
+    NULL,
+    0};
+
+DataAttribute iedModel_B1STG_DBAT1_SocPro_sVC_offset = {
+    DataAttributeModelType,
+    "offset",
+    (ModelNode*) &iedModel_B1STG_DBAT1_SocPro_sVC,
+    NULL,
+    NULL,
+    0,
+    -1,
+    IEC61850_FC_CF,
+    IEC61850_FLOAT32,
+    0,
+    NULL,
+    0};
+
+DataAttribute iedModel_B1STG_DBAT1_SocPro_db = {
+    DataAttributeModelType,
+    "db",
+    (ModelNode*) &iedModel_B1STG_DBAT1_SocPro,
+    (ModelNode*) &iedModel_B1STG_DBAT1_SocPro_subEna,
+    NULL,
+    0,
+    -1,
+    IEC61850_FC_CF,
+    IEC61850_INT32U,
+    0,
+    NULL,
+    0};
+
+DataAttribute iedModel_B1STG_DBAT1_SocPro_subEna = {
+    DataAttributeModelType,
+    "subEna",
+    (ModelNode*) &iedModel_B1STG_DBAT1_SocPro,
+    (ModelNode*) &iedModel_B1STG_DBAT1_SocPro_subMag,
+    NULL,
+    0,
+    -1,
+    IEC61850_FC_SV,
+    IEC61850_BOOLEAN,
+    0,
+    NULL,
+    0};
+
+DataAttribute iedModel_B1STG_DBAT1_SocPro_subMag = {
+    DataAttributeModelType,
+    "subMag",
+    (ModelNode*) &iedModel_B1STG_DBAT1_SocPro,
+    (ModelNode*) &iedModel_B1STG_DBAT1_SocPro_subQ,
+    (ModelNode*) &iedModel_B1STG_DBAT1_SocPro_subMag_f,
+    0,
+    -1,
+    IEC61850_FC_SV,
+    IEC61850_CONSTRUCTED,
+    0,
+    NULL,
+    0};
+
+DataAttribute iedModel_B1STG_DBAT1_SocPro_subMag_f = {
+    DataAttributeModelType,
+    "f",
+    (ModelNode*) &iedModel_B1STG_DBAT1_SocPro_subMag,
+    NULL,
+    NULL,
+    0,
+    -1,
+    IEC61850_FC_SV,
+    IEC61850_FLOAT32,
+    0,
+    NULL,
+    0};
+
+DataAttribute iedModel_B1STG_DBAT1_SocPro_subQ = {
+    DataAttributeModelType,
+    "subQ",
+    (ModelNode*) &iedModel_B1STG_DBAT1_SocPro,
+    (ModelNode*) &iedModel_B1STG_DBAT1_SocPro_subID,
+    NULL,
+    0,
+    -1,
+    IEC61850_FC_SV,
+    IEC61850_QUALITY,
+    0,
+    NULL,
+    0};
+
+DataAttribute iedModel_B1STG_DBAT1_SocPro_subID = {
+    DataAttributeModelType,
+    "subID",
+    (ModelNode*) &iedModel_B1STG_DBAT1_SocPro,
+    (ModelNode*) &iedModel_B1STG_DBAT1_SocPro_blkEna,
+    NULL,
+    0,
+    -1,
+    IEC61850_FC_SV,
+    IEC61850_VISIBLE_STRING_64,
+    0,
+    NULL,
+    0};
+
+DataAttribute iedModel_B1STG_DBAT1_SocPro_blkEna = {
+    DataAttributeModelType,
+    "blkEna",
+    (ModelNode*) &iedModel_B1STG_DBAT1_SocPro,
+    NULL,
+    NULL,
+    0,
+    -1,
+    IEC61850_FC_BL,
+    IEC61850_BOOLEAN,
     0,
     NULL,
     0};
@@ -28189,11 +28584,21 @@ DataAttribute iedModel_B1STG_ZBAT1_VolChgRte_blkEna = {
     NULL,
     0};
 
+extern ReportControlBlock iedModel_B1EBK_LLN0_report0;
+
+ReportControlBlock iedModel_B1EBK_LLN0_report0 = {&iedModel_B1EBK_LLN0, "BikeTelemetryRCB01", "BikeTelemetry", false, "BikeTelemetry", 1, 27, 175, 50, 1000, {0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0}, NULL};
+
+
+
+
+
+
+
 IedModel iedModel = {
     "MoveUFF_Geral",
     &iedModel_B1EBK,
-    NULL,
-    NULL,
+    &iedModelds_B1EBK_LLN0_BikeTelemetry,
+    &iedModel_B1EBK_LLN0_report0,
     NULL,
     NULL,
     NULL,
@@ -28205,133 +28610,4 @@ IedModel iedModel = {
 static void
 initializeValues()
 {
-    printf("Inicializando Modelos de Controle (ctlModel = 1)...\n");
-
-    /* =================================================================
-     * LLN0 (Genérico)
-     * ================================================================= */
-
-    if (iedModel_B1EBK_LLN0_Mod_ctlModel.mmsValue != NULL) {
-        MmsValue_setInt32(iedModel_B1EBK_LLN0_Mod_ctlModel.mmsValue, 1);
-    } else {
-        iedModel_B1EBK_LLN0_Mod_ctlModel.mmsValue = MmsValue_newIntegerFromInt32(1);
-    }
-
-    /* =================================================================
-     * LANTXSWI1 (Lanterna)
-     * ================================================================= */
-   
-    //Seta um valor no SCADA
-    if (iedModel_B1EBK_LANTXSWI1_Pos_ctlModel.mmsValue != NULL) {
-        MmsValue_setInt32(iedModel_B1EBK_LANTXSWI1_Pos_ctlModel.mmsValue, 1);
-    } else {
-        iedModel_B1EBK_LANTXSWI1_Pos_ctlModel.mmsValue = MmsValue_newIntegerFromInt32(1);
-    }
-
-    //Bloqueia a entrada de novos valores
-    if (iedModel_B1EBK_LANTXSWI1_BlkOpn_ctlModel.mmsValue != NULL) {
-        MmsValue_setInt32(iedModel_B1EBK_LANTXSWI1_BlkOpn_ctlModel.mmsValue, 1);
-    } else {
-        iedModel_B1EBK_LANTXSWI1_BlkOpn_ctlModel.mmsValue = MmsValue_newIntegerFromInt32(1);
-    }
-
-    //Bloqueia a saída dos valores
-    if (iedModel_B1EBK_LANTXSWI1_BlkCls_ctlModel.mmsValue != NULL) {
-        MmsValue_setInt32(iedModel_B1EBK_LANTXSWI1_BlkCls_ctlModel.mmsValue, 1);
-    } else {
-        iedModel_B1EBK_LANTXSWI1_BlkCls_ctlModel.mmsValue = MmsValue_newIntegerFromInt32(1);
-    }
-
-    /* =================================================================
-     * ALMXSWI1 (Alarme)
-     * ================================================================= */
-    
-    if (iedModel_B1EBK_ALMXSWI1_Pos_ctlModel.mmsValue != NULL) {
-        MmsValue_setInt32(iedModel_B1EBK_ALMXSWI1_Pos_ctlModel.mmsValue, 1);
-    } else {
-        iedModel_B1EBK_ALMXSWI1_Pos_ctlModel.mmsValue = MmsValue_newIntegerFromInt32(1);
-    }
-
-    if (iedModel_B1EBK_ALMXSWI1_BlkOpn_ctlModel.mmsValue != NULL) {
-        MmsValue_setInt32(iedModel_B1EBK_ALMXSWI1_BlkOpn_ctlModel.mmsValue, 1);
-    } else {
-        iedModel_B1EBK_ALMXSWI1_BlkOpn_ctlModel.mmsValue = MmsValue_newIntegerFromInt32(1);
-    }
-
-    if (iedModel_B1EBK_ALMXSWI1_BlkCls_ctlModel.mmsValue != NULL) {
-        MmsValue_setInt32(iedModel_B1EBK_ALMXSWI1_BlkCls_ctlModel.mmsValue, 1);
-    } else {
-        iedModel_B1EBK_ALMXSWI1_BlkCls_ctlModel.mmsValue = MmsValue_newIntegerFromInt32(1);
-    }
-
-    /* =================================================================
-     * MOTXSWI1 (Motor)
-     * ================================================================= 
-     */
-
-    if (iedModel_B1EBK_MOTXSWI1_Pos_ctlModel.mmsValue != NULL) {
-        MmsValue_setInt32(iedModel_B1EBK_MOTXSWI1_Pos_ctlModel.mmsValue, 1);
-    } else {
-        iedModel_B1EBK_MOTXSWI1_Pos_ctlModel.mmsValue = MmsValue_newIntegerFromInt32(1);
-    }
-    
-    if (iedModel_B1EBK_MOTXSWI1_BlkOpn_ctlModel.mmsValue != NULL) {
-        MmsValue_setInt32(iedModel_B1EBK_MOTXSWI1_BlkOpn_ctlModel.mmsValue, 1);
-    } else {
-        iedModel_B1EBK_MOTXSWI1_BlkOpn_ctlModel.mmsValue = MmsValue_newIntegerFromInt32(1);
-    }
-    
-    if (iedModel_B1EBK_MOTXSWI1_BlkCls_ctlModel.mmsValue != NULL) {
-        MmsValue_setInt32(iedModel_B1EBK_MOTXSWI1_BlkCls_ctlModel.mmsValue, 1);
-    } else {
-        iedModel_B1EBK_MOTXSWI1_BlkCls_ctlModel.mmsValue = MmsValue_newIntegerFromInt32(1);
-    }
-
-    /* =================================================================
-     * CELXSWI1 (Célula de Hidrogênio)
-     * ================================================================= 
-     */
-
-    if (iedModel_B1HYD_CELXSWI1_Pos_ctlModel.mmsValue != NULL) {
-        MmsValue_setInt32(iedModel_B1HYD_CELXSWI1_Pos_ctlModel.mmsValue, 1);
-    } else {
-        iedModel_B1HYD_CELXSWI1_Pos_ctlModel.mmsValue = MmsValue_newIntegerFromInt32(1);
-    }
-    
-    if (iedModel_B1HYD_CELXSWI1_BlkOpn_ctlModel.mmsValue != NULL) {
-        MmsValue_setInt32(iedModel_B1HYD_CELXSWI1_BlkOpn_ctlModel.mmsValue, 1);
-    } else {
-        iedModel_B1HYD_CELXSWI1_BlkOpn_ctlModel.mmsValue = MmsValue_newIntegerFromInt32(1);
-    }
-    
-    if (iedModel_B1HYD_CELXSWI1_BlkCls_ctlModel.mmsValue != NULL) {
-        MmsValue_setInt32(iedModel_B1HYD_CELXSWI1_BlkCls_ctlModel.mmsValue, 1);
-    } else {
-        iedModel_B1HYD_CELXSWI1_BlkCls_ctlModel.mmsValue = MmsValue_newIntegerFromInt32(1);
-    }
-
-    
-    /* =================================================================
-     * CELXSWI1 (Célula de Hidrogênio)
-     * ================================================================= 
-     */
-
-    if (iedModel_B1HYD_TNKXSWI1_Pos_ctlModel.mmsValue != NULL) {
-        MmsValue_setInt32(iedModel_B1HYD_TNKXSWI1_Pos_ctlModel.mmsValue, 1);
-    } else {
-        iedModel_B1HYD_TNKXSWI1_Pos_ctlModel.mmsValue = MmsValue_newIntegerFromInt32(1);
-    }
-    
-    if (iedModel_B1HYD_TNKXSWI1_BlkOpn_ctlModel.mmsValue != NULL) {
-        MmsValue_setInt32(iedModel_B1HYD_TNKXSWI1_BlkOpn_ctlModel.mmsValue, 1);
-    } else {
-        iedModel_B1HYD_TNKXSWI1_BlkOpn_ctlModel.mmsValue = MmsValue_newIntegerFromInt32(1);
-    }
-    
-    if (iedModel_B1HYD_TNKXSWI1_BlkCls_ctlModel.mmsValue != NULL) {
-        MmsValue_setInt32(iedModel_B1HYD_TNKXSWI1_BlkCls_ctlModel.mmsValue, 1);
-    } else {
-        iedModel_B1HYD_TNKXSWI1_BlkCls_ctlModel.mmsValue = MmsValue_newIntegerFromInt32(1);
-    }
-
 }

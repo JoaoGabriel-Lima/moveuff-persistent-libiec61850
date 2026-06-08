@@ -1,6 +1,0 @@
-.install/
-build/
-*.o
-*.a
-*.so
-server_example_basic_io
