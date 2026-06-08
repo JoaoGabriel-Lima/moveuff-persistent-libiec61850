@@ -10,8 +10,7 @@ class Settings:
     registration_token: str = "moveuff-dev-token"
     report_retention: int = 100
     cors_origins: tuple[str, ...] = (
-        "http://localhost:3000",
-        "http://127.0.0.1:3000",
+        "*",
     )
 
     @classmethod
@@ -20,14 +19,15 @@ class Settings:
             origin.strip()
             for origin in os.getenv(
                 "MOVEUFF_CORS_ORIGINS",
-                "http://localhost:3000,http://127.0.0.1:3000",
+                "*",
             ).split(",")
             if origin.strip()
         )
 
         return cls(
             database_path=os.getenv("MOVEUFF_GATEWAY_DB", "gateway.db"),
-            registration_token=os.getenv("MOVEUFF_REGISTRATION_TOKEN", "moveuff-dev-token"),
+            registration_token=os.getenv(
+                "MOVEUFF_REGISTRATION_TOKEN", "moveuff-dev-token"),
             report_retention=int(os.getenv("MOVEUFF_REPORT_RETENTION", "100")),
             cors_origins=cors_origins,
         )
